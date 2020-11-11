@@ -4,7 +4,7 @@ import ArmyLogic from "./ArmyLogic";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ArmyMapLogic extends cc.Component {
+export default class MapArmyLogic extends cc.Component {
 
     @property(cc.Prefab)
     armyPrefab: cc.Prefab = null;

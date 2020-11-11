@@ -5,13 +5,13 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import LoginCommand from "./LoginCommand";
 
-import { LoginCommand } from "./LoginCommand";
-var ServerConfig = require("ServerConfig");
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class LoginLogic extends cc.Component {
 
     @property(cc.Label)
     labelName: cc.Label = null;
@@ -25,12 +25,12 @@ export default class NewClass extends cc.Component {
 
 
     onRegister(){
-        new LoginCommand().register(this.labelName.string,this.labelPass.string);
+        LoginCommand.getInstance().register(this.labelName.string,this.labelPass.string);
     }
 
 
     onLogin(){
-        new LoginCommand().accountLogin(this.labelName.string,this.labelPass.string)
+        LoginCommand.getInstance().accountLogin(this.labelName.string,this.labelPass.string)
     }
 
 

@@ -47,5 +47,6 @@
     "live": {
       "enable": false
     }
-  }
+  },
+  "start-scene": "94681aa6-17dd-47fe-b1bd-f2e2ca8fd6ca"
 }

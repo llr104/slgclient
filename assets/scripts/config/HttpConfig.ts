@@ -1,5 +1,5 @@
-var HttpConfig = 
-{
+/**http接口配置*/
+const HttpConfig = {
     //账号注册
     register: {
         name: "register",
@@ -7,4 +7,4 @@ var HttpConfig =
     },
 }
 
-module.exports = HttpConfig;
+export { HttpConfig };
