@@ -1,6 +1,6 @@
 import { HttpManager } from "../network/http/HttpManager";
 import { NetManager } from "../network/socket/NetManager";
-import { Tools } from "../utils/Tools";
+import { Tools } from "../scripts/utils/Tools";
 var CryptoJS = require("crypto-js.min");
 var HttpConfig = require("HttpConfig");
 var ServerConfig = require("ServerConfig");
