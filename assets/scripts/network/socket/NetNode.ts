@@ -196,7 +196,7 @@ export class NetNode {
                 if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                     this._requests.splice(i, 1);
                     i--;
-                    cc.systemEvent.emit(msg.name, msg);
+                    cc.systemEvent.emit(msg.name, msg , req.otherData);
                 }       
             }
         }
