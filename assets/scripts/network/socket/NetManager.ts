@@ -29,7 +29,7 @@ export class NetManager {
     }
 
     // 调用Node发送
-    public send(send_data: any, force: boolean = false) {
+    public send(send_data: any, otherData:any = {},force: boolean = false) {
 
         if(send_data.seq == undefined){
             send_data.seq = 0;
@@ -38,6 +38,7 @@ export class NetManager {
         var data = new RequestObject();
         data.json = send_data;
         data.rspName = send_data.name;
+        data.otherData = otherData;
 
         this._netNode.send(data,force);
     }

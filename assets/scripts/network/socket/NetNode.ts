@@ -110,8 +110,14 @@ export class NetNode {
         this._socket.onJsonMessage = (msg) => { this.onMessage(msg) };
         this._socket.onError = (event) => { this.onError(event) };
         this._socket.onClosed = (event) => { this.onClosed(event) };
-        this._socket.onGetKey = () => { this.onChecked() };
+        this._socket.onGetKey = () => { this.onGetKey() };
     
+    }
+
+
+    protected onGetKey(){
+        cc.systemEvent.emit(NetEvent.ServerHandShake);
+        this.onChecked();
     }
 
 
@@ -190,7 +196,7 @@ export class NetNode {
                 if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                     this._requests.splice(i, 1);
                     i--;
-                    cc.systemEvent.emit(msg.name, msg);
+                    cc.systemEvent.emit(msg.name, msg , req.otherData);
                 }       
             }
         }

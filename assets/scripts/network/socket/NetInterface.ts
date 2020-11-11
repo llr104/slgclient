@@ -18,6 +18,7 @@ export class RequestObject {
     autoReconnect: number = 0;  // -1 永久重连，0不自动重连，其他正整数为自动重试次数
     seq:number = 0;             // 消息的序号
     sended:boolean = false;        // 是否发送
+    otherData:any = {};
 }
 
 
@@ -40,4 +41,5 @@ export interface ISocket {
 export class NetEvent {
     public static ServerTimeOut:string = "ServerTimeOut";
     public static ServerConnected:string = "ServerConnected";
+    public static ServerHandShake:string = "ServerHandShake";
 }
