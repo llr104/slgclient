@@ -31,7 +31,7 @@ export default class LoginCommand {
     protected _proxy: LoginProxy = new LoginProxy();
 
     constructor() {
-        cc.systemEvent.on(NetEvent.ServerConnected, this.onServerConneted, this);
+        cc.systemEvent.on(NetEvent.ServerHandShake, this.onServerConneted, this);
         cc.systemEvent.on(HttpConfig.register.name, this.onRegister, this);
         cc.systemEvent.on(ServerConfig.account_login, this.onAccountLogin, this);
         cc.systemEvent.on(ServerConfig.role_enterServer, this.onEnterServer, this);
