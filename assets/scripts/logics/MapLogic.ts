@@ -113,8 +113,8 @@ export default class MapLogic extends cc.Component {
 
     //界面坐标转世界坐标
     protected viewPointToWorldPoint(point: cc.Vec2): cc.Vec2 {
-        let cameraWorldX: number = this.node.width * this.node.anchorX - cc.Canvas.instance.node.width * cc.Canvas.instance.node.anchorX + this._mapCamera.node.x;
-        let cameraWorldY: number = this.node.height * this.node.anchorY - cc.Canvas.instance.node.height * cc.Canvas.instance.node.anchorY + this._mapCamera.node.y;
+        let cameraWorldX: number = this.node.width * this.node.anchorX - cc.Canvas.instance.node.width * this._mapCamera.node.anchorX + this._mapCamera.node.x;
+        let cameraWorldY: number = this.node.height * this.node.anchorY - this._mapCamera.node.height * this._mapCamera.node.anchorY + this._mapCamera.node.y;
         console.log("viewPointToWorldPoint", this.node.width, this._mapCamera.node.width, this._mapCamera.node.x);
         return cc.v2(point.x + cameraWorldX, point.y + cameraWorldY);
     }

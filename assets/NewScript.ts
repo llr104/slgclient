@@ -1,5 +1,5 @@
-import { HttpManager } from "./network/http/HttpManager";
-import { NetManager } from "./network/socket/NetManager";
+import { HttpManager } from "./scripts/network/http/HttpManager";
+import { NetManager } from "./scripts/network/socket/NetManager";
 
 var GameConfig = require("GameConfig");
 var LoginProxy = require("LoginProxy");
