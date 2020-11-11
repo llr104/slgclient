@@ -7,6 +7,7 @@ import { Tools } from "../utils/Tools";
 import CryptoJS = require("../libs/crypto/crypto-js.min");
 import LoginProxy from "./LoginProxy";
 import { NetEvent } from "../network/socket/NetInterface";
+import MapCommand from "../map/MapCommand";
 
 export default class LoginCommand {
     //单例
@@ -69,7 +70,8 @@ export default class LoginCommand {
             cc.systemEvent.emit("create");
         } else {
             //进入游戏
-            cc.systemEvent.emit("enter_map");
+            MapCommand.getInstance().qryNationMapConfig();
+            // cc.systemEvent.emit("enter_map");
         }
     }
 
