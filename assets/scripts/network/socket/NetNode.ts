@@ -52,9 +52,9 @@ export class NetNode {
 
     protected _keepAliveTimer: any = null;                                  // 心跳定时器
     protected _reconnectTimer: any = null;                                  // 重连定时器
-    protected _heartTime: number = 10*1000;                                   // 心跳间隔
+    protected _heartTime: number = 10*1000;                                 // 心跳间隔
     protected _receiveTime: number = 15*1000;                               // 多久没收到数据断开
-    protected _reconnetTimeOut: number = 2*1000;                           // 重连间隔
+    protected _reconnetTimeOut: number = 2*1000;                            // 重连间隔
     protected _requests: RequestObject[] = Array<RequestObject>();          // 请求列表
     protected _maxSeqId :number = 1000000;
     protected _seqId :number = 0;
@@ -123,6 +123,7 @@ export class NetNode {
 
     protected onTimeOut(msg:any){
         console.log("NetNode onTimeOut!",msg)
+        //超时删除 请求队列
         for (var i = 0; i < this._requests.length;i++) {
             let req = this._requests[i];
             if(msg.name == req.rspName && msg.seq == req.seq){
@@ -198,6 +199,8 @@ export class NetNode {
     protected onError(event) {
         console.log("onError:",event);
 
+        //出错后清空定时器 那后断开服务 尝试链接
+        this.clearTimer();
         this.restReq();
         this.tryConnet();
     }
@@ -205,6 +208,8 @@ export class NetNode {
     protected onClosed(event) {
         console.log("onClosed:",event);
 
+
+        //出错后
         this.clearTimer();
         this.tryConnet();
     }
@@ -223,11 +228,13 @@ export class NetNode {
         console.log("tryConnet",this._autoReconnect)
         if (this.isAutoReconnect()) {
             this.updateNetTips(NetTipsType.ReConnecting, true);
+
+            
             this._socket.close();
+            this._state = NetNodeState.Closed;
+
             this._reconnectTimer = setTimeout(() => {
                 console.log("NetNode tryConnet!")
-
-                this._state = NetNodeState.Closed;
                 this.connect(this._connectOptions);
                 if (this._autoReconnect > 0) {
                     this._autoReconnect -= 1;
