@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "army",
+    "_name": "Army",
     "_objFlags": 0,
     "_parent": null,
     "_children": [

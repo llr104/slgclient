@@ -19,7 +19,7 @@ export default class MapUtil {
     }
 
     // 世界像素坐标转地图坐标
-    public static worldPixelToMapPoint(point: cc.Vec2): cc.Vec2 {
+    public static worldPixelToMapCellPoint(point: cc.Vec2): cc.Vec2 {
         //  转换原理 
         //  tiledMap 45度地图是已上方为(0,0)点 以左上方边界为y轴 右上方边界为x轴的坐标系
         //  所以只需要将点击坐标点的平行映射到地图坐标系的边界上 求解出映射点的像素坐标 / 格子大小 即可计算出对饮的 格子坐标
@@ -29,9 +29,23 @@ export default class MapUtil {
     }
 
     //地图坐标(格子的中心点)转世界像素坐标
-    public static mapToWorldPixelPoint(point: cc.Vec2): cc.Vec2 {
-        let pixelX: number = this.zeroPixelPoint.x - (point.x - point.y) * this.tileSize.width * 0.5;
+    public static mapCellToWorldPixelPoint(point: cc.Vec2): cc.Vec2 {
+        let pixelX: number = this.zeroPixelPoint.x - (point.y - point.x) * this.tileSize.width * 0.5;
         let pixelY: number = this.zeroPixelPoint.y - (point.x + point.y) * this.tileSize.height * 0.5;
-        return cc.v2(pixelY, pixelX);
+        return cc.v2(pixelX, pixelY);
+    }
+
+    // 地图坐标转地图像素坐标
+    public static mapCellToPixelPoint(point: cc.Vec2): cc.Vec2 {
+        let worldPoint: cc.Vec2 = this.mapCellToWorldPixelPoint(point);
+        let node:cc.Node = this.tiledMap.node;
+        return worldPoint.sub(cc.v2(node.width * node.anchorX, node.height * node.anchorY));
+    }
+
+    //地图像素转地图坐标
+    public static mapPixelToCellPoint(point: cc.Vec2): cc.Vec2 {
+        let node:cc.Node = this.tiledMap.node;
+        let worldPoint: cc.Vec2 = point.add(cc.v2(node.width * node.anchorX, node.height * node.anchorY));
+        return this.worldPixelToMapCellPoint(worldPoint);
     }
 }

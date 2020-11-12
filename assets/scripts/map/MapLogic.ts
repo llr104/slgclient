@@ -1,4 +1,6 @@
+
 import MapUtil from "../utils/MapUtil";
+import MapCommand from "./MapCommand";
 
 const { ccclass, property } = cc._decorator;
 
@@ -30,6 +32,9 @@ export default class MapLogic extends cc.Component {
         this.tiledMap.enableCulling(false);
         // this.touchAniNode.active = false;
         MapUtil.initMapConfig(this.tiledMap);
+
+        let layer:cc.TiledLayer = this.tiledMap.getLayer("ground");
+        MapCommand.getInstance().proxy.initResConfig(layer.getTiles(), this.tiledMap.getMapSize());
         this._maxMapX = (this.tiledMap.node.width - cc.game.canvas.width) * 0.5;
         this._maxMapY = (this.tiledMap.node.height - cc.game.canvas.height) * 0.5;
         this.node.on(cc.Node.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
@@ -37,6 +42,8 @@ export default class MapLogic extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
+
+        this.scrollToMapPoint(MapCommand.getInstance().proxy.getMyMainCity().position);
     }
 
     protected onDestroy(): void {
@@ -75,14 +82,14 @@ export default class MapLogic extends cc.Component {
             let touchLocation: cc.Vec2 = event.touch.getLocation();
             // console.log("onTouchEnd", touchLocation.x, touchLocation.y);
             touchLocation = this.viewPointToWorldPoint(touchLocation);
-            let mapPoint: cc.Vec2 = MapUtil.worldPixelToMapPoint(touchLocation);
-            let clickCenterPoint: cc.Vec2 = MapUtil.mapToWorldPixelPoint(mapPoint);
+            let mapPoint: cc.Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation);
+            let clickCenterPoint: cc.Vec2 = MapUtil.mapCellToWorldPixelPoint(mapPoint);
             clickCenterPoint = this.worldToMapPixelPoint(clickCenterPoint);
             // console.log("onTouchEnd", touchLocation.x, touchLocation.y)
             // console.log("onTouchEnd", mapPoint.x, mapPoint.y)
             // console.log("onTouchEnd", clickCenterPoint.x, clickCenterPoint.y)
-            if (mapPoint.x < 0 || mapPoint.x >= this.tiledMap.getMapSize().width 
-            || mapPoint.y < 0 || mapPoint.y >= this.tiledMap.getMapSize().height) {
+            if (mapPoint.x < 0 || mapPoint.x >= this.tiledMap.getMapSize().width
+                || mapPoint.y < 0 || mapPoint.y >= this.tiledMap.getMapSize().height) {
                 console.log("点击到了地图区域外 (" + mapPoint.x + "," + mapPoint.y + ")");
                 return;
             }
@@ -110,9 +117,9 @@ export default class MapLogic extends cc.Component {
 
     //界面坐标转世界坐标
     protected viewPointToWorldPoint(point: cc.Vec2): cc.Vec2 {
-        let cameraWorldX: number = this.node.width * this.node.anchorX - cc.Canvas.instance.node.width * cc.Canvas.instance.node.anchorX + this._mapCamera.node.x;
-        let cameraWorldY: number = this.node.height * this.node.anchorY - cc.Canvas.instance.node.height * cc.Canvas.instance.node.anchorY + this._mapCamera.node.y;
-        console.log("viewPointToWorldPoint", this.node.width, this._mapCamera.node.width, this._mapCamera.node.x);
+        let canvasNode: cc.Node = cc.Canvas.instance.node;
+        let cameraWorldX: number = this.node.width * this.node.anchorX - canvasNode.width * canvasNode.anchorX + this._mapCamera.node.x;
+        let cameraWorldY: number = this.node.height * this.node.anchorY - canvasNode.height * canvasNode.anchorY + this._mapCamera.node.y;
         return cc.v2(point.x + cameraWorldX, point.y + cameraWorldY);
     }
 
@@ -121,5 +128,15 @@ export default class MapLogic extends cc.Component {
         let pixelX: number = point.x - this.node.width * this.node.anchorX;
         let pixelY: number = point.y - this.node.height * this.node.anchorY;
         return cc.v2(pixelX, pixelY);
+    }
+
+    protected scrollToMapPoint(point: cc.Vec2): void {
+        let centerPoint: cc.Vec2 = MapUtil.mapCellToPixelPoint(point);
+        console.log("scrollToMapPoint", centerPoint.x, centerPoint.y);
+        let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, centerPoint.x));
+        let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, centerPoint.y));
+        this._mapCamera.node.x = positionX;
+        this._mapCamera.node.y = positionY;
+        console.log("scrollToMapPoint", point.x, point.y, this._mapCamera.node.x, this._mapCamera.node.y);
     }
 }

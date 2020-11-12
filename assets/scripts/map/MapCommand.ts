@@ -34,7 +34,11 @@ export default class MapCommand {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onRoleMyCity(data: any):void {
+    public get proxy(): MapProxy {
+        return this._proxy;
+    }
+
+    protected onRoleMyCity(data: any): void {
         console.log("onRoleMyCity", data);
         if (data.code == 0) {
             this._proxy.setMyCitys(data.msg.citys);
@@ -50,11 +54,11 @@ export default class MapCommand {
         }
     }
 
-    protected onNationMapScan(data: any): void {
+    protected onNationMapScan(data: any, otherData: any): void {
         console.log("onNationMapScan", data);
     }
 
-    public enterMap():void {
+    public enterMap(): void {
         if (this._proxy.getConfig() == null) {
             this.qryNationMapConfig();
             return;
@@ -63,36 +67,36 @@ export default class MapCommand {
             this.qryRoleMyCity();
             return;
         }
-        this.qryNationMapScan(this._proxy.getMyMainCity().x, this._proxy.getMyMainCity().y);
+        this.qryNationMapScan(this._proxy.getMyMainCity().position);
         cc.systemEvent.emit("enter_map");
     }
 
     /**请求自己的城池信息*/
     public qryRoleMyCity(): void {
-        let send_data: any = {
+        let sendData: any = {
             name: ServerConfig.role_myCity,
             msg: {}
         };
-        NetManager.getInstance().send(send_data);
+        NetManager.getInstance().send(sendData);
     }
 
     /**请求地图基础配置*/
     public qryNationMapConfig(): void {
-        let send_data: any = {
+        let sendData: any = {
             name: ServerConfig.nationMap_config,
             msg: {}
         };
-        NetManager.getInstance().send(send_data);
+        NetManager.getInstance().send(sendData);
     }
 
-    public qryNationMapScan(x: number, y: number): void {
-        let send_data: any = {
+    public qryNationMapScan(point: cc.Vec2): void {
+        let sendData: any = {
             name: ServerConfig.nationMap_scan,
             msg: {
-                x: x,
-                y: y
+                x: point.x,
+                y: point.y
             }
         };
-        NetManager.getInstance().send(send_data);
+        NetManager.getInstance().send(sendData);
     }
 }

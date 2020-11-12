@@ -1,3 +1,4 @@
+
 import MapUtil from "../utils/MapUtil";
 import ArmyLogic from "./ArmyLogic";
 
@@ -13,9 +14,7 @@ export default class MapArmyLogic extends cc.Component {
 
     protected onLoad(): void {
         this._parentLayer = MapUtil.tiledMap.getLayer("army");
-        let position: cc.Vec2 = MapUtil.mapToWorldPixelPoint(cc.v2(0, 0));
-        position.x -= this.node.width * this.node.anchorX;
-        position.y -= this.node.height * this.node.anchorY;
+        let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(0, 0));
         this._army = cc.instantiate(this.armyPrefab);
         this._army.setPosition(position);
         this._army.getComponent(ArmyLogic).mapPointX = 0;

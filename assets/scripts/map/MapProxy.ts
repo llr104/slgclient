@@ -1,3 +1,14 @@
+export enum MapResType {
+    Blank,//空地
+    Invalid,//无效区域 河流 山等
+    Gold,//金币
+    Grain,//粮食
+    Wood,//木材
+    Iron,//铁
+    Stone,//石料
+
+}
+
 /**地图基础配置*/
 export class MapConfig {
     type: number = 0;
@@ -10,11 +21,12 @@ export class MapConfig {
     defender: number = 0;
 }
 
+/**地图建筑配置*/
 export class MapBuild {
     cityId: number = 0;
     rid: number = 0;
     nickName: string = "";
-    x: number = 0;
+    position: cc.Vec2 = null;
     y: number = 0;
     isMain: number = 0;
     level: number = 0;
@@ -22,10 +34,28 @@ export class MapBuild {
 }
 
 export default class MapProxy {
+    protected _mapResConfig: Array<Array<MapResType>>= null;
     //地图基础配置数据
     protected _mapConfig: { [key: number]: MapConfig } = null;
     protected _myMainCity: MapBuild = null;
     protected _mySubCity: MapBuild = null;
+
+    //初始化地图资源配置
+    public initResConfig(tileMapGIds:number[], size:cc.Size):void {
+        this._mapResConfig = new Array<Array<MapResType>>(size.width);
+        for (let x:number = 0; x < size.width; x++) {
+            this._mapResConfig[x] = [];
+            for (let y:number = 0; y < size.height; y++) {
+                let index:number = x + y * size.width;
+                if (tileMapGIds[index] > 0) {
+                    //代表是山川 河流
+                    this._mapResConfig[x].push(MapResType.Invalid);
+                } else {
+                    this._mapResConfig[x].push(MapResType.Blank);
+                }
+            }
+        }
+    }
 
     public setNationMapConfig(configList: any[]):void {
         this._mapConfig = {};
@@ -48,10 +78,9 @@ export default class MapProxy {
         for (let i:number = 0; i < citys.length; i++) {
             let build:MapBuild = new MapBuild();
             build.cityId = citys[i].type;
-            build.rid = citys[i].name;
-            build.nickName = citys[i].Wood;
-            build.x = citys[i].iron;
-            build.y = citys[i].stone;
+            build.rid = citys[i].rid;
+            build.nickName = citys[i].nickName;
+            build.position = cc.v2(citys[i].x, citys[i].y);
             build.isMain = citys[i].is_main;
             build.level = citys[i].level;
             build.durable = citys[i].durable;
@@ -62,6 +91,8 @@ export default class MapProxy {
             }
         }
     }
+
+    public setMapScan()
 
     /**根据类型获取配置数据*/
     public getConfigByType(type: number): MapConfig {
