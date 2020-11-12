@@ -2,7 +2,7 @@ export class LocalCache{
     public static userListKey = "userListKey";
 
 
-    public static setPersonMemory(keyStr, Value) {
+    public static setPersonMemory(keyStr, Value):void {
         //cc.log("setPersonMemory:" + keyStr + ", " + Value);
     
         if (keyStr === undefined || keyStr === null || keyStr === "") {
@@ -26,7 +26,7 @@ export class LocalCache{
 
 
     
-    public static getPersonMemory(keyStr, defaultValue) {
+    public static getPersonMemory(keyStr, defaultValue):any {
         //cc.log("getPersonMemory:" + keyStr + ", " + defaultValue);
     
         //key不存在就gg了
@@ -60,7 +60,7 @@ export class LocalCache{
     }
 
 
-    public static getListForJson() {
+    public static getListForJson():any {
         var jsondata = cc.sys.localStorage.getItem(LocalCache.userListKey);
         if (0 == jsondata || jsondata == undefined)
             return;
@@ -70,12 +70,24 @@ export class LocalCache{
     };
 
 
-    public static getUuid(){
+    public static getUuid():any{
         return LocalCache.getPersonMemory("deviceuuid", "");
     }
     
-    public static setUuid = function (uuid) {
+    public static setUuid(uuid):void {
         LocalCache.setPersonMemory("deviceuuid", uuid);
     };
+
+
+
+
+    public static setLoginValidation(data:any):void{
+        LocalCache.setPersonMemory("loginvalidation", data);
+    }
+
+    public static getLoginValidation():any{
+        return LocalCache.getPersonMemory("loginvalidation", "");
+    }
+
 
 }

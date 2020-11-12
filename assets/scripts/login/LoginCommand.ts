@@ -8,6 +8,7 @@ import CryptoJS = require("../libs/crypto/crypto-js.min");
 import LoginProxy from "./LoginProxy";
 import { NetEvent } from "../network/socket/NetInterface";
 import MapCommand from "../map/MapCommand";
+import { LocalCache } from "../utils/LocalCache";
 
 export default class LoginCommand {
     //单例
@@ -49,14 +50,16 @@ export default class LoginCommand {
         console.log("LoginProxy register:", data, otherData);
         if (data.code == 0) {
             this.accountLogin(otherData.username, otherData.username);
+            LocalCache.setLoginValidation(otherData);
         }
     }
 
     /**登录回调*/
-    private onAccountLogin(data: any): void {
-        console.log("LoginProxy  login:", data);
+    private onAccountLogin(data: any, otherData:any): void {
+        console.log("LoginProxy  login:", data , otherData);
         if (data.code == 0) {
             this._proxy.loginData = data.msg;
+            LocalCache.setLoginValidation(otherData);
         }
         cc.systemEvent.emit("loginComplete", data.code);
     }
@@ -127,7 +130,9 @@ export default class LoginCommand {
                 hardware: Tools.getUUID()
             }
         };
-        NetManager.getInstance().send(send_data);
+
+        var otherData = { username: name, password: password };
+        NetManager.getInstance().send(send_data,otherData);
     }
 
 

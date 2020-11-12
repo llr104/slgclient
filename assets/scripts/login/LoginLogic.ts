@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { LocalCache } from "../utils/LocalCache";
 import LoginCommand from "./LoginCommand";
 
 
@@ -13,14 +14,21 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class LoginLogic extends cc.Component {
 
-    @property(cc.Label)
-    labelName: cc.Label = null;
+    @property(cc.EditBox)
+    editName: cc.EditBox = null;
 
-    @property(cc.Label)
-    labelPass: cc.Label = null;
+    @property(cc.EditBox)
+    editPass: cc.Label = null;
 
     protected onLoad(): void {
         cc.systemEvent.on("loginComplete", this.onLoginComplete, this);
+
+        var data = LocalCache.getLoginValidation();
+        console.log("LoginLogic  data:",data)
+        if(data){
+            this.editName.string = data.username;
+            this.editPass.string = data.password;
+        }
     }
 
     protected onDestroy(): void {
@@ -32,11 +40,11 @@ export default class LoginLogic extends cc.Component {
     }
 
     protected onClickRegister(): void {
-        LoginCommand.getInstance().register(this.labelName.string, this.labelPass.string);
+        LoginCommand.getInstance().register(this.editName.string, this.editPass.string);
     }
 
     protected onClickLogin(): void {
-        LoginCommand.getInstance().accountLogin(this.labelName.string, this.labelPass.string)
+        LoginCommand.getInstance().accountLogin(this.editName.string, this.editPass.string)
     }
 
     protected onClickClose(): void {
