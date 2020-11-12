@@ -12,14 +12,14 @@ export class HttpManager {
 
 
     protected _url:string = "";
-    public setWebUrl(url:string){
+    public setWebUrl(url:string):void{
         if(this._url == "" || this._url != url){
             this._url = url;
         } 
     }
 
 
-    public doGet(name:string,apiUrl:string,params:any,otherData:any = null){
+    public doGet(name:string,apiUrl:string,params:any,otherData:any = null):void{
         var invoke = new HttpInvoke();
         invoke.init(name,otherData);
         invoke.doSend(this._url + apiUrl,params,HttpInvokeType.GET);
@@ -27,7 +27,7 @@ export class HttpManager {
 
 
 
-    public doPost(name:string,apiUrl:string,params:any,otherData:any = null){
+    public doPost(name:string,apiUrl:string,params:any,otherData:any = null):void{
         var invoke = new HttpInvoke();
         invoke.init(name,otherData);
         invoke.doSend(this._url + apiUrl,params,HttpInvokeType.POST);

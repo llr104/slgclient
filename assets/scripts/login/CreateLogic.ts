@@ -17,25 +17,35 @@ export default class CreateLogic extends cc.Component {
     labelName: cc.Label = null;
 
 
-    start() {
+    @property(cc.Toggle)
+    manToggle: cc.Toggle = null;
+    
+
+    @property(cc.Toggle)
+    girlToggle: cc.Toggle = null;
+
+
+    protected onLoad():void{
         cc.systemEvent.on(ServerConfig.role_create, this.create, this);
     }
 
-
-
-    onCreate() {
+    protected onCreate() {
+        var sex = this.manToggle.isChecked?0:1;
         var loginData: any = LoginCommand.getInstance().proxy.loginData;
-        LoginCommand.getInstance().role_create(loginData.uid, this.labelName.string, 0, 0, 0)
+        LoginCommand.getInstance().role_create(loginData.uid, this.labelName.string, sex,0, 0)
     }
 
 
-    create(data) {
-        console.log("create:", data)
+    protected create(data):void{
+        console.log("create:", data);
+        if(data.code == 0){
+            this.node.active = false;
+        }
     }
 
 
 
-    onDestroy() {
+    protected onDestroy():void{
         cc.systemEvent.targetOff(this);
     }
 }

@@ -66,7 +66,7 @@ export default class LoginCommand {
         console.log("LoginProxy  enter:", data);
         //没有创建打开创建
         if (data.code == 9) {
-            cc.systemEvent.emit("create");
+            cc.systemEvent.emit("CreateRole");
         } else {
             //进入游戏
             MapCommand.getInstance().qryNationMapConfig();

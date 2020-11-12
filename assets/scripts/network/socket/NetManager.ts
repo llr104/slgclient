@@ -12,24 +12,23 @@ export class NetManager {
     public static getInstance(): NetManager {
         if (this._instance == null) {
             this._instance = new NetManager();
-            this._instance.init();
         }
         return this._instance;
     }
 
-    private init(){
+    constructor(){
         this._netNode = new NetNode();
         this._netNode.init();
     }
 
 
     // 调用Node连接
-    public connect(options: NetConnectOptions) {
+    public connect(options: NetConnectOptions) :void{
         this._netNode.connect(options);
     }
 
     // 调用Node发送
-    public send(send_data: any, otherData:any = {},force: boolean = false) {
+    public send(send_data: any, otherData:any = {},force: boolean = false) :void{
 
         if(send_data.seq == undefined){
             send_data.seq = 0;
@@ -45,18 +44,16 @@ export class NetManager {
 
 
     // 调用Node关闭
-    public close(code?: number, reason?: string) {
+    public close(code?: number, reason?: string):void {
         this._netNode.closeSocket(code, reason);
     }
 
     // 调用切换线路
-    public changeConnect(options: NetConnectOptions) {
+    public changeConnect(options: NetConnectOptions):void {
         this._netNode.changeConect(options);
     }
 
-    public tryConnet(){
+    public tryConnet():void{
         this._netNode.tryConnet();
     }
 }
-
-var Server =  NetManager.getInstance();

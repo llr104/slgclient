@@ -12,14 +12,14 @@ export class HttpInvoke {
     protected _otherData:any = null;
 
 
-    public init(name:string,_otherData:any = null){
+    public init(name:string,_otherData:any = null):void{
         this._name = name;
         this._otherData = _otherData;
     }
 
 
 
-    private onComplete(data:any){
+    private onComplete(data:any):void{
         var json = {};
         if(data){
             try {
@@ -33,7 +33,7 @@ export class HttpInvoke {
     }
 
 
-    public doSend(url:string,params:any,type:HttpInvokeType){
+    public doSend(url:string,params:any,type:HttpInvokeType):void{
         var self = this;
         let xhr = new XMLHttpRequest();
         xhr.timeout = this._receiveTime;
