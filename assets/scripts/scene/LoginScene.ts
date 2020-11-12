@@ -18,7 +18,7 @@ export default class LoginScene extends cc.Component {
 
     protected onLoad(): void {
         this.openLogin();
-        cc.systemEvent.on("create", this.onCreate, this);
+        cc.systemEvent.on("CreateRole", this.onCreate, this);
     }
 
     protected onDestroy(): void {

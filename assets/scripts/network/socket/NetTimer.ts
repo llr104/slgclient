@@ -20,7 +20,7 @@ export class NetTimer {
         this._tokenId = 0;
     }
 
-    public schedule(data:any,delay:number = 0){
+    public schedule(data:any,delay:number = 0):void{
         
         var self = this;
         var token = this._tokenId++;
@@ -36,7 +36,7 @@ export class NetTimer {
     }
 
 
-    private handleTimeout(id:number = 0){
+    private handleTimeout(id:number = 0):void{
         var data = this._tokens.get(id);
         if(data){
             cc.systemEvent.emit(NetEvent.ServerTimeOut, data);
@@ -45,7 +45,7 @@ export class NetTimer {
     }
 
 
-    public cancel(data:any){
+    public cancel(data:any):void{
         if(data == null){
             return
         }
@@ -67,7 +67,7 @@ export class NetTimer {
 
 
 
-    private getKey(data:any){
+    private getKey(data:any):number{
         var return_key = -1;
         this._tokens.forEach((value , key) =>{
             if(value.name == data.name && value.seq == data.seq){
@@ -79,7 +79,7 @@ export class NetTimer {
     }
 
 
-    public destroy(){
+    public destroy():void{
         var self = this;
         this._tokens.forEach(function(key, value){
             self.cancel(key);
