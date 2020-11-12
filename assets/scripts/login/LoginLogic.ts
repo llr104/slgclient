@@ -8,7 +8,7 @@
 import LoginCommand from "./LoginCommand";
 
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class LoginLogic extends cc.Component {
@@ -19,26 +19,27 @@ export default class LoginLogic extends cc.Component {
     @property(cc.Label)
     labelPass: cc.Label = null;
 
-    start () {
-        cc.systemEvent.on("create", this.enter, this);
+    protected onLoad(): void {
+        cc.systemEvent.on("loginComplete", this.onLoginComplete, this);
     }
 
-
-    onRegister(){
-        LoginCommand.getInstance().register(this.labelName.string,this.labelPass.string);
-    }
-
-
-    onLogin(){
-        LoginCommand.getInstance().accountLogin(this.labelName.string,this.labelPass.string)
-    }
-
-
-    enter(data){
-        this.node.destroy();
-    }
-
-    onDestroy(){
+    protected onDestroy(): void {
         cc.systemEvent.targetOff(this);
+    }
+
+    protected onLoginComplete():void {
+        this.node.active = false;
+    }
+
+    protected onClickRegister(): void {
+        LoginCommand.getInstance().register(this.labelName.string, this.labelPass.string);
+    }
+
+    protected onClickLogin(): void {
+        LoginCommand.getInstance().accountLogin(this.labelName.string, this.labelPass.string)
+    }
+
+    protected onClickClose(): void {
+        this.node.active = false;
     }
 }

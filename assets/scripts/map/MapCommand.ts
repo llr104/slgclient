@@ -33,30 +33,43 @@ export default class MapCommand {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onNationMapConfig(data: any):void {
+    protected onNationMapConfig(data: any): void {
         console.log("onNationMapConfig", data);
         if (data.code == 0) {
             this._proxy.setNationMapConfig(data.msg.Confs);
+            this.qryNationMapScan(19, 19);
+            this.enterMap();
         }
     }
 
-    protected onNationMapScan(data: any):void {
+    protected onNationMapScan(data: any): void {
         console.log("onNationMapScan", data);
     }
 
+    public enterMap():void {
+        if (this._proxy.getConfig() == null) {
+            this.qryNationMapConfig();
+            return;
+        }
+        cc.systemEvent.emit("enter_map");
+    }
+
     /**请求地图基础配置*/
-    public qryNationMapConfig():void {
-        let send_data:any = {
+    public qryNationMapConfig(): void {
+        let send_data: any = {
             name: ServerConfig.nationMap_config,
             msg: {}
         };
         NetManager.getInstance().send(send_data);
     }
 
-    public qryNationMapScan():void {
-        let send_data:any = {
+    public qryNationMapScan(x: number, y: number): void {
+        let send_data: any = {
             name: ServerConfig.nationMap_scan,
-            msg: {}
+            msg: {
+                x: x,
+                y: y
+            }
         };
         NetManager.getInstance().send(send_data);
     }

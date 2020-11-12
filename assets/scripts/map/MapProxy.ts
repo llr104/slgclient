@@ -22,10 +22,16 @@ export default class MapProxy {
         console.log("setNationMapConfig", this._mapConfig)
     }
 
+    /**根据类型获取配置数据*/
     public getConfigByType(type: number): MapConfig {
         if (this._mapConfig && this._mapConfig[type] != undefined) {
             return this._mapConfig[type];
         }
         return null;
+    }
+
+    /**获取地图配置全数据*/
+    public getConfig(): { [key: string]: MapConfig } {
+        return this._mapConfig;
     }
 }

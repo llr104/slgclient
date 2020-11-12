@@ -74,16 +74,14 @@ export default class MapLogic extends cc.Component {
         console.log("onTouchEnd", this._isMove);
         if (this._isMove == false) {
             let touchLocation: cc.Vec2 = event.touch.getLocation();
-            console.log("onTouchEnd", touchLocation.x, touchLocation.y)
+            // console.log("onTouchEnd", touchLocation.x, touchLocation.y);
             touchLocation = this.viewPointToWorldPoint(touchLocation);
-            // touchLocation = this._mapCamera.getScreenToWorldPoint(touchLocation);
             let mapPoint: cc.Vec2 = MapUtil.worldPixelToMapPoint(touchLocation);
-            
             let clickCenterPoint: cc.Vec2 = MapUtil.mapToWorldPixelPoint(mapPoint);
             clickCenterPoint = this.worldToMapPixelPoint(clickCenterPoint);
-            console.log("onTouchEnd", touchLocation.x, touchLocation.y)
-            console.log("onTouchEnd", mapPoint.x, mapPoint.y)
-            console.log("onTouchEnd", clickCenterPoint.x, clickCenterPoint.y)
+            // console.log("onTouchEnd", touchLocation.x, touchLocation.y)
+            // console.log("onTouchEnd", mapPoint.x, mapPoint.y)
+            // console.log("onTouchEnd", clickCenterPoint.x, clickCenterPoint.y)
             if (mapPoint.x < 0 || mapPoint.x >= this.tiledMap.getMapSize().width 
             || mapPoint.y < 0 || mapPoint.y >= this.tiledMap.getMapSize().height) {
                 console.log("点击到了地图区域外 (" + mapPoint.x + "," + mapPoint.y + ")");

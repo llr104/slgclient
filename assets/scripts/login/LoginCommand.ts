@@ -57,9 +57,8 @@ export default class LoginCommand {
         console.log("LoginProxy  login:", data);
         if (data.code == 0) {
             this._proxy.loginData = data.msg;
-            //登录完成进入服务器
-            this.role_enterServer(0);
         }
+        cc.systemEvent.emit("loginComplete", data.code);
     }
 
     /**进入服务器回调*/
@@ -71,7 +70,6 @@ export default class LoginCommand {
         } else {
             //进入游戏
             MapCommand.getInstance().qryNationMapConfig();
-            // cc.systemEvent.emit("enter_map");
         }
     }
 
