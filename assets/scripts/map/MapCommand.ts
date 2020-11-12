@@ -25,6 +25,7 @@ export default class MapCommand {
     protected _proxy: MapProxy = new MapProxy();
 
     constructor() {
+        cc.systemEvent.on(ServerConfig.role_myCity, this.onRoleMyCity, this);
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scan, this.onNationMapScan, this);
     }
@@ -33,11 +34,18 @@ export default class MapCommand {
         cc.systemEvent.targetOff(this);
     }
 
+    protected onRoleMyCity(data: any):void {
+        console.log("onRoleMyCity", data);
+        if (data.code == 0) {
+            this._proxy.setMyCitys(data.msg.citys);
+            this.enterMap();
+        }
+    }
+
     protected onNationMapConfig(data: any): void {
         console.log("onNationMapConfig", data);
         if (data.code == 0) {
             this._proxy.setNationMapConfig(data.msg.Confs);
-            this.qryNationMapScan(19, 19);
             this.enterMap();
         }
     }
@@ -51,7 +59,21 @@ export default class MapCommand {
             this.qryNationMapConfig();
             return;
         }
+        if (this._proxy.getMyMainCity() == null) {
+            this.qryRoleMyCity();
+            return;
+        }
+        this.qryNationMapScan(this._proxy.getMyMainCity().x, this._proxy.getMyMainCity().y);
         cc.systemEvent.emit("enter_map");
+    }
+
+    /**请求自己的城池信息*/
+    public qryRoleMyCity(): void {
+        let send_data: any = {
+            name: ServerConfig.role_myCity,
+            msg: {}
+        };
+        NetManager.getInstance().send(send_data);
     }
 
     /**请求地图基础配置*/

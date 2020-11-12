@@ -61,7 +61,6 @@ export default class MapLogic extends cc.Component {
             this._mapCamera.node.x = positionX;
             this._mapCamera.node.y = positionY;
         }
-
     }
 
     protected onTouchBegan(event: cc.Event.EventTouch): void {

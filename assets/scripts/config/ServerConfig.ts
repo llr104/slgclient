@@ -6,6 +6,7 @@ const ServerConfig = {
     role_enterServer: "role.enterServer",
     account_reLogin: "account.reLogin",
 
+    role_myCity: "role.myCity",
     nationMap_config: "nationMap.config",
     nationMap_scan: "nationMap.scan",
 }
