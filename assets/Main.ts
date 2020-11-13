@@ -31,6 +31,7 @@ export default class Main extends cc.Component {
 
         this.enterLogin();
         cc.systemEvent.on("enter_map", this.onEnterMap, this);
+        cc.systemEvent.on("enter_login", this.enterLogin, this);
     }
 
     protected onDestroy(): void {
@@ -38,18 +39,36 @@ export default class Main extends cc.Component {
     }
 
     private enterLogin(): void {
+        this.clearAllScene();
         this._loginScene = cc.instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
     }
 
     protected onEnterMap(): void {
-        if (this._loginScene) {
-            this._loginScene.destroy();
-            this._loginScene = null;
-        }
+        this.clearAllScene();
         this._mapScene = cc.instantiate(this.mapScenePrefab);
         this._mapScene.parent = this.node;
         this._mapUIScene = cc.instantiate(this.mapUIScenePrefab);
         this._mapUIScene.parent = this.node;
+    }
+
+
+    protected clearAllScene(){
+        if(this._mapScene){
+            this._mapScene.destroy();
+            this._mapScene = null;
+        }
+
+        if (this._mapUIScene) {
+            this._mapUIScene.destroy();
+            this._mapUIScene = null;
+        }
+
+        if (this._loginScene) {
+            this._loginScene.destroy();
+            this._loginScene = null;
+        }
+
+
     }
 }

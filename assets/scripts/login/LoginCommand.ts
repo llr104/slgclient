@@ -39,6 +39,9 @@ export default class LoginCommand {
         cc.systemEvent.on(ServerConfig.role_enterServer, this.onEnterServer, this);
         cc.systemEvent.on(ServerConfig.account_reLogin, this.onAccountRelogin, this);
         cc.systemEvent.on(ServerConfig.role_create, this.onRoleCreate, this);
+        cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
+
+
     }
 
     public onDestory(): void {
@@ -96,6 +99,17 @@ export default class LoginCommand {
         //重换成功再次调用
         if (data.code == 0) {
             this.role_enterServer(0);
+        }
+    }
+
+
+    
+    /**登出回调*/
+    private onAccountLogout(data: any): void {
+        //重换成功再次调用
+        if (data.code == 0) {
+            this._proxy.clear();
+            cc.systemEvent.emit("enter_login");
         }
     }
 
@@ -186,6 +200,20 @@ export default class LoginCommand {
             msg: {
                 session: session,
                 hardware: Tools.getUUID()
+            }
+        };
+        NetManager.getInstance().send(send_data);
+    }
+
+
+    /**
+     * logout
+     */
+    public account_logout():void{
+        var api_name = ServerConfig.account_logout;
+        var send_data = {
+            name: api_name,
+            msg: {
             }
         };
         NetManager.getInstance().send(send_data);
