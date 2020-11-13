@@ -1,6 +1,7 @@
 import { GameConfig } from "./scripts/config/GameConfig";
 import LoginCommand from "./scripts/login/LoginCommand";
 import MapCommand from "./scripts/map/MapCommand";
+import MapUICommand from "./scripts/map/ui/MapUICommand";
 import { HttpManager } from "./scripts/network/http/HttpManager";
 import { NetManager } from "./scripts/network/socket/NetManager";
 
@@ -28,6 +29,7 @@ export default class Main extends cc.Component {
         //初始化业务模块
         LoginCommand.getInstance();
         MapCommand.getInstance();
+        MapUICommand.getInstance();
 
         this.enterLogin();
         cc.systemEvent.on("enter_map", this.onEnterMap, this);

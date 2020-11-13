@@ -12,16 +12,37 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class MapUILogic extends cc.Component {
 
+    @property(cc.Prefab)
+    facilityPrefab: cc.Prefab = null;
 
-
+    protected _facilityNode: cc.Node = null;
     protected onLoad():void{
     }
 
 
     protected onDestroy():void{
+        this.clearAllNode();
     }
 
     protected onBack():void{
         LoginCommand.getInstance().account_logout();
     }
+
+
+
+
+    protected onFacility():void{
+        if (this._facilityNode == null) {
+            this._facilityNode = cc.instantiate(this.facilityPrefab);
+            this._facilityNode.parent = this.node;
+        } else {
+            this._facilityNode.active = true;
+        }
+    }
+
+
+    protected clearAllNode():void{
+        this._facilityNode = null;
+    }
+
 }
