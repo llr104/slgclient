@@ -74,6 +74,9 @@ export default class LoginCommand {
         if (data.code == 9) {
             cc.systemEvent.emit("CreateRole");
         } else {
+            if(data.code == 0){
+                this._proxy.enterServerData = data.msg.role;
+            }
             //进入游戏
             MapCommand.getInstance().qryNationMapConfig();
         }
@@ -84,7 +87,7 @@ export default class LoginCommand {
         //重新连接成功 重新登录
         console.log("LoginProxy  conneted:", this._proxy.loginData);
         if (this._proxy.loginData) {
-            this.account_reLogin(this._proxy.loginData.session,this._proxy.serverId);
+            this.account_reLogin(this._proxy.loginData.session,this._proxy.enterServerData.rid);
         }
     }
 
