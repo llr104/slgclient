@@ -84,7 +84,7 @@ export default class LoginCommand {
         //重新连接成功 重新登录
         console.log("LoginProxy  conneted:", this._proxy.loginData);
         if (this._proxy.loginData) {
-            this.account_reLogin(this._proxy.loginData.session);
+            this.account_reLogin(this._proxy.loginData.session,this._proxy.serverId);
         }
     }
 
@@ -98,7 +98,7 @@ export default class LoginCommand {
     private onRoleCreate(data: any): void {
         //重换成功再次调用
         if (data.code == 0) {
-            this.role_enterServer(0);
+            this.role_enterServer(this._proxy.serverId);
         }
     }
 
@@ -193,13 +193,14 @@ export default class LoginCommand {
      * 重新登录
      * @param session 
      */
-    public account_reLogin(session: string) {
+    public account_reLogin(session: string,rid:number = 0) {
         var api_name = ServerConfig.account_reLogin;
         var send_data = {
             name: api_name,
             msg: {
                 session: session,
-                hardware: Tools.getUUID()
+                hardware: Tools.getUUID(),
+                rid:rid,
             }
         };
         NetManager.getInstance().send(send_data);
@@ -214,6 +215,7 @@ export default class LoginCommand {
         var send_data = {
             name: api_name,
             msg: {
+
             }
         };
         NetManager.getInstance().send(send_data);
