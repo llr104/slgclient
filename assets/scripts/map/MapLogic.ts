@@ -1,5 +1,3 @@
-
-import MapUtil from "../utils/MapUtil";
 import MapCommand from "./MapCommand";
 
 const { ccclass, property } = cc._decorator;
@@ -14,6 +12,8 @@ export default class MapLogic extends cc.Component {
     // @property(cc.Node)
     // touchAniNode: cc.Node = null;
 
+    protected _cmd: MapCommand;
+
     protected _mapCamera: cc.Camera = null;
     protected _isTouch: boolean = false;
     protected _isMove: boolean = false;
@@ -26,15 +26,16 @@ export default class MapLogic extends cc.Component {
     protected _maxMapY: number = 1;
 
     protected _touchAniNode: cc.Node = null;
+    protected _centerPoint: cc.Vec2 = null;
 
     protected onLoad(): void {
+        console.log("MapLogic onLoad");
+        this._cmd = MapCommand.getInstance();
         this._mapCamera = cc.Canvas.instance.node.getChildByName("Map Camera").getComponent(cc.Camera);
-        this.tiledMap.enableCulling(false);
+        this.tiledMap.enableCulling(true);
         // this.touchAniNode.active = false;
-        MapUtil.initMapConfig(this.tiledMap);
+        this._cmd.proxy.initMapConfig(this.tiledMap);
 
-        let layer:cc.TiledLayer = this.tiledMap.getLayer("ground");
-        MapCommand.getInstance().proxy.initResConfig(layer.getTiles(), this.tiledMap.getMapSize());
         this._maxMapX = (this.tiledMap.node.width - cc.game.canvas.width) * 0.5;
         this._maxMapY = (this.tiledMap.node.height - cc.game.canvas.height) * 0.5;
         this.node.on(cc.Node.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
@@ -43,11 +44,12 @@ export default class MapLogic extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
 
+        this._centerPoint = MapCommand.getInstance().proxy.getMyMainCity().position;
         this.scrollToMapPoint(MapCommand.getInstance().proxy.getMyMainCity().position);
     }
 
     protected onDestroy(): void {
-
+        this._cmd = null;
     }
 
     protected onMouseWheel(event: cc.Event.EventMouse): void {
@@ -67,6 +69,7 @@ export default class MapLogic extends cc.Component {
             positionY = Math.min(this._maxMapY, Math.max(-this._maxMapY, positionY));
             this._mapCamera.node.x = positionX;
             this._mapCamera.node.y = positionY;
+            this.setCenterMapCellPoint(this._cmd.proxy.mapPixelToCellPoint(cc.v2(positionX, positionY)));
         }
     }
 
@@ -82,8 +85,8 @@ export default class MapLogic extends cc.Component {
             let touchLocation: cc.Vec2 = event.touch.getLocation();
             // console.log("onTouchEnd", touchLocation.x, touchLocation.y);
             touchLocation = this.viewPointToWorldPoint(touchLocation);
-            let mapPoint: cc.Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation);
-            let clickCenterPoint: cc.Vec2 = MapUtil.mapCellToWorldPixelPoint(mapPoint);
+            let mapPoint: cc.Vec2 = this._cmd.proxy.worldPixelToMapCellPoint(touchLocation);
+            let clickCenterPoint: cc.Vec2 = this._cmd.proxy.mapCellToWorldPixelPoint(mapPoint);
             clickCenterPoint = this.worldToMapPixelPoint(clickCenterPoint);
             // console.log("onTouchEnd", touchLocation.x, touchLocation.y)
             // console.log("onTouchEnd", mapPoint.x, mapPoint.y)
@@ -131,12 +134,19 @@ export default class MapLogic extends cc.Component {
     }
 
     protected scrollToMapPoint(point: cc.Vec2): void {
-        let centerPoint: cc.Vec2 = MapUtil.mapCellToPixelPoint(point);
+        let centerPoint: cc.Vec2 = this._cmd.proxy.mapCellToPixelPoint(point);
         console.log("scrollToMapPoint", centerPoint.x, centerPoint.y);
         let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, centerPoint.x));
         let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, centerPoint.y));
         this._mapCamera.node.x = positionX;
         this._mapCamera.node.y = positionY;
         console.log("scrollToMapPoint", point.x, point.y, this._mapCamera.node.x, this._mapCamera.node.y);
+        this.setCenterMapCellPoint(point);
+    }
+
+    protected setCenterMapCellPoint(point: cc.Vec2): void {
+        if (this._cmd.proxy.setCurCenterPoint(point)) {
+            cc.systemEvent.emit("map_center_change", point);
+        }
     }
 }

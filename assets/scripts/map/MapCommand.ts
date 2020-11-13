@@ -56,6 +56,22 @@ export default class MapCommand {
 
     protected onNationMapScan(data: any, otherData: any): void {
         console.log("onNationMapScan", data);
+        if (data.code == 0) {
+            // this._proxy.setMapScan(data.)
+        }
+    }
+
+    protected initMapResConfig(serverId: number = 0): void {
+        cc.resources.load("./config/mapRes_" + serverId, cc.JsonAsset, this.loadMapResComplete.bind(this));
+    }
+
+    protected loadMapResComplete(error: Error, asset: cc.JsonAsset): void {
+        if (error == undefined) {
+            this._proxy.initMapResConfig(asset.json);
+            this.enterMap();
+        } else {
+            console.log("loadMapResComplete error ", error);
+        }
     }
 
     public enterMap(): void {
@@ -65,6 +81,10 @@ export default class MapCommand {
         }
         if (this._proxy.getMyMainCity() == null) {
             this.qryRoleMyCity();
+            return;
+        }
+        if (this._proxy.mapResConfigs == null) {
+            this.initMapResConfig(0);
             return;
         }
         this.qryNationMapScan(this._proxy.getMyMainCity().position);

@@ -15,6 +15,7 @@ export default class MapResourceLogic extends cc.Component {
     protected _resList: { [key: string]: cc.Node } = {};
 
     protected onLoad(): void {
+        console.log("MapResourceLogic onLoad");
         this._cmd = MapCommand.getInstance();
         cc.systemEvent.on("map_center_change", this.updateView, this);
         this.scheduleOnce(this.updateView, 0.1);
@@ -29,7 +30,8 @@ export default class MapResourceLogic extends cc.Component {
         // return;
         let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
         let curShowLimit: MapShowLimitRect = this._cmd.proxy.getCurShowLimit();
-        let layer: cc.TiledLayer = this.tiledMap.getLayer("resource");
+        let layer: cc.TiledLayer = this.tiledMap.getLayer("ground");
+        console.log("MapResourceLogic curShowLimit", curShowLimit.minX, curShowLimit.maxX, curShowLimit.minY, curShowLimit.maxY);
         for (let x: number = curShowLimit.minX; x <= curShowLimit.maxX; x++) {
             for (let y: number = curShowLimit.minY; y <= curShowLimit.maxY; y++) {
                 if (resDataList[x][y].type >= MapResType.WOOD) {
@@ -38,10 +40,10 @@ export default class MapResourceLogic extends cc.Component {
                     if (node == undefined) {
                         node = cc.instantiate(this.resPrefab);
                         node.parent = layer.node;
-                        // layer.addUserNode(node);
                         this._resList[key] = node;
                         node.setPosition(this._cmd.proxy.mapCellToPixelPoint(cc.v2(x, y)));
                         node.getComponent(ResourceLogic).setResourceData(resDataList[x][y]);
+                        console.log("MapResourceLogic updateView", x, y, resDataList[x][y].type, node.x, node.y);
                     }
 
                 }

@@ -1,20 +1,23 @@
-
-import MapUtil from "../utils/MapUtil";
 import ArmyLogic from "./ArmyLogic";
+import MapCommand from "./MapCommand";
+import MapProxy, { MapConfig } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MapArmyLogic extends cc.Component {
-
+    @property(cc.TiledMap)
+    tiledMap: cc.TiledMap = null;
     @property(cc.Prefab)
     armyPrefab: cc.Prefab = null;
+    protected _proxy: MapProxy = null;
     protected _parentLayer: cc.TiledLayer = null;
     protected _army:cc.Node = null;
 
     protected onLoad(): void {
-        this._parentLayer = MapUtil.tiledMap.getLayer("army");
-        let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(0, 0));
+        this._proxy = MapCommand.getInstance().proxy;
+        this._parentLayer = this.tiledMap.getLayer("army");
+        let position: cc.Vec2 = this._proxy.mapCellToPixelPoint(cc.v2(0, 0));
         this._army = cc.instantiate(this.armyPrefab);
         this._army.setPosition(position);
         this._army.getComponent(ArmyLogic).mapPointX = 0;
@@ -29,7 +32,7 @@ export default class MapArmyLogic extends cc.Component {
     }
 
     protected onTouchMap(mapPoint: cc.Vec2, worldPixelPoint: cc.Vec2):void {
-        let guid: number = MapUtil.tiledMap.getLayer("ground").getTileGIDAt(mapPoint);
+        let guid: number = this.tiledMap.getLayer("ground").getTileGIDAt(mapPoint);
         console.log("onTouchMap guid ", guid);
         if (guid > 0) {
             //不可行走区域
