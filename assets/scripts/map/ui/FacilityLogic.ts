@@ -44,8 +44,9 @@ export default class FacilityLogic extends cc.Component {
 
 
     protected onQryCityFacilities():void{
-        var facility = MapUICommand.getInstance().proxy.getMyFacility();
-        console.log("facility:",facility);
+        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        var facility = MapUICommand.getInstance().proxy.getMyFacility(cityId);
+        // console.log("facility:",facility);
         this.srollLayout.node.removeAllChildren();
         if(facility){
             for(var i = 0;i < facility.length; i++){
@@ -62,7 +63,10 @@ export default class FacilityLogic extends cc.Component {
 
 
     protected onClickFacility(event:any): void {
-        console.log("onClickFacility:",event.currentTarget);
+        // console.log("onClickFacility:",event.currentTarget);
+        var otherData = event.currentTarget.otherData;
+        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        MapUICommand.getInstance().upFacility(cityId,otherData.type);
     }
 
 }

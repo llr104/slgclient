@@ -28,6 +28,7 @@ export default class MapUICommand {
 
     constructor() {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
+        cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
 
     }
 
@@ -35,6 +36,25 @@ export default class MapUICommand {
         console.log("onCityFacilities :",data);
         if(data.code == 0){
             this._proxy.setMyFacility(data.msg);
+            cc.systemEvent.emit("getCityFacilities");
+        }
+    }
+
+
+    protected onCityUpFacilities(data:any):void{
+        console.log("onCityUpFacilities :",data);
+        if(data.code == 0){
+            var cityId = data.msg.cityId;
+            var facility = data.msg.facility;
+            var facilityArr = this._proxy.getMyFacility(cityId);
+            for(var i = 0;i < facilityArr.length ;i++ ){
+                if(facilityArr[i].type == facility.type){
+                    facilityArr[i].cLevel = facility.cLevel;
+                    break;
+                }
+            }
+
+            this._proxy.setMyFacilityByCityId(cityId,facilityArr);
             cc.systemEvent.emit("getCityFacilities");
         }
     }
@@ -48,11 +68,32 @@ export default class MapUICommand {
     }
 
 
+    /**
+     * 设施
+     * @param cityId 
+     */
     public qryCityFacilities(cityId:number = 0): void {
         let sendData: any = {
             name: ServerConfig.city_facilities,
             msg: {
                 cityId:cityId,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+    /**
+     * 升级设施
+     * @param cityId 
+     * @param ftype 
+     */
+    public upFacility(cityId:number = 0,ftype:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.city_upFacility,
+            msg: {
+                cityId:cityId,
+                fType:ftype,
             }
         };
         NetManager.getInstance().send(sendData);

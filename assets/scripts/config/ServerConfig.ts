@@ -13,6 +13,7 @@ const ServerConfig = {
 
 
     city_facilities:"city.facilities",
+    city_upFacility:"city.upFacility",
 
     
 }
