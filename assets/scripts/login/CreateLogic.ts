@@ -33,7 +33,7 @@ export default class CreateLogic extends cc.Component {
     protected onCreate() {
         var sex = this.manToggle.isChecked?0:1;
         var loginData: any = LoginCommand.getInstance().proxy.loginData;
-        LoginCommand.getInstance().role_create(loginData.uid, this.editName.string, sex,0, 0)
+        LoginCommand.getInstance().role_create(loginData.uid, this.editName.string, sex,LoginCommand.getInstance().proxy.serverId, 0)
     }
 
 

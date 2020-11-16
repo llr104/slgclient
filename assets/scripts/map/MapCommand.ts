@@ -1,6 +1,7 @@
 import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
 import MapProxy from "./MapProxy";
+import MapUICommand from "./ui/MapUICommand";
 
 export default class MapCommand {
     //单例
@@ -63,6 +64,7 @@ export default class MapCommand {
 
     protected initMapResConfig(serverId: number = 0): void {
         cc.resources.load("./config/mapRes_" + serverId, cc.JsonAsset, this.loadMapResComplete.bind(this));
+        MapUICommand.getInstance().initMapJsonConfig();
     }
 
     protected loadMapResComplete(error: Error, asset: cc.JsonAsset): void {

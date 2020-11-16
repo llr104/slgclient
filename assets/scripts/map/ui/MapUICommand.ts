@@ -49,7 +49,7 @@ export default class MapUICommand {
             var facilityArr = this._proxy.getMyFacility(cityId);
             for(var i = 0;i < facilityArr.length ;i++ ){
                 if(facilityArr[i].type == facility.type){
-                    facilityArr[i].cLevel = facility.cLevel;
+                    facilityArr[i].level = facility.level;
                     break;
                 }
             }
@@ -99,4 +99,20 @@ export default class MapUICommand {
         NetManager.getInstance().send(sendData);
     }
 
+
+
+
+
+    public initMapJsonConfig():void{
+        cc.resources.loadDir("./config/json/", cc.JsonAsset, this.loadJsonResComplete.bind(this));
+    }
+
+
+    public loadJsonResComplete(error: Error, asset: [cc.JsonAsset]):void{
+        if(!error){
+            this._proxy.setAllFacilityCfg(asset);
+        }else{
+            console.log("loadJsonResComplete--asset:",error)
+        }
+    }
 }

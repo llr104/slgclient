@@ -14,14 +14,22 @@ export default class MapUILogic extends cc.Component {
 
     @property(cc.Prefab)
     facilityPrefab: cc.Prefab = null;
-
     protected _facilityNode: cc.Node = null;
+
+
+
+    @property(cc.Prefab)
+    facilityDesPrefab: cc.Prefab = null;
+    protected _facilityDesNode: cc.Node = null;
+
     protected onLoad():void{
+        cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
     }
 
 
     protected onDestroy():void{
         this.clearAllNode();
+        cc.systemEvent.targetOff(this);
     }
 
     protected onBack():void{
@@ -43,6 +51,20 @@ export default class MapUILogic extends cc.Component {
 
     protected clearAllNode():void{
         this._facilityNode = null;
+        this._facilityDesNode = null;
+    }
+
+
+
+    protected openFacilityDes(data:any):void{
+        if (this._facilityDesNode == null) {
+            this._facilityDesNode = cc.instantiate(this.facilityDesPrefab);
+            this._facilityDesNode.parent = this.node;
+        } else {
+            this._facilityDesNode.active = true;
+        }
+
+        this._facilityDesNode.getComponent("FacilityDesLogic").setData(data);
     }
 
 }

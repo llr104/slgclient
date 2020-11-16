@@ -21,8 +21,12 @@ export default class FacilityLogic extends cc.Component {
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
+    protected _curCtiyId:number = 0;
+
     protected onLoad():void{
         cc.systemEvent.on("getCityFacilities", this.onQryCityFacilities, this);
+
+        
     }
 
 
@@ -37,14 +41,15 @@ export default class FacilityLogic extends cc.Component {
 
 
     protected onEnable():void{
+        this._curCtiyId  = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        MapUICommand.getInstance().qryCityFacilities(this._curCtiyId);
         this.onQryCityFacilities();
-        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
-        MapUICommand.getInstance().qryCityFacilities(cityId);
+        
     }
 
 
     protected onQryCityFacilities():void{
-        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        var cityId = this._curCtiyId;
         var facility = MapUICommand.getInstance().proxy.getMyFacility(cityId);
         // console.log("facility:",facility);
         this.srollLayout.node.removeAllChildren();
@@ -53,7 +58,7 @@ export default class FacilityLogic extends cc.Component {
                 var item = cc.instantiate(this.facilityNode);
                 item.active = true;
                 item.getChildByName("facilityname").getComponent(cc.Label).string = facility[i].name;
-                item.getChildByName("facilitylv").getComponent(cc.Label).string = "Lv:"+facility[i].cLevel;
+                item.getChildByName("facilitylv").getComponent(cc.Label).string = "Lv:"+facility[i].level;
                 item.parent = this.srollLayout.node;
                 item.otherData = facility[i];
             }
@@ -65,8 +70,12 @@ export default class FacilityLogic extends cc.Component {
     protected onClickFacility(event:any): void {
         // console.log("onClickFacility:",event.currentTarget);
         var otherData = event.currentTarget.otherData;
-        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
-        MapUICommand.getInstance().upFacility(cityId,otherData.type);
+        // var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        // MapUICommand.getInstance().upFacility(cityId,otherData.type);
+
+
+        otherData.cityId = this._curCtiyId;
+        cc.systemEvent.emit("open_facility_des",otherData);
     }
 
 }

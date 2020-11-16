@@ -76,6 +76,7 @@ export default class LoginCommand {
         } else {
             if(data.code == 0){
                 this._proxy.enterServerData = data.msg.role;
+                this._proxy.roleRes = data.msg.role_res;
             }
             //进入游戏
             MapCommand.getInstance().qryNationMapConfig();
