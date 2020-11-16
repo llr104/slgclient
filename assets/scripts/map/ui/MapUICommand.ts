@@ -101,8 +101,23 @@ export default class MapUICommand {
 
 
 
+    /**
+     * 我的角色资源属性
+     * @param cityId 
+     */
+    public qryMyRoleRes(): void {
+        let sendData: any = {
+            name: ServerConfig.role_myRoleRes,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
 
 
+    /**
+     * 加载设施配置
+     */
     public initMapJsonConfig():void{
         cc.resources.loadDir("./config/json/", cc.JsonAsset, this.loadJsonResComplete.bind(this));
     }
@@ -115,4 +130,6 @@ export default class MapUICommand {
             console.log("loadJsonResComplete--asset:",error)
         }
     }
+
+
 }
