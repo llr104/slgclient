@@ -38,14 +38,11 @@ export default class MapLogic extends cc.Component {
 
         this._maxMapX = (this.tiledMap.node.width - cc.game.canvas.width) * 0.5;
         this._maxMapY = (this.tiledMap.node.height - cc.game.canvas.height) * 0.5;
-        this.node.on(cc.Node.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
-        this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchBegan, this);
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
-        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-
-        this._centerPoint = MapCommand.getInstance().proxy.getMyMainCity().position;
-        this.scrollToMapPoint(MapCommand.getInstance().proxy.getMyMainCity().position);
+        this.tiledMap.node.on(cc.Node.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
+        this.tiledMap.node.on(cc.Node.EventType.TOUCH_START, this.onTouchBegan, this);
+        this.tiledMap.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        this.tiledMap.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
+        this.tiledMap.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
     }
 
     protected onDestroy(): void {
@@ -121,19 +118,19 @@ export default class MapLogic extends cc.Component {
     //界面坐标转世界坐标
     protected viewPointToWorldPoint(point: cc.Vec2): cc.Vec2 {
         let canvasNode: cc.Node = cc.Canvas.instance.node;
-        let cameraWorldX: number = this.node.width * this.node.anchorX - canvasNode.width * canvasNode.anchorX + this._mapCamera.node.x;
-        let cameraWorldY: number = this.node.height * this.node.anchorY - canvasNode.height * canvasNode.anchorY + this._mapCamera.node.y;
+        let cameraWorldX: number = this.tiledMap.node.width * this.tiledMap.node.anchorX - canvasNode.width * canvasNode.anchorX + this._mapCamera.node.x;
+        let cameraWorldY: number = this.tiledMap.node.height * this.tiledMap.node.anchorY - canvasNode.height * canvasNode.anchorY + this._mapCamera.node.y;
         return cc.v2(point.x + cameraWorldX, point.y + cameraWorldY);
     }
 
     //世界坐标转化为相对地图的像素坐标
     protected worldToMapPixelPoint(point: cc.Vec2): cc.Vec2 {
-        let pixelX: number = point.x - this.node.width * this.node.anchorX;
-        let pixelY: number = point.y - this.node.height * this.node.anchorY;
+        let pixelX: number = point.x - this.tiledMap.node.width * this.tiledMap.node.anchorX;
+        let pixelY: number = point.y - this.tiledMap.node.height * this.tiledMap.node.anchorY;
         return cc.v2(pixelX, pixelY);
     }
 
-    protected scrollToMapPoint(point: cc.Vec2): void {
+    public scrollToMapPoint(point: cc.Vec2): void {
         let centerPoint: cc.Vec2 = this._cmd.proxy.mapCellToPixelPoint(point);
         console.log("scrollToMapPoint", centerPoint.x, centerPoint.y);
         let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, centerPoint.x));
@@ -145,8 +142,7 @@ export default class MapLogic extends cc.Component {
     }
 
     protected setCenterMapCellPoint(point: cc.Vec2): void {
-        if (this._cmd.proxy.setCurCenterPoint(point)) {
-            cc.systemEvent.emit("map_center_change", point);
-        }
+        console.log("setCenterMapCellPoint", point);
+        this._cmd.proxy.setCurCenterPoint(point);
     }
 }

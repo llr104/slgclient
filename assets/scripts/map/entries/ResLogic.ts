@@ -1,9 +1,9 @@
-import { MapResConfig, MapResType } from "./MapProxy";
+import { MapResConfig, MapResType } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ResourceLogic extends cc.Component {
+export default class ResLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
     @property(cc.SpriteAtlas)

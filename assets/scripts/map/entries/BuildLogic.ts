@@ -1,4 +1,4 @@
-import { MapBuild } from "./MapProxy";
+import { MapBuild } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 

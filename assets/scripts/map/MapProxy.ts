@@ -36,11 +36,34 @@ export class MapBuild {
 }
 
 /**地图展示区域*/
-export class MapShowLimitRect {
+export class MapRect {
     minX: number = 0;
-    minY: number = 0;
     maxX: number = 0;
+    minY: number = 0;
     maxY: number = 0;
+
+    constructor(minX: number = 0, maxX: number = 0, minY: number = 0, maxY: number = 0) {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+    }
+
+    public contains(x: number, y: number): boolean {
+        return (this.minX <= x &&
+            this.maxX >= x &&
+            this.minY <= y &&
+            this.maxY >= y);
+    }
+
+    public clone(): MapRect {
+        let rect: MapRect = new MapRect();
+        rect.minX = this.minX;
+        rect.maxX = this.maxX;
+        rect.minY = this.minY;
+        rect.maxY = this.maxY;
+        return rect;
+    }
 }
 
 export default class MapProxy {
@@ -55,18 +78,19 @@ export default class MapProxy {
     //地图 (0, 0)点对应的像素坐标
     protected _zeroPixelPoint: cc.Vec2 = cc.v2(0, 0);
     //x轴的展示格子数量
-    protected _showRectX: number = 7;
+    protected _showRectW: number = 7;
     //y轴的展示格子数量
-    protected _showRectY: number = 7;
+    protected _showRectH: number = 7;
     //当前地图中心点
     protected _curCenterPoint: cc.Vec2 = cc.v2(0, 0);
     //当前展示区域
-    protected _curShowLimitRect: MapShowLimitRect = new MapShowLimitRect();
+    protected _curShowRect: MapRect = null;
     protected _mapResConfigs: Array<Array<MapResConfig>> = null;
+    protected _mapBuilds: Array<Array<number>> = null;
     //地图基础配置数据
     protected _mapConfig: { [key: number]: MapConfig } = null;
     protected _myMainCity: MapBuild = null;
-    protected _mySubCity: MapBuild = null;
+    protected _mySubCitys: MapBuild[] = [];
 
     // 初始化地图配置
     public initMapConfig(map: cc.TiledMap): void {
@@ -76,7 +100,6 @@ export default class MapProxy {
         this._mapSize = map.getMapSize();
         this._zeroPixelPoint.x = this._mapSize.width * this._tileSize.width * 0.5;
         this._zeroPixelPoint.y = this._mapSize.height * this._tileSize.height - this._tileSize.height * 0.5;
-        console.log("initMapConfig", this._tileSize, this._mapSize, this._zeroPixelPoint, this._mapOffsetSize);
     }
 
     // 世界像素坐标转地图坐标
@@ -140,7 +163,7 @@ export default class MapProxy {
             if (build.isMain) {
                 this._myMainCity = build;
             } else {
-                this._mySubCity = build;
+                this._mySubCitys.push(build);
             }
         }
     }
@@ -167,22 +190,32 @@ export default class MapProxy {
         return this._mapResConfigs;
     }
 
+    /**设置地图当前中心点的信息*/
     public setCurCenterPoint(point: cc.Vec2): boolean {
-        if (this._curCenterPoint == null 
-            || this._curCenterPoint.x != point.x 
+        if (this._curCenterPoint == null
+            || this._curCenterPoint.x != point.x
             || this._curCenterPoint.y != point.y) {
-                this._curCenterPoint = point;
-                this._curShowLimitRect.minX = Math.max(0, point.x - this._showRectX);
-                this._curShowLimitRect.maxX = Math.min(this._mapSize.width - 1, point.x + this._showRectX);
-                this._curShowLimitRect.minY = Math.max(0, point.y - this._showRectY);
-                this._curShowLimitRect.maxY = Math.min(this._mapSize.height - 1, point.y + this._showRectY);
-                return true;
+            this._curCenterPoint = point;
+
+            let oldRect: MapRect = null;
+            if (this._curShowRect == null) {
+                this._curShowRect = new MapRect();
+            } else {
+                oldRect = this._curShowRect.clone();
+            }
+
+            this._curShowRect.minX = Math.max(0, point.x - this._showRectW);
+            this._curShowRect.maxX = Math.min(this._mapSize.width - 1, point.x + this._showRectW);
+            this._curShowRect.minY = Math.max(0, point.y - this._showRectH);
+            this._curShowRect.maxY = Math.min(this._mapSize.height - 1, point.y + this._showRectH);
+            cc.systemEvent.emit("map_center_change", point, this._curShowRect, oldRect);
+            return true;
         }
         return false;
     }
 
-    public getCurShowLimit(): MapShowLimitRect {
-        return this._curShowLimitRect;
+    public getCurShowRect(): MapRect {
+        return this._curShowRect;
     }
 
     public setMapScan(scanDatas: any): void {
@@ -206,5 +239,9 @@ export default class MapProxy {
 
     public getMyMainCity(): MapBuild {
         return this._myMainCity;
+    }
+
+    public getSubCitys(): MapBuild[] {
+        return this._mySubCitys;
     }
 }

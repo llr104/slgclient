@@ -1,26 +1,52 @@
+import MapCommand from "../map/MapCommand";
+import MapLogic from "../map/MapLogic";
+import { MapRect } from "../map/MapProxy";
+import MapResLogic from "../map/MapResLogic";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MapScene extends cc.Component {
-    @property(cc.Prefab)
-    mapPrefab: cc.Prefab = null;
+    @property(cc.Node)
+    mapLayer: cc.Node = null;
+    @property(cc.Node)
+    resLayer: cc.Node = null;
+    @property(cc.Node)
+    buildLayer: cc.Node = null;
+    @property(cc.Node)
+    armyLayer: cc.Node = null;
 
-    protected _mapNode: cc.Node = null;
+    protected _cmd: MapCommand = null;
 
     protected onLoad(): void {
-        this.openMap();
+        this._cmd = MapCommand.getInstance();
+        cc.systemEvent.on("map_center_change", this.onCenterChange, this);
+        this.scheduleOnce(() => {
+            let centerPoint: cc.Vec2 = MapCommand.getInstance().proxy.getMyMainCity().position;
+            this.node.getComponent(MapLogic).scrollToMapPoint(centerPoint);
+        });
     }
 
-    protected onDestroy():void {
-        this._mapNode = null;
+    protected onDestroy(): void {
+        cc.systemEvent.targetOff(this);
     }
 
-    protected openMap():void {
-        if (this._mapNode == null) {
-            this._mapNode = cc.instantiate(this.mapPrefab);
-            this._mapNode.parent = this.node;
-        } else {
-            this._mapNode.active =  true;
+    protected onCenterChange(centerPoint: cc.Vec2, showRect: MapRect, oldRect: MapRect): void {
+        if (oldRect != null) {
+            for (let x: number = oldRect.minX; x <= oldRect.maxX; x++) {
+                for (let y: number = oldRect.minY; y <= oldRect.maxY; y++) {
+                    if (showRect.contains(x, y) == false) {
+                        this.node.getComponent(MapResLogic).removeEntry(x, y);
+                    }
+                }
+            }
         }
+
+        for (let x: number = showRect.minX; x <= showRect.maxX; x++) {
+            for (let y: number = showRect.minY; y <= showRect.maxY; y++) {
+                this.node.getComponent(MapResLogic).addEntry(x, y);
+            }
+        }
+        this._cmd.qryNationMapScan(centerPoint);
     }
 }
