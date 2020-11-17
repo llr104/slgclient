@@ -32,12 +32,18 @@ export default class FacilityDesLogic extends cc.Component {
     costLabel: cc.Label = null;
 
 
+    
+    @property(cc.Label)
+    upLabel: cc.Label = null;
+
+
     @property(cc.Button)
     upButton: cc.Button = null;
 
     private _currData:any = null;
 
     private _nameObj:any = {};
+    private _upNameObj:any = {};
 
 
     protected onLoad():void{
@@ -48,6 +54,15 @@ export default class FacilityDesLogic extends cc.Component {
             iron:"金属",
             stone:"石材"
         };
+
+
+        this._upNameObj = {
+            rate:"效益",
+            limit:"上限",
+            yield:"产量",
+            cnt:"数量"
+        }
+
 
         cc.systemEvent.on("getCityFacilities", this.onCityUpFacilities, this);
     }
@@ -85,10 +100,22 @@ export default class FacilityDesLogic extends cc.Component {
 
             this.upButton.node.active = false;
             if(nextCost){
+
+                for(var key in this._upNameObj){
+                    if(nextCost[key] != undefined){
+                        this.upLabel.string = this._upNameObj[key] + ":" + nextCost[key];
+                        break;
+                    }
+                }
+
+
                 nextCost = nextCost.need;
                 var str = "";
                 for(var key in nextCost){
-                    str += " " + this._nameObj[key] + ": " + nextCost[key];
+                    if(nextCost[key] > 0){
+                        str += " " + this._nameObj[key] + ": " + nextCost[key];
+                    }
+                    
                 }
                 this.costLabel.string = str;
                 this.upButton.node.active = true;
