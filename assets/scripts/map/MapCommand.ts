@@ -1,11 +1,8 @@
 import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
-<<<<<<< Updated upstream
-import MapProxy from "./MapProxy";
 import MapUICommand from "./ui/MapUICommand";
-=======
 import MapProxy, { MapAreaData } from "./MapProxy";
->>>>>>> Stashed changes
+
 
 export default class MapCommand {
     //单例
