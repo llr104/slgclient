@@ -1,4 +1,4 @@
-import { ISocket, NetData } from "./NetInterface";
+import { ISocket } from "./NetInterface";
 import CryptoJS = require("../../libs/crypto/crypto-js.min");
 import convert = require("../../libs/convert")
 import gzip = require('../..//libs/gzip/gzip')

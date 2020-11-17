@@ -1,4 +1,4 @@
-import { ISocket,  RequestObject, CallbackObject, NetData, NetCallFunc, NetEvent } from "./NetInterface";
+import { RequestObject, NetEvent } from "./NetInterface";
 import { NetTimer } from "./NetTimer";
 import { WebSock } from "./WebSock";
 
@@ -11,10 +11,6 @@ import { WebSock } from "./WebSock";
 *   4. 调用网络屏蔽层
 */
 
-type ExecuterFunc = (callback: CallbackObject, buffer: NetData) => void;
-type CheckFunc = (checkedFunc : VoidFunc ) => void;
-type VoidFunc = () => void;
-type BoolFunc = () => boolean;
 
 
 export enum NetTipsType {
@@ -58,6 +54,7 @@ export class NetNode {
     protected _requests: RequestObject[] = Array<RequestObject>();          // 请求列表
     protected _maxSeqId :number = 1000000;
     protected _seqId :number = 0;
+    protected _invokePool:any = [];
 
     /********************** 网络相关处理 *********************/
     public init() {
@@ -66,6 +63,7 @@ export class NetNode {
         this.initSocket();
         this._timer = new NetTimer();
         this.initTimer();
+        this._invokePool = [];
         
     }
 
@@ -134,6 +132,7 @@ export class NetNode {
             let req = this._requests[i];
             if(msg.name == req.rspName && msg.seq == req.seq){
                 this._requests.splice(i, 1);
+                this.destroyInvoke(req);
                 i--;
             }       
         }
@@ -197,6 +196,7 @@ export class NetNode {
                     this._requests.splice(i, 1);
                     i--;
                     cc.systemEvent.emit(msg.name, msg , req.otherData);
+                    this.destroyInvoke(req);
                 }       
             }
         }
@@ -268,8 +268,21 @@ export class NetNode {
         }
     }
 
+
+
+
+    public send(send_data:any,otherData:any,force: boolean = false):void{
+
+        var data = this.createInvoke();//new RequestObject();
+        data.json = send_data;
+        data.rspName = send_data.name;
+        data.otherData = otherData;
+
+        this.sendPack(data,force);
+    }
+
     // 发起请求，如果当前处于重连中，进入缓存列表等待重连完成后发送
-    public send(obj: RequestObject, force: boolean = false): boolean {
+    public sendPack(obj: RequestObject, force: boolean = false): boolean {
         if (this._state == NetNodeState.Working || force) {
             this.socketSend(obj);
             this._requests.push(obj);
@@ -309,7 +322,7 @@ export class NetNode {
      * 心跳
      */
     public getHearbeat(){
-        var obj = new RequestObject();
+        var obj = this.createInvoke();//new RequestObject();
         obj.json = {name:"heartbeat",msg:{ctime:new Date().getTime()},seq:0};
         obj.rspName = "heartbeat";
         obj.seq = 0;
@@ -329,7 +342,7 @@ export class NetNode {
         }
 
         this._keepAliveTimer = setInterval(() => {
-            this.send(this.getHearbeat());
+            this.sendPack(this.getHearbeat());
         }, this._heartTime);
     }
 
@@ -350,5 +363,24 @@ export class NetNode {
     public rejectReconnect() {
         this._autoReconnect = 0;
         this.clearTimer();
+    }
+
+
+
+
+
+
+    protected createInvoke():RequestObject{
+        // console.log("createInvoke_invokePool :",this._invokePool.length)
+        if (this._invokePool.length > 0) {
+            return this._invokePool.shift();
+        }
+        return new RequestObject();
+    }
+
+    protected destroyInvoke(invoke:RequestObject):void {
+        invoke.destroy();
+        this._invokePool.push(invoke);
+        // console.log("destroyInvoke_invokePool :",this._invokePool.length)
     }
 }

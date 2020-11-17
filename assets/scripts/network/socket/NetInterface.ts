@@ -13,12 +13,21 @@ export type NetData = (string | ArrayBufferLike | Blob | ArrayBufferView);
 
 // 请求对象
 export class RequestObject {
-    json: any             // 请求的json
-    rspName: string = "";       // 接口名
-    autoReconnect: number = 0;  // -1 永久重连，0不自动重连，其他正整数为自动重试次数
-    seq:number = 0;             // 消息的序号
-    sended:boolean = false;        // 是否发送
-    otherData:any = {};
+    public json: any   = null;           // 请求的json
+    public rspName: string = "";       // 接口名
+    public autoReconnect: number = 0;  // -1 永久重连，0不自动重连，其他正整数为自动重试次数
+    public seq:number = 0;             // 消息的序号
+    public sended:boolean = false;        // 是否发送
+    public otherData:any = {};
+
+    public destroy():void{
+        this.json = null;
+        this.rspName = "";
+        this.autoReconnect = 0;
+        this.seq = 0;
+        this.sended = false;
+        this.otherData = {};
+    }
 }
 
 
