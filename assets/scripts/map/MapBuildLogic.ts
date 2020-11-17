@@ -1,4 +1,3 @@
-import { MapResConfig, MapResType } from "./MapProxy";
 import MapEntryLayerLogic from "./MapEntryLayerLogic";
 
 const { ccclass, property } = cc._decorator;
@@ -8,21 +7,24 @@ export default class MapBuildLogic extends MapEntryLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
+        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
     }
 
     protected onDestroy(): void {
+        cc.systemEvent.targetOff(this);
         super.onDestroy();
     }
 
-    public addEntry(x: number, y: number): void {
-        // let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
-        // if (resDataList[x][y].type >= MapResType.WOOD) {
-        //     super.addEntry(x, y);
-        // }
+    protected onUpdateBuilds(areaIndex: number): void {
+        this.removeArea(areaIndex);
+        this.updateNodeByArea(areaIndex);
     }
 
-    public updateEntry(node: cc.Node, x: number, y: number): void {
-        // let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
-        // node.getComponent(ResLogic).setResourceData(resDataList[x][y]);
+    public updateNodeByArea(areaIndex: number): void {
+
+    }
+
+    public updateEntry(node: cc.Node, data: any): void {
+
     }
 }

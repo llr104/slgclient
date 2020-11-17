@@ -1,14 +1,14 @@
-import { MapBuildData } from "../MapProxy";
+import { MapCityData } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BuildLogic extends cc.Component {
+export default class CityLogic extends cc.Component {
 
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
 
-    protected _data: MapBuildData = null;
+    protected _data: MapCityData = null;
 
     protected onLoad(): void {
 
@@ -18,7 +18,7 @@ export default class BuildLogic extends cc.Component {
 
     }
 
-    public setBuildData(data: MapBuildData): void {
+    public setCityData(data: MapCityData): void {
 
     }
 }

@@ -1,6 +1,8 @@
+import MapBuildLogic from "../map/MapBuildLogic";
+import MapCityLogic from "../map/MapCityLogic";
 import MapCommand from "../map/MapCommand";
 import MapLogic from "../map/MapLogic";
-import { MapRect } from "../map/MapProxy";
+import { MapAreaRectData, MapAreaData, MapCityData } from "../map/MapProxy";
 import MapResLogic from "../map/MapResLogic";
 
 const { ccclass, property } = cc._decorator;
@@ -20,33 +22,35 @@ export default class MapScene extends cc.Component {
 
     protected onLoad(): void {
         this._cmd = MapCommand.getInstance();
-        cc.systemEvent.on("map_center_change", this.onCenterChange, this);
+
+        //初始化地图
+        let tiledMap: cc.TiledMap = this.mapLayer.addComponent(cc.TiledMap);
+        tiledMap.tmxAsset = this._cmd.proxy.tiledMapAsset;
+        this._cmd.proxy.initMapConfig(tiledMap);
+        this._cmd.proxy.initMyCityIdDatas();
+        cc.systemEvent.on("map_show_area_change", this.onCenterChange, this);
         this.scheduleOnce(() => {
-            let centerPoint: cc.Vec2 = MapCommand.getInstance().proxy.getMyMainCity().position;
-            this.node.getComponent(MapLogic).scrollToMapPoint(centerPoint);
+            let myCity: MapCityData = this._cmd.proxy.getMyMainCity();
+            this.node.getComponent(MapLogic).setTiledMap(tiledMap);
+            this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(myCity.x, myCity.y));
         });
+        this.schedule(this.onTimer, 0.5);
     }
 
     protected onDestroy(): void {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onCenterChange(centerPoint: cc.Vec2, showRect: MapRect, oldRect: MapRect): void {
-        if (oldRect != null) {
-            for (let x: number = oldRect.minX; x <= oldRect.maxX; x++) {
-                for (let y: number = oldRect.minY; y <= oldRect.maxY; y++) {
-                    if (showRect.contains(x, y) == false) {
-                        this.node.getComponent(MapResLogic).removeEntry(x, y);
-                    }
-                }
-            }
+    protected onTimer(): void {
+        if (this._cmd.proxy.qryMapBuildList.length > 0) {
+            let qryData: MapAreaData = this._cmd.proxy.qryMapBuildList.shift();
+            this._cmd.qryNationMapScan(qryData);
         }
+    }
 
-        for (let x: number = showRect.minX; x <= showRect.maxX; x++) {
-            for (let y: number = showRect.minY; y <= showRect.maxY; y++) {
-                this.node.getComponent(MapResLogic).addEntry(x, y);
-            }
-        }
-        this._cmd.qryNationMapScan(centerPoint);
+    protected onCenterChange(centerPoint: cc.Vec2, showArea: MapAreaRectData): void {
+        this.node.getComponent(MapResLogic).udpateShowAreas(showArea.addIndexs, showArea.removeIndexs);
+        this.node.getComponent(MapBuildLogic).udpateShowAreas(showArea.addIndexs, showArea.removeIndexs);
+        this.node.getComponent(MapCityLogic).udpateShowAreas(showArea.addIndexs, showArea.removeIndexs);
     }
 }

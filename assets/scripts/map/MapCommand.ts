@@ -1,7 +1,11 @@
 import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
+<<<<<<< Updated upstream
 import MapProxy from "./MapProxy";
 import MapUICommand from "./ui/MapUICommand";
+=======
+import MapProxy, { MapAreaData } from "./MapProxy";
+>>>>>>> Stashed changes
 
 export default class MapCommand {
     //单例
@@ -56,20 +60,21 @@ export default class MapCommand {
     }
 
     protected onNationMapScan(data: any, otherData: any): void {
-        console.log("onNationMapScan", data);
+        console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            // this._proxy.setMapScan(data.)
+            this._proxy.setMapScan(data.msg, otherData.index);
         }
     }
 
     protected initMapResConfig(serverId: number = 0): void {
-        cc.resources.load("./config/mapRes_" + serverId, cc.JsonAsset, this.loadMapResComplete.bind(this));
+        cc.resources.load(["./world/worldMap", "./config/mapRes_" + serverId], this.loadMapResComplete.bind(this));
         MapUICommand.getInstance().initMapJsonConfig();
     }
 
-    protected loadMapResComplete(error: Error, asset: cc.JsonAsset): void {
+    protected loadMapResComplete(error: Error, assets: any[]): void {
         if (error == undefined) {
-            this._proxy.initMapResConfig(asset.json);
+            this._proxy.tiledMapAsset = assets[0] as cc.TiledMapAsset;
+            this._proxy.initMapResConfig((assets[1] as cc.JsonAsset).json);
             this.enterMap();
         } else {
             console.log("loadMapResComplete error ", error);
@@ -77,6 +82,10 @@ export default class MapCommand {
     }
 
     public enterMap(): void {
+        if (this._proxy.mapResConfigs == null) {
+            this.initMapResConfig(0);
+            return;
+        }
         if (this._proxy.getConfig() == null) {
             this.qryNationMapConfig();
             return;
@@ -85,11 +94,6 @@ export default class MapCommand {
             this.qryRoleMyCity();
             return;
         }
-        if (this._proxy.mapResConfigs == null) {
-            this.initMapResConfig(0);
-            return;
-        }
-        this.qryNationMapScan(this._proxy.getMyMainCity().position);
         cc.systemEvent.emit("enter_map");
     }
 
@@ -111,14 +115,15 @@ export default class MapCommand {
         NetManager.getInstance().send(sendData);
     }
 
-    public qryNationMapScan(point: cc.Vec2): void {
+    public qryNationMapScan(qryData: MapAreaData): void {
         let sendData: any = {
             name: ServerConfig.nationMap_scan,
             msg: {
-                x: point.x,
-                y: point.y
+                x: qryData.startX,
+                y: qryData.startY,
+                length: qryData.len
             }
         };
-        NetManager.getInstance().send(sendData);
+        NetManager.getInstance().send(sendData, qryData);
     }
 }

@@ -1,6 +1,6 @@
 import ResLogic from "./entries/ResLogic";
 import MapEntryLayerLogic from "./MapEntryLayerLogic";
-import { MapResConfig, MapResType } from "./MapProxy";
+import { MapAreaData, MapResConfig, MapResType } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -15,15 +15,19 @@ export default class MapResLogic extends MapEntryLayerLogic {
         super.onDestroy();
     }
 
-    public addEntry(x: number, y: number): void {
+    public updateNodeByArea(areaIndex: number): void {
         let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
-        if (resDataList[x][y].type >= MapResType.WOOD) {
-            super.addEntry(x, y);
+        let areaData: MapAreaData = this._cmd.proxy.getMapAreaData(areaIndex);
+        for (let x: number = areaData.startX; x < areaData.len + areaData.startX; x++) {
+            for (let y: number = areaData.startY; y < areaData.len + areaData.startY; y++) {
+                if (resDataList[x][y].type >= MapResType.WOOD) {
+                    this.addEntry(x, y, resDataList[x][y]);
+                }
+            }
         }
     }
 
-    public updateEntry(node: cc.Node, x: number, y: number): void {
-        let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
-        node.getComponent(ResLogic).setResourceData(resDataList[x][y]);
+    public updateEntry(node: cc.Node, data: any): void {
+        node.getComponent(ResLogic).setResourceData(data);
     }
 }
