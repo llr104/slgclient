@@ -53,6 +53,6 @@ export default class LoginScene extends cc.Component {
             return;
         }
         //登录完成进入服务器
-        LoginCommand.getInstance().role_enterServer(0);
+        LoginCommand.getInstance().role_enterServer(LoginCommand.getInstance().proxy.serverId);
     }
 }

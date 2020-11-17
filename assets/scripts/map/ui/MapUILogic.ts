@@ -22,8 +22,33 @@ export default class MapUILogic extends cc.Component {
     facilityDesPrefab: cc.Prefab = null;
     protected _facilityDesNode: cc.Node = null;
 
+    @property(cc.Label)
+    roleLabel: cc.Label = null;
+
+    protected _nameObj:any = {};
+
     protected onLoad():void{
+
+        this._nameObj = {
+            decree:"令牌",
+            grain:"谷物",
+            wood:"木材",
+            iron:"金属",
+            stone:"石材",
+            gold:"金钱",
+            wood_yield:"木材产量",
+            iron_yield:"金属产量",
+            stone_yield:"石材产量",
+            grain_yield:"谷物产量",
+            gold_yield:"金钱产量",
+            depot_capacity:"仓库容量"
+        };
+
         cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
+        cc.systemEvent.on("onRoleMyRoleRes", this.updateRole, this);
+
+        this.updateRole();
+        
     }
 
 
@@ -65,6 +90,17 @@ export default class MapUILogic extends cc.Component {
         }
 
         this._facilityDesNode.getComponent("FacilityDesLogic").setData(data);
+    }
+
+
+    protected updateRole():void{
+        var str:string = ""
+        var roleRes = LoginCommand.getInstance().proxy.roleRes;
+        for(var key in roleRes){
+            str += this._nameObj[key] + ": " + roleRes[key] + " ";
+        }
+
+        this.roleLabel.string = str; 
     }
 
 }

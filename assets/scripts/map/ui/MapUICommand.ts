@@ -1,4 +1,5 @@
 import { ServerConfig } from "../../config/ServerConfig";
+import LoginCommand from "../../login/LoginCommand";
 import { NetManager } from "../../network/socket/NetManager";
 import MapUIProxy from "./MapUIProxy";
 
@@ -29,6 +30,7 @@ export default class MapUICommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
+        cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
 
     }
 
@@ -56,6 +58,25 @@ export default class MapUICommand {
 
             this._proxy.setMyFacilityByCityId(cityId,facilityArr);
             cc.systemEvent.emit("getCityFacilities");
+
+
+            LoginCommand.getInstance().proxy.roleRes = data.msg.role_res;
+            cc.systemEvent.emit("onRoleMyRoleRes");
+        }
+    }
+
+
+
+
+
+
+
+
+    protected onRoleMyRoleRes(data:any):void{
+        console.log("onRoleMyRoleRes :",data);
+        if(data.code == 0){
+            LoginCommand.getInstance().proxy.roleRes = data.msg.role_res;
+            cc.systemEvent.emit("onRoleMyRoleRes");
         }
     }
 
