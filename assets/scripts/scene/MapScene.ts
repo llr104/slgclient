@@ -27,14 +27,15 @@ export default class MapScene extends cc.Component {
         let tiledMap: cc.TiledMap = this.mapLayer.addComponent(cc.TiledMap);
         tiledMap.tmxAsset = this._cmd.proxy.tiledMapAsset;
         this._cmd.proxy.initMapConfig(tiledMap);
-        this._cmd.proxy.initMyCityIdDatas();
+        this._cmd.proxy.initMyCityData();
         cc.systemEvent.on("map_show_area_change", this.onCenterChange, this);
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.proxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
             this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(myCity.x, myCity.y));
+            this.onTimer();//立即执行一次
         });
-        this.schedule(this.onTimer, 0.5);
+        this.schedule(this.onTimer, 0.2);
     }
 
     protected onDestroy(): void {
@@ -42,9 +43,12 @@ export default class MapScene extends cc.Component {
     }
 
     protected onTimer(): void {
-        if (this._cmd.proxy.qryMapBuildList.length > 0) {
-            let qryData: MapAreaData = this._cmd.proxy.qryMapBuildList.shift();
-            this._cmd.qryNationMapScan(qryData);
+        if (this._cmd.proxy.qryMapAreaList && this._cmd.proxy.qryMapAreaList.length > 0) {
+            let qryIndex: number = this._cmd.proxy.qryMapAreaList.shift();
+            let qryData: MapAreaData = this._cmd.proxy.getMapAreaData(qryIndex);
+            if (qryData.checkAndUpdateQryTime()) {
+                this._cmd.qryNationMapScanBlock(qryData);
+            }
         }
     }
 

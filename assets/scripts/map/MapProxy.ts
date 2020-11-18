@@ -30,26 +30,17 @@ export enum MapBuildType {
     RES//资源建筑只有一格 所以没有边界类型
 }
 
-export class MapCityIdData {
-    buildId: number = 0;
-    buildType: MapBuildType = MapBuildType.NONE;
-
-    constructor(buildId: number = 0, buildType: MapBuildType = MapBuildType.NONE) {
-        this.buildId = buildId;
-        this.buildType = buildType;
-    }
-}
-
 /**地图城池配置*/
 export class MapCityData {
     cityId: number = 0;
     rid: number = 0;
-    nickName: string = "";
+    name: string = "";
     x: number = null;
     y: number = 0;
     isMain: number = 0;
     level: number = 0;
-    durable: number = 0;
+    curDurable: number = 0;
+    maxDurable: number = 0;
 }
 
 export class MapBuildData {
@@ -63,6 +54,24 @@ export class MapBuildData {
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
+}
+
+export class MapAreaData {
+    static MAX_TIME: number = 30000;
+    index: number = 0;
+    startX: number = 0;
+    startY: number = 0;
+    len: number = 0;
+    qryStartTime: number = 0;
+
+    public checkAndUpdateQryTime(): boolean {
+        let nowTime: number = Date.now();
+        if (nowTime - this.qryStartTime >= MapAreaData.MAX_TIME) {
+            this.qryStartTime = nowTime;
+            return true
+        }
+        return false;
+    }
 }
 
 /**地图展示区域*/
@@ -128,20 +137,16 @@ export class MapAreaRectData {
             } else {
                 this.isChangeAll = false;
                 for (let i: number = 0; i < newArray.length; i++) {
-                    console.log("newArray[i]", i, newArray[i], oldArray.indexOf(newArray[i]));
                     if (oldArray.indexOf(newArray[i]) == -1) {
                         this.addIndexs.push(newArray[i]);
                     }
                 }
                 for (let i: number = 0; i < oldArray.length; i++) {
-                    console.log("oldArray[i]", i, oldArray[i], newArray.indexOf(newArray[i]));
                     if (newArray.indexOf(oldArray[i]) == -1) {
                         this.removeIndexs.push(oldArray[i]);
                     }
                 }
             }
-            console.log("setCenterAreaPoint", oldArray, newArray, this.toArray())
-            console.log("setCenterAreaPoint", this.centerIndex, this.addIndexs, this.removeIndexs)
             return true;
         }
         return false;
@@ -194,13 +199,6 @@ export class MapAreaRectData {
     }
 }
 
-export class MapAreaData {
-    index: number = 0;
-    startX: number = 0;
-    startY: number = 0;
-    len: number = 0;
-}
-
 export default class MapProxy {
     public tiledMapAsset: cc.TiledMapAsset = null;
     //地图像素大小
@@ -221,13 +219,13 @@ export default class MapProxy {
     protected _curCenterAreaPoint: cc.Vec2 = null;
     protected _curShowAreaData: MapAreaRectData = new MapAreaRectData();
     protected _mapAreaDatas: MapAreaData[] = null;
-    protected _mapAreaCityIds: Map<string, MapCityIdData>[] = null;
-    protected
+    protected _mapCityIdsForPos: Array<Array<number>> = null;
+    protected _mapCityIdsForArea: Array<Array<number>> = null;
     protected _mapResConfigs: Array<Array<MapResConfig>> = null;
-    protected _mapCitys: Map<number, MapCityData>[] = null;
-    protected _mapBuilds: Map<string, MapBuildData>[] = null;
+    protected _mapCitys: Map<number, MapCityData> = null;
+    protected _mapBuilds: Map<string, MapBuildData> = null;
     //地图请求列表
-    public qryMapBuildList: MapAreaData[] = [];
+    public qryMapAreaList: number[] = [];
     //地图基础配置数据
     protected _mapConfig: { [key: number]: MapConfig } = null;
     protected _myMainCity: MapCityData = null;
@@ -249,9 +247,10 @@ export default class MapProxy {
         MapAreaRectData.areaSize = cc.size(Math.ceil(this._mapSize.width / showH), Math.ceil(this._mapSize.height / showH));
         MapAreaRectData.maxIndex = MapAreaRectData.areaSize.width * MapAreaRectData.areaSize.height;
         this._mapAreaDatas = new Array(MapAreaRectData.maxIndex);
-        this._mapAreaCityIds = new Array(MapAreaRectData.maxIndex);
-        this._mapCitys = new Array(MapAreaRectData.maxIndex);
-        this._mapBuilds = new Array(MapAreaRectData.maxIndex);
+        this._mapCityIdsForPos = new Array(this._mapSize.width);
+        this._mapCityIdsForArea = new Array(MapAreaRectData.maxIndex);
+        this._mapCitys = new Map<number, MapCityData>();
+        this._mapBuilds = new Map<string, MapBuildData>();
 
         console.log("initMapConfig", this._areaCellSize, MapAreaRectData.areaSize, MapAreaRectData.maxIndex);
     }
@@ -314,22 +313,53 @@ export default class MapProxy {
     }
 
     /**获取地图区域建筑id数据*/
-    public getMapAreaCityIds(areaIndex: number): Map<string, MapCityIdData> {
-        if (this._mapAreaCityIds[areaIndex] == undefined) {
-            let data: Map<string, MapCityIdData> = new Map<string, MapCityIdData>();
-            this._mapAreaCityIds[areaIndex] = data;
-            return data;
+    public getMapCityIdForPos(x: number, y: number): number {
+        if (this._mapCityIdsForPos[x] == undefined) {
+            this._mapCityIdsForPos[x] = new Array(this._mapSize.width);
         }
-        return this._mapAreaCityIds[areaIndex];
+        return this._mapCityIdsForPos[x][y];
     }
 
-    public getMapAreaCitys(areaIndex: number): Map<number, MapCityData> {
-        if (this._mapCitys[areaIndex] == undefined) {
-            let data: Map<number, MapCityData> = new Map<number, MapCityData>();
-            this._mapCitys[areaIndex] = data;
-            return data;
+    public setMapCityIdForPos(x: number, y: number, data: number): void {
+        if (this._mapCityIdsForPos[x] == undefined) {
+            this._mapCityIdsForPos[x] = new Array(this._mapSize.width);
         }
-        return this._mapCitys[areaIndex];
+        this._mapCityIdsForPos[x][y] = data;
+    }
+
+    public updateMyCityIdsForPos(x: number, y: number, data: number): void {
+        this.setMapCityIdForPos(x, y, data);
+        this.setMapCityIdForPos(x, y - 1, data);
+        this.setMapCityIdForPos(x, y + 1, data);
+        this.setMapCityIdForPos(x - 1, y, data);
+        this.setMapCityIdForPos(x - 1, y - 1, data);
+        this.setMapCityIdForPos(x - 1, y + 1, data);
+        this.setMapCityIdForPos(x + 1, y, data);
+        this.setMapCityIdForPos(x + 1, y - 1, data);
+        this.setMapCityIdForPos(x + 1, y + 1, data);
+    }
+
+    /**获取地图区域建筑id数据*/
+    public getMapCityIdsForArea(areaIndex: number): number[] {
+        if (this._mapCityIdsForArea[areaIndex] == undefined) {
+            this._mapCityIdsForArea[areaIndex] = [];
+        }
+        return this._mapCityIdsForArea[areaIndex];
+    }
+
+    public setMapCityIdsForArea(areaIndex: number, datas: number[]): void {
+        this._mapCityIdsForArea[areaIndex] = datas;
+    }
+
+    public getMapCitys(): Map<number, MapCityData> {
+        return this._mapCitys;
+    }
+
+    public getCity(cityId: number): MapCityData {
+        if (this._mapCitys.has(cityId)) {
+            return this._mapCitys.get(cityId);
+        }
+        return null;
     }
 
     public getMapAreaBuilds(areaIndex: number): Map<string, MapBuildData> {
@@ -341,26 +371,37 @@ export default class MapProxy {
         return this._mapBuilds[areaIndex];
     }
 
-    public setCityIdData(data: MapCityData, index: number = -1, citys: Map<number, MapCityData> = null): void {
-        let areaIndex: number = index;
-        if (index == -1) {
-            areaIndex = this.getAreaIndexByCellPoint(cc.v2(data.x, data.y));
+
+    public addCityData(data: MapCityData): void {
+        this._mapCitys.set(data.cityId, data);
+        this.updateMyCityIdsForPos(data.x, data.y, data.cityId);
+    }
+
+    public updateCityData(data: any): void {
+        if (this._mapCitys.has(data.cityId)) {
+            let cityData: MapCityData = this._mapCitys.get(data.cityId);
+            cityData.rid = data.rid;
+            cityData.name = data.name;
+            cityData.isMain = data.is_main;
+            cityData.level = data.level;
+            cityData.curDurable = data.cur_durable;
+            cityData.maxDurable = data.max_durable;
+            if (cityData.x != data.x || cityData.y != data.y) {
+                //代表位置改变 重置旧位置数据
+                this.updateMyCityIdsForPos(cityData.x, cityData.y, 0);
+                cityData.x = data.x;
+                cityData.y = data.y;
+                this.updateMyCityIdsForPos(cityData.x, cityData.y, cityData.cityId);
+            }
         }
-        let mapCitys: Map<number, MapCityData> = citys;
-        if (mapCitys == null) {
-            mapCitys = this.getMapAreaCitys(areaIndex);
+    }
+
+    public removeCityData(cityId: number): void {
+        if (this._mapCitys.has(cityId)) {
+            let cityData: MapCityData = this._mapCitys.get(cityId);
+            this.updateMyCityIdsForPos(cityData.x, cityData.y, 0);
+            this._mapCitys.delete(cityId);
         }
-        mapCitys.set(data.cityId, data);
-        let buildIds: Map<string, MapCityIdData> = this.getMapAreaCityIds(areaIndex);
-        buildIds.set(data.x + "_" + data.y, new MapCityIdData(data.cityId, MapBuildType.CITY));
-        buildIds.set(data.x + "_" + (data.y - 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set(data.x + "_" + (data.y + 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x - 1) + "_" + data.y, new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x - 1) + "_" + (data.y - 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x - 1) + "_" + (data.y + 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x + 1) + "_" + data.y, new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x + 1) + "_" + (data.y - 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
-        buildIds.set((data.x + 1) + "_" + (data.y + 1), new MapCityIdData(data.cityId, MapBuildType.CITYSIDE));
     }
 
     public setBuildData(data: MapBuildData, index: number = -1, builds: Map<string, MapBuildData> = null): void {
@@ -390,19 +431,20 @@ export default class MapProxy {
             cfg.defender = configList[i].defender;
             this._mapConfig[configList[i].type] = cfg;
         }
-        console.log("setNationMapConfig", this._mapConfig);
+        // console.log("setNationMapConfig", this._mapConfig);
     }
 
     protected createCityData(data: any): MapCityData {
         let city: MapCityData = new MapCityData();
         city.cityId = data.cityId;
         city.rid = data.rid;
-        city.nickName = data.nickName;
+        city.name = data.name;
         city.x = data.x;
         city.y = data.y;
         city.isMain = data.is_main;
         city.level = data.level;
-        city.durable = data.durable;
+        city.curDurable = data.cur_durable;
+        city.maxDurable = data.max_durable;
         return city;
     }
 
@@ -430,18 +472,17 @@ export default class MapProxy {
             } else {
                 this._mySubCitys.push(city);
             }
-            // this.setCityIdData(city);
         }
     }
 
-    public initMyCityIdDatas(): void {
-        if (this._myMainCity) {
-            this.setCityIdData(this._myMainCity);
-        }
-        for (let i: number = 0; i < this._mySubCitys.length; i++) {
-            this.setCityIdData(this._mySubCitys[i]);
-        }
-        console.log("initMyCityIdDatas", this._mapCitys);
+    public initMyCityData(): void {
+        // if (this._myMainCity) {
+        //     this.addCityData(this._myMainCity);
+        // }
+        // for (let i: number = 0; i < this._mySubCitys.length; i++) {
+        //     this.addCityData(this._mySubCitys[i]);
+        // }
+        // console.log("initMyCityData", this._mapCitys);
     }
 
     public initMapResConfig(jsonData: any): void {
@@ -479,10 +520,14 @@ export default class MapProxy {
         return MapAreaRectData.getIndexByPoint(this.getAreaPointByCellPoint(point));
     }
 
-    public getVaildAreaListByPoints(...points: cc.Vec2[]): number[] {
+    public getAreaIndexByPixelPoint(point: cc.Vec2): number {
+        return MapAreaRectData.getIndexByPoint(this.getAreaPointByPixelPoint(point));
+    }
+
+    public getVaildAreaListByPixelPoints(...points: cc.Vec2[]): number[] {
         let list: number[] = [];
         for (let i: number = 0; i < points.length; i++) {
-            let index: number = this.getAreaIndexByCellPoint(points[i]);
+            let index: number = this.getAreaIndexByPixelPoint(points[i]);
             if (MapAreaRectData.isVaildArea(index)
                 && list.indexOf(index) == -1) {
                 list.push(index);
@@ -508,13 +553,14 @@ export default class MapProxy {
 
                 let firstAreaIndexs: number[] = null;
                 if (this._curShowAreaData.isChangeAll) {
-                    this.qryMapBuildList.length = 0;//全量刷新就可以舍弃旧的尚未请求的数据
+                    this.qryMapAreaList.length = 0;//全量刷新就可以舍弃旧的尚未请求的数据
                     //全量刷新 需要计算四个角所在的区域 用于判断需要优先请求的区域
                     let leftTopPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(-cc.game.canvas.width * 0.5, cc.game.canvas.height * 0.5));
                     let leftDownPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(-cc.game.canvas.width * 0.5, -cc.game.canvas.height * 0.5));
                     let rightTopPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(cc.game.canvas.width * 0.5, cc.game.canvas.height * 0.5));
                     let rightDownPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(cc.game.canvas.width * 0.5, -cc.game.canvas.height * 0.5));
-                    firstAreaIndexs = this.getVaildAreaListByPoints(pixelPoint, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
+                    firstAreaIndexs = this.getVaildAreaListByPixelPoints(pixelPoint, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
+                    console.log("map_show_area_change", firstAreaIndexs.toString());
                 } else {
                     //其他情况优先请求中心区域
                     if (this._curShowAreaData.addIndexs.indexOf(this._curShowAreaData.centerIndex)
@@ -530,7 +576,7 @@ export default class MapProxy {
                         }
                     }
                 } else {
-                    otherIndexs = this._curShowAreaData.addIndexs;
+                    otherIndexs = this._curShowAreaData.addIndexs.concat();
                 }
 
                 //九宫格 屏幕中最多显示四个的内容所以第一次请求只需要请求四格的数据
@@ -540,17 +586,10 @@ export default class MapProxy {
                 } else {
                     qryIndexs = otherIndexs;
                 }
-                for (let i: number = 0; i < qryIndexs.length; i++) {
-                    let startPoint: cc.Vec2 = this.getStartCellPointByAreaIndex(qryIndexs[i]);
-                    let qryData: MapAreaData = new MapAreaData();
-                    qryData.index = qryIndexs[i];
-                    qryData.startX = startPoint.x;
-                    qryData.startY = startPoint.y;
-                    qryData.len = this._areaCellSize.width;
-                    this.qryMapBuildList.push(qryData);
-                }
-                console.log("map_show_area_change", firstAreaIndexs, otherIndexs);
-                console.log("map_show_area_change", this._curShowAreaData);
+                this.qryMapAreaList = qryIndexs;
+
+                // console.log("map_show_area_change", firstAreaIndexs, otherIndexs);
+                // console.log("map_show_area_change", this._curShowAreaData);
                 cc.systemEvent.emit("map_show_area_change", point, this._curShowAreaData);
 
             }
@@ -563,7 +602,7 @@ export default class MapProxy {
         return this._curShowAreaData;
     }
 
-    public setMapScan(scanDatas: any, areaIndex: number = 0): void {
+    public setMapScanBlock(scanDatas: any, areaIndex: number = 0): void {
         let rBuilds: any[] = scanDatas.mr_builds;
         let cBuilds: any[] = scanDatas.mc_builds;
         if (rBuilds.length > 0) {
@@ -575,12 +614,29 @@ export default class MapProxy {
             cc.systemEvent.emit("update_builds", areaIndex);
         }
         if (cBuilds.length > 0) {
-            let cityMap: Map<number, MapCityData> = this.getMapAreaCitys(areaIndex);
-            cityMap.clear();
-            for (let i: number = 0; i < rBuilds.length; i++) {
-                this.setCityIdData(this.createCityData(cBuilds), areaIndex, cityMap);
+            let oldCityIds: number[] = this.getMapCityIdsForArea(areaIndex);
+            let addCitys: MapCityData[] = [];
+            let removeCityIds: number[] = oldCityIds.concat();
+            let updateCitys: MapCityData[] = [];
+            let newCityIds: number[] = [];
+            for (let i: number = 0; i < cBuilds.length; i++) {
+                let index: number = oldCityIds.indexOf(cBuilds[i].cityId);
+                if (index == -1) {
+                    //新增
+                    let cityData: MapCityData = this.createCityData(cBuilds[i]);
+                    addCitys.push(cityData);
+                    this.addCityData(cityData);
+                } else {
+                    //已经存在的 就只更新
+                    removeCityIds.splice(index, 1);//移出删除列表
+                    this.updateCityData(cBuilds[i]);
+                    updateCitys.push(cBuilds[i].cityId);
+                }
+                newCityIds.push(cBuilds[i].cityId);
+                console.log("setMapScanBlock", index, oldCityIds.length, addCitys.length, removeCityIds.length, updateCitys.length);
             }
-            cc.systemEvent.emit("update_citys", areaIndex);
+            this.setMapCityIdsForArea(areaIndex, newCityIds);
+            cc.systemEvent.emit("update_citys", areaIndex, addCitys, removeCityIds, updateCitys);
         }
     }
 

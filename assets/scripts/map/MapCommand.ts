@@ -29,7 +29,7 @@ export default class MapCommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.role_myCity, this.onRoleMyCity, this);
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
-        cc.systemEvent.on(ServerConfig.nationMap_scan, this.onNationMapScan, this);
+        cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
     }
 
     public onDestory(): void {
@@ -56,10 +56,10 @@ export default class MapCommand {
         }
     }
 
-    protected onNationMapScan(data: any, otherData: any): void {
+    protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            this._proxy.setMapScan(data.msg, otherData.index);
+            this._proxy.setMapScanBlock(data.msg, otherData.index);
         }
     }
 
@@ -112,9 +112,9 @@ export default class MapCommand {
         NetManager.getInstance().send(sendData);
     }
 
-    public qryNationMapScan(qryData: MapAreaData): void {
+    public qryNationMapScanBlock(qryData: MapAreaData): void {
         let sendData: any = {
-            name: ServerConfig.nationMap_scan,
+            name: ServerConfig.nationMap_scanBlock,
             msg: {
                 x: qryData.startX,
                 y: qryData.startY,

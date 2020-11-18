@@ -1,9 +1,9 @@
-import MapEntryLayerLogic from "./MapEntryLayerLogic";
+import MapBaseLayerLogic from "./MapBaseLayerLogic";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class MapBuildLogic extends MapEntryLayerLogic {
+export default class MapBuildLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();

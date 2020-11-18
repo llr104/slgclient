@@ -1,5 +1,5 @@
 import MapCommand from "./MapCommand";
-import { MapBuildData, MapCityData, MapCityIdData, MapResConfig } from "./MapProxy";
+import { MapBuildData, MapCityData, MapResConfig } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,17 +25,14 @@ export default class MapResLogic extends cc.Component {
         }
 
         let areaIndex = this._cmd.proxy.getAreaIndexByCellPoint(mapPoint);
-        let cityIds: Map<string, MapCityIdData> = this._cmd.proxy.getMapAreaCityIds(areaIndex);
+        let cityId: number = this._cmd.proxy.getMapCityIdForPos(mapPoint.x, mapPoint.y);
         let key: string = mapPoint.x + "_" + mapPoint.y;
-        console.log("cityIds", areaIndex, cityIds);
-        if (cityIds.has(key)) {
+        console.log("cityIds", areaIndex, cityId);
+        if (cityId > 0) {
             //代表点击的是城市
-            let cityMap: Map<number, MapCityData> = this._cmd.proxy.getMapAreaCitys(areaIndex);
-            let city: MapCityData = cityMap.get(cityIds.get(key).buildId);
-            console.log("点击城市", city);
-
-            // cc.systemEvent.on("open_facility", this.openFacility, this);
-            cc.systemEvent.emit("open_facility",city);
+            let cityData: MapCityData = this._cmd.proxy.getCity(cityId);
+            console.log("点击城市", cityData);
+            cc.systemEvent.emit("open_facility", cityData);
             return;
         }
         let buildMap: Map<string, MapBuildData> = this._cmd.proxy.getMapAreaBuilds(areaIndex);

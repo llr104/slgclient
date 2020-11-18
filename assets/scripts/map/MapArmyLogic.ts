@@ -1,12 +1,12 @@
 import ArmyLogic from "./entries/ArmyLogic";
 import MapCommand from "./MapCommand";
-import MapEntryLayerLogic from "./MapEntryLayerLogic";
+import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import MapProxy, { MapConfig } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class MapArmyLogic extends MapEntryLayerLogic {
+export default class MapArmyLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();

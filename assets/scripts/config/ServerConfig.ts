@@ -10,7 +10,7 @@ const ServerConfig = {
     role_myCity: "role.myCity",
     role_myRoleRes:"role.myRoleRes",
     nationMap_config: "nationMap.config",
-    nationMap_scan: "nationMap.scan",
+    nationMap_scanBlock: "nationMap.scanBlock",
 
 
     city_facilities:"city.facilities",

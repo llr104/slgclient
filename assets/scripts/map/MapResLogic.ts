@@ -1,11 +1,11 @@
 import ResLogic from "./entries/ResLogic";
-import MapEntryLayerLogic from "./MapEntryLayerLogic";
+import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapAreaData, MapResConfig, MapResType } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class MapResLogic extends MapEntryLayerLogic {
+export default class MapResLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
@@ -21,7 +21,9 @@ export default class MapResLogic extends MapEntryLayerLogic {
         for (let x: number = areaData.startX; x < areaData.len + areaData.startX; x++) {
             for (let y: number = areaData.startY; y < areaData.len + areaData.startY; y++) {
                 if (resDataList[x][y].type >= MapResType.WOOD) {
-                    this.addEntry(x, y, resDataList[x][y]);
+                    let item: cc.Node = this.addItem(areaIndex, resDataList[x][y]);
+                    let position: cc.Vec2 = this._cmd.proxy.mapCellToPixelPoint(cc.v2(x, y));
+                    item.setPosition(position);
                 }
             }
         }
@@ -29,5 +31,10 @@ export default class MapResLogic extends MapEntryLayerLogic {
 
     public updateEntry(node: cc.Node, data: any): void {
         node.getComponent(ResLogic).setResourceData(data);
+    }
+
+    public setItemData(item: cc.Node, data: any): void {
+        let resData: MapResConfig = data as MapResConfig;
+        item.getComponent(ResLogic).setResourceData(resData);
     }
 }
