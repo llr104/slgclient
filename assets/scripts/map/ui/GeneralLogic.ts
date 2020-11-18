@@ -24,6 +24,7 @@ export default class GeneralLogic extends cc.Component {
 
 
     protected onLoad():void{
+        cc.systemEvent.on("onQryMyGenerals", this.initGeneralCfg, this);
     }
 
 
@@ -75,6 +76,7 @@ export default class GeneralLogic extends cc.Component {
 
     protected onEnable():void{
         this.initGeneralCfg();
+        MapUICommand.getInstance().qryMyGenerals();
     }
 
 

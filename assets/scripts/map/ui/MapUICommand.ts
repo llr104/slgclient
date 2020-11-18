@@ -87,6 +87,7 @@ export default class MapUICommand {
         if(data.code == 0){
             this._proxy.setMyGeneral(data.msg);
         }
+        cc.systemEvent.emit("onQryMyGenerals");
     }
 
     public onDestory(): void {
@@ -154,6 +155,25 @@ export default class MapUICommand {
         let sendData: any = {
             name: ServerConfig.general_myGenerals,
             msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+
+
+    /**
+     * 配置武将
+     */
+    public generalDispose(cityId:number = 0,generalId:number = 0,order:number = 0,position:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.general_dispose,
+            msg: {
+                cityId:cityId,
+                generalId:generalId,
+                order:order,
+                position:position,
             }
         };
         NetManager.getInstance().send(sendData);

@@ -18,6 +18,7 @@ const ServerConfig = {
 
 
     general_myGenerals:"general.myGenerals",
+    general_dispose:"general.dispose",
 
     
 }

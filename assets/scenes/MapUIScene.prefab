@@ -1462,6 +1462,12 @@
     "generalDesPrefab": {
       "__uuid__": "c13713b5-3941-439e-95a8-0ba72d16b86f"
     },
+    "generalDisPosePrefab": {
+      "__uuid__": "526fab38-08d3-44ba-9625-e5b1ca4e4333"
+    },
+    "cityAboutPrefab": {
+      "__uuid__": "cb8a794b-4b28-4a41-8d81-0d0ab47ccf3b"
+    },
     "roleLabel": {
       "__id__": 35
     },

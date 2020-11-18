@@ -47,6 +47,7 @@ export default class GeneralDesLogic extends cc.Component {
             defense:"防御",
             speed:"速度",
             destroy:"破坏",
+            exp:"经验",
         };
 
 

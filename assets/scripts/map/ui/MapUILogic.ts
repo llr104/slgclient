@@ -32,6 +32,17 @@ export default class MapUILogic extends cc.Component {
     generalDesPrefab: cc.Prefab = null;
     protected _generalDesNode: cc.Node = null;
 
+
+    
+    @property(cc.Prefab)
+    generalDisPosePrefab: cc.Prefab = null;
+    protected _generalDisPoseNode: cc.Node = null;
+
+
+    @property(cc.Prefab)
+    cityAboutPrefab: cc.Prefab = null;
+    protected _cityAboutNode: cc.Node = null;
+
     @property(cc.Label)
     roleLabel: cc.Label = null;
 
@@ -54,10 +65,18 @@ export default class MapUILogic extends cc.Component {
             depot_capacity:"仓库容量"
         };
 
-        cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
-        cc.systemEvent.on("onRoleMyRoleRes", this.updateRole, this);
+
+        cc.systemEvent.on("open_city_about", this.openCityAbout, this);
+
         cc.systemEvent.on("open_facility", this.openFacility, this);
+        cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
+        
+        cc.systemEvent.on("onRoleMyRoleRes", this.updateRole, this);
+        
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
+
+
+        cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
         this.updateRole();
         
     }
@@ -140,6 +159,42 @@ export default class MapUILogic extends cc.Component {
         }
 
         this._generalDesNode.getComponent("GeneralDesLogic").setData(cfgData,curData);
+    }
+
+
+
+
+
+
+
+    /**
+     * 武将配置
+     */
+    protected openGeneralDisPose(data:any):void{
+        if (this._generalDisPoseNode == null) {
+            this._generalDisPoseNode = cc.instantiate(this.generalDisPosePrefab);
+            this._generalDisPoseNode.parent = this.node;
+        } else {
+            this._generalDisPoseNode.active = true;
+        }
+
+        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data);
+    }
+
+
+
+
+    /**
+     * 城市
+     */
+    protected openCityAbout(data:any):void{
+        if (this._cityAboutNode == null) {
+            this._cityAboutNode = cc.instantiate(this.cityAboutPrefab);
+            this._cityAboutNode.parent = this.node;
+        } else {
+            this._cityAboutNode.active = true;
+        }
+        this._cityAboutNode.getComponent("CityAboutLogic").setData(data);
     }
 
 
