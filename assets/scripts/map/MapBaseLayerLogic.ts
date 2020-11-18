@@ -32,13 +32,16 @@ export default class MapBaseLayerLogic extends cc.Component {
         let item: cc.Node = this.createItem();
         item.parent = this.parentLayer;
         this.updateItem(areaIndex, data, item);
+
+        let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+        list.set(this.getIdByData(data), item);
         return item;
     }
 
     public updateItem(areaIndex: number, data: any, item: cc.Node = null): void {
         let realItem: cc.Node = item;
         if (item == null) {
-            let id = this.getIdByData(data);
+            let id:number = this.getIdByData(data);
             realItem = this.getItem(id, areaIndex);
         }
         if (realItem) {

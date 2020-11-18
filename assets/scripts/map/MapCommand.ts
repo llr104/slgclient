@@ -79,7 +79,7 @@ export default class MapCommand {
     }
 
     public enterMap(): void {
-        if (this._proxy.mapResConfigs == null) {
+        if (this._proxy.getMapResList() == null) {
             this.initMapResConfig(0);
             return;
         }

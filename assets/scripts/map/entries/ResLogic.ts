@@ -1,4 +1,4 @@
-import { MapResConfig, MapResType } from "../MapProxy";
+import {MapResData, MapResType } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -9,7 +9,7 @@ export default class ResLogic extends cc.Component {
     @property(cc.SpriteAtlas)
     resourceAtlas: cc.SpriteAtlas = null;
 
-    protected _data: MapResConfig = null;
+    protected _data: MapResData = null;
 
     protected onLoad(): void {
 
@@ -19,7 +19,7 @@ export default class ResLogic extends cc.Component {
 
     }
 
-    public setResourceData(data: MapResConfig): void {
+    public setResourceData(data: MapResData): void {
         this._data = data;
         if (data.type == MapResType.WOOD) {
             //木头

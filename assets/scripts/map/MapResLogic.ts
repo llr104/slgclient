@@ -1,6 +1,6 @@
 import ResLogic from "./entries/ResLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
-import { MapAreaData, MapResConfig, MapResType } from "./MapProxy";
+import { MapAreaData, MapResData, MapResType } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,7 +16,7 @@ export default class MapResLogic extends MapBaseLayerLogic {
     }
 
     public updateNodeByArea(areaIndex: number): void {
-        let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
+        let resDataList: Array<Array<MapResData>> = this._cmd.proxy.getMapResList();
         let areaData: MapAreaData = this._cmd.proxy.getMapAreaData(areaIndex);
         for (let x: number = areaData.startX; x < areaData.len + areaData.startX; x++) {
             for (let y: number = areaData.startY; y < areaData.len + areaData.startY; y++) {
@@ -34,7 +34,11 @@ export default class MapResLogic extends MapBaseLayerLogic {
     }
 
     public setItemData(item: cc.Node, data: any): void {
-        let resData: MapResConfig = data as MapResConfig;
+        let resData: MapResData = data as MapResData;
         item.getComponent(ResLogic).setResourceData(resData);
+    }
+
+    public getIdByData(data: any): number {
+        return (data as MapResData).id;
     }
 }

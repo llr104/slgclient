@@ -1,7 +1,6 @@
-import { MapAreaData, MapCityData, MapResConfig, MapResType } from "./MapProxy";
+import { MapCityData } from "./MapProxy";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import CityLogic from "./entries/CityLogic";
-import MapCommand from "./MapCommand";
 
 const { ccclass, property } = cc._decorator;
 

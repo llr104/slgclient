@@ -6,9 +6,12 @@ export class MapResType {
 }
 
 
-export class MapResConfig {
+export class MapResData {
+    id: number = 0;
     type: number = 0;
     level: number = 0;
+    x: number = 0;
+    y: number = 0;
 }
 
 /**地图基础配置*/
@@ -221,7 +224,7 @@ export default class MapProxy {
     protected _mapAreaDatas: MapAreaData[] = null;
     protected _mapCityIdsForPos: Array<Array<number>> = null;
     protected _mapCityIdsForArea: Array<Array<number>> = null;
-    protected _mapResConfigs: Array<Array<MapResConfig>> = null;
+    protected _mapResList: Array<Array<MapResData>> = null;
     protected _mapCitys: Map<number, MapCityData> = null;
     protected _mapBuilds: Map<string, MapBuildData> = null;
     //地图请求列表
@@ -489,22 +492,25 @@ export default class MapProxy {
         let w: number = jsonData.w;
         let h: number = jsonData.h;
         let list: Array<Array<number>> = jsonData.list;
-        this._mapResConfigs = new Array<Array<MapResConfig>>(w);
+        this._mapResList = new Array<Array<MapResData>>(w);
         for (let x: number = 0; x < w; x++) {
-            this._mapResConfigs[x] = [];
+            this._mapResList[x] = [];
             for (let y: number = 0; y < h; y++) {
                 let index = x + y * w;
-                let data: MapResConfig = new MapResConfig();
+                let data: MapResData = new MapResData();
+                data.id = index;
                 data.type = list[index][0];
                 data.level = list[index][1];
-                this._mapResConfigs[x].push(data);
+                data.x = x;
+                data.y = y;
+
+                this._mapResList[x].push(data);
             }
         }
-        console.log("initMapResConfig", this._mapResConfigs);
     }
 
-    public get mapResConfigs(): Array<Array<MapResConfig>> {
-        return this._mapResConfigs;
+    public getMapResList(): Array<Array<MapResData>> {
+        return this._mapResList;
     }
 
     public getAreaPointByCellPoint(point: cc.Vec2): cc.Vec2 {

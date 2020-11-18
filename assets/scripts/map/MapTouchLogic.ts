@@ -1,5 +1,5 @@
 import MapCommand from "./MapCommand";
-import { MapBuildData, MapCityData, MapResConfig } from "./MapProxy";
+import { MapBuildData, MapCityData, MapResData } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -42,7 +42,7 @@ export default class MapResLogic extends cc.Component {
             return;
         }
 
-        let resDataList: Array<Array<MapResConfig>> = this._cmd.proxy.mapResConfigs;
+        let resDataList: Array<Array<MapResData>> = this._cmd.proxy.getMapResList();
         console.log("点击野外区域", resDataList[mapPoint.x][mapPoint.y]);
     }
 
