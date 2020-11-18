@@ -33,6 +33,9 @@ export default class MapResLogic extends cc.Component {
             let cityMap: Map<number, MapCityData> = this._cmd.proxy.getMapAreaCitys(areaIndex);
             let city: MapCityData = cityMap.get(cityIds.get(key).buildId);
             console.log("点击城市", city);
+
+            // cc.systemEvent.on("open_facility", this.openFacility, this);
+            cc.systemEvent.emit("open_facility",city);
             return;
         }
         let buildMap: Map<string, MapBuildData> = this._cmd.proxy.getMapAreaBuilds(areaIndex);

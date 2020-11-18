@@ -31,6 +31,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
+        cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
 
     }
 
@@ -77,6 +78,14 @@ export default class MapUICommand {
         if(data.code == 0){
             LoginCommand.getInstance().proxy.roleRes = data.msg.role_res;
             cc.systemEvent.emit("onRoleMyRoleRes");
+        }
+    }
+
+
+    protected onQryMyGenerals(data:any):void{
+        console.log("onQryMyGenerals :",data);
+        if(data.code == 0){
+            this._proxy.setMyGeneral(data.msg);
         }
     }
 
@@ -136,19 +145,58 @@ export default class MapUICommand {
     }
 
 
+
+
+    /**
+     * 我的武将
+     */
+    public qryMyGenerals():void{
+        let sendData: any = {
+            name: ServerConfig.general_myGenerals,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
     /**
      * 加载设施配置
      */
     public initMapJsonConfig():void{
-        cc.resources.loadDir("./config/json/", cc.JsonAsset, this.loadJsonResComplete.bind(this));
+        cc.resources.loadDir("./config/json/facility/", cc.JsonAsset, this.loadFacJsonComplete.bind(this));
+        cc.resources.loadDir("./config/json/general/", cc.JsonAsset, this.loadGenJsonComplete.bind(this));
+        cc.resources.loadDir("./generalpic/", cc.SpriteFrame, this.loadGenTexComplete.bind(this));
+        this.qryMyGenerals();
     }
 
 
-    public loadJsonResComplete(error: Error, asset: [cc.JsonAsset]):void{
+    public loadFacJsonComplete(error: Error, asset: [cc.JsonAsset]):void{
         if(!error){
             this._proxy.setAllFacilityCfg(asset);
+            
         }else{
-            console.log("loadJsonResComplete--asset:",error)
+            console.log("loadFacJsonComplete--asset:",error)
+        }
+    }
+
+
+    public loadGenJsonComplete(error: Error, asset: [cc.JsonAsset]):void{
+        if(!error){
+            this._proxy.setGeneralCfg(asset);
+            
+        }else{
+            console.log("loadGenJsonComplete--asset:",error)
+        }
+    }
+
+
+
+    public loadGenTexComplete(error: Error, asset: [cc.SpriteFrame]):void{
+        if(!error){
+            this._proxy.setGenTex(asset);
+        }else{
+            console.log("loadGenTexComplete--asset:",error)
         }
     }
 

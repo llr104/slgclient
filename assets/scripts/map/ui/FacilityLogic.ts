@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import LoginCommand from "../../login/LoginCommand";
 import MapCommand from "../MapCommand";
 import MapUICommand from "./MapUICommand";
 
@@ -30,7 +31,6 @@ export default class FacilityLogic extends cc.Component {
     }
 
 
-
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
     }
@@ -40,13 +40,16 @@ export default class FacilityLogic extends cc.Component {
     }
 
 
-    protected onEnable():void{
-        this._curCtiyId  = MapCommand.getInstance().proxy.getMyMainCity().cityId;
-        MapUICommand.getInstance().qryCityFacilities(this._curCtiyId);
-        this.onQryCityFacilities();
-        
-    }
+    public setData(data:any):void{
+        this._curCtiyId  = data.cityId;
 
+
+        if(data.rid == LoginCommand.getInstance().proxy.enterServerData.rid){
+            MapUICommand.getInstance().qryCityFacilities(this._curCtiyId);
+            this.onQryCityFacilities();
+        }
+
+    }
 
     protected onQryCityFacilities():void{
         var cityId = this._curCtiyId;
@@ -68,12 +71,7 @@ export default class FacilityLogic extends cc.Component {
 
 
     protected onClickFacility(event:any): void {
-        // console.log("onClickFacility:",event.currentTarget);
         var otherData = event.currentTarget.otherData;
-        // var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
-        // MapUICommand.getInstance().upFacility(cityId,otherData.type);
-
-
         otherData.cityId = this._curCtiyId;
         cc.systemEvent.emit("open_facility_des",otherData);
     }
