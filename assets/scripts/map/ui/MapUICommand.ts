@@ -106,6 +106,11 @@ export default class MapUICommand {
     }
 
 
+    /**
+     * 配置武将
+     * @param data 
+     * @param otherData 
+     */
     protected onGeneralDispose(data:any,otherData:any):void{
         console.log("onGeneralDispose :",data,otherData);
         if(data.code == 0){
@@ -118,7 +123,11 @@ export default class MapUICommand {
 
 
 
-    
+    /**
+     * 出兵
+     * @param data 
+     * @param otherData 
+     */
     protected onGeneralAssignArmy(data:any,otherData:any):void{
         console.log("onGeneralAssignArmy :",data,otherData);
         if(data.code == 0){
@@ -132,6 +141,11 @@ export default class MapUICommand {
 
 
 
+    /**
+     * 征兵
+     * @param data 
+     * @param otherData 
+     */
     protected onGeneralConscript(data:any,otherData:any):void{
         console.log("onGeneralConscript :",data,otherData);
         if(data.code == 0){
