@@ -7,6 +7,7 @@
 
 
 import LoginCommand from "../../login/LoginCommand";
+import MapUICommand from "./MapUICommand";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -92,6 +93,7 @@ export default class MapUILogic extends cc.Component {
 
     protected onDestroy():void{
         this.clearAllNode();
+        MapUICommand.getInstance().proxy.destory();
         cc.systemEvent.targetOff(this);
     }
 

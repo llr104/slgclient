@@ -48,6 +48,12 @@ export default class MapUIProxy {
 
 
 
+    public destory():void{
+        this._myGeneral = new Map();
+        this._cityArmy = new Map();
+        this._myFacility = new Map();
+    }
+
     /**
      * 当前城市的设施
      * @param data 

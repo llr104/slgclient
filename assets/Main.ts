@@ -77,6 +77,8 @@ export default class Main extends cc.Component {
                 this._mapScene.parent = this.node;
                 this._mapUIScene = cc.instantiate(this.mapUIScenePrefab);
                 this._mapUIScene.parent = this.node;
+
+                MapUICommand.getInstance().qryMyGenerals();
             },
             this
         );

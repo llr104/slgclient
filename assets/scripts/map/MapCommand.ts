@@ -64,8 +64,8 @@ export default class MapCommand {
     }
 
     protected initMapResConfig(serverId: number = 0): void {
-        cc.resources.load(["./world/worldMap", "./config/mapRes_" + serverId], this.loadMapResComplete.bind(this));
-        MapUICommand.getInstance().initMapJsonConfig();
+        // cc.resources.load(["./world/worldMap", "./config/mapRes_" + serverId], this.loadMapResComplete.bind(this));
+        // MapUICommand.getInstance().initMapJsonConfig();
     }
 
     protected loadMapResComplete(error: Error, assets: any[]): void {
