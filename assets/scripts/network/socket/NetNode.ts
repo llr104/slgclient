@@ -186,19 +186,33 @@ export class NetNode {
         // console.log(`NetNode onMessage msg ` ,msg);
         
         if(msg){
-            // 接受到数据，重新定时收数据计时器
-            this.cannelMsgTimer(msg);
 
-            // console.log("this._requests.length:",this._requests.length)
-            for (var i = 0; i < this._requests.length;i++) {
-                let req = this._requests[i];
-                if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
-                    this._requests.splice(i, 1);
-                    i--;
-                    cc.systemEvent.emit(msg.name, msg , req.otherData);
-                    this.destroyInvoke(req);
-                }       
+             // 接受到数据，重新定时收数据计时器
+            //推送
+            if(msg.seq == 0){
+                cc.systemEvent.emit(msg.name, msg);
+            }else{
+                this.cannelMsgTimer(msg);
+                
+                // console.log("this._requests.length:",this._requests.length)
+                for (var i = 0; i < this._requests.length;i++) {
+                    let req = this._requests[i];
+                    if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
+                        this._requests.splice(i, 1);
+                        i--;
+                        cc.systemEvent.emit(msg.name, msg , req.otherData);
+                        this.destroyInvoke(req);
+                    }       
+                }
             }
+           
+
+
+
+
+
+
+
         }
     }
 
