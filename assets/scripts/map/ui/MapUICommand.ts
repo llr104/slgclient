@@ -35,6 +35,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
         cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
         cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
+        cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
     }
 
     protected onCityFacilities(data:any):void{
@@ -118,6 +119,19 @@ export default class MapUICommand {
 
 
     
+    protected onGeneralAssignArmy(data:any,otherData:any):void{
+        console.log("onGeneralAssignArmy :",data,otherData);
+        if(data.code == 0){
+            data.msg.cityId = otherData.cityId;
+            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
+            cc.systemEvent.emit("onGeneralAssignArmy");
+
+        }
+    }
+
+
+
+
     protected onGeneralConscript(data:any,otherData:any):void{
         console.log("onGeneralConscript :",data,otherData);
         if(data.code == 0){
@@ -258,14 +272,32 @@ export default class MapUICommand {
     }
 
 
+
+    /**
+     * 出兵
+     */
+    public generalAssignArmy(armyId:number = 0,state:number = 0,x:number = 0,y:Number = 0,otherData:any):void{
+        let sendData: any = {
+            name: ServerConfig.general_assignArmy,
+            msg: {
+                armyId:armyId,
+                state:state,
+                x:x,
+                y:y,
+            }
+        };
+        NetManager.getInstance().send(sendData,otherData);
+    }
+
+
     /**
      * 加载设施配置
      */
     public initMapJsonConfig():void{
-        cc.resources.loadDir("./config/json/facility/", cc.JsonAsset, this.loadFacJsonComplete.bind(this));
-        cc.resources.loadDir("./config/json/general/", cc.JsonAsset, this.loadGenJsonComplete.bind(this));
-        cc.resources.loadDir("./generalpic/", cc.SpriteFrame, this.loadGenTexComplete.bind(this));
-        this.qryMyGenerals();
+        // cc.resources.loadDir("./config/json/facility/", cc.JsonAsset, this.loadFacJsonComplete.bind(this));
+        // cc.resources.loadDir("./config/json/general/", cc.JsonAsset, this.loadGenJsonComplete.bind(this));
+        // cc.resources.loadDir("./generalpic/", cc.SpriteFrame, this.loadGenTexComplete.bind(this));
+        // this.qryMyGenerals();
     }
 
 
