@@ -43,6 +43,11 @@ export default class MapUILogic extends cc.Component {
     cityAboutPrefab: cc.Prefab = null;
     protected _cityAboutNode: cc.Node = null;
 
+
+    @property(cc.Prefab)
+    conscriptPrefab: cc.Prefab = null;
+    protected _conscriptNode: cc.Node = null;
+
     @property(cc.Label)
     roleLabel: cc.Label = null;
 
@@ -77,6 +82,9 @@ export default class MapUILogic extends cc.Component {
 
 
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
+
+
+        cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         this.updateRole();
         
     }
@@ -96,6 +104,9 @@ export default class MapUILogic extends cc.Component {
         this._facilityNode = null;
         this._facilityDesNode = null;
         this._generalNode = null;
+        this._cityAboutNode = null;
+        this._conscriptNode = null;
+        this._generalDisPoseNode = null;
     }
 
 
@@ -197,6 +208,22 @@ export default class MapUILogic extends cc.Component {
         this._cityAboutNode.getComponent("CityAboutLogic").setData(data);
     }
 
+
+
+
+    /**
+     * 征兵
+     */
+    protected openConscript(orderId:number = 0,cityData:any):void{
+        if (this._conscriptNode == null) {
+            this._conscriptNode = cc.instantiate(this.conscriptPrefab);
+            this._conscriptNode.parent = this.node;
+        } else {
+            this._conscriptNode.active = true;
+        }
+
+        this._conscriptNode.getComponent("ConscriptLogic").setData(orderId,cityData);
+    }
 
 
     /**

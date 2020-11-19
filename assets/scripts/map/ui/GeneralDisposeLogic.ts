@@ -135,14 +135,6 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     private addDispose(data:any):void{
         var maxSize = 3;
-        // if(this._generalDisposeArr.length >= maxSize){
-        //     return;
-        // }
-
-        // if(this._generalDisposeArr.indexOf(data) ==  -1){
-        //     this._generalDisposeArr.push(data);
-        // }
-
         for(var i = 0;i < maxSize;i++){
             if(!this._generalDisposeArr[i]){
                 this._generalDisposeArr[i] = data;
@@ -156,11 +148,12 @@ export default class GeneralDisposeLogic extends cc.Component {
         for(var i = 0;i < this.picNode.length;i++){
             var item = this.picNode[i];
             item.getChildByName("pic").active = false;
-
+            item.otherData = null;
             var dispiose = this._generalDisposeArr[i]; 
             if(dispiose){
                 item.getChildByName("pic").active = true;
                 item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = MapUICommand.getInstance().proxy.getGenTex(dispiose.cfgId);
+                item.otherData = dispiose;
             }
         }
     }
@@ -202,6 +195,16 @@ export default class GeneralDisposeLogic extends cc.Component {
     protected clearDisPose():void{
         this._generalDisposeArr = [];
         this.updateView();
+    }
+
+
+
+    protected onClickDisGeneral(event:any): void {
+        var otherData = event.currentTarget.otherData;
+        if(otherData){
+            cc.systemEvent.emit("open_general_conscript", this._orderIndex,this._cityData);
+        }
+        
     }
 
     protected onEnable():void{

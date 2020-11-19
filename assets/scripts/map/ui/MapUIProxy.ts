@@ -201,6 +201,11 @@ export default class MapUIProxy {
     }
 
 
+    public getGeneralCfgById(cfgId:number = 0):any{
+        return this._generalConfig.get(cfgId);
+    }
+
+
 
     /**
      * 武将纹理
@@ -244,6 +249,18 @@ export default class MapUIProxy {
         return this._myGeneral.get(cfgId);
     }
 
+
+
+    public getMyGeneralById(id:number = 0):any{
+        let _mygeneralArr = Array.from(this._myGeneral.values());
+        for(var i = 0;i<_mygeneralArr.length ;i++){
+            if(_mygeneralArr[i].id == id){
+                return _mygeneralArr[i];
+            }
+        }
+
+        return null;
+    }
 
 
     /**

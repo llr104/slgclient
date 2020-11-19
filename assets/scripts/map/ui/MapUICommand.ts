@@ -34,6 +34,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
         cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
         cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
+        cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
     }
 
     protected onCityFacilities(data:any):void{
@@ -110,6 +111,23 @@ export default class MapUICommand {
             data.msg.cityId = otherData.cityId
             this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
             cc.systemEvent.emit("onGeneralDispose");
+        }
+    }
+
+
+
+
+    
+    protected onGeneralConscript(data:any,otherData:any):void{
+        console.log("onGeneralConscript :",data,otherData);
+        if(data.code == 0){
+            data.msg.cityId = otherData.cityId;
+            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
+            cc.systemEvent.emit("onGeneralDispose");
+
+            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
+            cc.systemEvent.emit("onRoleMyRoleRes");
+
         }
     }
 
@@ -219,6 +237,24 @@ export default class MapUICommand {
             }
         };
         NetManager.getInstance().send(sendData);
+    }
+
+
+    /**
+     * 武将征兵
+     */
+    public generalConscript(armyId:number = 0,firstCnt:number = 0,secondCnt:number = 0,thirdCnt:number = 0,otherData:any):void{
+        let sendData: any = {
+            name: ServerConfig.general_conscript,
+            msg: {
+                armyId:armyId,
+                firstCnt:firstCnt,
+                secondCnt:secondCnt,
+                thirdCnt:thirdCnt,
+
+            }
+        };
+        NetManager.getInstance().send(sendData,otherData);
     }
 
 

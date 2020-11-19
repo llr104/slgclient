@@ -1468,6 +1468,9 @@
     "cityAboutPrefab": {
       "__uuid__": "cb8a794b-4b28-4a41-8d81-0d0ab47ccf3b"
     },
+    "conscriptPrefab": {
+      "__uuid__": "01ecab7b-8860-44e8-95a9-0f2af97ae3f5"
+    },
     "roleLabel": {
       "__id__": 35
     },
