@@ -18,7 +18,6 @@ export default class LoadingLogic extends cc.Component {
 
     protected onProgress(precent: number): void {
         this.bar.progress = precent;
-        console.log("LoadingLogic onProgress", precent);
     }
 
     protected onComplete(): void {

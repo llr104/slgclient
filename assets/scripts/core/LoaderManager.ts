@@ -96,12 +96,13 @@ export default class LoaderManager {
     }
 
     protected onProgress(finish: number, total: number): void {
-        let percent: number = (this._curIndex + 1) / this._loadDataList.length;
-        percent *= (finish / total);
+        let percent: number = 1 / this._loadDataList.length;
+        let subPercent:number = (finish / total) * percent;
+        let totalPercent:number = Number((subPercent + percent * this._curIndex).toFixed(2));
         if (this._target && this._progressCallback) {
-            this._progressCallback.call(this._target, percent);
+            this._progressCallback.call(this._target, totalPercent);
         }
-        cc.systemEvent.emit("load_progress", percent);
+        cc.systemEvent.emit("load_progress", totalPercent);
     }
 
     protected onComplete(error: Error = null): void {

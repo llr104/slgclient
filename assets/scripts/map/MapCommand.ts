@@ -63,21 +63,6 @@ export default class MapCommand {
         }
     }
 
-    protected initMapResConfig(serverId: number = 0): void {
-        cc.resources.load(["./world/worldMap", "./config/mapRes_" + serverId], this.loadMapResComplete.bind(this));
-        MapUICommand.getInstance().initMapJsonConfig();
-    }
-
-    protected loadMapResComplete(error: Error, assets: any[]): void {
-        if (error == undefined) {
-            this._proxy.tiledMapAsset = assets[0] as cc.TiledMapAsset;
-            this._proxy.initMapResConfig((assets[1] as cc.JsonAsset).json);
-            this.enterMap();
-        } else {
-            console.log("loadMapResComplete error ", error);
-        }
-    }
-
     public enterMap(): void {
         if (this._proxy.hasResConfig() == false) {
             this.qryNationMapConfig();
