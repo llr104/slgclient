@@ -41,7 +41,7 @@ export default class MapBaseLayerLogic extends cc.Component {
     public updateItem(areaIndex: number, data: any, item: cc.Node = null): void {
         let realItem: cc.Node = item;
         if (item == null) {
-            let id:number = this.getIdByData(data);
+            let id: number = this.getIdByData(data);
             realItem = this.getItem(id, areaIndex);
         }
         if (realItem) {
@@ -105,15 +105,15 @@ export default class MapBaseLayerLogic extends cc.Component {
         }
         for (let i: number = 0; i < addIndexs.length; i++) {
             this.addArea(addIndexs[i]);
-            this.updateNodeByArea(addIndexs[i]);
+            // this.updateNodeByArea(addIndexs[i]);
         }
     }
 
-    public updateNodeByArea(areaIndex: number): void {
+    public initNodeByArea(areaIndex: number): void {
 
     }
 
     public getIdByData(data: any): number {
-        return 0;
+        return data.id;
     }
 }

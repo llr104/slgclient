@@ -1,7 +1,4 @@
-import ArmyLogic from "./entries/ArmyLogic";
-import MapCommand from "./MapCommand";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
-import MapProxy, { MapConfig } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 

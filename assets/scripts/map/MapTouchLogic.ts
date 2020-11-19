@@ -1,6 +1,5 @@
-import LoginCommand from "../login/LoginCommand";
 import MapCommand from "./MapCommand";
-import { MapBuildData, MapCityData, MapResData } from "./MapProxy";
+import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,33 +19,25 @@ export default class MapResLogic extends cc.Component {
 
     protected onTouchMap(mapPoint: cc.Vec2, clickCenterPoint: cc.Vec2): void {
         console.log("点击区域 (" + mapPoint.x + "," + mapPoint.y + ")");
-        if (this._cmd.proxy.isVaildCellPoint(mapPoint) == false) {
+        if (MapUtil.isVaildCellPoint(mapPoint) == false) {
             console.log("点击到无效区域");
             return;
         }
 
-        let areaIndex = this._cmd.proxy.getAreaIndexByCellPoint(mapPoint);
-        let cityId: number = this._cmd.proxy.getMapCityIdForPos(mapPoint.x, mapPoint.y);
-        let key: string = mapPoint.x + "_" + mapPoint.y;
-        console.log("cityIds", areaIndex, cityId);
-        if (cityId > 0) {
+        let cellId:number = MapUtil.getIdByCellPoint(mapPoint.x, mapPoint.y);
+        if (this._cmd.proxy.getCity(cellId) != null) {
             //代表点击的是城市
-            let cityData: MapCityData = this._cmd.proxy.getCity(cityId);
-            console.log("点击城市", cityData);
-
-            
-            cc.systemEvent.emit("open_city_about", cityData);
+			cc.systemEvent.emit("open_city_about", this._cmd.proxy.getCity(cellId));
             return;
         }
-        let buildMap: Map<string, MapBuildData> = this._cmd.proxy.getMapAreaBuilds(areaIndex);
-        if (buildMap.has(key)) {
+
+        if (this._cmd.proxy.getBuild(cellId) != null) {
             //代表点击被占领的区域
-            console.log("点击被占领的区域", buildMap.get(key));
+            console.log("点击被占领的区域", this._cmd.proxy.getBuild(cellId));
             return;
         }
 
-        let resDataList: Array<Array<MapResData>> = this._cmd.proxy.getMapResList();
-        console.log("点击野外区域", resDataList[mapPoint.x][mapPoint.y]);
+        console.log("点击野外区域", this._cmd.proxy.getResData(cellId));
     }
 
     public updateNodeByArea(areaIndex: number): void {

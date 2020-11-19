@@ -1,4 +1,5 @@
 import MapCommand from "./MapCommand";
+import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
 
@@ -61,7 +62,7 @@ export default class MapLogic extends cc.Component {
                 pixelPoint.x = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
                 pixelPoint.y = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
                 this._mapCamera.node.setPosition(pixelPoint);
-                this.setCenterMapCellPoint(this._cmd.proxy.mapPixelToCellPoint(pixelPoint), pixelPoint);
+                this.setCenterMapCellPoint(MapUtil.mapPixelToCellPoint(pixelPoint), pixelPoint);
             }
         }
     }
@@ -76,8 +77,8 @@ export default class MapLogic extends cc.Component {
         if (this._isMove == false) {
             let touchLocation: cc.Vec2 = event.touch.getLocation();
             touchLocation = this.viewPointToWorldPoint(touchLocation);
-            let mapPoint: cc.Vec2 = this._cmd.proxy.worldPixelToMapCellPoint(touchLocation);
-            let clickCenterPoint: cc.Vec2 = this._cmd.proxy.mapCellToWorldPixelPoint(mapPoint);
+            let mapPoint: cc.Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation);
+            let clickCenterPoint: cc.Vec2 = MapUtil.mapCellToWorldPixelPoint(mapPoint);
             clickCenterPoint = this.worldToMapPixelPoint(clickCenterPoint);
             //派发事件
             cc.systemEvent.emit("touch_map", mapPoint, clickCenterPoint);
@@ -106,7 +107,7 @@ export default class MapLogic extends cc.Component {
     }
 
     public scrollToMapPoint(point: cc.Vec2): void {
-        let pixelPoint: cc.Vec2 = this._cmd.proxy.mapCellToPixelPoint(point);
+        let pixelPoint: cc.Vec2 = MapUtil.mapCellToPixelPoint(point);
         // console.log("scrollToMapPoint", pixelPoint.x, pixelPoint.y);
         let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
         let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));

@@ -59,7 +59,7 @@ export default class MapCommand {
     protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            this._proxy.setMapScanBlock(data.msg, otherData.index);
+            this._proxy.setMapScanBlock(data.msg, otherData.id);
         }
     }
 
@@ -79,11 +79,11 @@ export default class MapCommand {
     }
 
     public enterMap(): void {
-        if (this._proxy.getMapResList() == null) {
+        if (this._proxy.hasResDatas() == false) {
             this.initMapResConfig(0);
             return;
         }
-        if (this._proxy.getConfig() == null) {
+        if (this._proxy.hasResConfig() == false) {
             this.qryNationMapConfig();
             return;
         }
@@ -116,8 +116,8 @@ export default class MapCommand {
         let sendData: any = {
             name: ServerConfig.nationMap_scanBlock,
             msg: {
-                x: qryData.startX,
-                y: qryData.startY,
+                x: qryData.startCellX,
+                y: qryData.startCellY,
                 length: qryData.len
             }
         };
