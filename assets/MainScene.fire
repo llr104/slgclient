@@ -493,6 +493,9 @@
     "mapUIScenePrefab": {
       "__uuid__": "895a3761-91d5-4e77-ad9c-96303f4d8448"
     },
+    "loadingPrefab": {
+      "__uuid__": "15e55279-cb81-491c-b468-cc5b4233cd7b"
+    },
     "_id": "78VyY9tRZIqLQOADTL0j7b"
   }
 ]

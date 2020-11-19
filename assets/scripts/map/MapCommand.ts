@@ -79,10 +79,6 @@ export default class MapCommand {
     }
 
     public enterMap(): void {
-        if (this._proxy.hasResDatas() == false) {
-            this.initMapResConfig(0);
-            return;
-        }
         if (this._proxy.hasResConfig() == false) {
             this.qryNationMapConfig();
             return;

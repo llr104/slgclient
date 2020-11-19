@@ -22,6 +22,7 @@ export default class MapScene extends cc.Component {
     protected _cmd: MapCommand = null;
 
     protected onLoad(): void {
+        console.log("MapScene onLoad", this.mapLayer);
         this._cmd = MapCommand.getInstance();
 
         //初始化地图
@@ -40,7 +41,10 @@ export default class MapScene extends cc.Component {
     }
 
     protected onDestroy(): void {
+        console.log("MapScene onDestroy");
         cc.systemEvent.targetOff(this);
+        this._cmd.proxy.clearData();
+        this._cmd = null;
     }
 
     protected onTimer(): void {
@@ -54,7 +58,7 @@ export default class MapScene extends cc.Component {
     }
 
     protected onMapShowAreaChange(centerPoint: cc.Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
-        // console.log("map_show_area_change", arguments);
+        console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildLogic: MapBuildLogic = this.node.getComponent(MapBuildLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);

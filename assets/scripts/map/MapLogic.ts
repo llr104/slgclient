@@ -113,12 +113,12 @@ export default class MapLogic extends cc.Component {
         let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
         this._mapCamera.node.x = positionX;
         this._mapCamera.node.y = positionY;
-        // console.log("scrollToMapPoint", point.x, point.y, this._mapCamera.node.x, this._mapCamera.node.y);
+        console.log("scrollToMapPoint", point.x, point.y, this._mapCamera.node.x, this._mapCamera.node.y);
         this.setCenterMapCellPoint(point, pixelPoint);
     }
 
     protected setCenterMapCellPoint(point: cc.Vec2, pixelPoint: cc.Vec2): void {
-        // console.log("setCenterMapCellPoint", point);
+        console.log("setCenterMapCellPoint", point);
         this._cmd.proxy.setCurCenterPoint(point, pixelPoint);
     }
 }

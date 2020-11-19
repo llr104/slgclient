@@ -155,6 +155,8 @@ export default class MapProxy {
     }
 
     public clearData(): void {
+        this._curCenterPoint = null;
+        this._curCenterAreaId = -1;
         this._mapAreaDatas.length = 0;
         this._mapBuilds.length = 0;
         this._mapCitys.length = 0;
