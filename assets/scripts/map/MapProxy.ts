@@ -93,9 +93,9 @@ export class MapAreaData {
     x: number = 0;
     y: number = 0;
     startCellX: number = 0;
-    startCellY:number = 0;
-    endCellX:number = 0;
-    endCellY:number = 0;
+    startCellY: number = 0;
+    endCellX: number = 0;
+    endCellY: number = 0;
     len: number = 0;
     qryStartTime: number = 0;
 
@@ -132,7 +132,7 @@ export default class MapProxy {
     //当前地图中心点
     protected _curCenterPoint: cc.Vec2 = null;
     //当前展示区域
-    protected _curCenterAreaData: MapAreaData = null;
+    protected _curCenterAreaId: number = -1;
     protected _mapAreaDatas: MapAreaData[] = [];
     protected _mapResDatas: MapResData[] = [];
     protected _mapCitys: MapCityData[] = [];
@@ -300,7 +300,7 @@ export default class MapProxy {
             this._curCenterPoint = point;
             let areaPoint: cc.Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
             let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
-            if (this._curCenterAreaData == null || this._curCenterAreaData.id != areaId) {
+            if (this._curCenterAreaId == -1 || this._curCenterAreaId != areaId) {
                 //展示区域变化
                 let areaData: MapAreaData = this.getMapAreaData(areaId);
                 let oldIds: number[] = null;
@@ -309,7 +309,8 @@ export default class MapProxy {
                 let removeIds: number[] = [];
                 let firstAreaIds: number[] = null;
                 let otherAreaIds: number[] = [];
-                if (this._curCenterAreaData == null || this._curCenterAreaData.fuzzyEquals(areaData, 3) == false) {
+                if (this._curCenterAreaId == -1
+                    || this.getMapAreaData(this._curCenterAreaId).fuzzyEquals(areaData, 3) == false) {
                     //全量刷新
                     oldIds = [];
                     addIds = newIds;
@@ -320,7 +321,7 @@ export default class MapProxy {
                     let rightDownPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(cc.game.canvas.width * 0.5, -cc.game.canvas.height * 0.5));
                     firstAreaIds = MapUtil.getVaildAreaIdsByPixelPoints(pixelPoint, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
                 } else {
-                    oldIds = MapUtil.get9GridVaildAreaIds(areaData.id);
+                    oldIds = MapUtil.get9GridVaildAreaIds(this._curCenterAreaId);
                     for (let i: number = 0; i < newIds.length; i++) {
                         if (oldIds.indexOf(newIds[i]) == -1) {
                             addIds.push(newIds[i]);
@@ -355,17 +356,16 @@ export default class MapProxy {
                 }
                 this.qryAreaIds = this.qryAreaIds.concat(qryIndexs);
 
-                this._curCenterAreaData = areaData;
-                cc.systemEvent.emit("map_show_area_change", point, this._curCenterAreaData, addIds, removeIds);
-
+                this._curCenterAreaId = areaId;
+                cc.systemEvent.emit("map_show_area_change", point, this._curCenterAreaId, addIds, removeIds);
             }
             return true;
         }
         return false;
     }
 
-    public getCurCenterAreaData(): MapAreaData {
-        return this._curCenterAreaData;
+    public getCurCenterAreaId(): number {
+        return this._curCenterAreaId;
     }
 
     public setMapScanBlock(scanDatas: any, areaId: number = 0): void {
@@ -395,7 +395,7 @@ export default class MapProxy {
                         lastBuildCellIds.splice(index, 1);//移除重复数据
                         continue;
                     }
-                    
+
                 }
                 //其他情况就是新数据了
                 this._mapBuilds[cellId] = this.createBuildData(rBuilds[i], cellId);
@@ -490,11 +490,11 @@ export default class MapProxy {
         return null;
     }
 
-    public hasResDatas():boolean {
+    public hasResDatas(): boolean {
         return this._mapResDatas.length > 0;
     }
 
-    public hasResConfig():boolean {
+    public hasResConfig(): boolean {
         return this._mapResConfigs.size > 0;
     }
 

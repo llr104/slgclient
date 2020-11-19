@@ -101,7 +101,7 @@ export default class MapUtil {
     }
 
     public static getAreaPointByCellPoint(x: number, y: number): cc.Vec2 {
-        return cc.v2(Math.floor(y / this._areaCellSize.width), Math.floor(y / this._areaCellSize.height));
+        return cc.v2(Math.floor(x / this._areaCellSize.width), Math.floor(y / this._areaCellSize.height));
     }
 
     /**获取区域id*/

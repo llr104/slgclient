@@ -53,7 +53,7 @@ export default class MapScene extends cc.Component {
         }
     }
 
-    protected onMapShowAreaChange(centerPoint: cc.Vec2, centerArea: MapAreaData, addIds: number[], removeIds: number[]): void {
+    protected onMapShowAreaChange(centerPoint: cc.Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
         // console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildLogic: MapBuildLogic = this.node.getComponent(MapBuildLogic);

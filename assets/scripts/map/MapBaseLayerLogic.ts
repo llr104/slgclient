@@ -87,9 +87,7 @@ export default class MapBaseLayerLogic extends cc.Component {
                 this._itemPool.put(node);
             });
             list.clear();
-
             this._itemMap.delete(areaIndex);
-            // console.log("removeArea", list, this._itemMap)
         }
     }
 
@@ -105,7 +103,6 @@ export default class MapBaseLayerLogic extends cc.Component {
         }
         for (let i: number = 0; i < addIndexs.length; i++) {
             this.addArea(addIndexs[i]);
-            // this.updateNodeByArea(addIndexs[i]);
         }
     }
 
