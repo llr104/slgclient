@@ -64,31 +64,34 @@ export default class GeneralDisposeLogic extends cc.Component {
 
         var cityArmy = MapUICommand.getInstance().proxy.getCityArmy(this._cityData.cityId);
         // console.log("cityArmy:",cityArmy)
-        var cityArmyData = cityArmy[this._orderIndex];
-        var children = this.srollLayout.node.children;
-        for(var i = 0;i < children.length;i++){
-            var child = children[i];
-            var toggle = child.getComponent(cc.Toggle);
-            toggle.isChecked = false;
-            var curData = toggle.curData;
-            // console.log("curData.id:",curData.id)
-            if(curData.id == cityArmyData.firstId || curData.id == cityArmyData.secondId || curData.id == cityArmyData.thirdId){
-                toggle.isChecked = true;
-                // this.dispose(toggle);
-
-                if(curData.id == cityArmyData.firstId){
-                    this._generalDisposeArr[0] = (curData);
-                }
-                
-                if(curData.id == cityArmyData.secondId){
-                    this._generalDisposeArr[1] = (curData);
-                }
-
-                if(curData.id == cityArmyData.thirdId){
-                    this._generalDisposeArr[2] = (curData);
+        if(cityArmy.length > 0){
+            var cityArmyData = cityArmy[this._orderIndex];
+            var children = this.srollLayout.node.children;
+            for(var i = 0;i < children.length;i++){
+                var child = children[i];
+                var toggle = child.getComponent(cc.Toggle);
+                toggle.isChecked = false;
+                var curData = toggle.curData;
+                // console.log("curData.id:",curData.id)
+                if(curData.id == cityArmyData.firstId || curData.id == cityArmyData.secondId || curData.id == cityArmyData.thirdId){
+                    toggle.isChecked = true;
+                    // this.dispose(toggle);
+    
+                    if(curData.id == cityArmyData.firstId){
+                        this._generalDisposeArr[0] = (curData);
+                    }
+                    
+                    if(curData.id == cityArmyData.secondId){
+                        this._generalDisposeArr[1] = (curData);
+                    }
+    
+                    if(curData.id == cityArmyData.thirdId){
+                        this._generalDisposeArr[2] = (curData);
+                    }
                 }
             }
         }
+
 
         this.updateView();
     }

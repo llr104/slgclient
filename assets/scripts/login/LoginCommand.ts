@@ -89,10 +89,11 @@ export default class LoginCommand {
     private onServerConneted(): void {
         //重新连接成功 重新登录
         var loginData = this._proxy.getLoginData();
-        console.log("LoginProxy  conneted:", loginData);
+        var roleData = this._proxy.getRoleData();
+        console.log("LoginProxy  conneted:", loginData,roleData);
         
         if (loginData) {
-            this.account_reLogin(loginData.session,loginData.rid);
+            this.account_reLogin(loginData.session,roleData.rid);
         }
     }
 
