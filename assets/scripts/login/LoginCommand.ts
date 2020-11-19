@@ -61,7 +61,8 @@ export default class LoginCommand {
     private onAccountLogin(data: any, otherData:any): void {
         console.log("LoginProxy  login:", data , otherData);
         if (data.code == 0) {
-            this._proxy.loginData = data.msg;
+            // this._proxy.loginData = data.msg;
+            this._proxy.saveLoginData(data.msg);
             LocalCache.setLoginValidation(otherData);
         }
         cc.systemEvent.emit("loginComplete", data.code);
@@ -75,8 +76,9 @@ export default class LoginCommand {
             cc.systemEvent.emit("CreateRole");
         } else {
             if(data.code == 0){
-                this._proxy.enterServerData = data.msg.role;
-                this._proxy.roleRes = data.msg.role_res;
+                // this._proxy.enterServerData = data.msg.role;
+                // this._proxy.roleRes = data.msg.role_res;
+                this._proxy.saveEnterData(data.msg);
             }
             //进入游戏
             MapCommand.getInstance().qryNationMapConfig();
@@ -86,9 +88,11 @@ export default class LoginCommand {
     /**重连回调*/
     private onServerConneted(): void {
         //重新连接成功 重新登录
-        console.log("LoginProxy  conneted:", this._proxy.loginData);
-        if (this._proxy.loginData) {
-            this.account_reLogin(this._proxy.loginData.session,this._proxy.enterServerData.rid);
+        var loginData = this._proxy.getLoginData();
+        console.log("LoginProxy  conneted:", loginData);
+        
+        if (loginData) {
+            this.account_reLogin(loginData.session,loginData.rid);
         }
     }
 

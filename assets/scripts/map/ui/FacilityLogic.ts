@@ -42,12 +42,9 @@ export default class FacilityLogic extends cc.Component {
 
     public setData(data:any):void{
         this._curCtiyId  = data.cityId;
-
-
-        if(data.rid == LoginCommand.getInstance().proxy.enterServerData.rid){
-            MapUICommand.getInstance().qryCityFacilities(this._curCtiyId);
-            this.onQryCityFacilities();
-        }
+        
+        MapUICommand.getInstance().qryCityFacilities(this._curCtiyId);
+        this.onQryCityFacilities();
 
     }
 

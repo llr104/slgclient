@@ -44,6 +44,7 @@ export default class MapUIProxy {
     protected _generalConfig:any = null;//武将配置
     protected _generalTex:any = new Map();//武将纹理
     protected _myGeneral:any = new Map();//我的武将
+    protected _cityArmy:any = new Map();//城池军队配置
 
 
 
@@ -227,18 +228,53 @@ export default class MapUIProxy {
 
 
 
+    /**
+     * 我拥有的武将
+     * @param data 
+     */
     public setMyGeneral(data:any):void{
         for(var i = 0;i < data.generals.length;i++){
             this._myGeneral.set(data.generals[i].cfgId,data.generals[i])
         }
-
-        console.log("this._myGeneral:",this._myGeneral)
     }
 
 
 
     public getMyGeneral(cfgId:number = 0):any{
         return this._myGeneral.get(cfgId);
+    }
+
+
+
+    /**
+     * 城池军队配置
+     * @param data 
+     */
+    public setCityArmy(data:any):void{
+        this._cityArmy.set(data.cityId,data.armys?data.armys:[]);
+    }
+
+    public updateCityArmy(cityId:number = 0,army:any):void{
+        var armys = this.getCityArmy(cityId);
+        if(armys){
+            if(armys.length > 0){
+                for(var i = 0;i < armys.length;i++){
+                    if(armys[i].id == army.id){
+                        armys[i] = army;
+                        break;
+                    }
+                }
+            }else{
+                armys.push(army);
+            }
+            
+            this._cityArmy.set(cityId,armys);
+        }
+    }
+
+
+    public getCityArmy(cityId:number = 0):any{
+        return this._cityArmy.get(cityId);
     }
 
 }

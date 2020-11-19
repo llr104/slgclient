@@ -48,7 +48,9 @@ export default class LoginScene extends cc.Component {
 
     protected onClickEnter(): void {
         //未登录 就弹登录界面
-        if (LoginCommand.getInstance().proxy.loginData == null) {
+
+        var loginData = LoginCommand.getInstance().proxy.getLoginData();
+        if (loginData == null) {
             this.openLogin();
             return;
         }

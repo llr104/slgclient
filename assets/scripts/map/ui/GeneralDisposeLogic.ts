@@ -30,17 +30,16 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     private _generalDisposeArr:any[] = [];
     private _cityData:any = null;
+    private _orderIndex:number = 0;
 
 
     protected onLoad():void{
         cc.systemEvent.on("onQryMyGenerals", this.initGeneralCfg, this);
-        cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
+        cc.systemEvent.on("onGeneralArmyList", this.onGeneralArmyList, this);
+        cc.systemEvent.on("onGeneralDispose", this.onGeneralArmyList, this);
     }
 
 
-    private onGeneralDispose(data:any):void{
-        console.log("onGeneralDispose:",data)
-    }
 
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
@@ -52,9 +51,47 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     public setData(data:any):void{
+        this.clearDisPose();
         this._cityData = data;
+
+        // this.initGeneralCfg();
+        MapUICommand.getInstance().qryMyGenerals();
     }
 
+
+    protected onGeneralArmyList():void{
+        this.clearDisPose();
+
+        var cityArmy = MapUICommand.getInstance().proxy.getCityArmy(this._cityData.cityId);
+        // console.log("cityArmy:",cityArmy)
+        var cityArmyData = cityArmy[this._orderIndex];
+        var children = this.srollLayout.node.children;
+        for(var i = 0;i < children.length;i++){
+            var child = children[i];
+            var toggle = child.getComponent(cc.Toggle);
+            toggle.isChecked = false;
+            var curData = toggle.curData;
+            // console.log("curData.id:",curData.id)
+            if(curData.id == cityArmyData.firstId || curData.id == cityArmyData.secondId || curData.id == cityArmyData.thirdId){
+                toggle.isChecked = true;
+                // this.dispose(toggle);
+
+                if(curData.id == cityArmyData.firstId){
+                    this._generalDisposeArr[0] = (curData);
+                }
+                
+                if(curData.id == cityArmyData.secondId){
+                    this._generalDisposeArr[1] = (curData);
+                }
+
+                if(curData.id == cityArmyData.thirdId){
+                    this._generalDisposeArr[2] = (curData);
+                }
+            }
+        }
+
+        this.updateView();
+    }
 
 
     protected initGeneralCfg():void{
@@ -62,7 +99,6 @@ export default class GeneralDisposeLogic extends cc.Component {
         this.srollLayout.node.removeAllChildren();
 
         let _generalConfigArr = Array.from(_generalConfig.values());
-
 
         for(var i = 0;i < _generalConfigArr.length; i++){
             var cfgId = _generalConfigArr[i].cfgId;
@@ -83,44 +119,43 @@ export default class GeneralDisposeLogic extends cc.Component {
             item.getComponent(cc.Toggle).curData = curData;
         }
 
+
+        MapUICommand.getInstance().qryGeneralArmyList(this._cityData.cityId);
     }
 
 
     protected onClickGeneral(currentTarget:any): void {
-        // var cfgData = event.currentTarget.cfgData;
-        // var curData = event.currentTarget.curData;
+        this.dispose(currentTarget);
+        currentTarget.isChecked = false;
 
-        console.log("currentTarget:",currentTarget)
-
-        if(currentTarget.isChecked){
-            this.addDispose(currentTarget.curData);
-        }else{
-            this.removeDispose(currentTarget.curData);
-        }
-
-        this.upDateView();
-
-        var index = this._generalDisposeArr.indexOf(currentTarget.curData);
-        index+=1;
-        MapUICommand.getInstance().generalDispose(this._cityData.cityId,currentTarget.curData.id,1,index);
+        var position = this.getIndex(currentTarget.curData);
+        MapUICommand.getInstance().generalDispose(this._cityData.cityId,currentTarget.curData.id,this._orderIndex + 1,position,this._cityData);
     }
 
 
     private addDispose(data:any):void{
         var maxSize = 3;
-        if(this._generalDisposeArr.length >= maxSize){
-            return;
+        // if(this._generalDisposeArr.length >= maxSize){
+        //     return;
+        // }
+
+        // if(this._generalDisposeArr.indexOf(data) ==  -1){
+        //     this._generalDisposeArr.push(data);
+        // }
+
+        for(var i = 0;i < maxSize;i++){
+            if(!this._generalDisposeArr[i]){
+                this._generalDisposeArr[i] = data;
+            }
         }
-        this._generalDisposeArr.push(data);
+        
     }
 
 
-    private upDateView():void{
+    private updateView():void{
         for(var i = 0;i < this.picNode.length;i++){
             var item = this.picNode[i];
             item.getChildByName("pic").active = false;
-
-
 
             var dispiose = this._generalDisposeArr[i]; 
             if(dispiose){
@@ -129,19 +164,47 @@ export default class GeneralDisposeLogic extends cc.Component {
             }
         }
     }
+    
 
 
 
     private removeDispose(data:any):void{
-        var index = this._generalDisposeArr.indexOf(data);
-        if(index >= 0){
-            this._generalDisposeArr.splice(index,1);
+        var maxSize = 3;
+        for(var i = 0;i < maxSize;i++){
+            if(this._generalDisposeArr[i] == data){
+                this._generalDisposeArr[i] = null;
+            }
         }
     }
 
+
+    private getIndex(data:any):number{
+        var maxSize = 3;
+        for(var i = 0;i < maxSize;i++){
+            if(this._generalDisposeArr[i] == data){
+                return (i + 1);
+            }
+        }
+
+        return 0;
+    }
+
+
+    protected dispose(currentTarget:any):void{
+        if(currentTarget.isChecked){
+            this.addDispose(currentTarget.curData);
+        }else{
+            this.removeDispose(currentTarget.curData);
+        }
+    }
+
+
+    protected clearDisPose():void{
+        this._generalDisposeArr = [];
+        this.updateView();
+    }
+
     protected onEnable():void{
-        this.initGeneralCfg();
-        MapUICommand.getInstance().qryMyGenerals();
     }
 
 

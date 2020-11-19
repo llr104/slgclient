@@ -16,6 +16,15 @@ const { ccclass, property } = cc._decorator;
 export default class CityAboutLogic extends cc.Component {
 
 
+
+    @property(cc.Node)
+    typeNode1: cc.Node = null;
+
+
+    
+    @property(cc.Node)
+    typeNode2: cc.Node = null;
+
     private _cityData:any = null;
     protected onLoad():void{
         
@@ -34,7 +43,13 @@ export default class CityAboutLogic extends cc.Component {
 
     public setData(data:any):void{
         this._cityData = data;
-
+        var roleData = LoginCommand.getInstance().proxy.getRoleData();
+        this.typeNode1.active = this.typeNode2.active = false;
+        if(roleData.rid == this._cityData.rid){
+            this.typeNode1.active = true;
+        }else{
+            this.typeNode2.active = true;
+        }
     }
 
 

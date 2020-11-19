@@ -32,7 +32,8 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
-
+        cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
+        cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
     }
 
     protected onCityFacilities(data:any):void{
@@ -61,7 +62,7 @@ export default class MapUICommand {
             cc.systemEvent.emit("getCityFacilities");
 
 
-            LoginCommand.getInstance().proxy.roleRes = data.msg.role_res;
+            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
             cc.systemEvent.emit("onRoleMyRoleRes");
         }
     }
@@ -76,7 +77,7 @@ export default class MapUICommand {
     protected onRoleMyRoleRes(data:any):void{
         console.log("onRoleMyRoleRes :",data);
         if(data.code == 0){
-            LoginCommand.getInstance().proxy.roleRes = data.msg.role_res;
+            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
             cc.systemEvent.emit("onRoleMyRoleRes");
         }
     }
@@ -86,8 +87,30 @@ export default class MapUICommand {
         console.log("onQryMyGenerals :",data);
         if(data.code == 0){
             this._proxy.setMyGeneral(data.msg);
+            cc.systemEvent.emit("onQryMyGenerals");
         }
-        cc.systemEvent.emit("onQryMyGenerals");
+        
+    }
+
+
+
+
+    protected onGeneralArmyList(data:any):void{
+        console.log("onGeneralArmyList :",data);
+        if(data.code == 0){
+            this._proxy.setCityArmy(data.msg);
+            cc.systemEvent.emit("onGeneralArmyList");
+        }
+    }
+
+
+    protected onGeneralDispose(data:any,otherData:any):void{
+        console.log("onGeneralDispose :",data,otherData);
+        if(data.code == 0){
+            data.msg.cityId = otherData.cityId
+            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
+            cc.systemEvent.emit("onGeneralDispose");
+        }
     }
 
     public onDestory(): void {
@@ -166,7 +189,7 @@ export default class MapUICommand {
     /**
      * 配置武将
      */
-    public generalDispose(cityId:number = 0,generalId:number = 0,order:number = 0,position:number = 0):void{
+    public generalDispose(cityId:number = 0,generalId:number = 0,order:number = 0,position:number = 0,otherData:any):void{
         let sendData: any = {
             name: ServerConfig.general_dispose,
             msg: {
@@ -174,6 +197,25 @@ export default class MapUICommand {
                 generalId:generalId,
                 order:order,
                 position:position,
+            }
+        };
+        NetManager.getInstance().send(sendData,otherData);
+    }
+
+
+
+
+
+
+    
+    /**
+     * 城池武将
+     */
+    public qryGeneralArmyList(cityId:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.general_armyList,
+            msg: {
+                cityId:cityId,
             }
         };
         NetManager.getInstance().send(sendData);

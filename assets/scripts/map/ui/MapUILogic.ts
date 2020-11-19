@@ -204,7 +204,7 @@ export default class MapUILogic extends cc.Component {
      */
     protected updateRole():void{
         var str:string = ""
-        var roleRes = LoginCommand.getInstance().proxy.roleRes;
+        var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         var c = 0;
         for(var key in roleRes){
             str += this._nameObj[key] + ": " + roleRes[key] + " ";
