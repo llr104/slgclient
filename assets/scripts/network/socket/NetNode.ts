@@ -53,7 +53,7 @@ export class NetNode {
     protected _reconnetTimeOut: number = 2*1000;                            // 重连间隔
     protected _requests: RequestObject[] = Array<RequestObject>();          // 请求列表
     protected _maxSeqId :number = 1000000;
-    protected _seqId :number = 0;
+    protected _seqId :number = 1;
     protected _invokePool:any = [];
 
     /********************** 网络相关处理 *********************/
@@ -272,7 +272,7 @@ export class NetNode {
     public closeSocket(code?: number, reason?: string) {
         this.clearTimer();
         this._requests.length = 0;
-        this._seqId = 0;
+        this._seqId = 1;
         this._autoReconnect = 0;
 
         if (this._socket) {

@@ -24,12 +24,17 @@ export default class ConscriptLogic extends cc.Component {
     private _generalDisposeArr:any = null;
     private _generalArmyArr:any = null;
     private _cityArmyData:any = null;
+    private _orderId:number = 0;
 
 
     protected onLoad():void{
-        
+        cc.systemEvent.on("onGeneralDispose", this.onGeneralDispose, this);
     }
 
+
+    protected onGeneralDispose():void{
+        this.setData(this._orderId,this._cityData)
+    }
 
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
@@ -43,9 +48,10 @@ export default class ConscriptLogic extends cc.Component {
         this._generalDisposeArr = [];
         this._generalArmyArr = [];
 
+        this._orderId = orderId;
         this._cityData = cityData;
         var cityArmy = MapUICommand.getInstance().proxy.getCityArmy(this._cityData.cityId);
-        this._cityArmyData = cityArmy[orderId];
+        this._cityArmyData = cityArmy[this._orderId];
 
         this._generalDisposeArr[0] = MapUICommand.getInstance().proxy.getMyGeneralById(this._cityArmyData.firstId);
         this._generalDisposeArr[1] = MapUICommand.getInstance().proxy.getMyGeneralById(this._cityArmyData.secondId);

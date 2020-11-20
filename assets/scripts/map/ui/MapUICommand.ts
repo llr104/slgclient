@@ -302,47 +302,4 @@ export default class MapUICommand {
         };
         NetManager.getInstance().send(sendData,otherData);
     }
-
-
-    /**
-     * 加载设施配置
-     */
-    public initMapJsonConfig():void{
-        // cc.resources.loadDir("./config/json/facility/", cc.JsonAsset, this.loadFacJsonComplete.bind(this));
-        // cc.resources.loadDir("./config/json/general/", cc.JsonAsset, this.loadGenJsonComplete.bind(this));
-        // cc.resources.loadDir("./generalpic/", cc.SpriteFrame, this.loadGenTexComplete.bind(this));
-        // this.qryMyGenerals();
-    }
-
-
-    public loadFacJsonComplete(error: Error, asset: [cc.JsonAsset]):void{
-        if(!error){
-            this._proxy.setAllFacilityCfg(asset);
-            
-        }else{
-            console.log("loadFacJsonComplete--asset:",error)
-        }
-    }
-
-
-    public loadGenJsonComplete(error: Error, asset: [cc.JsonAsset]):void{
-        if(!error){
-            this._proxy.setGeneralCfg(asset);
-            
-        }else{
-            console.log("loadGenJsonComplete--asset:",error)
-        }
-    }
-
-
-
-    public loadGenTexComplete(error: Error, asset: [cc.SpriteFrame]):void{
-        if(!error){
-            this._proxy.setGenTex(asset);
-        }else{
-            console.log("loadGenTexComplete--asset:",error)
-        }
-    }
-
-
 }

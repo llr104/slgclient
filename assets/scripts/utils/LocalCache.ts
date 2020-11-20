@@ -40,6 +40,7 @@ export class LocalCache{
             jsonContent = {};
         }
     
+        
         //如果本身值存在就返回本身
         if (jsonContent[keyStr] !== null && jsonContent[keyStr] !== undefined && jsonContent[keyStr] !== "") {
             return jsonContent[keyStr];
