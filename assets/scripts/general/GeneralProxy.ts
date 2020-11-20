@@ -50,6 +50,7 @@ export default class GeneralProxy {
                 levelData = cfgs[i].json.levels;
             }
         }
+
         if (cfgData) {
             this._generalConfigs.clear();
             for (let i: number = 0; i < cfgData.length; i++) {
@@ -65,7 +66,7 @@ export default class GeneralProxy {
                 this._generalConfigs.set(cfg.cfgId, cfg);
             }
         }
-        console.log("levelData", levelData);
+
         if (levelData) {
             this._levelConfigs.length = levelData.length;
             for (let i: number = 0; i < levelData.length; i++) {
@@ -121,6 +122,10 @@ export default class GeneralProxy {
         return null;
     }
 
+    public getMaxLevel(): number {
+        return this._levelConfigs.length;
+    }
+
     /**武将头像素材*/
     public getGeneralTex(cfgId: number): cc.SpriteFrame {
         if (this._generalTexs.has(cfgId)) {
@@ -130,7 +135,7 @@ export default class GeneralProxy {
     }
 
     /**我的武将列表*/
-    public getMyGenerals():GeneralData[] {
+    public getMyGenerals(): GeneralData[] {
         return Array.from(this._myGenerals.values());
     }
 
