@@ -79,7 +79,7 @@ export default class LoginCommand {
                 this._proxy.saveEnterData(data.msg);
             }
             //进入游戏
-            MapCommand.getInstance().qryNationMapConfig();
+            MapCommand.getInstance().enterMap();
         }
     }
 

@@ -38,6 +38,10 @@ export default class ArmyCommand {
         cc.systemEvent.targetOff(this);
     }
 
+    public clearData():void {
+        this._proxy.clearData();
+    }
+
     public get proxy(): ArmyProxy {
         return this._proxy;
     }
@@ -89,6 +93,11 @@ export default class ArmyCommand {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
             cc.systemEvent.emit("update_army", armyData);
         }
+    }
+
+    /**我的角色属性*/
+    public updateMyProperty(data: any): void {
+        
     }
 
     /**请求自己的军队信息*/

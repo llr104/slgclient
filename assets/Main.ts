@@ -49,8 +49,15 @@ export default class Main extends cc.Component {
         cc.systemEvent.targetOff(this);
     }
 
+    protected clearData(): void {
+        MapCommand.getInstance().clearData();
+        GeneralCommand.getInstance().clearData();
+        ArmyCommand.getInstance().clearData();
+    }
+
     private enterLogin(): void {
         this.clearAllScene();
+        this.clearData();
         this._loginScene = cc.instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
     }
@@ -77,7 +84,7 @@ export default class Main extends cc.Component {
                 GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3]);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
 
-                let cityId: number = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+                let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
                 GeneralCommand.getInstance().qryMyGenerals();
                 ArmyCommand.getInstance().qryArmyList(cityId);
 

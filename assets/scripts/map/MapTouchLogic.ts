@@ -32,16 +32,16 @@ export default class MapTouchLogic extends cc.Component {
             return;
         }
 
-        let cellId:number = MapUtil.getIdByCellPoint(mapPoint.x, mapPoint.y);
-        let data:any = null;
-        data = this._cmd.proxy.getCity(cellId);
+        let cellId: number = MapUtil.getIdByCellPoint(mapPoint.x, mapPoint.y);
+        let data: any = null;
+        data = this._cmd.cityProxy.getCity(cellId);
         if (data != null) {
             //代表点击的是城市
             cc.systemEvent.emit("open_city_about", data);
             return;
         }
 
-        data = this._cmd.proxy.getBuild(cellId);
+        data = this._cmd.buildProxy.getBuild(cellId);
         if (data != null) {
             //代表点击被占领的区域
             console.log("点击被占领的区域", data);
@@ -54,21 +54,21 @@ export default class MapTouchLogic extends cc.Component {
         console.log("点击野外区域", data);
     }
 
-    protected onMoveMap():void {
+    protected onMoveMap(): void {
         this.removeClickUINode();
     }
 
-    public showClickUINode(data:any, pos:cc.Vec2): void {
+    public showClickUINode(data: any, pos: cc.Vec2): void {
         if (this._clickUINode == null) {
             this._clickUINode = cc.instantiate(this.clickUIPrefab);
-            
+
         }
         this._clickUINode.parent = this.node;
         this._clickUINode.setPosition(pos);
         this._clickUINode.getComponent(MapClickUILogic).setCellData(data, pos);
     }
 
-    public removeClickUINode():void {
+    public removeClickUINode(): void {
         if (this._clickUINode) {
             this._clickUINode.parent = null;
         }

@@ -32,6 +32,10 @@ export default class GeneralCommand {
         cc.systemEvent.targetOff(this);
     }
 
+    public clearData():void {
+        this._proxy.clearData();
+    }
+
     public get proxy(): GeneralProxy {
         return this._proxy;
     }
@@ -43,6 +47,11 @@ export default class GeneralCommand {
             this._proxy.updateMyGenerals(data.msg.generals);
             cc.systemEvent.emit("update_my_generals");
         }
+    }
+
+    /**我的角色属性*/
+    public updateMyProperty(data: any): void {
+        
     }
 
     public qryMyGenerals(): void {

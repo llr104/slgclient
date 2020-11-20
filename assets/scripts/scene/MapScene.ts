@@ -1,8 +1,9 @@
 import MapBuildLogic from "../map/MapBuildLogic";
 import MapCityLogic from "../map/MapCityLogic";
+import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import MapLogic from "../map/MapLogic";
-import { MapAreaData, MapCityData, MapResType } from "../map/MapProxy";
+import { MapAreaData, MapResType } from "../map/MapProxy";
 import MapResLogic from "../map/MapResLogic";
 import MapUtil from "../map/MapUtil";
 
@@ -29,10 +30,10 @@ export default class MapScene extends cc.Component {
         let tiledMap: cc.TiledMap = this.mapLayer.addComponent(cc.TiledMap);
         tiledMap.tmxAsset = this._cmd.proxy.tiledMapAsset;
         MapUtil.initMapConfig(tiledMap);
-        this._cmd.proxy.init();
+        this._cmd.initData();
         cc.systemEvent.on("map_show_area_change", this.onMapShowAreaChange, this);
         this.scheduleOnce(() => {
-            let myCity: MapCityData = this._cmd.proxy.getMyMainCity();
+            let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
             this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(myCity.x, myCity.y));
             this.onTimer();//立即执行一次
@@ -80,12 +81,12 @@ export default class MapScene extends cc.Component {
                         resLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
                     //建筑
-                    if (this._cmd.proxy.getBuild(cellId) != null) {
-                        buildLogic.addItem(addIds[i], this._cmd.proxy.getBuild(cellId));
+                    if (this._cmd.buildProxy.getBuild(cellId) != null) {
+                        buildLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
                     }
                     //城池
-                    if (this._cmd.proxy.getCity(cellId) != null) {
-                        cityLogic.addItem(addIds[i], this._cmd.proxy.getCity(cellId));
+                    if (this._cmd.cityProxy.getCity(cellId) != null) {
+                        cityLogic.addItem(addIds[i], this._cmd.cityProxy.getCity(cellId));
                     }
                 }
             }

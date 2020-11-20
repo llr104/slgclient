@@ -127,7 +127,7 @@ export default class FacilityDesLogic extends cc.Component {
 
     protected onClickUpFacility(): void {
         var otherData = this._currData;
-        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+        var cityId = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
         MapUICommand.getInstance().upFacility(cityId,otherData.type);
     }
 

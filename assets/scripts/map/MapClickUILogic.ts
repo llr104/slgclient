@@ -1,7 +1,7 @@
 import ArmyCommand from "../general/ArmyCommand";
 import { ArmyData } from "../general/ArmyProxy";
+import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
-import { MapCityData } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,7 +21,7 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickOccupy(): void {
-        let myCity: MapCityData = MapCommand.getInstance().proxy.getMyMainCity();
+        let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
         if (armyData == null) {
             console.log("没有队伍");

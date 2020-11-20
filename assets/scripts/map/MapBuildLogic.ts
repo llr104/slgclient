@@ -1,6 +1,6 @@
 import BuildLogic from "./entries/BuildLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
-import { MapBuildData } from "./MapProxy";
+import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
@@ -22,13 +22,13 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
         // console.log("update_builds", arguments);
         if (this._itemMap.has(areaIndex)) {
             for (let i: number = 0; i < addIds.length; i++) {
-                this.addItem(areaIndex, this._cmd.proxy.getBuild(addIds[i]));
+                this.addItem(areaIndex, this._cmd.buildProxy.getBuild(addIds[i]));
             }
             for (let i: number = 0; i < removeIds.length; i++) {
                 this.removeItem(areaIndex, removeIds[i]);
             }
             for (let i: number = 0; i < updateIds.length; i++) {
-                this.updateItem(areaIndex, this._cmd.proxy.getBuild(updateIds[i]));
+                this.updateItem(areaIndex, this._cmd.buildProxy.getBuild(updateIds[i]));
             }
         }
     }

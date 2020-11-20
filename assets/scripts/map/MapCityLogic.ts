@@ -1,7 +1,7 @@
-import { MapCityData } from "./MapProxy";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import CityLogic from "./entries/CityLogic";
 import MapUtil from "./MapUtil";
+import { MapCityData } from "./MapCityProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -22,13 +22,13 @@ export default class MapCityLogic extends MapBaseLayerLogic {
         // console.log("update_citys", arguments);
         if (this._itemMap.has(areaIndex)) {
             for (let i: number = 0; i < addIds.length; i++) {
-                this.addItem(areaIndex, this._cmd.proxy.getCity(addIds[i]));
+                this.addItem(areaIndex, this._cmd.cityProxy.getCity(addIds[i]));
             }
             for (let i: number = 0; i < removeIds.length; i++) {
                 this.removeItem(areaIndex, removeIds[i]);
             }
             for (let i: number = 0; i < updateIds.length; i++) {
-                this.updateItem(areaIndex, this._cmd.proxy.getCity(updateIds[i]));
+                this.updateItem(areaIndex, this._cmd.cityProxy.getCity(updateIds[i]));
             }
         }
     }

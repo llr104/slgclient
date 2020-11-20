@@ -1,6 +1,11 @@
 import { ServerConfig } from "../config/ServerConfig";
+import ArmyCommand from "../general/ArmyCommand";
+import GeneralCommand from "../general/GeneralCommand";
 import { NetManager } from "../network/socket/NetManager";
+import MapBuildProxy from "./MapBuildProxy";
+import MapCityProxy from "./MapCityProxy";
 import MapProxy, { MapAreaData } from "./MapProxy";
+import MapUICommand from "./ui/MapUICommand";
 
 
 export default class MapCommand {
@@ -24,8 +29,12 @@ export default class MapCommand {
 
     //数据model
     protected _proxy: MapProxy = new MapProxy();
+    protected _cityProxy: MapCityProxy = new MapCityProxy();
+    protected _buildProxy: MapBuildProxy = new MapBuildProxy();
+    protected _isQryMyProperty: boolean = false;
 
     constructor() {
+        cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
         cc.systemEvent.on(ServerConfig.role_myCity, this.onRoleMyCity, this);
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
@@ -35,15 +44,48 @@ export default class MapCommand {
         cc.systemEvent.targetOff(this);
     }
 
+    public initData(): void {
+        this._proxy.initData();
+        this._cityProxy.initData();
+        this._buildProxy.initData();
+    }
+
+    public clearData(): void {
+        this._proxy.clearData();
+        this._cityProxy.clearData();
+        this._buildProxy.clearData();
+        this._isQryMyProperty = false;
+    }
+
     public get proxy(): MapProxy {
         return this._proxy;
+    }
+
+    public get cityProxy(): MapCityProxy {
+        return this._cityProxy;
+    }
+
+    public get buildProxy(): MapBuildProxy {
+        return this._buildProxy;
+    }
+
+    protected onRoleMyProperty(data: any): void {
+        console.log("onRoleMyProperty", data);
+        if (data.code == 0) {
+            this._isQryMyProperty = true;
+            MapUICommand.getInstance().updateMyProperty(data);
+            GeneralCommand.getInstance().updateMyProperty(data.msg.generals);
+            ArmyCommand.getInstance().updateMyProperty(data.msg.armys);
+            this._cityProxy.setMyCitys(data.msg.citys);
+            this._buildProxy.setMyBuilds(data.msg.mr_builds);
+            this.enterMap();
+        }
     }
 
     protected onRoleMyCity(data: any): void {
         console.log("onRoleMyCity", data);
         if (data.code == 0) {
-            this._proxy.setMyCitys(data.msg.citys);
-            this.enterMap();
+            this._cityProxy.setMyCitys(data.msg.citys);
         }
     }
 
@@ -58,7 +100,8 @@ export default class MapCommand {
     protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            this._proxy.setMapScanBlock(data.msg, otherData.id);
+            this._cityProxy.setMapScanBlock(data.msg, otherData.id);
+            this._buildProxy.setMapScanBlock(data.msg, otherData.id);
         }
     }
 
@@ -67,11 +110,21 @@ export default class MapCommand {
             this.qryNationMapConfig();
             return;
         }
-        if (this._proxy.getMyMainCity() == null) {
-            this.qryRoleMyCity();
+        if (this._isQryMyProperty == false) {
+            this.qryRoleMyProperty();
             return;
         }
         cc.systemEvent.emit("enter_map");
+    }
+
+    /**请求角色全量信息*/
+    public qryRoleMyProperty(): void {
+        let sendData: any = {
+            name: ServerConfig.role_myProperty,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
     }
 
     /**请求自己的城池信息*/

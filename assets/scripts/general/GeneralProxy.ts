@@ -39,6 +39,10 @@ export default class GeneralProxy {
     protected _generalTexs: Map<number, cc.SpriteFrame> = new Map<number, cc.SpriteFrame>();
     protected _myGenerals: Map<number, GeneralData> = new Map<number, GeneralData>();
 
+    public clearData():void {
+        this._myGenerals.clear();
+    }
+
     public initGeneralConfig(cfgs: any[]): void {
         let cfgData: any = null;
         let levelData: any = null;
