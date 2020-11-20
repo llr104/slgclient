@@ -48,26 +48,26 @@ export default class MapUILogic extends cc.Component {
     conscriptPrefab: cc.Prefab = null;
     protected _conscriptNode: cc.Node = null;
 
-    @property(cc.Label)
-    roleLabel: cc.Label = null;
+    @property(cc.Layout)
+    srollLayout:cc.Layout = null;
 
     protected _nameObj:any = {};
 
     protected onLoad():void{
 
         this._nameObj = {
-            decree:"令牌",
-            grain:"谷物",
-            wood:"木材",
-            iron:"金属",
-            stone:"石材",
-            gold:"金钱",
-            wood_yield:"木材产量",
-            iron_yield:"金属产量",
-            stone_yield:"石材产量",
-            grain_yield:"谷物产量",
-            gold_yield:"金钱产量",
-            depot_capacity:"仓库容量"
+            decree:"令牌x",
+            grain:"谷物x",
+            wood:"木材x",
+            iron:"金属x",
+            stone:"石材x",
+            gold:"金钱x",
+            wood_yield:"木材+",
+            iron_yield:"金属+",
+            stone_yield:"石材+",
+            grain_yield:"谷物+",
+            gold_yield:"金钱+",
+            depot_capacity:"仓库+"
         };
 
 
@@ -230,19 +230,15 @@ export default class MapUILogic extends cc.Component {
      * 角色信息
      */
     protected updateRole():void{
-        var str:string = ""
+        var children = this.srollLayout.node.children;
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
-        var c = 0;
+        var i = 0;
         for(var key in roleRes){
-            str += this._nameObj[key] + ": " + roleRes[key] + " ";
-            if(c > 6){
-                str +="\n"
-                c = 0;
-            }
-            c++
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
+            i++;
+
         }
 
-        this.roleLabel.string = str; 
     }
 
 }
