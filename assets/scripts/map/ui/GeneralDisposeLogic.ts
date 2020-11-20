@@ -27,16 +27,24 @@ export default class GeneralDisposeLogic extends cc.Component {
     picNode: cc.Node[] = [];
 
 
+    @property([cc.Node])
+    pageNode: cc.Node = null;
+
+
+
+    private _generalDisposeMap:any = new Map();
     private _generalDisposeArr:any[] = [];
     private _cityData:any = null;
     private _orderIndex:number = 0;
+    private _maxOrder:number = 3;
+    private _maxGeneral:number = 3;
 
 
     protected onLoad():void{
-        console.log("onLoad GeneralDisposeLogic");
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
         cc.systemEvent.on("update_army_list", this.onGeneralArmyList, this);
         cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
+        this.pageNode.on("scroll-ended",this.onPageChange,this)
     }
 
 
@@ -82,11 +90,10 @@ export default class GeneralDisposeLogic extends cc.Component {
                 var toggle = child.getComponent(cc.Toggle);
                 toggle.isChecked = false;
                 var curData = toggle.curData;
-                // console.log("curData.id:",curData.id)
+
                 if(curData.id == cityArmyData.firstId || curData.id == cityArmyData.secondId || curData.id == cityArmyData.thirdId){
-                    toggle.isChecked = true;
-                    // this.dispose(toggle);
-    
+                    // toggle.isChecked = true;
+                    
                     if(curData.id == cityArmyData.firstId){
                         this._generalDisposeArr[0] = (curData);
                     }
@@ -132,8 +139,7 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     private addDispose(data:any):void{
-        var maxSize = 3;
-        for(var i = 0;i < maxSize;i++){
+        for(var i = 0;i < this._maxGeneral;i++){
             if(!this._generalDisposeArr[i]){
                 this._generalDisposeArr[i] = data;
             }
@@ -160,18 +166,17 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     private removeDispose(data:any):void{
-        var maxSize = 3;
-        for(var i = 0;i < maxSize;i++){
+        for(var i = 0;i < this._maxGeneral;i++){
             if(this._generalDisposeArr[i] == data){
                 this._generalDisposeArr[i] = null;
             }
         }
+        
     }
 
 
     private getIndex(data:any):number{
-        var maxSize = 3;
-        for(var i = 0;i < maxSize;i++){
+        for(var i = 0;i < this._maxGeneral;i++){
             if(this._generalDisposeArr[i] == data){
                 return (i + 1);
             }
@@ -192,9 +197,26 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     protected clearDisPose():void{
         this._generalDisposeArr = [];
+        this.initMap();
         this.updateView();
     }
 
+
+    protected initMap():void{
+        this._generalDisposeMap = new Map();
+        for(var i = 0;i < this._maxOrder;i++){
+            this._generalDisposeMap.set(i,[])
+        }
+    }
+
+
+    protected getMap(orderId:number = 0):any{
+        return this._generalDisposeMap.get(orderId);
+    }
+
+    protected setMap(orderId:number = 0,arr:any):void{
+        this._generalDisposeMap.get(orderId,arr);
+    }
 
 
     protected onClickDisGeneral(event:any): void {
@@ -202,7 +224,17 @@ export default class GeneralDisposeLogic extends cc.Component {
         if(otherData){
             cc.systemEvent.emit("open_general_conscript", this._orderIndex,this._cityData);
         }
-        
+    }
+
+
+
+    protected onPageChange(target:any):void{
+        console.log("onPageChange:",)
+        this._orderIndex = target.getCurrentPageIndex();
+
+        // this._generalDisposeArr = 
+        this.updateView();
+
     }
 
     protected onEnable():void{

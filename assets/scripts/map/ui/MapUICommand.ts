@@ -31,53 +31,60 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
+        cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
     }
 
-    protected onCityFacilities(data: any): void {
-        console.log("onCityFacilities :", data);
-        if (data.code == 0) {
+    protected onCityFacilities(data:any):void{
+        console.log("onCityFacilities :",data);
+        if(data.code == 0){
             this._proxy.setMyFacility(data.msg);
             cc.systemEvent.emit("update_my_facilities");
         }
     }
 
 
-    protected onCityUpFacilities(data: any): void {
-        console.log("onCityUpFacilities :", data);
-        if (data.code == 0) {
+    protected onCityUpFacilities(data:any):void{
+        console.log("onCityUpFacilities :",data);
+        if(data.code == 0){
             var cityId = data.msg.cityId;
             var facility = data.msg.facility;
             var facilityArr = this._proxy.getMyFacility(cityId);
-            for (var i = 0; i < facilityArr.length; i++) {
-                if (facilityArr[i].type == facility.type) {
+            for(var i = 0;i < facilityArr.length ;i++ ){
+                if(facilityArr[i].type == facility.type){
                     facilityArr[i].level = facility.level;
                     break;
                 }
             }
 
-            this._proxy.setMyFacilityByCityId(cityId, facilityArr);
+            this._proxy.setMyFacilityByCityId(cityId,facilityArr);
             cc.systemEvent.emit("update_my_facilities");
 
 
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("onRoleMyRoleRes");
+            cc.systemEvent.emit("upate_my_roleRes");
         }
     }
 
 
 
-
-
-
-
-
-    protected onRoleMyRoleRes(data: any): void {
-        console.log("onRoleMyRoleRes :", data);
-        if (data.code == 0) {
+    protected onRoleMyRoleRes(data:any):void{
+        console.log("onRoleMyRoleRes :",data);
+        if(data.code == 0){
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("onRoleMyRoleRes");
+            cc.systemEvent.emit("upate_my_roleRes");
         }
     }
+
+
+    protected onRoleMyProperty(data:any):void{
+        console.log("onRoleMyProperty :",data);
+        if(data.code == 0){
+            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
+            cc.systemEvent.emit("upate_my_roleRes");
+        }
+    }
+
+
 
     public onDestory(): void {
         cc.systemEvent.targetOff(this);
@@ -92,11 +99,11 @@ export default class MapUICommand {
      * 设施
      * @param cityId 
      */
-    public qryCityFacilities(cityId: number = 0): void {
+    public qryCityFacilities(cityId:number = 0): void {
         let sendData: any = {
             name: ServerConfig.city_facilities,
             msg: {
-                cityId: cityId,
+                cityId:cityId,
             }
         };
         NetManager.getInstance().send(sendData);
@@ -108,12 +115,12 @@ export default class MapUICommand {
      * @param cityId 
      * @param ftype 
      */
-    public upFacility(cityId: number = 0, ftype: number = 0): void {
+    public upFacility(cityId:number = 0,ftype:number = 0):void{
         let sendData: any = {
             name: ServerConfig.city_upFacility,
             msg: {
-                cityId: cityId,
-                fType: ftype,
+                cityId:cityId,
+                fType:ftype,
             }
         };
         NetManager.getInstance().send(sendData);
@@ -137,10 +144,17 @@ export default class MapUICommand {
 
 
 
-    /**我的角色属性*/
-    public updateMyProperty(data: any): void {
-        LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-        cc.systemEvent.emit("onRoleMyRoleRes");
+    /**
+     * 我的角色资源属性(全)
+     * @param 
+     */
+    public qryRoleMyProperty(): void {
+        let sendData: any = {
+            name: ServerConfig.role_myProperty,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
     }
 
 
