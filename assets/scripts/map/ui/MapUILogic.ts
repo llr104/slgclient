@@ -76,7 +76,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_facility", this.openFacility, this);
         cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
         
-        cc.systemEvent.on("onRoleMyRoleRes", this.updateRole, this);
+        cc.systemEvent.on("upate_my_roleRes", this.updateRole, this);
         
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
 

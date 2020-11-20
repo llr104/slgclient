@@ -70,7 +70,7 @@ export default class ArmyCommand {
         console.log("onGeneralConscript", data);
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("onRoleMyRoleRes");
+            cc.systemEvent.emit("upate_my_roleRes");
 
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
             cc.systemEvent.emit("update_army", armyData);

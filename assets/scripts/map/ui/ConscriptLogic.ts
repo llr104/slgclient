@@ -31,7 +31,7 @@ export default class ConscriptLogic extends cc.Component {
 
 
     protected onUpdateArmy(army: ArmyData): void {
-        if (army.cityId == this._cityData.cityId && army.order == this._orderId)
+        if (army.cityId == this._cityData.cityId && army.order == this._orderId + 1)
             this.setData(this._orderId, this._cityData)
     }
 
@@ -87,8 +87,8 @@ export default class ConscriptLogic extends cc.Component {
                 slider.getComponent(cc.Slider).armyNumer = armyNumer;
 
 
-                min.getComponent(cc.Label).string = armyNumer;
-                max.getComponent(cc.Label).string = maxArmyNumer;
+                min.getComponent(cc.Label).string = "已征兵:" + armyNumer;
+                max.getComponent(cc.Label).string = "最大:" + maxArmyNumer;
 
                 var pic = item.getChildByName("pic");
                 pic.active = true;

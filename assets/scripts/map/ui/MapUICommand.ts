@@ -65,17 +65,6 @@ export default class MapUICommand {
         }
     }
 
-
-
-    protected onRoleMyRoleRes(data:any):void{
-        console.log("onRoleMyRoleRes :",data);
-        if(data.code == 0){
-            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("upate_my_roleRes");
-        }
-    }
-
-
     protected onRoleMyProperty(data:any):void{
         console.log("onRoleMyProperty :",data);
         if(data.code == 0){
