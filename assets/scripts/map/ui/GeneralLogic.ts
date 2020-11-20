@@ -47,8 +47,8 @@ export default class GeneralLogic extends cc.Component {
             item.getChildByName("name").getComponent(cc.Label).string = list[i].name;
             item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(list[i].cfgId);
             item.parent = this.srollLayout.node;
-            item.getComponent(cc.Toggle).cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
-            item.getComponent(cc.Toggle).curData = list[i];
+            item.cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
+            item.curData = list[i];
         }
     }
 

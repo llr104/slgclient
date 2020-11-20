@@ -25,7 +25,7 @@ export default class FacilityLogic extends cc.Component {
     protected _curCtiyId:number = 0;
 
     protected onLoad():void{
-        cc.systemEvent.on("getCityFacilities", this.onQryCityFacilities, this);
+        cc.systemEvent.on("update_my_facilities", this.onQryCityFacilities, this);
 
         
     }

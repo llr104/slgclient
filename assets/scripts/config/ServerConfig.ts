@@ -11,6 +11,7 @@ const ServerConfig = {
     role_myRoleRes:"role.myRoleRes",
     nationMap_config: "nationMap.config",
     nationMap_scanBlock: "nationMap.scanBlock",
+    role_myProperty:"role.myProperty",
 
 
     city_facilities:"city.facilities",
@@ -23,6 +24,7 @@ const ServerConfig = {
     general_conscript:"general.conscript",
     general_assignArmy:"general.assignArmy",
     general_armyState:"general.armyState",
+
 }
 
 

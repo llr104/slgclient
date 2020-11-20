@@ -5,6 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GeneralCommand from "../../general/GeneralCommand";
+import { GenaralLevelConfig } from "../../general/GeneralProxy";
+
 
 const { ccclass, property } = cc._decorator;
 
@@ -66,9 +69,9 @@ export default class GeneralDesLogic extends cc.Component {
         this._currData = curData;
         this._cfgData = cfgData;
         this.titleLabel.string = curData.name;
-        
-        
-        this.lvLabel.string = this._currData.level + "/" + this._cfgData.levels.length;
+    
+        var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();//GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level.level);
+        this.lvLabel.string = this._currData.level + "/" + maxLevel;//levelCfg.length;
         var str_des = "";
         for(var key in cfgData){
             if(key == "cfgId" || key == "cost"){

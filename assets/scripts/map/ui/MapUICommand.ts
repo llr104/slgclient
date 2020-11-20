@@ -31,18 +31,14 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
-        // cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
-        // cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
-        // cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
-        // cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
-        // cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
+        cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
     }
 
     protected onCityFacilities(data:any):void{
         console.log("onCityFacilities :",data);
         if(data.code == 0){
             this._proxy.setMyFacility(data.msg);
-            cc.systemEvent.emit("getCityFacilities");
+            cc.systemEvent.emit("update_my_facilities");
         }
     }
 
@@ -61,7 +57,7 @@ export default class MapUICommand {
             }
 
             this._proxy.setMyFacilityByCityId(cityId,facilityArr);
-            cc.systemEvent.emit("getCityFacilities");
+            cc.systemEvent.emit("update_my_facilities");
 
 
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
@@ -85,79 +81,16 @@ export default class MapUICommand {
     }
 
 
-    protected onQryMyGenerals(data:any):void{
-        console.log("onQryMyGenerals :",data);
+
+    protected onRoleMyProperty(data:any):void{
+        console.log("onRoleMyProperty :",data);
         if(data.code == 0){
-            this._proxy.setMyGeneral(data.msg);
-            cc.systemEvent.emit("onQryMyGenerals");
-        }
-        
-    }
-
-
-
-
-    protected onGeneralArmyList(data:any):void{
-        console.log("onGeneralArmyList :",data);
-        if(data.code == 0){
-            this._proxy.setCityArmy(data.msg);
-            cc.systemEvent.emit("onGeneralArmyList");
+            // LoginCommand.getInstance().proxy.saveEnterData(data.msg);
+            // cc.systemEvent.emit("onRoleMyRoleRes");
         }
     }
 
 
-    /**
-     * 配置武将
-     * @param data 
-     * @param otherData 
-     */
-    protected onGeneralDispose(data:any,otherData:any):void{
-        console.log("onGeneralDispose :",data,otherData);
-        if(data.code == 0){
-            data.msg.cityId = otherData.cityId
-            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
-            cc.systemEvent.emit("onGeneralDispose");
-        }
-    }
-
-
-
-
-    /**
-     * 出兵
-     * @param data 
-     * @param otherData 
-     */
-    protected onGeneralAssignArmy(data:any,otherData:any):void{
-        console.log("onGeneralAssignArmy :",data,otherData);
-        if(data.code == 0){
-            data.msg.cityId = otherData.cityId;
-            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
-            cc.systemEvent.emit("onGeneralAssignArmy");
-
-        }
-    }
-
-
-
-
-    /**
-     * 征兵
-     * @param data 
-     * @param otherData 
-     */
-    protected onGeneralConscript(data:any,otherData:any):void{
-        console.log("onGeneralConscript :",data,otherData);
-        if(data.code == 0){
-            data.msg.cityId = otherData.cityId;
-            this._proxy.updateCityArmy(otherData.cityId,data.msg.army);
-            cc.systemEvent.emit("onGeneralDispose");
-
-            LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("onRoleMyRoleRes");
-
-        }
-    }
 
     public onDestory(): void {
         cc.systemEvent.targetOff(this);
@@ -218,11 +151,12 @@ export default class MapUICommand {
 
 
     /**
-     * 我的武将
+     * 我的角色资源属性(全)
+     * @param 
      */
-    public qryMyGenerals():void{
+    public qryRoleMyProperty(): void {
         let sendData: any = {
-            name: ServerConfig.general_myGenerals,
+            name: ServerConfig.role_myProperty,
             msg: {
             }
         };
@@ -230,76 +164,4 @@ export default class MapUICommand {
     }
 
 
-
-
-    /**
-     * 配置武将
-     */
-    public generalDispose(cityId:number = 0,generalId:number = 0,order:number = 0,position:number = 0,otherData:any):void{
-        let sendData: any = {
-            name: ServerConfig.general_dispose,
-            msg: {
-                cityId:cityId,
-                generalId:generalId,
-                order:order,
-                position:position,
-            }
-        };
-        NetManager.getInstance().send(sendData,otherData);
-    }
-
-
-
-
-
-
-    
-    /**
-     * 城池武将
-     */
-    public qryGeneralArmyList(cityId:number = 0):void{
-        let sendData: any = {
-            name: ServerConfig.general_armyList,
-            msg: {
-                cityId:cityId,
-            }
-        };
-        NetManager.getInstance().send(sendData);
-    }
-
-
-    /**
-     * 武将征兵
-     */
-    public generalConscript(armyId:number = 0,firstCnt:number = 0,secondCnt:number = 0,thirdCnt:number = 0,otherData:any):void{
-        let sendData: any = {
-            name: ServerConfig.general_conscript,
-            msg: {
-                armyId:armyId,
-                firstCnt:firstCnt,
-                secondCnt:secondCnt,
-                thirdCnt:thirdCnt,
-
-            }
-        };
-        NetManager.getInstance().send(sendData,otherData);
-    }
-
-
-
-    /**
-     * 出兵
-     */
-    public generalAssignArmy(armyId:number = 0,state:number = 0,x:number = 0,y:Number = 0,otherData:any):void{
-        let sendData: any = {
-            name: ServerConfig.general_assignArmy,
-            msg: {
-                armyId:armyId,
-                state:state,
-                x:x,
-                y:y,
-            }
-        };
-        NetManager.getInstance().send(sendData,otherData);
-    }
 }
