@@ -5,9 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import LoginCommand from "../../login/LoginCommand";
-import MapCommand from "../MapCommand";
-import MapUICommand from "./MapUICommand";
+import GeneralCommand from "../../general/GeneralCommand";
+import { GeneralData } from "../../general/GeneralProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -24,7 +23,7 @@ export default class GeneralLogic extends cc.Component {
 
 
     protected onLoad():void{
-        cc.systemEvent.on("onQryMyGenerals", this.initGeneralCfg, this);
+        cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
     }
 
 
@@ -39,31 +38,18 @@ export default class GeneralLogic extends cc.Component {
 
 
     protected initGeneralCfg():void{
-        var _generalConfig = MapUICommand.getInstance().proxy.getGeneralCfg();
-        this.srollLayout.node.removeAllChildren();
-
-        let _generalConfigArr = Array.from(_generalConfig.values());
-
-
-        for(var i = 0;i < _generalConfigArr.length; i++){
-            var cfgId = _generalConfigArr[i].cfgId;
-
-            var curData = MapUICommand.getInstance().proxy.getMyGeneral(cfgId);
-            if(!curData){
-                continue;
-            }
-
-            var item = cc.instantiate(this.generalNode);
+        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        console.log("initGeneralCfg", list, this.srollLayout.node);
+        this.srollLayout.node.removeAllChildren(true);
+        for (let i:number = 0; i < list.length; i++) {
+            let item:cc.Node = cc.instantiate(this.generalNode);
             item.active = true;
-
-            
-            item.getChildByName("name").getComponent(cc.Label).string = _generalConfigArr[i].name;
-            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = MapUICommand.getInstance().proxy.getGenTex(cfgId);
+            item.getChildByName("name").getComponent(cc.Label).string = list[i].name;
+            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(list[i].cfgId);
             item.parent = this.srollLayout.node;
-            item.cfgData = _generalConfigArr[i];
-            item.curData = curData;
+            item.getComponent(cc.Toggle).cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
+            item.getComponent(cc.Toggle).curData = list[i];
         }
-
     }
 
 
@@ -76,7 +62,7 @@ export default class GeneralLogic extends cc.Component {
 
     protected onEnable():void{
         this.initGeneralCfg();
-        MapUICommand.getInstance().qryMyGenerals();
+        GeneralCommand.getInstance().qryMyGenerals();
     }
 
 

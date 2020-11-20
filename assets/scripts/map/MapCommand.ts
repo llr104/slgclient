@@ -1,6 +1,5 @@
 import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
-import MapUICommand from "./ui/MapUICommand";
 import MapProxy, { MapAreaData } from "./MapProxy";
 
 

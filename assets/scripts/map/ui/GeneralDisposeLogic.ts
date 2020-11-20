@@ -5,11 +5,10 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ServerConfig } from "../../config/ServerConfig";
-import LoginCommand from "../../login/LoginCommand";
-import MapCommand from "../MapCommand";
-import MapUICommand from "./MapUICommand";
-
+import ArmyCommand from "../../general/ArmyCommand";
+import { ArmyData } from "../../general/ArmyProxy";
+import GeneralCommand from "../../general/GeneralCommand";
+import { GeneralData } from "../../general/GeneralProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -34,11 +33,11 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     protected onLoad():void{
-        cc.systemEvent.on("onQryMyGenerals", this.initGeneralCfg, this);
-        cc.systemEvent.on("onGeneralArmyList", this.onGeneralArmyList, this);
-        cc.systemEvent.on("onGeneralDispose", this.onGeneralArmyList, this);
+        console.log("onLoad GeneralDisposeLogic");
+        cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
+        cc.systemEvent.on("update_army_list", this.onGeneralArmyList, this);
+        cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
     }
-
 
 
     protected onDestroy():void{
@@ -55,17 +54,28 @@ export default class GeneralDisposeLogic extends cc.Component {
         this._cityData = data;
 
         // this.initGeneralCfg();
-        MapUICommand.getInstance().qryMyGenerals();
+        
+        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        if (list.length <= 0) {
+            GeneralCommand.getInstance().qryMyGenerals();
+        } else {
+            this.initGeneralCfg();
+        }
+        let armyList:ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        if (armyList == null) {
+            ArmyCommand.getInstance().qryArmyList(this._cityData.cityId);
+        } else {
+            this.onGeneralArmyList();
+        }
     }
 
 
     protected onGeneralArmyList():void{
         this.clearDisPose();
-
-        var cityArmy = MapUICommand.getInstance().proxy.getCityArmy(this._cityData.cityId);
-        // console.log("cityArmy:",cityArmy)
-        if(cityArmy.length > 0){
-            var cityArmyData = cityArmy[this._orderIndex];
+        
+        let cityArmyData: ArmyData = ArmyCommand.getInstance().proxy.getArmyByOrder(this._orderIndex + 1, this._cityData.cityId);
+        console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
+        if(cityArmyData != null){
             var children = this.srollLayout.node.children;
             for(var i = 0;i < children.length;i++){
                 var child = children[i];
@@ -98,41 +108,26 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     protected initGeneralCfg():void{
-        var _generalConfig = MapUICommand.getInstance().proxy.getGeneralCfg();
-        this.srollLayout.node.removeAllChildren();
-
-        let _generalConfigArr = Array.from(_generalConfig.values());
-
-        for(var i = 0;i < _generalConfigArr.length; i++){
-            var cfgId = _generalConfigArr[i].cfgId;
-
-            var curData = MapUICommand.getInstance().proxy.getMyGeneral(cfgId);
-            if(!curData){
-                continue;
-            }
-
-            var item = cc.instantiate(this.generalNode);
+        
+        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        console.log("initGeneralCfg", list);
+        for (let i:number = 0; i < list.length; i++) {
+            let item:cc.Node = cc.instantiate(this.generalNode);
             item.active = true;
-
-            
-            item.getChildByName("name").getComponent(cc.Label).string = _generalConfigArr[i].name;
-            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = MapUICommand.getInstance().proxy.getGenTex(cfgId);
+            item.getChildByName("name").getComponent(cc.Label).string = list[i].name;
+            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(list[i].cfgId);
             item.parent = this.srollLayout.node;
-            item.getComponent(cc.Toggle).cfgData = _generalConfigArr[i];
-            item.getComponent(cc.Toggle).curData = curData;
+            item.getComponent(cc.Toggle).cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
+            item.getComponent(cc.Toggle).curData = list[i];
         }
-
-
-        MapUICommand.getInstance().qryGeneralArmyList(this._cityData.cityId);
     }
-
 
     protected onClickGeneral(currentTarget:any): void {
         this.dispose(currentTarget);
         currentTarget.isChecked = false;
 
         var position = this.getIndex(currentTarget.curData);
-        MapUICommand.getInstance().generalDispose(this._cityData.cityId,currentTarget.curData.id,this._orderIndex + 1,position,this._cityData);
+        ArmyCommand.getInstance().generalDispose(this._cityData.cityId,currentTarget.curData.id,this._orderIndex + 1,position,this._cityData);
     }
 
 
@@ -155,7 +150,7 @@ export default class GeneralDisposeLogic extends cc.Component {
             var dispiose = this._generalDisposeArr[i]; 
             if(dispiose){
                 item.getChildByName("pic").active = true;
-                item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = MapUICommand.getInstance().proxy.getGenTex(dispiose.cfgId);
+                item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(dispiose.cfgId);
                 item.otherData = dispiose;
             }
         }

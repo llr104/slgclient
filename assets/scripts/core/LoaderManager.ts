@@ -5,11 +5,13 @@ export enum LoadDataType {
 
 export class LoadData {
     path: string = "";
-    type: LoadDataType = LoadDataType.FILE;
+    loadType: LoadDataType = LoadDataType.FILE;
+    fileType: typeof cc.Asset = cc.Asset; 
 
-    constructor(path: string = "", type: LoadDataType = LoadDataType.FILE) {
+    constructor(path: string = "", loadType: LoadDataType = LoadDataType.FILE, fileType: typeof cc.Asset = cc.Asset) {
         this.path = path;
-        this.type = type;
+        this.loadType = loadType;
+        this.fileType = fileType;
     }
 }
 
@@ -60,9 +62,9 @@ export default class LoaderManager {
             return;
         }
         let data: LoadData = this._loadDataList[this._curIndex];
-        if (data.type == LoadDataType.DIR) {
+        if (data.loadType == LoadDataType.DIR) {
             //加载目录
-            cc.resources.loadDir(data.path,
+            cc.resources.loadDir(data.path, data.fileType, 
                 (finish: number, total: number) => {
                     this.onProgress(finish, total);
                 },
@@ -78,7 +80,7 @@ export default class LoaderManager {
                 });
         } else {
             //加载文件
-            cc.resources.load(data.path,
+            cc.resources.load(data.path, data.fileType, 
                 (finish: number, total: number) => {
                     this.onProgress(finish, total);
                 },

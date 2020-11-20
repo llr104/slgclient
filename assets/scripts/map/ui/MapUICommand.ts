@@ -31,11 +31,11 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
-        cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
-        cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
-        cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
-        cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
-        cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
+        // cc.systemEvent.on(ServerConfig.general_myGenerals, this.onQryMyGenerals, this);
+        // cc.systemEvent.on(ServerConfig.general_armyList, this.onGeneralArmyList, this);
+        // cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
+        // cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
+        // cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
     }
 
     protected onCityFacilities(data:any):void{

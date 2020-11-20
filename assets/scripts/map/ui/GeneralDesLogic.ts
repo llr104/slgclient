@@ -5,10 +5,6 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ServerConfig } from "../../config/ServerConfig";
-import MapCommand from "../MapCommand";
-import MapUICommand from "./MapUICommand";
-
 
 const { ccclass, property } = cc._decorator;
 

@@ -6,9 +6,6 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import LoginCommand from "../../login/LoginCommand";
-import MapCommand from "../MapCommand";
-import MapUICommand from "./MapUICommand";
-
 
 const { ccclass, property } = cc._decorator;
 

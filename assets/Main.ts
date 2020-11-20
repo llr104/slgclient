@@ -1,5 +1,7 @@
 import { GameConfig } from "./scripts/config/GameConfig";
 import LoaderManager, { LoadData, LoadDataType } from "./scripts/core/LoaderManager";
+import ArmyCommand from "./scripts/general/ArmyCommand";
+import GeneralCommand from "./scripts/general/GeneralCommand";
 import LoginCommand from "./scripts/login/LoginCommand";
 import MapCommand from "./scripts/map/MapCommand";
 import MapUICommand from "./scripts/map/ui/MapUICommand";
@@ -35,6 +37,8 @@ export default class Main extends cc.Component {
         LoginCommand.getInstance();
         MapCommand.getInstance();
         MapUICommand.getInstance();
+        GeneralCommand.getInstance();
+        ArmyCommand.getInstance();
 
         this.enterLogin();
         cc.systemEvent.on("enter_map", this.onEnterMap, this);
@@ -53,11 +57,11 @@ export default class Main extends cc.Component {
 
     protected onEnterMap(): void {
         let dataList: LoadData[] = [];
-        dataList.push(new LoadData("./world/worldMap", LoadDataType.FILE));
-        dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE));
-        dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR));
-        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR));
-        dataList.push(new LoadData("./generalpic", LoadDataType.DIR));
+        dataList.push(new LoadData("./world/worldMap", LoadDataType.FILE, cc.TiledMapAsset));
+        dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, cc.JsonAsset));
+        dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
+        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
+        dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
         this.addLoadingNode();
         console.log("onEnterMap");
         LoaderManager.getInstance().startLoadList(dataList, null,
@@ -70,8 +74,13 @@ export default class Main extends cc.Component {
                 MapCommand.getInstance().proxy.tiledMapAsset = datas[0] as cc.TiledMapAsset;
                 MapCommand.getInstance().proxy.initMapResConfig((datas[1] as cc.JsonAsset).json);
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
-                MapUICommand.getInstance().proxy.setGeneralCfg(datas[3]);
-                MapUICommand.getInstance().proxy.setGenTex(datas[4]);
+                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3]);
+                GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
+
+                let cityId: number = MapCommand.getInstance().proxy.getMyMainCity().cityId;
+                GeneralCommand.getInstance().qryMyGenerals();
+                ArmyCommand.getInstance().qryArmyList(cityId);
+
                 this.clearAllScene();
                 this._mapScene = cc.instantiate(this.mapScenePrefab);
                 this._mapScene.parent = this.node;
@@ -107,7 +116,5 @@ export default class Main extends cc.Component {
             this._loginScene.destroy();
             this._loginScene = null;
         }
-
-
     }
 }

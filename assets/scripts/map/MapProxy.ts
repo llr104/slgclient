@@ -302,6 +302,8 @@ export default class MapProxy {
             this._curCenterPoint = point;
             let areaPoint: cc.Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
             let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
+
+            // console.log("setCurCenterPoint", areaId, this._curCenterAreaId);
             if (this._curCenterAreaId == -1 || this._curCenterAreaId != areaId) {
                 //展示区域变化
                 let areaData: MapAreaData = this.getMapAreaData(areaId);
@@ -506,5 +508,12 @@ export default class MapProxy {
 
     public getSubCitys(): MapCityData[] {
         return this._mySubCitys;
+    }
+
+    public getMyPlayerId():number {
+        if (this._myMainCity) {
+            return this._myMainCity.rid;
+        }
+        return 0;
     }
 }
