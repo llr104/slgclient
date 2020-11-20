@@ -100,8 +100,9 @@ export default class MapCommand {
     protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
+            let rId:number = this._cityProxy.getMyPlayerId();
             this._cityProxy.setMapScanBlock(data.msg, otherData.id);
-            this._buildProxy.setMapScanBlock(data.msg, otherData.id);
+            this._buildProxy.setMapScanBlock(data.msg, otherData.id, rId);
         }
     }
 

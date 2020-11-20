@@ -31,7 +31,6 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
-        cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
     }
 
     protected onCityFacilities(data:any):void{
@@ -65,7 +64,7 @@ export default class MapUICommand {
         }
     }
 
-    protected onRoleMyProperty(data:any):void{
+    protected onRoleMyRoleRes(data:any):void{
         console.log("onRoleMyProperty :",data);
         if(data.code == 0){
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
@@ -137,14 +136,8 @@ export default class MapUICommand {
      * 我的角色资源属性(全)
      * @param 
      */
-    public qryRoleMyProperty(): void {
-        let sendData: any = {
-            name: ServerConfig.role_myProperty,
-            msg: {
-            }
-        };
-        NetManager.getInstance().send(sendData);
+    public updateMyProperty(data:any): void {
+        LoginCommand.getInstance().proxy.saveEnterData(data.msg);
+        cc.systemEvent.emit("upate_my_roleRes");
     }
-
-
 }

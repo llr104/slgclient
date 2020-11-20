@@ -1,10 +1,12 @@
-import { MapBuildData } from "../MapProxy";
+import { MapBuildAscription, MapBuildData } from "../MapBuildProxy";
+import MapCommand from "../MapCommand";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class BuildLogic extends cc.Component {
-
+    @property(cc.Sprite)
+    spr: cc.Sprite = null;
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
 
@@ -15,10 +17,17 @@ export default class BuildLogic extends cc.Component {
     }
 
     protected onDestroy(): void {
-
+        this._data = null;
     }
 
     public setBuildData(data: MapBuildData): void {
-
+        this._data = data;
+        if (this._data) {
+            if (this._data.ascription == MapBuildAscription.Me) {
+                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("world_img_tile_1");
+            } else {
+                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("world_img_tile_2");
+            }
+        }
     }
 }

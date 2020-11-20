@@ -1,4 +1,4 @@
-import { MapCityData } from "../MapProxy";
+import { MapCityData } from "../MapCityProxy";
 
 const { ccclass, property } = cc._decorator;
 

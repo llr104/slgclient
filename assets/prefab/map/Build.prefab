@@ -194,6 +194,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "spr": {
+      "__id__": 3
+    },
     "buildAtlas": {
       "__uuid__": "5e6ba678-106d-44da-8756-36b022994cd5"
     },

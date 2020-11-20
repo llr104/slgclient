@@ -1,5 +1,11 @@
 import MapUtil from "./MapUtil";
 
+export enum MapBuildAscription {
+    Me,
+    Friendly,
+    Enemy
+}
+
 /**地图建筑和占领数据*/
 export class MapBuildData {
     id: number = 0;
@@ -13,6 +19,7 @@ export class MapBuildData {
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
+    ascription:MapBuildAscription = MapBuildAscription.Me;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -75,7 +82,7 @@ export default class MapBuildProxy {
         // }
     }
 
-    public setMapScanBlock(scanDatas: any, areaId: number = 0): void {
+    public setMapScanBlock(scanDatas: any, areaId: number = 0, myRId: number = 0): void {
         let rBuilds: any[] = scanDatas.mr_builds;
         if (rBuilds.length > 0) {
             let lastBuildCellIds: number[] = null;
@@ -105,6 +112,7 @@ export default class MapBuildProxy {
                 }
                 //其他情况就是新数据了
                 this._mapBuilds[cellId] = this.createBuildData(rBuilds[i], cellId);
+                this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == myRId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                 addBuildCellIds.push(cellId);
             }
             if (lastBuildCellIds && lastBuildCellIds.length > 0) {
