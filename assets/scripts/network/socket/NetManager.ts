@@ -19,8 +19,6 @@ export class NetManager {
     constructor(){
         this._netNode = new NetNode();
         this._netNode.init();
-
-        cc.NodePool
     }
     
 

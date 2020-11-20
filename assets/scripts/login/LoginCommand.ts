@@ -33,7 +33,7 @@ export default class LoginCommand {
     protected _proxy: LoginProxy = new LoginProxy();
 
     constructor() {
-        cc.systemEvent.on(NetEvent.ServerHandShake, this.onServerConneted, this);
+        cc.systemEvent.on(NetEvent.ServerCheckLogin, this.onServerConneted, this);
         cc.systemEvent.on(HttpConfig.register.name, this.onRegister, this);
         cc.systemEvent.on(ServerConfig.account_login, this.onAccountLogin, this);
         cc.systemEvent.on(ServerConfig.role_enterServer, this.onEnterServer, this);
@@ -76,8 +76,6 @@ export default class LoginCommand {
             cc.systemEvent.emit("CreateRole");
         } else {
             if(data.code == 0){
-                // this._proxy.enterServerData = data.msg.role;
-                // this._proxy.roleRes = data.msg.role_res;
                 this._proxy.saveEnterData(data.msg);
             }
             //进入游戏
@@ -94,6 +92,8 @@ export default class LoginCommand {
         
         if (loginData) {
             this.account_reLogin(loginData.session,roleData.rid);
+        }else{
+            cc.systemEvent.emit(NetEvent.ServerHandShake);
         }
     }
 
@@ -101,6 +101,9 @@ export default class LoginCommand {
     private onAccountRelogin(data: any): void {
         //断线重新登录
         console.log("LoginProxy  relogin:", data);
+        if(data.code == 0){
+            cc.systemEvent.emit(NetEvent.ServerHandShake);
+        }
     }
 
     /**创建角色回调*/

@@ -109,13 +109,15 @@ export class NetNode {
         this._socket.onError = (event) => { this.onError(event) };
         this._socket.onClosed = (event) => { this.onClosed(event) };
         this._socket.onGetKey = () => { this.onGetKey() };
-    
+
+        cc.systemEvent.on(NetEvent.ServerHandShake, this.onChecked, this);
     }
 
 
     protected onGetKey(){
-        cc.systemEvent.emit(NetEvent.ServerHandShake);
-        this.onChecked();
+        this._state = NetNodeState.Working;
+        cc.systemEvent.emit(NetEvent.ServerCheckLogin);
+        // this.onChecked();
     }
 
 
@@ -157,13 +159,13 @@ export class NetNode {
         // 启动心跳
         this.resetHearbeatTimer();
 
-        cc.systemEvent.emit(NetEvent.ServerConnected);
+        // cc.systemEvent.emit(NetEvent.ServerConnected);
     }
 
     // 连接验证成功，进入工作状态
     protected onChecked() {
         console.log("NetNode onChecked!")
-        this._state = NetNodeState.Working;
+        
         // 关闭连接或重连中的状态显示
         this.updateNetTips(NetTipsType.Connecting, false);
         this.updateNetTips(NetTipsType.ReConnecting, false);

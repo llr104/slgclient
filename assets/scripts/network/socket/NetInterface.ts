@@ -51,4 +51,5 @@ export class NetEvent {
     public static ServerTimeOut:string = "ServerTimeOut";
     public static ServerConnected:string = "ServerConnected";
     public static ServerHandShake:string = "ServerHandShake";
+    public static ServerCheckLogin:string = "ServerCheckLogin";
 }
