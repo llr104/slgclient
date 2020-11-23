@@ -23,6 +23,10 @@ export default class Main extends cc.Component {
     @property(cc.Prefab)
     loadingPrefab: cc.Prefab = null;
 
+
+    @property(cc.Prefab)
+    waitPrefab: cc.Prefab = null;
+
     protected _loginScene: cc.Node = null;
     protected _mapScene: cc.Node = null;
     protected _mapUIScene: cc.Node = null;

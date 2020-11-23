@@ -183,15 +183,15 @@
     "_id": ""
   },
   {
-    "__type__": "95c8cs2Y1VPuZTnkrmbn3po",
+    "__type__": "791008KQaNLzIyR/L9Rataa",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 2
     },
     "_enabled": true,
-    "alignmentType": 2,
-    "scaleType": 0,
+    "scaleType": 1,
+    "alignmentType": 3,
     "_id": ""
   },
   {
