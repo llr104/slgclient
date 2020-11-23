@@ -193,6 +193,7 @@ export default class MapProxy {
                     qryIndexs = otherAreaIds;
                 }
                 this.qryAreaIds = this.qryAreaIds.concat(qryIndexs);
+                // this.qryAreaIds = [18];
 
                 this._curCenterAreaId = areaId;
                 cc.systemEvent.emit("map_show_area_change", point, this._curCenterAreaId, addIds, removeIds);

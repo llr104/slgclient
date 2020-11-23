@@ -44,8 +44,8 @@ export class ArmyData {
         data.fromY = serverData.from_y;
         data.toX = serverData.to_x;
         data.toY = serverData.to_y;
-        data.startTime = serverData.start;
-        data.endTime = serverData.end;
+        data.startTime = serverData.start * 1000;
+        data.endTime = serverData.end * 1000;
         return data;
     }
 }
@@ -81,17 +81,23 @@ export default class ArmyProxy {
 
     public updateArmy(cityId: number, data: any): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
+        if (list == null) {
+            list = new Array(this._maxArmyCnt);
+            this._armys.set(cityId, list);
+        }
         let armyData: ArmyData = list[data.order - 1];
         list[data.order - 1] = ArmyData.createFromServer(data, armyData);
-        return armyData;
+        return list[data.order - 1];
     }
 
     /**根据id获取军队*/
     public getArmyById(id: number, cityId: number): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
-        for (let i: number = 0; i < list.length; i++) {
-            if (list[i] && list[i].id == id) {
-                return list[i];
+        if (list) {
+            for (let i: number = 0; i < list.length; i++) {
+                if (list[i] && list[i].id == id) {
+                    return list[i];
+                }
             }
         }
         return null;
@@ -100,14 +106,19 @@ export default class ArmyProxy {
     /**根据位置获取军队*/
     public getArmyByOrder(order: number, cityId: number): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
-        return list[order - 1];
+        if (list) {
+            return list[order - 1];
+        }
+        return null;
     }
 
     public getFirstArmy(cityId:number):ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
-        for (let i: number = 0; i < list.length; i++) {
-            if (list[i]) {
-                return list[i];
+        if (list) {
+            for (let i: number = 0; i < list.length; i++) {
+                if (list[i]) {
+                    return list[i];
+                }
             }
         }
         return null;
