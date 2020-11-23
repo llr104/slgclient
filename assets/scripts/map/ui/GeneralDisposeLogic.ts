@@ -31,6 +31,10 @@ export default class GeneralDisposeLogic extends cc.Component {
     @property(cc.Node)
     outNode: cc.Node = null;
 
+    
+    @property(cc.Label)
+    stateNode: cc.Label = null;
+
     private _cityData:any = null;
     private _outPos:any = null;
     private _orderIndex:number = 0;
@@ -42,6 +46,8 @@ export default class GeneralDisposeLogic extends cc.Component {
         cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
         this.pageNode.on("scroll-ended",this.onPageChange,this);
         cc.systemEvent.on("chosed_general", this.onChoseGeneral, this);
+
+        this.stateNode.node.active = this.outNode.active = false;
         
     }
 
@@ -58,7 +64,7 @@ export default class GeneralDisposeLogic extends cc.Component {
             this.onGeneralArmyList();
         }
         let armyList:ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        console.log("GeneralDisposeLogic---armyList:",armyList)
+        // console.log("GeneralDisposeLogic---armyList:",armyList)
         if (armyList == null) {
             ArmyCommand.getInstance().qryArmyList(this._cityData.cityId);
         } else {
@@ -71,7 +77,7 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     protected onGeneralArmyList():void{
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
+        // console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
         // this.pageLayout.node.removeAllChildren();
         if(cityArmyData != null){
             var children = this.pageLayout.node.children;
@@ -99,9 +105,18 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     protected updateView():void{
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        if(cityArmyData && this._outPos){
+        if(cityArmyData && cityArmyData.length > 0 && this._outPos){
             var state = cityArmyData[this._orderIndex].state;
             this.outNode.active = (state == 0?true:false);
+
+            this.stateNode.node.active = !this.outNode.active;
+
+
+            if(state == 1){
+                this.stateNode.string = '进攻中.....'
+            }else if(state == 3){
+                this.stateNode.string = '返回中.....'
+            }
         }else{
             this.outNode.active = false;
         }

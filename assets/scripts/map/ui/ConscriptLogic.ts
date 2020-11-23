@@ -27,6 +27,8 @@ export default class ConscriptLogic extends cc.Component {
 
     protected onLoad(): void {
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
+        cc.systemEvent.on("conscript_army_success", this.onClickClose, this);
+        
     }
 
 
