@@ -2,6 +2,7 @@ import BuildLogic from "./entries/BuildLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
+import MapUICommand from "./ui/MapUICommand";
 
 const { ccclass, property } = cc._decorator;
 
@@ -11,6 +12,8 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
     protected onLoad(): void {
         super.onLoad();
         cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
+        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
+        
     }
 
     protected onDestroy(): void {
@@ -31,6 +34,11 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
                 this.updateItem(areaIndex, this._cmd.buildProxy.getBuild(updateIds[i]));
             }
         }
+    }
+
+    protected onUpdateBuild(data: MapBuildData):void {
+        let areaIndex:number = MapUtil.getAreaIdByCellPoint(data.x, data.y);
+        this.addItem(areaIndex, data);
     }
 
     public setItemData(item: cc.Node, data: any): void {

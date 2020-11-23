@@ -35,7 +35,8 @@ export default class MapCommand {
 
     constructor() {
         cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
-        cc.systemEvent.on(ServerConfig.role_myCity, this.onRoleMyCity, this);
+        cc.systemEvent.on(ServerConfig.role_roleBuildState, this.onBuildState, this);
+        
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
     }
@@ -76,16 +77,16 @@ export default class MapCommand {
             MapUICommand.getInstance().updateMyProperty(data);
             GeneralCommand.getInstance().updateMyProperty(data.msg.generals);
             ArmyCommand.getInstance().updateMyProperty(data.msg.armys);
-            this._cityProxy.setMyCitys(data.msg.citys);
-            this._buildProxy.setMyBuilds(data.msg.mr_builds);
+            this._cityProxy.initMyCitys(data.msg.citys);
+            this._buildProxy.initMyBuilds(data.msg.mr_builds);
             this.enterMap();
         }
     }
 
-    protected onRoleMyCity(data: any): void {
-        console.log("onRoleMyCity", data);
+    protected onBuildState(data: any): void {
+        console.log("onBuildState", data);
         if (data.code == 0) {
-            this._cityProxy.setMyCitys(data.msg.citys);
+            this._buildProxy.updateMyBuild(data.msg.mr_build);
         }
     }
 

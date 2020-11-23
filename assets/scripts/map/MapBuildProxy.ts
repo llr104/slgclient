@@ -12,14 +12,14 @@ export class MapBuildData {
     rid: number = 0;
     nickName: string = "";
     name: string = "";
-    x: number = null;
+    x: number = 0;
     y: number = 0;
     type: number = 0;
     level: number = 0;
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
-    ascription:MapBuildAscription = MapBuildAscription.Me;
+    ascription: MapBuildAscription = MapBuildAscription.Me;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -33,25 +33,8 @@ export class MapBuildData {
         }
         return false;
     }
-}
 
-export default class MapBuildProxy {
-    protected _mapBuilds: MapBuildData[] = [];
-    protected _myBuilds: MapBuildData[] = [];
-    protected _lastBuildCellIds: Map<number, number[]> = new Map<number, number[]>();
-
-    // 初始化数据
-    public initData(): void {
-        this._mapBuilds.length = MapUtil.mapCellCount;
-        this._lastBuildCellIds.clear();
-    }
-
-    public clearData(): void {
-        this._mapBuilds.length = 0;
-        this._lastBuildCellIds.clear();
-    }
-
-    protected createBuildData(data: any, id: number = 0, buildData: MapBuildData = null): MapBuildData {
+    public static createBuildData(data: any, id: number = 0, buildData: MapBuildData = null): MapBuildData {
         let build: MapBuildData = buildData;
         if (buildData == null) {
             build = new MapBuildData();
@@ -68,18 +51,56 @@ export default class MapBuildProxy {
         build.defender = data.defender;
         return build;
     }
+}
+
+export default class MapBuildProxy {
+    protected _mapBuilds: MapBuildData[] = [];
+    protected _myBuilds: MapBuildData[] = [];
+    protected _lastBuildCellIds: Map<number, number[]> = new Map<number, number[]>();
+
+    // 初始化数据
+    public initData(): void {
+        this._mapBuilds.length = MapUtil.mapCellCount;
+        this._lastBuildCellIds.clear();
+        this.updateMyBuildIds();//建筑信息比加载更前 所以id需要根据加载的地图做更新
+    }
+
+    public clearData(): void {
+        this._mapBuilds.length = 0;
+        this._lastBuildCellIds.clear();
+    }
 
     /**我的建筑信息*/
-    public setMyBuilds(builds: any[]): void {
-        // this._mySubCitys.length = 0;
-        // for (let i: number = 0; i < citys.length; i++) {
-        //     let city: MapCityData = this.createCityData(citys[i]);
-        //     if (city.isMain) {
-        //         this._myMainCity = city;
-        //     } else {
-        //         this._mySubCitys.push(city);
-        //     }
-        // }
+    public initMyBuilds(builds: any[]): void {
+        this._myBuilds.length = 0;
+        for (let i: number = 0; i < builds.length; i++) {
+            let id: number = MapUtil.getIdByCellPoint(builds[i].x, builds[i].y);
+            let build: MapBuildData = MapBuildData.createBuildData(builds[i], id);
+            this._myBuilds.push(build);
+        }
+    }
+
+    /**更新建筑id*/
+    public updateMyBuildIds(): void {
+        for (let i: number = 0; i < this._myBuilds.length; i++) {
+            let id: number = MapUtil.getIdByCellPoint(this._myBuilds[i].x, this._myBuilds[i].y);
+            this._myBuilds[i].id = id;
+        }
+    }
+
+    /**更新建筑*/
+    public updateMyBuild(build: any): void {
+        let id: number = MapUtil.getIdByCellPoint(build.x, build.y);
+        let buildData: MapBuildData = null;
+        if (this._mapBuilds[id] == null) {
+            //代表是新增
+            buildData = MapBuildData.createBuildData(build, id);
+            this._myBuilds.push(build);
+            this._mapBuilds[id] = buildData;
+        } else {
+            buildData = MapBuildData.createBuildData(build, id, this._mapBuilds[id]);
+        }
+        cc.systemEvent.emit("update_build", buildData);
     }
 
     public setMapScanBlock(scanDatas: any, areaId: number = 0, myRId: number = 0): void {
@@ -102,7 +123,7 @@ export default class MapBuildProxy {
                         //存在就列表中 就代表是已存在的数据
                         if (this._mapBuilds[cellId].equalsServerData(rBuilds[i]) == false) {
                             //代表数据不一样需要刷新
-                            this._mapBuilds[cellId] = this.createBuildData(rBuilds[i], cellId, this._mapBuilds[cellId]);
+                            this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId, this._mapBuilds[cellId]);
                             updateBuildCellIds.push(cellId);
                         }
                         lastBuildCellIds.splice(index, 1);//移除重复数据
@@ -111,13 +132,16 @@ export default class MapBuildProxy {
 
                 }
                 //其他情况就是新数据了
-                this._mapBuilds[cellId] = this.createBuildData(rBuilds[i], cellId);
+                this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId);
                 this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == myRId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                 addBuildCellIds.push(cellId);
             }
             if (lastBuildCellIds && lastBuildCellIds.length > 0) {
                 //代表有需要删除的数据
                 removeBuildCellIds = lastBuildCellIds;
+                for (let i: number = 0; i < removeBuildCellIds.length; i++) {
+                    this._mapBuilds[removeBuildCellIds[i]] = null;
+                }
             }
             this._lastBuildCellIds.set(areaId, buildCellIds);
             if (addBuildCellIds.length > 0 || removeBuildCellIds.length > 0 || updateBuildCellIds.length > 0) {
