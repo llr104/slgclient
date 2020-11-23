@@ -156,6 +156,11 @@ export default class MapCityProxy {
             let updateCityCellIds: number[] = [];
             let removeCityCellIds: number[] = [];
             for (let i: number = 0; i < cBuilds.length; i++) {
+                let areaIndex:number = MapUtil.getAreaIdByCellPoint(cBuilds[i].x, cBuilds[i].y);
+                if (areaIndex != areaId) {
+                    //代表服务端给过来的数据不在当前区域
+                    continue;
+                }
                 let cellId: number = MapUtil.getIdByCellPoint(cBuilds[i].x, cBuilds[i].y);
                 cityCellIds.push(cellId);
                 if (lastCityCellIds) {

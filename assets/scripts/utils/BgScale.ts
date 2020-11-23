@@ -1,12 +1,4 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 const {ccclass, property} = cc._decorator;
-
 
 export enum BGScaleType {
     FULL_SCREEN,                    
@@ -15,9 +7,6 @@ export enum BGScaleType {
     SCALE_ONLY_WIDTH,  
     SCALE_ONLY_HEIGHT,                     
 }
-
-
-
 
 export enum BGAlignmentType {
     TOP,                    
@@ -29,10 +18,8 @@ export enum BGAlignmentType {
 
 @ccclass
 export default class BgScale extends cc.Component {
-
     @property
     alignmentType = BGAlignmentType.CENTER;
-
     @property
     scaleType = BGScaleType.FULL_SCREEN;
 
@@ -40,11 +27,28 @@ export default class BgScale extends cc.Component {
     private realH:number = 0;
     private _resizeCallback:any = null;
 
-    protected start():void{
-
+    protected onLoad ():void {
+        this.realW = this.node.width;
+        this.realH = this.node.height;
+        this.setMyFrameSize();
+        if (cc.sys.isBrowser) {
+            this._resizeCallback = this.setMyFrameSizeAgain.bind(this);
+            window.addEventListener('resize', this._resizeCallback);
+            window.addEventListener('orientationchange', this._resizeCallback);
+            document.addEventListener('rotateScreen', this._resizeCallback);
+            document.addEventListener('resetScreen', this._resizeCallback);
+        }
     }
-    
 
+    protected onDestroy():void {
+        if (cc.sys.isBrowser) {
+            window.removeEventListener('resize', this._resizeCallback);
+            window.removeEventListener('orientationchange', this._resizeCallback);
+            document.removeEventListener('rotateScreen', this._resizeCallback);
+            document.removeEventListener('resetScreen', this._resizeCallback);
+            this._resizeCallback = null;
+        }
+    }
 
     protected setMyFrameSize():void {
         if (!this.node) {
@@ -109,39 +113,11 @@ export default class BgScale extends cc.Component {
         }
     }
 
-
-
-    protected onLoad ():void {
-        this.realW = this.node.width;
-        this.realH = this.node.height;
-        this.setMyFrameSize();
-        if (cc.sys.isBrowser) {
-            this._resizeCallback = this.setMyFrameSizeAgain.bind(this);
-            window.addEventListener('resize', this._resizeCallback);
-            window.addEventListener('orientationchange', this._resizeCallback);
-            document.addEventListener('rotateScreen', this._resizeCallback);
-            document.addEventListener('resetScreen', this._resizeCallback);
-        }
-
-    }
-
-
-    protected onDestroy():void {
-        if (cc.sys.isBrowser) {
-            window.removeEventListener('resize', this._resizeCallback);
-            window.removeEventListener('orientationchange', this._resizeCallback);
-            document.removeEventListener('rotateScreen', this._resizeCallback);
-            document.removeEventListener('resetScreen', this._resizeCallback);
-            this._resizeCallback = null;
-        }
-    }
-
     protected setMyFrameSizeAgain():void {
         this.scheduleOnce(function () {
             this.setMyFrameSize();
         }.bind(this), 0.05);
     }
-
 
     protected changeOrientation(flag:boolean):void {
         this.setMyFrameSize();

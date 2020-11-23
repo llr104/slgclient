@@ -9,6 +9,7 @@ import LoginProxy from "./LoginProxy";
 import { NetEvent } from "../network/socket/NetInterface";
 import MapCommand from "../map/MapCommand";
 import { LocalCache } from "../utils/LocalCache";
+import DateUtil from "../utils/DateUtil";
 
 export default class LoginCommand {
     //单例
@@ -40,7 +41,7 @@ export default class LoginCommand {
         cc.systemEvent.on(ServerConfig.account_reLogin, this.onAccountRelogin, this);
         cc.systemEvent.on(ServerConfig.role_create, this.onRoleCreate, this);
         cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
-
+        cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
 
     }
 
@@ -74,12 +75,14 @@ export default class LoginCommand {
         //没有创建打开创建
         if (data.code == 9) {
             cc.systemEvent.emit("CreateRole");
+            DateUtil.setServerTime(data.msg.time);
         } else {
             if(data.code == 0){
                 this._proxy.saveEnterData(data.msg);
+                DateUtil.setServerTime(data.msg.time);
+                //进入游戏
+                MapCommand.getInstance().enterMap();
             }
-            //进入游戏
-            MapCommand.getInstance().enterMap();
         }
     }
 
@@ -122,6 +125,12 @@ export default class LoginCommand {
         if (data.code == 0) {
             this._proxy.clear();
             cc.systemEvent.emit("enter_login");
+        }
+    }
+
+    protected onNationMapGiveUp(data: any, otherData: any): void {
+        if (data.code == 0) {
+            this._proxy.saveEnterData(data.msg);
         }
     }
 

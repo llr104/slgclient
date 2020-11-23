@@ -85,7 +85,9 @@ export default class MapBuildProxy {
         for (let i: number = 0; i < this._myBuilds.length; i++) {
             let id: number = MapUtil.getIdByCellPoint(this._myBuilds[i].x, this._myBuilds[i].y);
             this._myBuilds[i].id = id;
+            this._mapBuilds[id] = this._myBuilds[i];
         }
+        console.log("updateMyBuildIds", this._myBuilds);
     }
 
     /**更新建筑*/
@@ -103,6 +105,12 @@ export default class MapBuildProxy {
         cc.systemEvent.emit("update_build", buildData);
     }
 
+    public removeBuild(x: number, y:number):void {
+        let id: number = MapUtil.getIdByCellPoint(x, y);
+        this._mapBuilds[id] = null;
+        cc.systemEvent.emit("delete_build", id, x, y);
+    }
+
     public setMapScanBlock(scanDatas: any, areaId: number = 0, myRId: number = 0): void {
         let rBuilds: any[] = scanDatas.mr_builds;
         if (rBuilds.length > 0) {
@@ -115,6 +123,11 @@ export default class MapBuildProxy {
             let updateBuildCellIds: number[] = [];
             let removeBuildCellIds: number[] = [];
             for (let i: number = 0; i < rBuilds.length; i++) {
+                let areaIndex:number = MapUtil.getAreaIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
+                if (areaIndex != areaId) {
+                    //代表服务端给过来的数据不在当前区域
+                    continue;
+                }
                 let cellId: number = MapUtil.getIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
                 buildCellIds.push(cellId);
                 if (lastBuildCellIds) {

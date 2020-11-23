@@ -13,7 +13,8 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
         super.onLoad();
         cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
         cc.systemEvent.on("update_build", this.onUpdateBuild, this);
-        
+        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+
     }
 
     protected onDestroy(): void {
@@ -36,9 +37,15 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
         }
     }
 
-    protected onUpdateBuild(data: MapBuildData):void {
-        let areaIndex:number = MapUtil.getAreaIdByCellPoint(data.x, data.y);
+    protected onUpdateBuild(data: MapBuildData): void {
+        // console.log("update_build", data);
+        let areaIndex: number = MapUtil.getAreaIdByCellPoint(data.x, data.y);
         this.addItem(areaIndex, data);
+    }
+
+    protected onDeleteBuild(id: number, x: number, y: number): void {
+        let areaIndex: number = MapUtil.getAreaIdByCellPoint(x, y);
+        this.removeItem(areaIndex, id);
     }
 
     public setItemData(item: cc.Node, data: any): void {

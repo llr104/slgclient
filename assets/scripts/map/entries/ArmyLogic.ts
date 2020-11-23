@@ -1,4 +1,5 @@
 import { ArmyData } from "../../general/ArmyProxy";
+import DateUtil from "../../utils/DateUtil";
 import MapUtil from "../MapUtil";
 
 const { ccclass, property } = cc._decorator;
@@ -27,7 +28,7 @@ export default class ArmyLogic extends cc.Component {
 
     protected update(): void {
         if (this._data && this._data.state > 0) {
-            let nowTime: number = Date.now() / 1000;
+            let nowTime: number = DateUtil.getServerTime();
             // console.log("time1 ", nowTime);
             // console.log("time2 ", this._data.startTime * 1000);
             // console.log("time3 ", this._data.endTime * 1000);

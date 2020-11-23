@@ -29,12 +29,15 @@ export default class MapBaseLayerLogic extends cc.Component {
     }
 
     public addItem(areaIndex: number, data: any): cc.Node {
-        let item: cc.Node = this.createItem();
-        item.parent = this.parentLayer;
+        let id: number = this.getIdByData(data);
+        let item: cc.Node = this.getItem(areaIndex, id);
+        if (item == null) {
+            item = this.createItem();
+            item.parent = this.parentLayer;
+            let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+            list.set(this.getIdByData(data), item);
+        }
         this.updateItem(areaIndex, data, item);
-
-        let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
-        list.set(this.getIdByData(data), item);
         return item;
     }
 
@@ -42,7 +45,7 @@ export default class MapBaseLayerLogic extends cc.Component {
         let realItem: cc.Node = item;
         if (item == null) {
             let id: number = this.getIdByData(data);
-            realItem = this.getItem(id, areaIndex);
+            realItem = this.getItem(areaIndex, id);
         }
         if (realItem) {
             this.setItemData(realItem, data);
@@ -53,7 +56,7 @@ export default class MapBaseLayerLogic extends cc.Component {
 
     }
 
-    public removeItem(id: number, areaIndex: number): boolean {
+    public removeItem(areaIndex: number, id: number): boolean {
         let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
         if (list.has(id)) {
             let item: cc.Node = list.get(id);
@@ -64,7 +67,7 @@ export default class MapBaseLayerLogic extends cc.Component {
         return false;
     }
 
-    public getItem(id: number, areaIndex: number): cc.Node {
+    public getItem(areaIndex: number, id: number): cc.Node {
         let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
         if (list.has(id)) {
             return list.get(id);

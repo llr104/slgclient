@@ -15,6 +15,8 @@ export default class MapClickUILogic extends cc.Component {
     btnMove: cc.Button = null;
     @property(cc.Button)
     btnOccupy: cc.Button = null;
+    @property(cc.Button)
+    btnGiveUp: cc.Button = null;
 
     protected _data: any = null;
     protected onLoad(): void {
@@ -24,6 +26,11 @@ export default class MapClickUILogic extends cc.Component {
     protected onDestroy(): void {
         cc.systemEvent.targetOff(this);
 
+    }
+
+    protected onClickGiveUp(): void {
+        MapCommand.getInstance().giveUpBuild(this._data.x, this._data.y);
+        this.node.parent = null;
     }
 
     protected onClickMove(): void {
@@ -57,15 +64,18 @@ export default class MapClickUILogic extends cc.Component {
             //点击的是野外
             this.btnMove.node.active = true;
             this.btnOccupy.node.active = true;
+            this.btnGiveUp.node.active = false;
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
             if ((this._data as MapBuildData).ascription == MapBuildAscription.Me) {
                 //我自己的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
+                this.btnGiveUp.node.active = true;
             } else {
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = true;
+                this.btnGiveUp.node.active = false;
             }
         }
     }

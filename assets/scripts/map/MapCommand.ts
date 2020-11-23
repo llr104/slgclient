@@ -36,9 +36,9 @@ export default class MapCommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
         cc.systemEvent.on(ServerConfig.role_roleBuildState, this.onBuildState, this);
-        
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
+        cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
     }
 
     public onDestory(): void {
@@ -101,9 +101,16 @@ export default class MapCommand {
     protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            let rId:number = this._cityProxy.getMyPlayerId();
+            let rId: number = this._cityProxy.getMyPlayerId();
             this._cityProxy.setMapScanBlock(data.msg, otherData.id);
             this._buildProxy.setMapScanBlock(data.msg, otherData.id, rId);
+        }
+    }
+
+    protected onNationMapGiveUp(data: any, otherData: any): void {
+        console.log("onNationMapGiveUp", data, otherData);
+        if (data.code == 0) {
+            this._buildProxy.removeBuild(data.msg.x, data.msg.y);
         }
     }
 
@@ -157,5 +164,16 @@ export default class MapCommand {
             }
         };
         NetManager.getInstance().send(sendData, qryData);
+    }
+
+    public giveUpBuild(x: number, y: number): void {
+        let sendData: any = {
+            name: ServerConfig.nationMap_giveUp,
+            msg: {
+                x: x,
+                y: y
+            }
+        };
+        NetManager.getInstance().send(sendData);
     }
 }
