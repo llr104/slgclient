@@ -84,6 +84,7 @@ export default class ArmyCommand {
         if (data.code == 0) {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
             cc.systemEvent.emit("update_army", armyData);
+            cc.systemEvent.emit("update_army_assign");
         }
     }
 
