@@ -30,6 +30,8 @@ export default class GeneralLogic extends cc.Component {
     protected onLoad():void{
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
         cc.systemEvent.on("chosed_general", this.onClickClose, this);
+        cc.systemEvent.on("update_army_assign", this.onClickClose, this);
+        
         
     }
 
@@ -66,9 +68,9 @@ export default class GeneralLogic extends cc.Component {
 
 
 
-    public setData(data:ArmyData,type:number = 0,position:number = 0):void{
-        if(data && data.generals){
-            this._cunGeneral = data.generals;
+    public setData(data:number[],type:number = 0,position:number = 0):void{
+        if(data && data.length > 0){
+            this._cunGeneral = data;
         }
         
         this._type = type;
@@ -79,6 +81,10 @@ export default class GeneralLogic extends cc.Component {
         this.initGeneralCfg();
         GeneralCommand.getInstance().qryMyGenerals();
     }
+
+
+
+
 
 
     protected onEnable():void{

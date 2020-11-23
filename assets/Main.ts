@@ -6,6 +6,7 @@ import LoginCommand from "./scripts/login/LoginCommand";
 import MapCommand from "./scripts/map/MapCommand";
 import MapUICommand from "./scripts/map/ui/MapUICommand";
 import { HttpManager } from "./scripts/network/http/HttpManager";
+import { NetEvent } from "./scripts/network/socket/NetInterface";
 import { NetManager } from "./scripts/network/socket/NetManager";
 
 const { ccclass, property } = cc._decorator;
@@ -31,6 +32,7 @@ export default class Main extends cc.Component {
     protected _mapScene: cc.Node = null;
     protected _mapUIScene: cc.Node = null;
     protected _loadingNode: cc.Node = null;
+    protected _waitNode: cc.Node = null;
 
     protected onLoad(): void {
         //初始化连接
@@ -47,6 +49,7 @@ export default class Main extends cc.Component {
         this.enterLogin();
         cc.systemEvent.on("enter_map", this.onEnterMap, this);
         cc.systemEvent.on("enter_login", this.enterLogin, this);
+        cc.systemEvent.on(NetEvent.ServerRequesting, this.showWaitNode,this);
     }
 
     protected onDestroy(): void {
@@ -112,6 +115,17 @@ export default class Main extends cc.Component {
         }
     }
 
+
+    protected showWaitNode(isShow:boolean):void{
+        // if (this._waitNode == null) {
+        //     this._waitNode = cc.instantiate(this.waitPrefab);
+        //     this._waitNode.parent = this.node;
+        //     this._waitNode.zIndex = 2;
+        // }
+        // console.log("showWaitNode:",isShow)
+        // this._waitNode.active = isShow;
+    }
+
     protected clearAllScene() {
         if (this._mapScene) {
             this._mapScene.destroy();
@@ -127,5 +141,11 @@ export default class Main extends cc.Component {
             this._loginScene.destroy();
             this._loginScene = null;
         }
+        
+        if (this._waitNode) {
+            this._waitNode.destroy();
+            this._waitNode = null;
+        }
+        
     }
 }

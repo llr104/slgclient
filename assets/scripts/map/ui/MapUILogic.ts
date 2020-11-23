@@ -142,7 +142,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将
      */
-    protected openGeneral(data:ArmyData,type:number = 0,position:number = 0,zIndex:number = 0):void{
+    protected openGeneral(data:number[],type:number = 0,position:number = 0,zIndex:number = 0):void{
         if (this._generalNode == null) {
             this._generalNode = cc.instantiate(this.generalPrefab);
             this._generalNode.parent = this.node;
@@ -160,7 +160,7 @@ export default class MapUILogic extends cc.Component {
      * @param data 
      * @param zIndex 
      */
-    protected openGeneralChoose(data:ArmyData,position:number = 0):void{
+    protected openGeneralChoose(data:number[],position:number = 0):void{
         this.openGeneral(data,1,position,1);
     }
 

@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import ArmyCommand from "../../general/ArmyCommand";
+import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 
@@ -23,6 +25,7 @@ export default class GeneralGroupLogic extends cc.Component {
     itemNode: cc.Node[] = [];
 
     private _curData:any = null;
+    private _cityData:any = null;
 
     protected onLoad():void{
 
@@ -31,6 +34,8 @@ export default class GeneralGroupLogic extends cc.Component {
 
     protected setData(curData:any,cityData:any,orderId:number = 1):void{
         this._curData = curData;
+        this._cityData = cityData;
+
         // console.log("GeneralGroupLogic--this._curData:",curData,orderId)
         if(this._curData){
             for(var i = 0; i < this.itemNode.length ;i++){
@@ -62,15 +67,21 @@ export default class GeneralGroupLogic extends cc.Component {
 
 
     protected onClickDisGeneral(event:any,index:number = 0): void {
-        console.log("onClickDisGeneral:",index)
-        // var otherData = event.currentTarget.otherData;
-        // if(otherData){
-        //     cc.systemEvent.emit("open_general_conscript", this._orderIndex,this._cityData);
-        // }
+        var generalArr = this.getAllGenerals();
+        cc.systemEvent.emit("open_general_choose",generalArr,index);
+    }
 
 
-        var general = this._curData?this._curData:null;
-        cc.systemEvent.emit("open_general_choose",general,index);
+    private getAllGenerals():number[]{
+        let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        var arr = [];
+        for(var i = 0; i < cityArmyData.length ;i++){
+            if(cityArmyData[i]){
+                arr = arr.concat(cityArmyData[i].generals);
+            }
+            
+        }
+        return arr;
     }
 
 }

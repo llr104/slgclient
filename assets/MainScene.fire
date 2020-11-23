@@ -496,6 +496,9 @@
     "loadingPrefab": {
       "__uuid__": "15e55279-cb81-491c-b468-cc5b4233cd7b"
     },
+    "waitPrefab": {
+      "__uuid__": "02de61f9-95a2-4a1e-adc0-1d56b572a127"
+    },
     "_id": "78VyY9tRZIqLQOADTL0j7b"
   }
 ]

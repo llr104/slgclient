@@ -138,10 +138,13 @@ export class NetNode {
                 i--;
             }       
         }
+
+        this.updateNetTips(NetTipsType.Requesting, this._requests.length > 0);
     }
 
     protected updateNetTips(tipsType: NetTipsType, isShow: boolean) {
         if (tipsType == NetTipsType.Requesting) {
+            cc.systemEvent.emit(NetEvent.ServerRequesting, isShow);
 
         } else if (tipsType == NetTipsType.Connecting) {
 
@@ -206,6 +209,8 @@ export class NetNode {
                         this.destroyInvoke(req);
                     }       
                 }
+
+                this.updateNetTips(NetTipsType.Requesting, this._requests.length > 0);
             }
            
 
