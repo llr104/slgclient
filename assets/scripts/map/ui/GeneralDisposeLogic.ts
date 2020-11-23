@@ -105,7 +105,7 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     protected updateView():void{
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        if(cityArmyData && cityArmyData.length > 0 && this._outPos){
+        if(cityArmyData && cityArmyData.length > 0 && this._outPos && cityArmyData[this._orderIndex]){
             var state = cityArmyData[this._orderIndex].state;
             this.outNode.active = (state == 0?true:false);
 
