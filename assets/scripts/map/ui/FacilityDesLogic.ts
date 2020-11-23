@@ -64,7 +64,7 @@ export default class FacilityDesLogic extends cc.Component {
         }
 
 
-        cc.systemEvent.on("getCityFacilities", this.onCityUpFacilities, this);
+        cc.systemEvent.on("update_my_facilities", this.onCityUpFacilities, this);
     }
 
     protected onDestroy():void{
@@ -127,7 +127,7 @@ export default class FacilityDesLogic extends cc.Component {
 
     protected onClickUpFacility(): void {
         var otherData = this._currData;
-        var cityId = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
+        var cityId = MapCommand.getInstance().proxy.getMyMainCity().cityId;
         MapUICommand.getInstance().upFacility(cityId,otherData.type);
     }
 

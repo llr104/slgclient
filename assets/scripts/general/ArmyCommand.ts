@@ -126,14 +126,12 @@ export default class ArmyCommand {
     }
 
     /**给军队征兵*/
-    public generalConscript(armyId: number = 0, firstCnt: number = 0, secondCnt: number = 0, thirdCnt: number = 0, otherData: any): void {
+    public generalConscript(armyId: number = 0, cnts:number[] = [], otherData: any): void {
         let sendData: any = {
             name: ServerConfig.general_conscript,
             msg: {
                 armyId: armyId,
-                firstCnt: firstCnt,
-                secondCnt: secondCnt,
-                thirdCnt: thirdCnt,
+                cnts: cnts,
             }
         };
         NetManager.getInstance().send(sendData, otherData);

@@ -16,37 +16,103 @@ const { ccclass, property } = cc._decorator;
 export default class GeneralDisposeLogic extends cc.Component {
 
 
+    
+    @property(cc.Prefab)
+    generalGroupPrefab: cc.Prefab = null;
+
     @property(cc.Node)
-    generalNode: cc.Node = null;
-
-    @property(cc.Layout)
-    srollLayout:cc.Layout = null;
-
-
-    @property([cc.Node])
-    picNode: cc.Node[] = [];
-
-
-    @property([cc.Node])
     pageNode: cc.Node = null;
 
+    
+    @property(cc.Layout)
+    pageLayout:cc.Layout = null;
 
 
-    private _generalDisposeMap:any = new Map();
-    private _generalDisposeArr:any[] = [];
+    @property(cc.Node)
+    outNode: cc.Node = null;
+
     private _cityData:any = null;
+    private _outPos:any = null;
     private _orderIndex:number = 0;
-    private _maxOrder:number = 3;
-    private _maxGeneral:number = 3;
-
+    private _maxOrder:number = 5;
 
     protected onLoad():void{
-        cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
+        // cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
         cc.systemEvent.on("update_army_list", this.onGeneralArmyList, this);
         cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
-        this.pageNode.on("scroll-ended",this.onPageChange,this)
+        this.pageNode.on("scroll-ended",this.onPageChange,this);
+        cc.systemEvent.on("chosed_general", this.onChoseGeneral, this);
+        
     }
 
+
+    public setData(data:any,outPos:any = null):void{
+        this._cityData = data;
+        this._outPos = outPos
+
+        
+        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        if (list.length <= 0) {
+            GeneralCommand.getInstance().qryMyGenerals();
+        } else {
+            this.onGeneralArmyList();
+        }
+        let armyList:ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        console.log("GeneralDisposeLogic---armyList:",armyList)
+        if (armyList == null) {
+            ArmyCommand.getInstance().qryArmyList(this._cityData.cityId);
+        } else {
+            this.onGeneralArmyList();
+        }
+    }
+
+
+
+
+    protected onGeneralArmyList():void{
+        let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
+        // this.pageLayout.node.removeAllChildren();
+        if(cityArmyData != null){
+            var children = this.pageLayout.node.children;
+
+            for(var i = 0;i < children.length; i++){
+                let item:cc.Node = children[i];
+                let com = item.getComponent("GeneralGroupLogic");
+                if(com){
+                    com.setData(cityArmyData[i],this._cityData, i);
+                }
+            }
+        }
+
+        this.updateView();
+    }
+
+    protected onPageChange(target:any):void{
+        console.log("onPageChange:",)
+        this._orderIndex = target.getCurrentPageIndex();
+        this.updateView();
+    }
+
+
+
+
+    protected updateView():void{
+        let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        if(cityArmyData && this._outPos){
+            var state = cityArmyData[this._orderIndex].state;
+            this.outNode.active = (state == 0?true:false);
+        }else{
+            this.outNode.active = false;
+        }
+    }
+
+
+
+    protected onChoseGeneral(cfgData:any ,curData:any,position:any):void{
+        // console.log("onChoseGeneral :",position,this._orderIndex)
+        ArmyCommand.getInstance().generalDispose(this._cityData.cityId , curData.id,this._orderIndex + 1,Number(position),this._cityData);
+    }
 
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
@@ -57,188 +123,12 @@ export default class GeneralDisposeLogic extends cc.Component {
     }
 
 
-    public setData(data:any):void{
-        this.clearDisPose();
-        this._cityData = data;
-
-        // this.initGeneralCfg();
-        
-        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
-        if (list.length <= 0) {
-            GeneralCommand.getInstance().qryMyGenerals();
-        } else {
-            this.initGeneralCfg();
-        }
-        let armyList:ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        if (armyList == null) {
-            ArmyCommand.getInstance().qryArmyList(this._cityData.cityId);
-        } else {
-            this.onGeneralArmyList();
-        }
-    }
-
-
-    protected onGeneralArmyList():void{
-        this.clearDisPose();
-        
-        let cityArmyData: ArmyData = ArmyCommand.getInstance().proxy.getArmyByOrder(this._orderIndex + 1, this._cityData.cityId);
-        console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
-        if(cityArmyData != null){
-            var children = this.srollLayout.node.children;
-            for(var i = 0;i < children.length;i++){
-                var child = children[i];
-                var toggle = child.getComponent(cc.Toggle);
-                toggle.isChecked = false;
-                var curData = toggle.curData;
-
-                if(curData.id == cityArmyData.firstId || curData.id == cityArmyData.secondId || curData.id == cityArmyData.thirdId){
-                    // toggle.isChecked = true;
-                    
-                    if(curData.id == cityArmyData.firstId){
-                        this._generalDisposeArr[0] = (curData);
-                    }
-                    
-                    if(curData.id == cityArmyData.secondId){
-                        this._generalDisposeArr[1] = (curData);
-                    }
-    
-                    if(curData.id == cityArmyData.thirdId){
-                        this._generalDisposeArr[2] = (curData);
-                    }
-                }
-            }
-        }
-
-
-        this.updateView();
-    }
-
-
-    protected initGeneralCfg():void{
-        
-        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
-        console.log("initGeneralCfg", list);
-        for (let i:number = 0; i < list.length; i++) {
-            let item:cc.Node = cc.instantiate(this.generalNode);
-            item.active = true;
-            item.getChildByName("name").getComponent(cc.Label).string = list[i].name;
-            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(list[i].cfgId);
-            item.parent = this.srollLayout.node;
-            item.getComponent(cc.Toggle).cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
-            item.getComponent(cc.Toggle).curData = list[i];
-        }
-    }
-
-    protected onClickGeneral(currentTarget:any): void {
-        this.dispose(currentTarget);
-        currentTarget.isChecked = false;
-
-        var position = this.getIndex(currentTarget.curData);
-        ArmyCommand.getInstance().generalDispose(this._cityData.cityId,currentTarget.curData.id,this._orderIndex + 1,position,this._cityData);
-    }
-
-
-    private addDispose(data:any):void{
-        for(var i = 0;i < this._maxGeneral;i++){
-            if(!this._generalDisposeArr[i]){
-                this._generalDisposeArr[i] = data;
-            }
+    protected onClickOccupy():void{
+        let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        if(cityArmyData){
+            var id = cityArmyData[this._orderIndex].id;
+            ArmyCommand.getInstance().generalAssignArmy(id, 1, this._outPos.x, this._outPos.y, this._cityData);
         }
         
     }
-
-
-    private updateView():void{
-        for(var i = 0;i < this.picNode.length;i++){
-            var item = this.picNode[i];
-            item.getChildByName("pic").active = false;
-            item.otherData = null;
-            var dispiose = this._generalDisposeArr[i]; 
-            if(dispiose){
-                item.getChildByName("pic").active = true;
-                item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(dispiose.cfgId);
-                item.otherData = dispiose;
-            }
-        }
-    }
-    
-
-
-
-    private removeDispose(data:any):void{
-        for(var i = 0;i < this._maxGeneral;i++){
-            if(this._generalDisposeArr[i] == data){
-                this._generalDisposeArr[i] = null;
-            }
-        }
-        
-    }
-
-
-    private getIndex(data:any):number{
-        for(var i = 0;i < this._maxGeneral;i++){
-            if(this._generalDisposeArr[i] == data){
-                return (i + 1);
-            }
-        }
-
-        return 0;
-    }
-
-
-    protected dispose(currentTarget:any):void{
-        if(currentTarget.isChecked){
-            this.addDispose(currentTarget.curData);
-        }else{
-            this.removeDispose(currentTarget.curData);
-        }
-    }
-
-
-    protected clearDisPose():void{
-        this._generalDisposeArr = [];
-        this.initMap();
-        this.updateView();
-    }
-
-
-    protected initMap():void{
-        this._generalDisposeMap = new Map();
-        for(var i = 0;i < this._maxOrder;i++){
-            this._generalDisposeMap.set(i,[])
-        }
-    }
-
-
-    protected getMap(orderId:number = 0):any{
-        return this._generalDisposeMap.get(orderId);
-    }
-
-    protected setMap(orderId:number = 0,arr:any):void{
-        this._generalDisposeMap.get(orderId,arr);
-    }
-
-
-    protected onClickDisGeneral(event:any): void {
-        var otherData = event.currentTarget.otherData;
-        if(otherData){
-            cc.systemEvent.emit("open_general_conscript", this._orderIndex,this._cityData);
-        }
-    }
-
-
-
-    protected onPageChange(target:any):void{
-        console.log("onPageChange:",)
-        this._orderIndex = target.getCurrentPageIndex();
-
-        // this._generalDisposeArr = 
-        this.updateView();
-
-    }
-
-    protected onEnable():void{
-    }
-
-
 }

@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 
@@ -14,16 +15,22 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class GeneralLogic extends cc.Component {
 
-
-    @property(cc.Node)
-    generalNode: cc.Node = null;
-
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
+    @property(cc.Prefab)
+    generalItemPrefab: cc.Prefab = null;
+
+
+
+    private _cunGeneral:number[] = [];
+    private _type:number = 0;
+    private _position:number = 0;
 
     protected onLoad():void{
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
+        cc.systemEvent.on("chosed_general", this.onClickClose, this);
+        
     }
 
 
@@ -39,30 +46,43 @@ export default class GeneralLogic extends cc.Component {
 
     protected initGeneralCfg():void{
         let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
-        console.log("initGeneralCfg", list, this.srollLayout.node);
+        // console.log("initGeneralCfg", list, this.srollLayout.node);
         this.srollLayout.node.removeAllChildren(true);
         for (let i:number = 0; i < list.length; i++) {
-            let item:cc.Node = cc.instantiate(this.generalNode);
+            if(this._cunGeneral.indexOf(list[i].id) >= 0 ){
+                continue;
+            }
+
+
+            let item:cc.Node = cc.instantiate(this.generalItemPrefab);
             item.active = true;
-            item.getChildByName("name").getComponent(cc.Label).string = list[i].name;
-            item.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(list[i].cfgId);
             item.parent = this.srollLayout.node;
-            item.cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(list[i].cfgId);
-            item.curData = list[i];
+            let com = item.getComponent("GeneralItemLogic");
+            if(com){
+                com.setData(list[i],this._type,this._position);
+            }
         }
     }
 
 
-    protected onClickGeneral(event:any): void {
-        var cfgData = event.currentTarget.cfgData;
-        var curData = event.currentTarget.curData;
-        cc.systemEvent.emit("open_general_des",cfgData,curData);
+
+    public setData(data:ArmyData,type:number = 0,position:number = 0):void{
+        if(data && data.generals){
+            this._cunGeneral = data.generals;
+        }
+        
+        this._type = type;
+        this._position = position;
+
+        console.log("GeneralLogic:",this._cunGeneral,data)
+
+        this.initGeneralCfg();
+        GeneralCommand.getInstance().qryMyGenerals();
     }
 
 
     protected onEnable():void{
-        this.initGeneralCfg();
-        GeneralCommand.getInstance().qryMyGenerals();
+
     }
 
 

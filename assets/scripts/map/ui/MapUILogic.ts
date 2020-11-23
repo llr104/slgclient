@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 
+import { ArmyData } from "../../general/ArmyProxy";
 import LoginCommand from "../../login/LoginCommand";
 const { ccclass, property } = cc._decorator;
 
@@ -72,19 +73,13 @@ export default class MapUILogic extends cc.Component {
 
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
-
         cc.systemEvent.on("open_facility", this.openFacility, this);
         cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
-        
         cc.systemEvent.on("upate_my_roleRes", this.updateRole, this);
-        
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
-
-
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
-
-
         cc.systemEvent.on("open_general_conscript", this.openConscript, this);
+        cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         this.updateRole();
         
     }
@@ -147,15 +142,27 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将
      */
-    protected openGeneral():void{
+    protected openGeneral(data:ArmyData,type:number = 0,position:number = 0,zIndex:number = 0):void{
         if (this._generalNode == null) {
             this._generalNode = cc.instantiate(this.generalPrefab);
             this._generalNode.parent = this.node;
         } else {
             this._generalNode.active = true;
         }
-    }
 
+        this._generalNode.getComponent("GeneralLogic").setData(data,type,position);
+        this._generalNode.zIndex = zIndex;
+    }
+    
+    
+    /**
+     * 武将选择
+     * @param data 
+     * @param zIndex 
+     */
+    protected openGeneralChoose(data:ArmyData,position:number = 0):void{
+        this.openGeneral(data,1,position,1);
+    }
 
 
     /**
@@ -181,7 +188,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将配置
      */
-    protected openGeneralDisPose(data:any):void{
+    protected openGeneralDisPose(data:any,outPos:any = null):void{
         if (this._generalDisPoseNode == null) {
             this._generalDisPoseNode = cc.instantiate(this.generalDisPosePrefab);
             this._generalDisPoseNode.parent = this.node;
@@ -189,7 +196,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDisPoseNode.active = true;
         }
 
-        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data);
+        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data,outPos);
     }
 
 

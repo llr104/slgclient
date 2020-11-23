@@ -26,7 +26,8 @@ export default class MapClickUILogic extends cc.Component {
         if (armyData == null) {
             console.log("没有队伍");
         } else {
-            ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);
+            // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
+            cc.systemEvent.emit("open_general_dispose",myCity, this._data);
         }
         this.node.parent = null;
     }

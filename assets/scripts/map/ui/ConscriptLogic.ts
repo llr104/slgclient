@@ -50,15 +50,16 @@ export default class ConscriptLogic extends cc.Component {
         this._orderId = orderId;
         this._cityData = cityData;
         this._cityArmyData = ArmyCommand.getInstance().proxy.getArmyByOrder(this._orderId + 1, this._cityData.cityId);
+        // console.log("ConscriptLogic --- this._cityArmyData:", this._cityArmyData,this._orderId,this._cityData)
 
-        this._generalDisposeArr[0] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.firstId);
-        this._generalDisposeArr[1] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.secondId);
-        this._generalDisposeArr[2] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.thirdId);
+        this._generalDisposeArr[0] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[0]);
+        this._generalDisposeArr[1] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[1]);
+        this._generalDisposeArr[2] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[2]);
 
 
-        this._generalArmyArr[0] = this._cityArmyData.firstCnt;
-        this._generalArmyArr[1] = this._cityArmyData.secondCnt;
-        this._generalArmyArr[2] = this._cityArmyData.thirdCnt;
+        this._generalArmyArr[0] = this._cityArmyData.soldiers[0];
+        this._generalArmyArr[1] = this._cityArmyData.soldiers[1];
+        this._generalArmyArr[2] = this._cityArmyData.soldiers[2];
         this.updateView();
     }
 
@@ -124,7 +125,7 @@ export default class ConscriptLogic extends cc.Component {
             thirdCnt = this.getProgress(slider.getComponent(cc.Slider));
         }
 
-        ArmyCommand.getInstance().generalConscript(this._cityArmyData.id, firstCnt, secondCnt, thirdCnt, this._cityData);
+        ArmyCommand.getInstance().generalConscript(this._cityArmyData.id, [firstCnt,secondCnt,thirdCnt], this._cityData);
     }
 
 
