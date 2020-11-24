@@ -3,14 +3,20 @@ import { ArmyData } from "../general/ArmyProxy";
 import { MapBuildAscription, MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
-import { MapResData } from "./MapProxy";
+import { MapResConfig, MapResData } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MapClickUILogic extends cc.Component {
     @property(cc.Label)
-    labelDes: cc.Label = null;
+    labelName: cc.Label = null;
+    @property(cc.Label)
+    labelPos: cc.Label = null;
+    @property(cc.Label)
+    labelYield: cc.Label = null;
+    @property(cc.Label)
+    labelSoldierCnt: cc.Label = null;
     @property(cc.Button)
     btnMove: cc.Button = null;
     @property(cc.Button)
@@ -58,7 +64,12 @@ export default class MapClickUILogic extends cc.Component {
 
     public setCellData(data: any, pixelPos: cc.Vec2): void {
         this._data = data;
-        this.labelDes.string = "(" + data.x + ", " + data.y + ")";
+        let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
+        let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type);
+        this.labelName.string = resCfg.name;
+        this.labelPos.string = "(" + data.x + ", " + data.y + ")";
+        this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
+        this.labelSoldierCnt.string = "守备兵力 x" + (resData.level * 100);
         if (this._data instanceof MapResData) {
             //点击的是野外
             this.btnMove.node.active = false;

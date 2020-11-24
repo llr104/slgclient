@@ -227,6 +227,24 @@ export default class MapProxy {
         return this._mapAreaDatas[id];
     }
 
+    /*获取产量描述**/
+    public getResYieldDesList(cfg: MapResConfig):string[] {
+        let list:string[] = [];
+        if (cfg.grain > 0) {
+            list.push("粮食 x" + cfg.grain);
+        }
+        if (cfg.wood > 0) {
+            list.push("木材 x" + cfg.wood);
+        }
+        if (cfg.iron > 0) {
+            list.push("铁矿 x" + cfg.iron);
+        }
+        if (cfg.stone > 0) {
+            list.push("石料 x" + cfg.stone);
+        }
+        return list;
+    }
+
     public getResData(id: number): MapResData {
         return this._mapResDatas[id];
     }
