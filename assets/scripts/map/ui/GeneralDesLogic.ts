@@ -71,7 +71,7 @@ export default class GeneralDesLogic extends cc.Component {
         this.titleLabel.string = curData.name;
     
         var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();//GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level.level);
-        this.lvLabel.string = this._currData.level + "/" + maxLevel;//levelCfg.length;
+        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel;//levelCfg.length;
         var str_des = "";
         for(var key in cfgData){
             if(key == "cfgId" || key == "cost"){

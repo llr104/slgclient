@@ -18,22 +18,14 @@ export class FacilityConfig {
 }
 
 
-
-
-/**武将(配置)*/
-export class GeneralConfig {
-    name: string = "";
-    cfgId:number = 0;
-    force:number = 0;
-    strategy:number = 0;
-    defense:number = 0;
-    speed:number = 0;
-    destroy:number = 0;
-    cost:number = 0;
-    levels:any = {};
+/**征兵基础消耗*/
+export class ConscriptBaseCost {
+    cost_wood: number = 0;
+    cost_iron:number = 0;
+    cost_stone:number = 0;
+    cost_grain:number = 0;
+    cost_gold:number = 0;
 }
-
-
 
 
 
@@ -41,10 +33,7 @@ export class GeneralConfig {
 export default class MapUIProxy {
     protected _myFacility: any = new Map();//城市设施
     protected _facilityConfig:any = null;//设施配置
-    protected _generalConfig:any = null;//武将配置
-    protected _generalTex:any = new Map();//武将纹理
-    protected _myGeneral:any = new Map();//我的武将
-    protected _cityArmy:any = new Map();//城池军队配置
+    protected _armyBaseCost:ConscriptBaseCost = new ConscriptBaseCost();
 
 
 
@@ -56,7 +45,7 @@ export default class MapUIProxy {
         this._myFacility.clear();
         var cityId = data.cityId;
         var facilities = data.facilities;
-        console.log("facilities:",facilities)
+        // console.log("facilities:",facilities)
         if(facilities){
             var facilitiesArr = [];
             for(var i = 0;i < facilities.length;i++){
@@ -150,7 +139,6 @@ export default class MapUIProxy {
         }
 
         _facilityConfig = null;
-        // console.log("this._facilityConfig:",this._facilityConfig);
     }
 
 
@@ -159,139 +147,20 @@ export default class MapUIProxy {
     }
 
 
+    public setBaseCost(data:any):void{
+        // console.log("setBaseCost:",data)
+        this._armyBaseCost.cost_gold = data.json.conscript.cost_gold;
+        this._armyBaseCost.cost_iron = data.json.conscript.cost_iron;
+        this._armyBaseCost.cost_wood = data.json.conscript.cost_wood;
+        this._armyBaseCost.cost_grain = data.json.conscript.cost_grain;
+        this._armyBaseCost.cost_stone = data.json.conscript.cost_stone;
 
-    /**
-     * 武将配置
-     * @param jsonAsset 
-     */
-    public setGeneralCfg(jsonAsset:any):void{
-        this._generalConfig = new Map();
-        var _generalConfig = {};
-
-        // console.log("setGeneralCfg--asset:",jsonAsset);
-        for(var i = 0;i < jsonAsset.length;i++){
-            var asset = jsonAsset[i];
-            _generalConfig[asset._name] = asset.json;
-        }
-
-
-        for(var i = 0;i<_generalConfig.general.list.length;i++){
-            var obj = new GeneralConfig();
-            obj.cfgId = _generalConfig.general.list[i].cfgId;
-            obj.name = _generalConfig.general.list[i].name;
-            obj.force = _generalConfig.general.list[i].force;
-            obj.strategy = _generalConfig.general.list[i].strategy;
-            obj.defense = _generalConfig.general.list[i].defense;
-            obj.speed = _generalConfig.general.list[i].speed;
-            obj.destroy = _generalConfig.general.list[i].destroy;
-            obj.cost = _generalConfig.general.list[i].cost;
-            obj.levels = _generalConfig.general_basic.levels;
-            this._generalConfig.set(obj.cfgId,obj);
-        }
-
-        // console.log("this._generalConfig:",this._generalConfig);
     }
 
-
-    /**
-     * 获取武将配置
-     */
-    public getGeneralCfg():any{
-        return this._generalConfig;
+    
+    public getBaseCost() : ConscriptBaseCost {
+        return this._armyBaseCost;
     }
-
-
-    public getGeneralCfgById(cfgId:number = 0):any{
-        return this._generalConfig.get(cfgId);
-    }
-
-
-
-    /**
-     * 武将纹理
-     * @param texAsset 
-     */
-    public setGenTex(texAsset:any):void{
-        // console.log("setGenTex--asset:",texAsset);
-        for(var i = 0;i < texAsset.length;i++){
-            var asset = texAsset[i];
-            var cfgId = asset._name.split("_")[1];
-            cfgId = Number(cfgId);
-            this._generalTex.set(cfgId,asset);
-        }
-    }
-
-
-
-    public getGenTex(cfgId:number = 0):any{
-        return this._generalTex.get(cfgId);
-    }
-
-
-
-
-
-
-
-    /**
-     * 我拥有的武将
-     * @param data 
-     */
-    public setMyGeneral(data:any):void{
-        for(var i = 0;i < data.generals.length;i++){
-            this._myGeneral.set(data.generals[i].cfgId,data.generals[i])
-        }
-    }
-
-
-
-    public getMyGeneral(cfgId:number = 0):any{
-        return this._myGeneral.get(cfgId);
-    }
-
-
-
-    public getMyGeneralById(id:number = 0):any{
-        let _mygeneralArr = Array.from(this._myGeneral.values());
-        for(var i = 0;i<_mygeneralArr.length ;i++){
-            if(_mygeneralArr[i].id == id){
-                return _mygeneralArr[i];
-            }
-        }
-
-        return null;
-    }
-
-
-    /**
-     * 城池军队配置
-     * @param data 
-     */
-    public setCityArmy(data:any):void{
-        this._cityArmy.set(data.cityId,data.armys?data.armys:[]);
-    }
-
-    public updateCityArmy(cityId:number = 0,army:any):void{
-        var armys = this.getCityArmy(cityId);
-        if(armys){
-            if(armys.length > 0){
-                for(var i = 0;i < armys.length;i++){
-                    if(armys[i].id == army.id){
-                        armys[i] = army;
-                        break;
-                    }
-                }
-            }else{
-                armys.push(army);
-            }
-            
-            this._cityArmy.set(cityId,armys);
-        }
-    }
-
-
-    public getCityArmy(cityId:number = 0):any{
-        return this._cityArmy.get(cityId);
-    }
+    
 
 }

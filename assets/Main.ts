@@ -76,6 +76,7 @@ export default class Main extends cc.Component {
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
+        dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
         this.addLoadingNode();
         console.log("onEnterMap");
         LoaderManager.getInstance().startLoadList(dataList, null,
@@ -90,6 +91,7 @@ export default class Main extends cc.Component {
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
                 GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3]);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
+                MapUICommand.getInstance().proxy.setBaseCost(datas[5]);
 
                 let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
                 GeneralCommand.getInstance().qryMyGenerals();
