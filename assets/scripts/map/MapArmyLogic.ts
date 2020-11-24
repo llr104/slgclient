@@ -37,7 +37,7 @@ export default class MapArmyLogic extends cc.Component {
 
     protected onUpdateArmyList(datas: ArmyData[]): void {
         for (let i:number = 0; i < datas.length; i++) {
-            if (datas[i] && datas[i].state == 0) {
+            if (datas[i] && datas[i].cmd > 0) {
                 this.onUpdateArmy(datas[i]);
             }
         }
@@ -46,7 +46,7 @@ export default class MapArmyLogic extends cc.Component {
     protected onUpdateArmy(data: ArmyData): void {
         console.log("update_army", data);
         let node: cc.Node = null;
-        if (data.state > 0) {
+        if (data.cmd == 0) {
             //代表不在地图上
             this.removeArmyById(data.id);
             return;

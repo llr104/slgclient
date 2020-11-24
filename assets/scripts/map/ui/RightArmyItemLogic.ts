@@ -12,7 +12,7 @@ export default class RightArmyItemLogic extends cc.Component {
     @property(cc.Label)
     labelInfo: cc.Label = null;
     @property(cc.Node)
-    bottomNode: cc.Node = null; \
+    bottomNode: cc.Node = null;
     @property(cc.Sprite)
     headIcon: cc.Sprite = null;
     @property(cc.Label)
@@ -43,7 +43,8 @@ export default class RightArmyItemLogic extends cc.Component {
 
     protected onClickBack(): void {
         if (this._data) {
-            ArmyCommand.getInstance().generalAssignArmy(this._data.id, 3, this._data.toX, this._data.toY, null);
+            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+            ArmyCommand.getInstance().generalAssignArmy(this._data.id, 3, cityData.x, cityData.y, null);
         }
     }
 
@@ -56,24 +57,22 @@ export default class RightArmyItemLogic extends cc.Component {
     protected updateItem(): void {
         if (this._data) {
             this.node.active = true;
-            let stateStr: string = this._data.state == 0 ? "[行军]" : "[停留]";
-            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+            let stateStr: string = this._data.state > 0 ? "[行军]" : "[停留]";
             let generalData: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
             let nameStr: string = generalData ? generalData.name + "队" : "";
             let posStr: string = "(" + this._data.x + ", " + this._data.y + ")";
             this.labelInfo.string = stateStr + " " + nameStr + " " + posStr;
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generalData.cfgId);
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
-            if (this._data.state == 1) {
+
+            if (this._data.cmd == 0) {
+                //代表在城池里面
+                this.btnSetting.active = true;
+                this.btnBack.active = false;
+            } else if (this._data.state == 0) {
                 //停留的时候才能配置队伍和撤退
-                if (this._data.cmd == 0) {
-                    //代表在城池里面
-                    this.btnSetting.active = true;
-                    this.btnBack.active = false;
-                } else {
-                    this.btnSetting.active = false;
-                    this.btnBack.active = true;
-                }
+                this.btnSetting.active = false;
+                this.btnBack.active = true;
             } else {
                 this.btnSetting.active = false;
                 this.btnBack.active = false;
