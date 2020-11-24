@@ -9,6 +9,9 @@ import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GenaralLevelConfig } from "../../general/GeneralProxy";
+import LoginCommand from "../../login/LoginCommand";
+import MapUICommand from "./MapUICommand";
+import { ConscriptBaseCost } from "./MapUIProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -20,9 +23,12 @@ export default class ConscriptLogic extends cc.Component {
 
     private _cityData: any = null;
     private _generalDisposeArr: any = null;
-    private _generalArmyArr: any = null;
+    private _generalArmyArr: number[] = [];
     private _cityArmyData: ArmyData = null;
     private _orderId: number = 0;
+
+    @property(cc.Label)
+    costNode: cc.Label = null;
 
 
     protected onLoad(): void {
@@ -52,16 +58,13 @@ export default class ConscriptLogic extends cc.Component {
         this._orderId = orderId;
         this._cityData = cityData;
         this._cityArmyData = ArmyCommand.getInstance().proxy.getArmyByOrder(this._orderId + 1, this._cityData.cityId);
-        // console.log("ConscriptLogic --- this._cityArmyData:", this._cityArmyData,this._orderId,this._cityData)
 
         this._generalDisposeArr[0] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[0]);
         this._generalDisposeArr[1] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[1]);
         this._generalDisposeArr[2] = GeneralCommand.getInstance().proxy.getMyGeneral(this._cityArmyData.generals[2]);
 
 
-        this._generalArmyArr[0] = this._cityArmyData.soldiers[0];
-        this._generalArmyArr[1] = this._cityArmyData.soldiers[1];
-        this._generalArmyArr[2] = this._cityArmyData.soldiers[2];
+        this._generalArmyArr = this._generalArmyArr.concat(this._cityArmyData.soldiers);
         this.updateView();
     }
 
@@ -91,7 +94,7 @@ export default class ConscriptLogic extends cc.Component {
 
 
                 min.getComponent(cc.Label).string = "已征兵:" + armyNumer;
-                max.getComponent(cc.Label).string = "最大:" + maxArmyNumer;
+                max.getComponent(cc.Label).string = "最大可征兵:" + maxArmyNumer;
 
                 var pic = item.getChildByName("pic");
                 pic.active = true;
@@ -99,6 +102,8 @@ export default class ConscriptLogic extends cc.Component {
                 item.otherData = dispiose;
             }
         }
+
+        this.onProgress();
     }
 
 
@@ -106,30 +111,33 @@ export default class ConscriptLogic extends cc.Component {
 
 
     private onClickConscript(): void {
-        var firstCnt: number = 0;
-        var secondCnt: number = 0;
-        var thirdCnt: number = 0;
+        var cnt:number[] = this.getCntArr();
         var slider: cc.Node = null;
-        if (this.picNode[0].active) {
-            slider = this.picNode[0].getChildByName("New Slider");
-            firstCnt = this.getProgress(slider.getComponent(cc.Slider));
-        }
 
-
-        if (this.picNode[1].active) {
-            slider = this.picNode[1].getChildByName("New Slider");
-            secondCnt = this.getProgress(slider.getComponent(cc.Slider));
-        }
-
-
-        if (this.picNode[2].active) {
-            slider = this.picNode[2].getChildByName("New Slider");
-            thirdCnt = this.getProgress(slider.getComponent(cc.Slider));
-        }
-
-        ArmyCommand.getInstance().generalConscript(this._cityArmyData.id, [firstCnt,secondCnt,thirdCnt], this._cityData);
+        ArmyCommand.getInstance().generalConscript(this._cityArmyData.id, cnt, this._cityData);
     }
 
+
+
+    private getCntArr():number[]{
+        var cnt:number[] = [0,0,0];
+        var slider: cc.Node = null;
+
+        for(var i = 0;i < this.picNode.length;i++){
+            if(this.picNode[i].active){
+                slider = this.picNode[i].getChildByName("New Slider");
+                cnt[i] = this.getProgress(slider.getComponent(cc.Slider));
+            }
+        }
+        return cnt.concat();
+    }
+
+
+
+    private getALLCnt():number{
+        var cnt:number[] = this.getCntArr();
+        return cnt[0] + cnt[1] + cnt[2];
+    }
 
     private getProgress(data: any): number {
         var baseArmyNumer = data.armyNumer;
@@ -137,6 +145,18 @@ export default class ConscriptLogic extends cc.Component {
         var maxArmyNumer = data.maxArmyNumer;
         return parseInt(((maxArmyNumer - baseArmyNumer) * progress) + "");
 
+    }
+
+
+    private onProgress():void{
+        var myRoleRes = LoginCommand.getInstance().proxy.getRoleResData();
+        var baseCost:ConscriptBaseCost = MapUICommand.getInstance().proxy.getBaseCost();
+        var cnts = this.getALLCnt();
+        this.costNode.string = "消耗:  " + "金币:"+ cnts * baseCost.cost_gold + "/" + myRoleRes.gold;
+        this.costNode.string += " 木材:"+ cnts * baseCost.cost_wood + "/" + myRoleRes.wood;
+        this.costNode.string += " 石材:"+ cnts * baseCost.cost_stone + "/" + myRoleRes.stone;
+        this.costNode.string += " 金属:"+ cnts * baseCost.cost_iron + "/" + myRoleRes.iron;
+        this.costNode.string += " 谷物:"+ cnts * baseCost.cost_grain + "/" + myRoleRes.grain;
     }
 
 }
