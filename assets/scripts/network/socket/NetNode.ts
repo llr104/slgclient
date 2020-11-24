@@ -129,6 +129,7 @@ export class NetNode {
 
     protected onTimeOut(msg:any){
         console.log("NetNode onTimeOut!",msg)
+        var isGet = false;
         //超时删除 请求队列
         for (var i = 0; i < this._requests.length;i++) {
             let req = this._requests[i];
@@ -136,15 +137,16 @@ export class NetNode {
                 this._requests.splice(i, 1);
                 this.destroyInvoke(req);
                 i--;
+                isGet = true;
             }       
         }
 
-        this.updateNetTips(NetTipsType.Requesting, this._requests.length > 0);
+        this.updateNetTips(NetTipsType.Requesting, !isGet);
     }
 
     protected updateNetTips(tipsType: NetTipsType, isShow: boolean) {
         if (tipsType == NetTipsType.Requesting) {
-            cc.systemEvent.emit(NetEvent.ServerRequesting, isShow);
+            // cc.systemEvent.emit(NetEvent.ServerRequesting, isShow);
 
         } else if (tipsType == NetTipsType.Connecting) {
 
@@ -182,7 +184,7 @@ export class NetNode {
 
             }
             // 如果还有等待返回的请求，启动网络请求层
-            this.updateNetTips(NetTipsType.Requesting, this._requests.length > 0);
+            
         }
     }
 
@@ -199,6 +201,7 @@ export class NetNode {
             }else{
                 this.cannelMsgTimer(msg);
                 
+                var isGet = false;
                 // console.log("this._requests.length:",this._requests.length)
                 for (var i = 0; i < this._requests.length;i++) {
                     let req = this._requests[i];
@@ -207,24 +210,21 @@ export class NetNode {
                         i--;
                         cc.systemEvent.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
+                        isGet = true;
                     }       
                 }
 
-                this.updateNetTips(NetTipsType.Requesting, this._requests.length > 0);
+                this.updateNetTips(NetTipsType.Requesting, !isGet);
             }
            
-
-
-
-
-
-
-
         }
     }
 
     protected onError(event) {
         console.log("onError:",event);
+
+        this.updateNetTips(NetTipsType.Connecting, false);
+        this.updateNetTips(NetTipsType.Requesting, false);
 
         //出错后清空定时器 那后断开服务 尝试链接
         this.clearTimer();
@@ -235,6 +235,9 @@ export class NetNode {
     protected onClosed(event) {
         console.log("onClosed:",event);
 
+
+        this.updateNetTips(NetTipsType.Connecting, false);
+        this.updateNetTips(NetTipsType.Requesting, false);
 
         //出错后
         this.clearTimer();
@@ -336,6 +339,7 @@ export class NetNode {
         this._seqId+=1;
         obj.sended = true;
         this._timer.schedule(obj.json,this._receiveTime);
+        this.updateNetTips(NetTipsType.Requesting, true);
     }
 
 

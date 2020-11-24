@@ -188,7 +188,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将配置
      */
-    protected openGeneralDisPose(data:any,outPos:any = null):void{
+    protected openGeneralDisPose(data:any,outPos:any = null,type:number = 0):void{
         if (this._generalDisPoseNode == null) {
             this._generalDisPoseNode = cc.instantiate(this.generalDisPosePrefab);
             this._generalDisPoseNode.parent = this.node;
@@ -196,7 +196,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDisPoseNode.active = true;
         }
 
-        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data,outPos);
+        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data,outPos,type);
     }
 
 

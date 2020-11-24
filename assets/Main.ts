@@ -117,13 +117,13 @@ export default class Main extends cc.Component {
 
 
     protected showWaitNode(isShow:boolean):void{
-        // if (this._waitNode == null) {
-        //     this._waitNode = cc.instantiate(this.waitPrefab);
-        //     this._waitNode.parent = this.node;
-        //     this._waitNode.zIndex = 2;
-        // }
-        // console.log("showWaitNode:",isShow)
-        // this._waitNode.active = isShow;
+        if (this._waitNode == null) {
+            this._waitNode = cc.instantiate(this.waitPrefab);
+            this._waitNode.parent = this.node;
+            this._waitNode.zIndex = 2;
+        }
+        console.log("showWaitNode:",isShow)
+        this._waitNode.active = isShow;
     }
 
     protected clearAllScene() {

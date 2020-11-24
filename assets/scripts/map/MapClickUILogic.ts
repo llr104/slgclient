@@ -34,14 +34,14 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickMove(): void {
-        // let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        // let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
-        // if (armyData == null) {
-        //     console.log("没有队伍");
-        // } else {
-        //     // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-        //     cc.systemEvent.emit("open_general_dispose", myCity, this._data);
-        // }
+        let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
+        if (armyData == null) {
+            console.log("没有队伍");
+        } else {
+            // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
+            cc.systemEvent.emit("open_general_dispose", myCity, this._data,2);
+        }
         this.node.parent = null;
     }
 
@@ -52,7 +52,7 @@ export default class MapClickUILogic extends cc.Component {
             console.log("没有队伍");
         } else {
             // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-            cc.systemEvent.emit("open_general_dispose", myCity, this._data);
+            cc.systemEvent.emit("open_general_dispose", myCity, this._data,1);
         }
         this.node.parent = null;
     }
