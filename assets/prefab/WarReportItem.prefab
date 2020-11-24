@@ -770,7 +770,7 @@
         "__id__": 19
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -1382,7 +1382,7 @@
         "__id__": 35
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -1994,7 +1994,7 @@
         "__id__": 51
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -2723,7 +2723,7 @@
         "__id__": 70
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -3335,7 +3335,7 @@
         "__id__": 86
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -3947,7 +3947,7 @@
         "__id__": 102
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,

@@ -33,10 +33,12 @@ export class WarReport {
     id: number = 0;
     attack_rid:number = 0;
     defense_rid:number = 0;
-    beg_attack_army:string = "";
-    beg_defense_army:string = "";
-    end_attack_army:string = "";
-    end_defense_army:string = "";
+
+    beg_attack_army:any = {};
+    beg_defense_army:any = {};
+    end_attack_army:any = {};
+    end_defense_army:any = {};
+
     attack_is_win:boolean = false;
     attack_is_read:boolean = false;
     defense_is_read:boolean = false;
@@ -45,6 +47,8 @@ export class WarReport {
     x:number = 0;
     y:number = 0;
     ctime:number = 0;
+    attack_general:any = {};
+    defense_general:any = {}
     
 }
 
@@ -192,10 +196,14 @@ export default class MapUIProxy {
             obj.id = list[i].id;
             obj.attack_rid = list[i].attack_rid;
             obj.defense_rid = list[i].defense_rid;
-            obj.beg_attack_army = list[i].beg_attack_army;
-            obj.beg_defense_army = list[i].beg_defense_army;
-            obj.end_attack_army = list[i].end_attack_army;
-            obj.end_defense_army = list[i].end_defense_army;
+
+            obj.beg_attack_army = JSON.parse(list[i].beg_attack_army);
+            obj.beg_defense_army = JSON.parse(list[i].beg_defense_army);
+            obj.end_attack_army = JSON.parse(list[i].end_attack_army);
+            obj.end_defense_army = JSON.parse(list[i].end_defense_army);
+            obj.attack_general = JSON.parse(list[i].attack_general);
+            obj.defense_general = JSON.parse(list[i].defense_general);
+
             obj.attack_is_win = list[i].attack_is_win;
             obj.attack_is_read = list[i].attack_is_read;
             obj.defense_is_read = list[i].defense_is_read;

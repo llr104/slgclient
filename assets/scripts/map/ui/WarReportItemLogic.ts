@@ -27,7 +27,8 @@ export default class WarReportItemLogic extends cc.Component {
         this._curData = data;
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
-        this.node.color = isRead?cc.color(122,122,122,122):cc.color(255,255,255,255);
+        // this.node.color = isRead?cc.color(122,122,122):cc.color(255,255,255);
+        this.node.opacity = isRead?120:255;
     }
 
     protected onClickItem():void{
