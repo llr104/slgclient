@@ -29,10 +29,7 @@ export default class GeneralLogic extends cc.Component {
 
     protected onLoad():void{
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
-        cc.systemEvent.on("chosed_general", this.onClickClose, this);
-        cc.systemEvent.on("update_army_assign", this.onClickClose, this);
-        
-        
+        cc.systemEvent.on("chosed_general", this.onClickClose, this); 
     }
 
 

@@ -46,7 +46,8 @@ export default class GeneralDisposeLogic extends cc.Component {
         cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
         this.pageNode.on("scroll-ended",this.onPageChange,this);
         cc.systemEvent.on("chosed_general", this.onChoseGeneral, this);
-
+        cc.systemEvent.on("update_army_assign", this.onClickClose, this);
+        
         this.stateNode.node.active = this.outNode.active = false;
         
     }

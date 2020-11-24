@@ -21,6 +21,10 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Sprite)
     spritePic:cc.Sprite = null;
 
+
+    @property(cc.Node)
+    delNode:cc.Node = null;
+
     private _curData:GeneralData = null;
     private _type:number = 0;
     private _position:number = 0;
@@ -28,7 +32,7 @@ export default class GeneralItemLogic extends cc.Component {
     private _orderId:number = 1;
 
     protected onLoad():void{
-
+        this.delNode.active = false;
     }
 
 
@@ -41,6 +45,7 @@ export default class GeneralItemLogic extends cc.Component {
 
         this.msgLabel.string = this._curData.name;
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
+        this.delNode.active = false;
     }
 
 
@@ -48,6 +53,8 @@ export default class GeneralItemLogic extends cc.Component {
     protected setOtherData(cityData:any,orderId:number = 1):void{
         this._cityData = cityData;
         this._orderId = orderId
+
+        this.delNode.active = true;
     }
 
 
@@ -66,6 +73,13 @@ export default class GeneralItemLogic extends cc.Component {
             cc.systemEvent.emit("open_general_conscript", this._orderId,this._cityData);
         }
         
+    }
+
+
+
+    protected onDelete():void{
+        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
+        cc.systemEvent.emit("chosed_general",cfgData,this._curData,-1);
     }
 
 }
