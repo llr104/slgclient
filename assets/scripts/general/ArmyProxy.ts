@@ -3,15 +3,9 @@ export class ArmyData {
     id: number = 0;
     cityId: number = 0;
     order: number = 0;
-    // firstId: number = 0;
-    // secondId: number = 0;
-    // thirdId: number = 0;
-    // firstCnt: number = 0;
-    // secondCnt: number = 0;
-    // thirdCnt: number = 0;
-    generals:number[] = [];
-    soldiers:number[] = [];
-
+    generals: number[] = [];
+    soldiers: number[] = [];
+    cmd: number = 0;
     state: number = 0;
     fromX: number = 0;
     fromY: number = 0;
@@ -19,6 +13,8 @@ export class ArmyData {
     toY: number = 0;
     startTime: number = 0;
     endTime: number = 0;
+    x: number = 0;
+    y: number = 0;
 
     static createFromServer(serverData: any, armyData: ArmyData = null): ArmyData {
         let data: ArmyData = armyData;
@@ -28,24 +24,27 @@ export class ArmyData {
         data.id = serverData.id;
         data.cityId = serverData.cityId;
         data.order = serverData.order;
-        // data.firstId = serverData.firstId;
-        // data.secondId = serverData.secondId;
-        // data.thirdId = serverData.thirdId;
-        // data.firstCnt = serverData.first_soldier_cnt;
-        // data.secondCnt = serverData.second_soldier_cnt;
-        // data.thirdCnt = serverData.third_soldier_cnt;
-
-
         data.generals = serverData.generals;
         data.soldiers = serverData.soldiers;
-
         data.state = serverData.state;
-        data.fromX = serverData.from_x;
-        data.fromY = serverData.from_y;
-        data.toX = serverData.to_x;
-        data.toY = serverData.to_y;
+        data.cmd = serverData.cmd;
+        if (data.cmd == 3) {
+            //返回的时候 坐标是反的
+            data.fromX = serverData.to_x;
+            data.fromY = serverData.to_y;
+            data.toX = serverData.from_x;
+            data.toY = serverData.from_y;
+        } else {
+            data.fromX = serverData.from_x;
+            data.fromY = serverData.from_y;
+            data.toX = serverData.to_x;
+            data.toY = serverData.to_y;
+        }
+        data.x = data.toX;
+        data.y = data.toY;
         data.startTime = serverData.start * 1000;
         data.endTime = serverData.end * 1000;
+
         return data;
     }
 }
@@ -112,7 +111,7 @@ export default class ArmyProxy {
         return null;
     }
 
-    public getFirstArmy(cityId:number):ArmyData {
+    public getFirstArmy(cityId: number): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
         if (list) {
             for (let i: number = 0; i < list.length; i++) {

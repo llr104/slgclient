@@ -140,12 +140,12 @@ export default class ArmyCommand {
     }
 
     /**出兵*/
-    public generalAssignArmy(armyId: number = 0, state: number = 0, x: number = 0, y: Number = 0, otherData: any): void {
+    public generalAssignArmy(armyId: number = 0, cmd: number = 0, x: number = 0, y: Number = 0, otherData: any = null): void {
         let sendData: any = {
             name: ServerConfig.general_assignArmy,
             msg: {
                 armyId: armyId,
-                state: state,
+                cmd: cmd,
                 x: x,
                 y: y,
             }
