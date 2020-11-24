@@ -59,19 +59,25 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected onClickGeneral(event:any): void {
-        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
+        if(this._curData){
+            var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
 
-        console.log("onClickGeneral:",cfgData,this._curData,this._position,this._type)
-        if(this._type == 0){
-            cc.systemEvent.emit("open_general_des",cfgData,this._curData);
+            //武将详情
+             if(this._type == 0){
+                 cc.systemEvent.emit("open_general_des",cfgData,this._curData);
+             }
+             
+             //队伍武将选择
+             else if(this._type == 1){
+                 cc.systemEvent.emit("chosed_general",cfgData,this._curData,this._position);
+             }
+
+             //征兵
+             else if(this._type == 2){
+                 cc.systemEvent.emit("open_general_conscript", this._orderId,this._cityData);
+             }
         }
-        
-        else if(this._type == 1){
-            cc.systemEvent.emit("chosed_general",cfgData,this._curData,this._position);
-        }
-        else{
-            cc.systemEvent.emit("open_general_conscript", this._orderId,this._cityData);
-        }
+
         
     }
 

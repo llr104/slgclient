@@ -1,3 +1,4 @@
+import LoginCommand from "../../login/LoginCommand";
 
 
 /**设施*/
@@ -28,12 +29,33 @@ export class ConscriptBaseCost {
 }
 
 
+export class WarReport {
+    id: number = 0;
+    attack_rid:number = 0;
+    defense_rid:number = 0;
+    beg_attack_army:string = "";
+    beg_defense_army:string = "";
+    end_attack_army:string = "";
+    end_defense_army:string = "";
+    attack_is_win:boolean = false;
+    attack_is_read:boolean = false;
+    defense_is_read:boolean = false;
+    destroy_durable:number = 0;
+    occupy:number = 0;
+    x:number = 0;
+    y:number = 0;
+    ctime:number = 0;
+    
+}
+
+
 
 
 export default class MapUIProxy {
     protected _myFacility: any = new Map();//城市设施
     protected _facilityConfig:any = null;//设施配置
     protected _armyBaseCost:ConscriptBaseCost = new ConscriptBaseCost();
+    protected _warReport:Map<number, WarReport> = new Map<number, WarReport>();
 
 
 
@@ -148,7 +170,6 @@ export default class MapUIProxy {
 
 
     public setBaseCost(data:any):void{
-        // console.log("setBaseCost:",data)
         this._armyBaseCost.cost_gold = data.json.conscript.cost_gold;
         this._armyBaseCost.cost_iron = data.json.conscript.cost_iron;
         this._armyBaseCost.cost_wood = data.json.conscript.cost_wood;
@@ -162,5 +183,68 @@ export default class MapUIProxy {
         return this._armyBaseCost;
     }
     
+
+
+    public updateWarReport(data:any):void{
+        var list = data.list;
+        for(var i = 0;i < list.length ;i++){
+            var obj = new WarReport();
+            obj.id = list[i].id;
+            obj.attack_rid = list[i].attack_rid;
+            obj.defense_rid = list[i].defense_rid;
+            obj.beg_attack_army = list[i].beg_attack_army;
+            obj.beg_defense_army = list[i].beg_defense_army;
+            obj.end_attack_army = list[i].end_attack_army;
+            obj.end_defense_army = list[i].end_defense_army;
+            obj.attack_is_win = list[i].attack_is_win;
+            obj.attack_is_read = list[i].attack_is_read;
+            obj.defense_is_read = list[i].defense_is_read;
+            obj.destroy_durable = list[i].destroy_durable;
+            obj.occupy = list[i].occupy;
+            obj.x = list[i].x;
+            obj.y = list[i].y;
+            obj.ctime = list[i].ctime * 1000;
+
+            this._warReport.set(obj.id,obj);
+        }
+    }
+
+
+
+    public updateWarRead(id:number = 0,isRead:boolean = true){
+        var data = this._warReport.get(id);
+        var roleData = LoginCommand.getInstance().proxy.getRoleData();
+        if(data){
+            if(data.defense_rid == roleData.rid){
+                data.defense_is_read = isRead;
+            }
+
+            if(data.attack_rid == roleData.rid){
+                data.attack_is_read = isRead;
+            }
+
+            this._warReport.set(id,data);
+        }
+    }
+
+
+    public isRead(id:number = 0):boolean{
+        var data = this._warReport.get(id);
+        var roleData = LoginCommand.getInstance().proxy.getRoleData();
+        if(data){
+            if(data.defense_rid == roleData.rid){
+                return data.defense_is_read;
+            }
+
+            if(data.attack_rid == roleData.rid){
+                return data.attack_is_read ;
+            }
+
+        }
+    }
+
+    public getWarReport():WarReport[]{
+        return Array.from(this._warReport.values());
+    }
 
 }
