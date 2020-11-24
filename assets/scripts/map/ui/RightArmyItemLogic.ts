@@ -55,7 +55,7 @@ export default class RightArmyItemLogic extends cc.Component {
     }
 
     protected updateItem(): void {
-        if (this._data) {
+        if (this._data && this._data.generals[0] != 0) {
             this.node.active = true;
             let stateStr: string = this._data.state > 0 ? "[行军]" : "[停留]";
             let generalData: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
