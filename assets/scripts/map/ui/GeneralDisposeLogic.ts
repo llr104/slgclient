@@ -153,6 +153,12 @@ export default class GeneralDisposeLogic extends cc.Component {
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
         if(cityArmyData){
             var id = cityArmyData[this._orderIndex].id;
+            var generals = cityArmyData[this._orderIndex].generals;
+            if(generals[0] == 0){
+                console.log("第一个武将要配置")
+                return;
+            }
+
             ArmyCommand.getInstance().generalAssignArmy(id, 1, this._outPos.x, this._outPos.y, this._cityData);
         }
         
@@ -163,6 +169,11 @@ export default class GeneralDisposeLogic extends cc.Component {
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
         if(cityArmyData){
             var id = cityArmyData[this._orderIndex].id;
+            var generals = cityArmyData[this._orderIndex].generals;
+            if(generals[0] == 0){
+                console.log("第一个武将要配置")
+                return;
+            }
             ArmyCommand.getInstance().generalAssignArmy(id, 2, this._outPos.x, this._outPos.y, this._cityData);
         }
         

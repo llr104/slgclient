@@ -49,6 +49,11 @@ export default class MapUILogic extends cc.Component {
     conscriptPrefab: cc.Prefab = null;
     protected _conscriptNode: cc.Node = null;
 
+
+    @property(cc.Prefab)
+    warReportPrefab: cc.Prefab = null;
+    protected _warReportNode: cc.Node = null;
+
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
@@ -232,6 +237,21 @@ export default class MapUILogic extends cc.Component {
         this._conscriptNode.getComponent("ConscriptLogic").setData(orderId,cityData);
     }
 
+
+
+    /**
+     * 战报
+     */
+    protected openWarReport():void{
+        if (this._warReportNode == null) {
+            this._warReportNode = cc.instantiate(this.warReportPrefab);
+            this._warReportNode.parent = this.node;
+        } else {
+            this._warReportNode.active = true;
+        }
+
+        this._warReportNode.getComponent("WarReportLogic").updateView();
+    }
 
     /**
      * 角色信息

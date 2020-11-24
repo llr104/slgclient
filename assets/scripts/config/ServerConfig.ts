@@ -26,6 +26,11 @@ const ServerConfig = {
     general_assignArmy: "general.assignArmy",
     general_armyState: "general.armyState",
 
+
+    war_report:"war.report",
+    war_reportPush:"war.reportPush",
+    war_read:"war.read"
+
 }
 
 
