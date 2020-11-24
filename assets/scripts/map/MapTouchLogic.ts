@@ -1,5 +1,8 @@
+import { MapBuildData } from "./MapBuildProxy";
+import { MapCityData } from "./MapCityProxy";
 import MapClickUILogic from "./MapClickUILogic";
 import MapCommand from "./MapCommand";
+import { MapResData } from "./MapProxy";
 import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
@@ -33,25 +36,28 @@ export default class MapTouchLogic extends cc.Component {
         }
 
         let cellId: number = MapUtil.getIdByCellPoint(mapPoint.x, mapPoint.y);
-        let data: any = null;
-        data = this._cmd.cityProxy.getCity(cellId);
-        if (data != null) {
+        let cityData: MapCityData = this._cmd.cityProxy.getCity(cellId);;
+        if (cityData != null) {
             //代表点击的是城市
-            cc.systemEvent.emit("open_city_about", data);
+            cc.systemEvent.emit("open_city_about", cityData);
             return;
         }
 
-        data = this._cmd.buildProxy.getBuild(cellId);
-        if (data != null) {
+        let buildData: MapBuildData = this._cmd.buildProxy.getBuild(cellId);
+        if (buildData != null) {
             //代表点击被占领的区域
-            console.log("点击被占领的区域", data);
-            this.showClickUINode(data, clickPixelPoint);
+            console.log("点击被占领的区域", buildData);
+            this.showClickUINode(buildData, clickPixelPoint);
             return;
         }
 
-        data = this._cmd.proxy.getResData(cellId);
-        this.showClickUINode(data, clickPixelPoint);
-        console.log("点击野外区域", data);
+        let resData: MapResData = this._cmd.proxy.getResData(cellId);
+        if (resData.type > 0) {
+            this.showClickUINode(resData, clickPixelPoint);
+            console.log("点击野外区域", resData);
+        } else {
+            console.log("点击山脉河流区域");
+        }
     }
 
     protected onMoveMap(): void {

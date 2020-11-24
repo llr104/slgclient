@@ -40,8 +40,15 @@ export class ArmyData {
             data.toX = serverData.to_x;
             data.toY = serverData.to_y;
         }
-        data.x = data.toX;
-        data.y = data.toY;
+        if (data.cmd == 0) {
+            //代表是停留在城池中
+            data.x = data.fromX;
+            data.y = data.fromY;
+        } else {
+            data.x = data.toX;
+            data.y = data.toY;
+        }
+
         data.startTime = serverData.start * 1000;
         data.endTime = serverData.end * 1000;
 

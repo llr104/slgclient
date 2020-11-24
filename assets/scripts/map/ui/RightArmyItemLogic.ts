@@ -4,6 +4,7 @@ import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
+import DateUtil from "../../utils/DateUtil";
 
 const { ccclass, property } = cc._decorator;
 
@@ -11,6 +12,8 @@ const { ccclass, property } = cc._decorator;
 export default class RightArmyItemLogic extends cc.Component {
     @property(cc.Label)
     labelInfo: cc.Label = null;
+    @property(cc.Label)
+    labelPos: cc.Label = null;
     @property(cc.Node)
     bottomNode: cc.Node = null;
     @property(cc.Sprite)
@@ -37,6 +40,14 @@ export default class RightArmyItemLogic extends cc.Component {
         this._data = null;
     }
 
+    protected update(): void {
+        if (this._data && this._data.state > 0) {
+            let nowTime: number = DateUtil.getServerTime();
+            let time: number = Math.max(0, this._data.endTime - nowTime);
+            this.labelPos.string = DateUtil.converSecondStr(time);
+        }
+    }
+
     protected onClickTop(): void {
         this.bottomNode.active = !this.bottomNode.active;
     }
@@ -60,8 +71,8 @@ export default class RightArmyItemLogic extends cc.Component {
             let stateStr: string = this._data.state > 0 ? "[行军]" : "[停留]";
             let generalData: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
             let nameStr: string = generalData ? generalData.name + "队" : "";
-            let posStr: string = "(" + this._data.x + ", " + this._data.y + ")";
-            this.labelInfo.string = stateStr + " " + nameStr + " " + posStr;
+            this.labelInfo.string = stateStr + " " + nameStr;
+            this.labelPos.string = "(" + this._data.x + ", " + this._data.y + ")";
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generalData.cfgId);
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
 

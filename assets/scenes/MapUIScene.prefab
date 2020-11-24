@@ -6279,6 +6279,9 @@
       "__id__": 155
     },
     "armyItemPrefabs": {
+      "__uuid__": "a93aebe7-df95-4df0-9ff6-b1e79055a23a"
+    },
+    "cityItemPrefabs": {
       "__uuid__": "fc05c8dd-402b-4ea0-b267-761efb1fc056"
     },
     "_id": ""

@@ -50,8 +50,7 @@ export class MapCityData {
 export default class MapCityProxy {
     protected _mapCitys: MapCityData[] = [];
     protected _lastCityCellIds: Map<number, number[]> = new Map<number, number[]>();
-    protected _myMainCity: MapCityData = null;
-    protected _mySubCitys: MapCityData[] = [];
+    protected _myCitys: MapCityData[] = [];
 
     // 初始化数据
     public initData(): void {
@@ -104,29 +103,24 @@ export default class MapCityProxy {
 
     /**我的建筑信息*/
     public initMyCitys(citys: any[]): void {
-        this._mySubCitys.length = 0;
+        this._myCitys.length = 0;
         for (let i: number = 0; i < citys.length; i++) {
             let id: number = MapUtil.getIdByCellPoint(citys[i].x, citys[i].y);
             let city: MapCityData = MapCityData.createCityData(citys[i], id);
             if (city.isMain) {
-                this._myMainCity = city;
+                this._myCitys.unshift(city);
             } else {
-                this._mySubCitys.push(city);
+                this._myCitys.push(city);
             }
         }
     }
 
     /**更新建筑id*/
     public updateMyCityIds(): void {
-        if (this._myMainCity) {
-            let id: number = MapUtil.getIdByCellPoint(this._myMainCity.x, this._myMainCity.y);
-            this._myMainCity.id = id;
-            this._mapCitys[id] = this._myMainCity;
-        }
-        for (let i: number = 0; i < this._mySubCitys.length; i++) {
-            let id: number = MapUtil.getIdByCellPoint(this._mySubCitys[i].x, this._mySubCitys[i].y);
-            this._mySubCitys[i].id = id;
-            this._mapCitys[id] = this._mySubCitys[i];
+        for (let i: number = 0; i < this._myCitys.length; i++) {
+            let id: number = MapUtil.getIdByCellPoint(this._myCitys[i].x, this._myCitys[i].y);
+            this._myCitys[i].id = id;
+            this._mapCitys[id] = this._myCitys[i];
         }
         
     }
@@ -199,16 +193,28 @@ export default class MapCityProxy {
     }
 
     public getMyMainCity(): MapCityData {
-        return this._myMainCity;
+        if (this._myCitys.length > 0) {
+            return this._myCitys[0];
+        }
+        return null;
     }
 
-    public getSubCitys(): MapCityData[] {
-        return this._mySubCitys;
+    public getMyCityById(cityId:number): MapCityData {
+        for (let i:number = 0; i < this._myCitys.length; i++) {
+            if (this._myCitys[i].cityId == cityId) {
+                return this._myCitys[i];
+            }
+        }
+        return null;
+    }
+
+    public getMyCitys():MapCityData[] {
+        return this._myCitys;
     }
 
     public getMyPlayerId(): number {
-        if (this._myMainCity) {
-            return this._myMainCity.rid;
+        if (this._myCitys.length > 0) {
+            return this._myCitys[0].rid;
         }
         return 0;
     }

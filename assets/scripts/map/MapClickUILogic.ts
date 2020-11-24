@@ -25,7 +25,6 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onDestroy(): void {
         cc.systemEvent.targetOff(this);
-
     }
 
     protected onClickGiveUp(): void {
@@ -62,7 +61,7 @@ export default class MapClickUILogic extends cc.Component {
         this.labelDes.string = "(" + data.x + ", " + data.y + ")";
         if (this._data instanceof MapResData) {
             //点击的是野外
-            this.btnMove.node.active = true;
+            this.btnMove.node.active = false;
             this.btnOccupy.node.active = true;
             this.btnGiveUp.node.active = false;
         } else if (this._data instanceof MapBuildData) {
@@ -73,8 +72,8 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = true;
             } else {
-                this.btnMove.node.active = true;
-                this.btnOccupy.node.active = true;
+                this.btnMove.node.active = false;
+                this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
             }
         }

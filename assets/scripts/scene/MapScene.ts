@@ -32,6 +32,7 @@ export default class MapScene extends cc.Component {
         MapUtil.initMapConfig(tiledMap);
         this._cmd.initData();
         cc.systemEvent.on("map_show_area_change", this.onMapShowAreaChange, this);
+        cc.systemEvent.on("scroll_top_map", this.onScrollToMap, this);
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
@@ -91,5 +92,9 @@ export default class MapScene extends cc.Component {
                 }
             }
         }
+    }
+
+    protected onScrollToMap(x:number, y:number):void {
+        this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(x, y));
     }
 }
