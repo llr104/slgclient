@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { ServerConfig } from "../../config/ServerConfig";
+import LoginCommand from "../../login/LoginCommand";
 import MapCommand from "../MapCommand";
 import MapUICommand from "./MapUICommand";
 
@@ -91,6 +92,7 @@ export default class FacilityDesLogic extends cc.Component {
         this.titleLabel.string = data.name;
 
         var cfgData = MapUICommand.getInstance().proxy.getFacilityCfgByType(data.type);
+        var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         if(cfgData){
             console.log("cfgData.json:",cfgData.json)
             this.desLabel.string = cfgData.json.des;
@@ -109,15 +111,18 @@ export default class FacilityDesLogic extends cc.Component {
                 }
 
 
+
+
+
                 nextCost = nextCost.need;
                 var str = "";
                 for(var key in nextCost){
                     if(nextCost[key] > 0){
-                        str += " " + this._nameObj[key] + ": " + nextCost[key];
+                        str += " " + this._nameObj[key] + ": " + nextCost[key] + "/" + roleRes[key];
                     }
                     
                 }
-                this.costLabel.string = "升级所需:" + str;
+                this.costLabel.string = str;
                 this.upButton.node.active = true;
             }
         }

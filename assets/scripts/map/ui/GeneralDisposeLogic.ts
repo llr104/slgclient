@@ -129,7 +129,7 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
         }else{
-            this.inNode.active = this.outNode.active = false;
+            this.stateNode.node.active = this.inNode.active = this.outNode.active = false;
             
         }
     }
