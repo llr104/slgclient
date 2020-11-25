@@ -49,6 +49,8 @@ export class WarReport {
     ctime:number = 0;
     attack_general:any = {};
     defense_general:any = {}
+
+    is_read:boolean = false;
     
 }
 
@@ -205,8 +207,10 @@ export default class MapUIProxy {
             obj.defense_general = JSON.parse(list[i].defense_general);
 
             obj.attack_is_win = list[i].attack_is_win;
-            obj.attack_is_read = list[i].attack_is_read;
             obj.defense_is_read = list[i].defense_is_read;
+            obj.attack_is_read = list[i].attack_is_read;
+            
+            obj.is_read = this.isReadObj(obj);
             obj.destroy_durable = list[i].destroy_durable;
             obj.occupy = list[i].occupy;
             obj.x = list[i].x;
@@ -225,11 +229,14 @@ export default class MapUIProxy {
         if(data){
             if(data.defense_rid == roleData.rid){
                 data.defense_is_read = isRead;
+                data.is_read = isRead;
             }
 
             if(data.attack_rid == roleData.rid){
                 data.attack_is_read = isRead;
+                data.is_read = isRead;
             }
+            
 
             this._warReport.set(id,data);
         }
@@ -249,11 +256,51 @@ export default class MapUIProxy {
             }
 
         }
+
+        return false;
+    }
+
+    public isReadObj(obj:any):boolean{
+        var roleData = LoginCommand.getInstance().proxy.getRoleData();
+        if(obj.defense_rid == roleData.rid){
+            return obj.defense_is_read;
+        }
+
+        if(obj.attack_rid == roleData.rid){
+            return obj.attack_is_read ;
+        }
+
+        return false;
     }
 
     public getWarReport():WarReport[]{
-        return Array.from(this._warReport.values());
+        var arr:WarReport[] = Array.from(this._warReport.values());
+        arr = arr.sort(this.sortIsRead);
+        arr = arr.concat();
+
+        var backArr:WarReport[] = [];
+        for(var i = 0; i < arr.length;i++){
+            if(arr[i].is_read == true){
+                backArr.push(arr[i]);
+                arr.splice(i,1);
+                i--;
+            }
+        }
+
+
+        backArr = backArr.concat(arr);
+        backArr = backArr.reverse();
+        return backArr;
     }
+
+
+    public sortIsRead(a:any,b:any):number{
+        if (a.id < b.id){
+            return 1;
+        }
+
+        return -1;
+	}
 
 
     public isReadNum():number{
