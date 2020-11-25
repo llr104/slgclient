@@ -37,7 +37,6 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected setData(curData:GeneralData,type:number = 0,position:number = 0):void{
-        // console.log("GeneralItemLogic---curData:",curData)
         this._curData = curData;
         this._type = type;
         this._position = position;
@@ -67,7 +66,7 @@ export default class GeneralItemLogic extends cc.Component {
                  cc.systemEvent.emit("open_general_des",cfgData,this._curData);
              }
              
-             //队伍武将选择
+             //上阵
              else if(this._type == 1){
                  cc.systemEvent.emit("chosed_general",cfgData,this._curData,this._position);
              }
@@ -83,9 +82,22 @@ export default class GeneralItemLogic extends cc.Component {
 
 
 
+
+    /**
+     * 下阵
+     */
     protected onDelete():void{
         var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
         cc.systemEvent.emit("chosed_general",cfgData,this._curData,-1);
+    }
+
+
+
+
+    public setWarReportData(curData:any):void{
+        this.msgLabel.string = "Lv" + curData.level + " " + curData.name;
+        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
+        this.delNode.active = false;
     }
 
 }

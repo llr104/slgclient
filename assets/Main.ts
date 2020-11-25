@@ -96,6 +96,7 @@ export default class Main extends cc.Component {
                 let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
                 GeneralCommand.getInstance().qryMyGenerals();
                 ArmyCommand.getInstance().qryArmyList(cityId);
+                MapUICommand.getInstance().qryWarReport();
 
                 this.clearAllScene();
                 this._mapScene = cc.instantiate(this.mapScenePrefab);
