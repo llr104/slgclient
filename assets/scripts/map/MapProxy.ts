@@ -139,7 +139,7 @@ export default class MapProxy {
             let areaPoint: cc.Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
             let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
 
-            // console.log("setCurCenterPoint", areaId, this._curCenterAreaId);
+            cc.systemEvent.emit("map_center_change", this._curCenterPoint);
             if (this._curCenterAreaId == -1 || this._curCenterAreaId != areaId) {
                 //展示区域变化
                 let areaData: MapAreaData = this.getMapAreaData(areaId);
@@ -203,6 +203,10 @@ export default class MapProxy {
             return true;
         }
         return false;
+    }
+
+    public getCurCenterPoint():cc.Vec2 {
+        return this._curCenterPoint;
     }
 
     public getCurCenterAreaId(): number {
