@@ -51,7 +51,8 @@ export default class MapCityProxy {
     protected _mapCitys: MapCityData[] = [];
     protected _lastCityCellIds: Map<number, number[]> = new Map<number, number[]>();
     protected _myCitys: MapCityData[] = [];
-
+    public myId: number = 0;
+    
     // 初始化数据
     public initData(): void {
         this._mapCitys.length = MapUtil.mapCellCount;
@@ -197,6 +198,10 @@ export default class MapCityProxy {
             return this._myCitys[0];
         }
         return null;
+    }
+
+    public isMyCity(cityId:number):boolean {
+        return this.getMyCityById(cityId) != null;
     }
 
     public getMyCityById(cityId:number): MapCityData {

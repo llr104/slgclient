@@ -79,6 +79,8 @@ export default class MapCommand {
             ArmyCommand.getInstance().updateMyProperty(data.msg.armys);
             this._cityProxy.initMyCitys(data.msg.citys);
             this._buildProxy.initMyBuilds(data.msg.mr_builds);
+            this._cityProxy.myId = this._cityProxy.getMyPlayerId();
+            this._buildProxy.myId = this._cityProxy.getMyPlayerId();
             this.enterMap();
         }
     }
@@ -86,7 +88,7 @@ export default class MapCommand {
     protected onBuildState(data: any): void {
         console.log("onBuildState", data);
         if (data.code == 0) {
-            this._buildProxy.updateMyBuild(data.msg.mr_build);
+            this._buildProxy.updateBuild(data.msg.mr_build);
         }
     }
 
@@ -101,9 +103,8 @@ export default class MapCommand {
     protected onNationMapScanBlock(data: any, otherData: any): void {
         console.log("onNationMapScan", data, otherData);
         if (data.code == 0) {
-            let rId: number = this._cityProxy.getMyPlayerId();
             this._cityProxy.setMapScanBlock(data.msg, otherData.id);
-            this._buildProxy.setMapScanBlock(data.msg, otherData.id, rId);
+            this._buildProxy.setMapScanBlock(data.msg, otherData.id);
         }
     }
 

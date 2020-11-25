@@ -3,6 +3,7 @@ import MapUtil from "./MapUtil";
 /**地图基础资源配置*/
 export class MapResConfig {
     type: number = 0;
+    level: number = 0;
     name: string = "";
     wood: number = 0;
     iron: number = 0;
@@ -17,7 +18,7 @@ export class MapResType {
     static WOOD: number = 52;
     static IRON: number = 53;
     static STONE: number = 54;
-    static GRAIN: number = 53;
+    static GRAIN: number = 55;
 }
 
 /**地图资源数据*/
@@ -81,7 +82,7 @@ export default class MapProxy {
     //地图请求列表
     public qryAreaIds: number[] = [];
     //地图基础配置数据
-    protected _mapResConfigs: Map<number, MapResConfig> = new Map<number, MapResConfig>();
+    protected _mapResConfigs: Map<string, MapResConfig> = new Map<string, MapResConfig>();
 
     // 初始化地图配置
     public initData(): void {
@@ -101,6 +102,7 @@ export default class MapProxy {
         for (let i: number = 0; i < configList.length; i++) {
             let cfg: MapResConfig = new MapResConfig();
             cfg.type = configList[i].type;
+            cfg.level = configList[i].level;
             cfg.name = configList[i].name;
             cfg.wood = configList[i].Wood;
             cfg.iron = configList[i].iron;
@@ -108,7 +110,7 @@ export default class MapProxy {
             cfg.grain = configList[i].grain;
             cfg.durable = configList[i].durable;
             cfg.defender = configList[i].defender;
-            this._mapResConfigs.set(configList[i].type, cfg);
+            this._mapResConfigs.set(configList[i].type + "_" + cfg.level, cfg);
         }
     }
 
@@ -228,19 +230,19 @@ export default class MapProxy {
     }
 
     /*获取产量描述**/
-    public getResYieldDesList(cfg: MapResConfig):string[] {
-        let list:string[] = [];
+    public getResYieldDesList(cfg: MapResConfig): string[] {
+        let list: string[] = [];
         if (cfg.grain > 0) {
-            list.push("粮食 x" + cfg.grain);
+            list.push("粮食 +" + cfg.grain + "/小时");
         }
         if (cfg.wood > 0) {
-            list.push("木材 x" + cfg.wood);
+            list.push("木材 +" + cfg.wood + "/小时");
         }
         if (cfg.iron > 0) {
-            list.push("铁矿 x" + cfg.iron);
+            list.push("铁矿 +" + cfg.iron + "/小时");
         }
         if (cfg.stone > 0) {
-            list.push("石料 x" + cfg.stone);
+            list.push("石料 +" + cfg.stone + "/小时");
         }
         return list;
     }
@@ -250,9 +252,10 @@ export default class MapProxy {
     }
 
     /**根据类型获取配置数据*/
-    public getResConfig(type: number): MapResConfig {
-        if (this._mapResConfigs.has(type)) {
-            return this._mapResConfigs.get(type);
+    public getResConfig(type: number, level: number): MapResConfig {
+        let key: string = type + "_" + level;
+        if (this._mapResConfigs.has(key)) {
+            return this._mapResConfigs.get(key);
         }
         return null;
     }

@@ -29,26 +29,31 @@ export default class MapBaseLayerLogic extends cc.Component {
     }
 
     public addItem(areaIndex: number, data: any): cc.Node {
-        let id: number = this.getIdByData(data);
-        let item: cc.Node = this.getItem(areaIndex, id);
-        if (item == null) {
-            item = this.createItem();
-            item.parent = this.parentLayer;
-            let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
-            list.set(this.getIdByData(data), item);
+        if (this._itemMap.has(areaIndex)) {
+            let id: number = this.getIdByData(data);
+            let item: cc.Node = this.getItem(areaIndex, id);
+            if (item == null) {
+                item = this.createItem();
+                item.parent = this.parentLayer;
+                let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+                list.set(this.getIdByData(data), item);
+            }
+            this.updateItem(areaIndex, data, item);
+            return item;
         }
-        this.updateItem(areaIndex, data, item);
-        return item;
+        return null;
     }
 
     public updateItem(areaIndex: number, data: any, item: cc.Node = null): void {
-        let realItem: cc.Node = item;
-        if (item == null) {
-            let id: number = this.getIdByData(data);
-            realItem = this.getItem(areaIndex, id);
-        }
-        if (realItem) {
-            this.setItemData(realItem, data);
+        if (this._itemMap.has(areaIndex)) {
+            let realItem: cc.Node = item;
+            if (item == null) {
+                let id: number = this.getIdByData(data);
+                realItem = this.getItem(areaIndex, id);
+            }
+            if (realItem) {
+                this.setItemData(realItem, data);
+            }
         }
     }
 

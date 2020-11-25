@@ -57,6 +57,7 @@ export default class MapBuildProxy {
     protected _mapBuilds: MapBuildData[] = [];
     protected _myBuilds: MapBuildData[] = [];
     protected _lastBuildCellIds: Map<number, number[]> = new Map<number, number[]>();
+    public myId: number = 0;
 
     // 初始化数据
     public initData(): void {
@@ -91,7 +92,7 @@ export default class MapBuildProxy {
     }
 
     /**更新建筑*/
-    public updateMyBuild(build: any): void {
+    public updateBuild(build: any): void {
         let id: number = MapUtil.getIdByCellPoint(build.x, build.y);
         let buildData: MapBuildData = null;
         if (this._mapBuilds[id] == null) {
@@ -102,16 +103,17 @@ export default class MapBuildProxy {
         } else {
             buildData = MapBuildData.createBuildData(build, id, this._mapBuilds[id]);
         }
+        this._mapBuilds[id].ascription = this._mapBuilds[id].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
         cc.systemEvent.emit("update_build", buildData);
     }
 
-    public removeBuild(x: number, y:number):void {
+    public removeBuild(x: number, y: number): void {
         let id: number = MapUtil.getIdByCellPoint(x, y);
         this._mapBuilds[id] = null;
         cc.systemEvent.emit("delete_build", id, x, y);
     }
 
-    public setMapScanBlock(scanDatas: any, areaId: number = 0, myRId: number = 0): void {
+    public setMapScanBlock(scanDatas: any, areaId: number = 0): void {
         let rBuilds: any[] = scanDatas.mr_builds;
         if (rBuilds.length > 0) {
             let lastBuildCellIds: number[] = null;
@@ -123,7 +125,7 @@ export default class MapBuildProxy {
             let updateBuildCellIds: number[] = [];
             let removeBuildCellIds: number[] = [];
             for (let i: number = 0; i < rBuilds.length; i++) {
-                let areaIndex:number = MapUtil.getAreaIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
+                let areaIndex: number = MapUtil.getAreaIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
                 if (areaIndex != areaId) {
                     //代表服务端给过来的数据不在当前区域
                     continue;
@@ -137,6 +139,7 @@ export default class MapBuildProxy {
                         if (this._mapBuilds[cellId].equalsServerData(rBuilds[i]) == false) {
                             //代表数据不一样需要刷新
                             this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId, this._mapBuilds[cellId]);
+                            this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                             updateBuildCellIds.push(cellId);
                         }
                         lastBuildCellIds.splice(index, 1);//移除重复数据
@@ -146,7 +149,7 @@ export default class MapBuildProxy {
                 }
                 //其他情况就是新数据了
                 this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId);
-                this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == myRId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
+                this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                 addBuildCellIds.push(cellId);
             }
             if (lastBuildCellIds && lastBuildCellIds.length > 0) {

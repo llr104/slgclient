@@ -39,7 +39,11 @@ export default class MapTouchLogic extends cc.Component {
         let cityData: MapCityData = this._cmd.cityProxy.getCity(cellId);;
         if (cityData != null) {
             //代表点击的是城市
-            cc.systemEvent.emit("open_city_about", cityData);
+            if (this._cmd.cityProxy.isMyCity(cityData.cityId)) {
+                cc.systemEvent.emit("open_city_about", cityData);
+            } else {
+                this.showClickUINode(cityData, clickPixelPoint);
+            }
             return;
         }
 
