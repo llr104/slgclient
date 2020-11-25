@@ -53,4 +53,5 @@ export class NetEvent {
     public static ServerHandShake:string = "ServerHandShake";
     public static ServerCheckLogin:string = "ServerCheckLogin";
     public static ServerRequesting:string = "ServerRequesting";
+    public static ServerRequestSucess:string = "ServerRequestSucess";
 }

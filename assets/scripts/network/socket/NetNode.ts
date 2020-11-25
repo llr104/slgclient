@@ -207,6 +207,7 @@ export class NetNode {
                         i--;
                         cc.systemEvent.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
+                        cc.systemEvent.emit(NetEvent.ServerRequestSucess,msg);
                     }       
                 }
 

@@ -8,6 +8,7 @@ import MapUICommand from "./scripts/map/ui/MapUICommand";
 import { HttpManager } from "./scripts/network/http/HttpManager";
 import { NetEvent } from "./scripts/network/socket/NetInterface";
 import { NetManager } from "./scripts/network/socket/NetManager";
+import { Tools } from "./scripts/utils/Tools";
 
 const { ccclass, property } = cc._decorator;
 
@@ -27,6 +28,9 @@ export default class Main extends cc.Component {
 
     @property(cc.Prefab)
     waitPrefab: cc.Prefab = null;
+
+    @property(cc.Prefab)
+    toastPrefab: cc.Prefab = null;
 
     protected _loginScene: cc.Node = null;
     protected _mapScene: cc.Node = null;
@@ -50,6 +54,7 @@ export default class Main extends cc.Component {
         cc.systemEvent.on("enter_map", this.onEnterMap, this);
         cc.systemEvent.on("enter_login", this.enterLogin, this);
         cc.systemEvent.on(NetEvent.ServerRequesting, this.showWaitNode,this);
+        cc.systemEvent.on(NetEvent.ServerRequestSucess,this.onShowToast,this);
     }
 
     protected onDestroy(): void {
@@ -125,8 +130,25 @@ export default class Main extends cc.Component {
             this._waitNode.parent = this.node;
             this._waitNode.zIndex = 2;
         }
-        console.log("showWaitNode:",isShow)
         this._waitNode.active = isShow;
+    }
+
+
+    protected onShowTopToast(text:string = ""):void{
+        let toast = cc.instantiate(this.toastPrefab);
+        toast.parent = this.node;
+        toast.zIndex = 10;
+        
+        toast.getComponent("Toast").setText(text);
+    }
+
+
+    private onShowToast(msg:any):void{
+        if(msg.code == 0 || msg.code == 9){
+            return;
+        }
+
+        this.onShowTopToast(Tools.getCodeStr(msg.code))
     }
 
     protected clearAllScene() {
