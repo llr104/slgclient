@@ -9,6 +9,8 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MapClickUILogic extends cc.Component {
+    @property(cc.Node)
+    bgSelect: cc.Node = null;
     @property(cc.Label)
     labelName: cc.Label = null;
     @property(cc.Label)
@@ -45,10 +47,16 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onEnable(): void {
         cc.systemEvent.on("update_build", this.onUpdateBuild, this);
+
+        this.bgSelect.opacity = 100;
+        let tween:cc.Tween = cc.tween(this.bgSelect).to(0.8, {opacity:0}).to(0.8, {opacity:100});
+        tween = tween.repeatForever(tween);
+        tween.start();
     }
 
     protected onDisable(): void {
         cc.systemEvent.targetOff(this);
+        cc.Tween.stopAllByTarget(this.bgSelect);
     }
 
     protected onUpdateBuild(data: MapBuildData): void {

@@ -115,7 +115,7 @@
     "_prefab": {
       "__id__": 4
     },
-    "_opacity": 40,
+    "_opacity": 100,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -2955,6 +2955,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "bgSelect": {
+      "__id__": 2
+    },
     "labelName": {
       "__id__": 12
     },
