@@ -80,6 +80,14 @@ export default class MapUtil {
         return cc.v2(id % this._areaSize.width, Math.floor(id / this._areaSize.width));
     }
 
+    public static get9GridCellIds(id:number):number[] {
+        return [
+            id + this._mapSize.width - 1, id + this._mapSize.width, id + this._mapSize.width + 1,
+            id - 1, id, id + 1,
+            id - this._mapSize.width - 1, id - this._mapSize.width, id - this._mapSize.width + 1
+        ];
+    }
+
     /**获取区域为中点的九宫格id列表*/
     public static get9GridAreaIds(id: number): number[] {
         return [

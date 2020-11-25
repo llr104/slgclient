@@ -2,9 +2,10 @@ import { ServerConfig } from "../config/ServerConfig";
 import ArmyCommand from "../general/ArmyCommand";
 import GeneralCommand from "../general/GeneralCommand";
 import { NetManager } from "../network/socket/NetManager";
-import MapBuildProxy from "./MapBuildProxy";
-import MapCityProxy from "./MapCityProxy";
+import MapBuildProxy, { MapBuildData } from "./MapBuildProxy";
+import MapCityProxy, { MapCityData } from "./MapCityProxy";
 import MapProxy, { MapAreaData } from "./MapProxy";
+import MapUtil from "./MapUtil";
 import MapUICommand from "./ui/MapUICommand";
 
 
@@ -113,6 +114,45 @@ export default class MapCommand {
         if (data.code == 0) {
             this._buildProxy.removeBuild(data.msg.x, data.msg.y);
         }
+    }
+
+    /**是否是可行军的位置*/
+    public isCanMoveCell(x:number, y:number):boolean {
+        let id: number = MapUtil.getIdByCellPoint(x, y);
+        let buiildData:MapBuildData = this.buildProxy.getBuild(id);
+        if (buiildData && buiildData.rid == this.buildProxy.myId) {
+            return true;
+        }
+        let cityData:MapCityData = this.cityProxy.getCity(id);
+        if (cityData && cityData.rid == this.cityProxy.myId) {
+            return true;
+        }
+    }
+
+    public isCanOccupyCell(x:number, y:number):boolean {
+        let id: number = MapUtil.getIdByCellPoint(x, y);
+        let buiildData:MapBuildData = this.buildProxy.getBuild(id);
+        if (buiildData && buiildData.rid == this.buildProxy.myId) {
+            return false;//已经占领
+        }
+        let cityData:MapCityData = this.cityProxy.getCity(id);
+        if (cityData && cityData.rid == this.cityProxy.myId) {
+            return false;//已经建城
+        }
+        let ids:number[] = MapUtil.get9GridCellIds(id);
+        for (let i:number = 0; i < ids[i]; i++) {
+            if (ids[i] != id) {
+                buiildData = this.buildProxy.getBuild(ids[i]);
+                if (buiildData && buiildData.rid == this.buildProxy.myId) {
+                    return true;//已经占领相邻格子
+                }
+                cityData = this.cityProxy.getCity(ids[i]);
+                if (cityData && cityData.rid == this.cityProxy.myId) {
+                    return true;//已经在相邻格子建城
+                }
+            }
+        }
+        return false;
     }
 
     public enterMap(): void {
