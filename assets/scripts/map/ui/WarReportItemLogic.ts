@@ -46,9 +46,9 @@ export default class WarReportItemLogic extends cc.Component {
         this.setTeams(this.ackNode,this._curData.attack_general);
         this.setTeams(this.defNode,this._curData.defense_general);
 
-        // console.log("WarReportItemLogic -- _curData:",this._curData);
         this.actMsgLabel.string = this._curData.attack_is_win?"胜":"败";
         this.defMsgLabel.string = this._curData.attack_is_win?"败":"胜";
+        console.log("WarReportItemLogic -- _curData:",this._curData);
     }
 
 

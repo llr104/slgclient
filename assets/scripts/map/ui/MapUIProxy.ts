@@ -255,4 +255,17 @@ export default class MapUIProxy {
         return Array.from(this._warReport.values());
     }
 
+
+    public isReadNum():number{
+        var num = 0;
+        var arr = this.getWarReport();
+        for(var i = 0 ;i < arr.length ;i++){
+            if(!this.isRead(arr[i].id)){
+                num++;
+            }
+        }
+
+        return num;
+    }
+
 }
