@@ -19,25 +19,25 @@ export default class GeneralDesLogic extends cc.Component {
     @property(cc.Label)
     titleLabel: cc.Label = null;
 
-
     @property(cc.Label)
     lvLabel: cc.Label = null;
-
 
     @property(cc.Label)
     costLabel: cc.Label = null;
 
+    @property(cc.Layout)
+    srollLayout:cc.Layout = null;
 
-    
     @property(cc.Label)
-    desLabel: cc.Label = null;
+    powerLabel: cc.Label = null;
 
+    @property(cc.Sprite)
+    spritePic:cc.Sprite = null;
 
     private _currData:any = null;
     private _cfgData:any = null;
 
     private _nameObj:any = {};
-
 
     protected onLoad():void{
         this._nameObj = {
@@ -46,9 +46,8 @@ export default class GeneralDesLogic extends cc.Component {
             defense:"防御",
             speed:"速度",
             destroy:"破坏",
-            exp:"经验",
-            physical_power:"体力"
         };
+
 
 
 
@@ -69,33 +68,26 @@ export default class GeneralDesLogic extends cc.Component {
         console.log("setData:",cfgData,curData);
         this._currData = curData;
         this._cfgData = cfgData;
-        this.titleLabel.string = curData.name;
+        this.titleLabel.string = cfgData.name;
     
         var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();
-        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel;
-        var str_des = "";
-        for(var key in cfgData){
-            if(key == "cfgId" || key == "cost"){
-                continue;
-            }            
+        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel + "经验:"+curData.exp;
+
+
+
+
+        var children = this.srollLayout.node.children;
+        var i = 0;
+        for(var key in this._nameObj){
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + cfgData[key]/100 
+            +"(+" + cfgData[key+"_grow"]/100 +"%)";
+            i++;
+
         }
 
+        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(cfgData.cfgId);
 
-
-        // if(cfgData[key] > 0){
-            
-        // }
-
-
-        str_des = this._nameObj.force + ": " + cfgData.force/100 + "(+" + curData.force_grow/100 + "%)";
-        str_des += " " + this._nameObj.strategy + ": " + cfgData.strategy/100 + "(+" + curData.strategy_grow/100 + "%)";
-        str_des += " " + this._nameObj.defense + ": " + cfgData.defense/100 + "(+" + curData.defense_grow/100 + "%)";
-        str_des += " " + this._nameObj.speed + ": " + cfgData.speed/100 + "(+" + curData.speed_grow/100 + "%)";
-        str_des += " " + this._nameObj.destroy + ": " + cfgData.destroy/100 + "(+" + curData.destroy_grow/100 + "%)";
-        str_des += " " + this._nameObj.exp + ": " + curData.exp;
-        str_des += " " + this._nameObj.physical_power + ": " + curData.physical_power;
-
-        this.desLabel.string = str_des;
+        this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "花费："+cfgData.cost;
     }
 

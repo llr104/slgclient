@@ -94,7 +94,7 @@ export default class Main extends cc.Component {
                 MapCommand.getInstance().proxy.tiledMapAsset = datas[0] as cc.TiledMapAsset;
                 MapCommand.getInstance().proxy.initMapResConfig((datas[1] as cc.JsonAsset).json);
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
-                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3]);
+                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as cc.JsonAsset).json);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
                 MapUICommand.getInstance().proxy.setBaseCost(datas[5]);
 

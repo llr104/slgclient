@@ -14,6 +14,8 @@ export class GeneralConfig {
     defense_grow:number = 0;
     speed_grow:number = 0;
     destroy_grow:number = 0;
+    physical_power_limit:number = 0;
+    cost_physical_power:number = 0;
 }
 
 /**武将等级配置*/
@@ -26,22 +28,10 @@ export class GenaralLevelConfig {
 /**武将数据*/
 export class GeneralData {
     id: number = 0;
-    name: string = "";
     cfgId: number = 0;
-    force: number = 0;
-    strategy: number = 0;
-    defense: number = 0;
-    speed: number = 0;
-    destroy: number = 0;
     cost: number = 0;
     exp: number = 0;
     level: number = 0;
-
-    force_grow:number = 0;
-    strategy_grow:number = 0;
-    defense_grow:number = 0;
-    speed_grow:number = 0;
-    destroy_grow:number = 0;
     physical_power:number = 0;
 }
 
@@ -56,7 +46,7 @@ export default class GeneralProxy {
         this._myGenerals.clear();
     }
 
-    public initGeneralConfig(cfgs: any[]): void {
+    public initGeneralConfig(cfgs: any[], bCost:any): void {
         let cfgData: any = null;
         let levelData: any = null;
         for (let i: number = 0; i < cfgs.length; i++) {
@@ -86,6 +76,9 @@ export default class GeneralProxy {
                 cfg.defense_grow = cfgData[i].defense_grow;
                 cfg.speed_grow = cfgData[i].speed_grow;
                 cfg.destroy_grow = cfgData[i].destroy_grow;
+                cfg.physical_power_limit = bCost.general.physical_power_limit;
+                cfg.cost_physical_power = bCost.general.cost_physical_power;
+
 
                 this._generalConfigs.set(cfg.cfgId, cfg);
             }
@@ -116,24 +109,11 @@ export default class GeneralProxy {
         for (var i = 0; i < datas.length; i++) {
             let data: GeneralData = new GeneralData();
             data.id = datas[i].id;
-            data.name = datas[i].name;
             data.cfgId = datas[i].cfgId;
-            data.force = datas[i].force;
-            data.strategy = datas[i].strategy;
-            data.defense = datas[i].defense;
-            data.speed = datas[i].speed;
-            data.destroy = datas[i].destroy;
             data.cost = datas[i].cost;
             data.exp = datas[i].exp;
             data.level = datas[i].level;
-
-            data.force_grow = datas[i].force_grow;
-            data.strategy_grow = datas[i].strategy_grow;
-            data.defense_grow = datas[i].defense_grow;
-            data.speed_grow = datas[i].speed_grow;
-            data.destroy_grow = datas[i].destroy_grow;
             data.physical_power = datas[i].physical_power;
-
             this._myGenerals.set(data.id, data);
         }
     }
