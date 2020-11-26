@@ -43,9 +43,11 @@ export default class GeneralItemLogic extends cc.Component {
 
 
         var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
-        this.msgLabel.string = cfgData.name;
+        this.msgLabel.string = cfgData.name +" Lv." +  curData.level +" (" + curData.physical_power+"/"+cfgData.physical_power_limit+")";
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
         this.delNode.active = false;
+
+        
     }
 
 
