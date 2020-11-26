@@ -154,7 +154,7 @@ export default class ConscriptLogic extends cc.Component {
         var cnts = this.getALLCnt();
         this.costNode.string = "消耗:  " + "金币:"+ cnts * baseCost.cost_gold + "/" + myRoleRes.gold;
         this.costNode.string += " 木材:"+ cnts * baseCost.cost_wood + "/" + myRoleRes.wood;
-        this.costNode.string += " 石材:"+ cnts * baseCost.cost_stone + "/" + myRoleRes.stone;
+        // this.costNode.string += " 石材:"+ cnts * baseCost.cost_stone + "/" + myRoleRes.stone;
         this.costNode.string += " 金属:"+ cnts * baseCost.cost_iron + "/" + myRoleRes.iron;
         this.costNode.string += " 谷物:"+ cnts * baseCost.cost_grain + "/" + myRoleRes.grain;
     }

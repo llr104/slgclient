@@ -70,7 +70,12 @@ export default class RightArmyItemLogic extends cc.Component {
             this.node.active = true;
             let stateStr: string = this._data.state > 0 ? "[行军]" : "[停留]";
             let generalData: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
-            let nameStr: string = generalData ? generalData.name + "队" : "";
+            var teamName = "";
+            if(generalData){
+                teamName =  GeneralCommand.getInstance().proxy.getGeneralCfg(generalData.cfgId).name;
+            }
+            
+            let nameStr: string = teamName + "队";
             this.labelInfo.string = stateStr + " " + nameStr;
             this.labelPos.string = "(" + this._data.x + ", " + this._data.y + ")";
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generalData.cfgId);

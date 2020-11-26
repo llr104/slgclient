@@ -96,7 +96,8 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     public setWarReportData(curData:any):void{
-        this.msgLabel.string = "Lv" + curData.level + " " + curData.name;
+        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
+        this.msgLabel.string = "Lv" + curData.level + " " + cfgData.name;
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
         this.delNode.active = false;
     }

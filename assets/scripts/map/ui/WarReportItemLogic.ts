@@ -43,8 +43,8 @@ export default class WarReportItemLogic extends cc.Component {
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         this.node.opacity = isRead?120:255;
 
-        this.setTeams(this.ackNode,this._curData.attack_general);
-        this.setTeams(this.defNode,this._curData.defense_general);
+        this.setTeams(this.ackNode,this._curData.beg_attack_general);
+        this.setTeams(this.defNode,this._curData.beg_defense_general);
 
         this.actMsgLabel.string = this._curData.attack_is_win?"胜":"败";
         this.defMsgLabel.string = this._curData.attack_is_win?"败":"胜";

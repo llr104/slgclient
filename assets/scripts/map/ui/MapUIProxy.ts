@@ -47,8 +47,11 @@ export class WarReport {
     x:number = 0;
     y:number = 0;
     ctime:number = 0;
-    attack_general:any = {};
-    defense_general:any = {}
+    beg_attack_general:any = {};
+    beg_defense_general:any = {};
+
+    end_attack_general:any = {};
+    end_defense_general:any = {};
 
     is_read:boolean = false;
     
@@ -203,8 +206,11 @@ export default class MapUIProxy {
             obj.beg_defense_army = JSON.parse(list[i].beg_defense_army);
             obj.end_attack_army = JSON.parse(list[i].end_attack_army);
             obj.end_defense_army = JSON.parse(list[i].end_defense_army);
-            obj.attack_general = JSON.parse(list[i].attack_general);
-            obj.defense_general = JSON.parse(list[i].defense_general);
+            obj.beg_attack_general = JSON.parse(list[i].beg_attack_general);
+            obj.beg_defense_general = JSON.parse(list[i].beg_defense_general);
+
+            obj.end_attack_general = JSON.parse(list[i].end_attack_general);
+            obj.end_defense_general = JSON.parse(list[i].end_defense_general);
 
             obj.attack_is_win = list[i].attack_is_win;
             obj.defense_is_read = list[i].defense_is_read;
