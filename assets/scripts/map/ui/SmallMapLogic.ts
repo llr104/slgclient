@@ -41,7 +41,7 @@ export default class SmallMapLogic extends cc.Component {
 
     onClickJump(): void {
         let x: number = Number(this.editBoxX.string);
-        let y: number = Number(this.editBoxX.string);
+        let y: number = Number(this.editBoxY.string);
         if (x >= 0 
             && y >= 0 
             && x < MapUtil.mapSize.width 
