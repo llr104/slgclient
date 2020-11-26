@@ -1,3 +1,18 @@
+
+
+export class Role{
+    rid:number = 0;
+    uid:number = 0;
+    nickName:string = "";
+    sex:number = 0;
+    sid:number = 0;
+    balance:number = 0;
+    headId:number = 0;
+    profile:string = "";
+}
+
+
+
 export default class LoginProxy {
     //登录数据
     private _loginData: any = null;
@@ -5,7 +20,7 @@ export default class LoginProxy {
 
 
     //角色数据
-    private _roleData :any = null;
+    private _roleData :Role = null;
 
     //角色资源
     private _roleResData:any = null;
@@ -18,7 +33,18 @@ export default class LoginProxy {
 
     public saveEnterData(data:any):void{
         if(data.role){
-            this._roleData = data.role;
+            if(!this._roleData){
+                this._roleData = new Role();
+            }
+            this._roleData.rid = data.role.rid;
+            this._roleData.uid = data.role.uid;
+            this._roleData.nickName = data.role.nickName;
+            this._roleData.sex = data.role.sex;
+            this._roleData.sid = data.role.sid;
+            this._roleData.balance = data.role.balance;
+            this._roleData.headId = data.role.headId;
+            this._roleData.profile = data.role.profile;
+
         }
         
         if(data.role_res){
@@ -28,7 +54,7 @@ export default class LoginProxy {
     }
 
 
-    public getRoleData():any{
+    public getRoleData():Role{
         return this._roleData;
     }
 

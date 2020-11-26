@@ -8,6 +8,12 @@ export class GeneralConfig {
     speed: number = 0;
     destroy: number = 0;
     cost: number = 0;
+
+    force_grow:number = 0;
+    strategy_grow:number = 0;
+    defense_grow:number = 0;
+    speed_grow:number = 0;
+    destroy_grow:number = 0;
 }
 
 /**武将等级配置*/
@@ -30,6 +36,13 @@ export class GeneralData {
     cost: number = 0;
     exp: number = 0;
     level: number = 0;
+
+    force_grow:number = 0;
+    strategy_grow:number = 0;
+    defense_grow:number = 0;
+    speed_grow:number = 0;
+    destroy_grow:number = 0;
+    physical_power:number = 0;
 }
 
 export default class GeneralProxy {
@@ -67,6 +80,13 @@ export default class GeneralProxy {
                 cfg.speed = cfgData[i].speed;
                 cfg.destroy = cfgData[i].destroy;
                 cfg.cost = cfgData[i].cost;
+
+                cfg.force_grow = cfgData[i].force_grow;
+                cfg.strategy_grow = cfgData[i].strategy_grow;
+                cfg.defense_grow = cfgData[i].defense_grow;
+                cfg.speed_grow = cfgData[i].speed_grow;
+                cfg.destroy_grow = cfgData[i].destroy_grow;
+
                 this._generalConfigs.set(cfg.cfgId, cfg);
             }
         }
@@ -106,6 +126,14 @@ export default class GeneralProxy {
             data.cost = datas[i].cost;
             data.exp = datas[i].exp;
             data.level = datas[i].level;
+
+            data.force_grow = datas[i].force_grow;
+            data.strategy_grow = datas[i].strategy_grow;
+            data.defense_grow = datas[i].defense_grow;
+            data.speed_grow = datas[i].speed_grow;
+            data.destroy_grow = datas[i].destroy_grow;
+            data.physical_power = datas[i].physical_power;
+
             this._myGenerals.set(data.id, data);
         }
     }

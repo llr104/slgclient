@@ -47,6 +47,7 @@ export default class GeneralDesLogic extends cc.Component {
             speed:"速度",
             destroy:"破坏",
             exp:"经验",
+            physical_power:"体力"
         };
 
 
@@ -70,26 +71,37 @@ export default class GeneralDesLogic extends cc.Component {
         this._cfgData = cfgData;
         this.titleLabel.string = curData.name;
     
-        var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();//GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level.level);
-        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel;//levelCfg.length;
+        var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();
+        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel;
         var str_des = "";
         for(var key in cfgData){
             if(key == "cfgId" || key == "cost"){
                 continue;
-            }
-
-            if(cfgData[key] > 0){
-                str_des += " " + this._nameObj[key] + ": " + cfgData[key];
-            }
-            
+            }            
         }
+
+
+
+        // if(cfgData[key] > 0){
+            
+        // }
+
+
+        str_des = this._nameObj.force + ": " + cfgData.force/100 + "(+" + curData.force_grow/100 + "%)";
+        str_des += " " + this._nameObj.strategy + ": " + cfgData.strategy/100 + "(+" + curData.strategy_grow/100 + "%)";
+        str_des += " " + this._nameObj.defense + ": " + cfgData.defense/100 + "(+" + curData.defense_grow/100 + "%)";
+        str_des += " " + this._nameObj.speed + ": " + cfgData.speed/100 + "(+" + curData.speed_grow/100 + "%)";
+        str_des += " " + this._nameObj.destroy + ": " + cfgData.destroy/100 + "(+" + curData.destroy_grow/100 + "%)";
+        str_des += " " + this._nameObj.exp + ": " + curData.exp;
+        str_des += " " + this._nameObj.physical_power + ": " + curData.physical_power;
+
         this.desLabel.string = str_des;
         this.costLabel.string = "花费："+cfgData.cost;
     }
 
 
 
-    protected onClickUpFacility(): void {
+    protected onClickUpGeneral(): void {
         var otherData = this._currData;
     }
 
