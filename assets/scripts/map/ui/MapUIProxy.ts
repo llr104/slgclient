@@ -221,7 +221,7 @@ export default class MapUIProxy {
             obj.occupy = list[i].occupy;
             obj.x = list[i].x;
             obj.y = list[i].y;
-            obj.ctime = list[i].ctime * 1000;
+            obj.ctime = list[i].ctime;
 
             this._warReport.set(obj.id,obj);
         }
@@ -294,8 +294,8 @@ export default class MapUIProxy {
         }
 
 
-        backArr = backArr.concat(arr);
-        backArr = backArr.reverse();
+        backArr = arr.concat(backArr);
+        // backArr = backArr.reverse();
         return backArr;
     }
 

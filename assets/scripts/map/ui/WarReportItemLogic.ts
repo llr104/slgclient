@@ -7,6 +7,7 @@
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
+import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
 
@@ -32,12 +33,19 @@ export default class WarReportItemLogic extends cc.Component {
     @property(cc.Label)
     defMsgLabel: cc.Label = null;
 
+
+    @property(cc.Label)
+    timeLabel: cc.Label = null;
+
     protected onLoad():void{
 
     }
 
 
-    protected setData(data:any):void{
+    protected updateItem(data:any):void{
+        if(this._curData == data){
+            return;
+        }
         this._curData = data;
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
@@ -49,6 +57,8 @@ export default class WarReportItemLogic extends cc.Component {
         this.actMsgLabel.string = this._curData.attack_is_win?"胜":"败";
         this.defMsgLabel.string = this._curData.attack_is_win?"败":"胜";
         // console.log("WarReportItemLogic -- _curData:",this._curData);
+
+        this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
     }
 
 
