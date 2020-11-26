@@ -2,6 +2,8 @@ import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "../login/LoginCommand";
 import { NetManager } from "../network/socket/NetManager";
 import ArmyProxy, { ArmyData } from "./ArmyProxy";
+import GeneralCommand from "./GeneralCommand";
+import { GeneralData } from "./GeneralProxy";
 
 
 export default class ArmyCommand {
@@ -98,8 +100,23 @@ export default class ArmyCommand {
     }
 
     /**我的角色属性*/
-    public updateMyProperty(data: any): void {
-        
+    public updateMyProperty(datas: any[]): void {
+        if (datas.length > 0) {
+            let armyDatas: ArmyData[] = this._proxy.updateArmys(datas[0].cityId, datas);
+            cc.systemEvent.emit("update_army_list", armyDatas);
+        }
+    }
+
+    /**获取军队当前体力*/
+    public getArmyPhysicalPower(armyData: ArmyData):number {
+        let minPower:number = 100;
+        for (let i:number = 0; i < armyData.generals.length; i++) {
+            let general:GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(armyData.generals[i]);
+            if (general && minPower > general.physical_power) {
+                minPower = general.physical_power;
+            }
+        }
+        return minPower;
     }
 
     /**请求自己的军队信息*/

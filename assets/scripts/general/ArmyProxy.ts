@@ -4,7 +4,7 @@ export class ArmyCmd {
     static Attack: number = 1;//攻击
     static Garrison: number = 2;//驻军
     static Reclaim: number = 3;//屯田
-    static Return: number = 4;
+    static Return: number = 4;//撤退
 }
 
 /**军队数据*/
@@ -37,7 +37,7 @@ export class ArmyData {
         data.soldiers = serverData.soldiers;
         data.state = serverData.state;
         data.cmd = serverData.cmd;
-        if (data.cmd == 3) {
+        if (data.cmd == ArmyCmd.Return) {
             //返回的时候 坐标是反的
             data.fromX = serverData.to_x;
             data.fromY = serverData.to_y;

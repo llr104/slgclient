@@ -2,7 +2,6 @@ import ArmyCommand from "../general/ArmyCommand";
 import { ArmyData } from "../general/ArmyProxy";
 import ArmyLogic from "./entries/ArmyLogic";
 import MapCommand from "./MapCommand";
-import { MapAreaData } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 

@@ -49,7 +49,7 @@ export default class MapClickUILogic extends cc.Component {
         cc.systemEvent.on("update_build", this.onUpdateBuild, this);
 
         this.bgSelect.opacity = 100;
-        let tween:cc.Tween = cc.tween(this.bgSelect).to(0.8, {opacity:0}).to(0.8, {opacity:100});
+        let tween: cc.Tween = cc.tween(this.bgSelect).to(0.8, { opacity: 0 }).to(0.8, { opacity: 100 });
         tween = tween.repeatForever(tween);
         tween.start();
     }
@@ -66,6 +66,17 @@ export default class MapClickUILogic extends cc.Component {
             && this._data.y == data.y) {
             this.setCellData(data, this._pixelPos);
         }
+    }
+
+    protected onClickReclaim(): void {
+        let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
+        if (armyData == null) {
+            console.log("没有队伍");
+        } else {
+            ArmyCommand.getInstance().generalAssignArmy(armyData.id, ArmyCmd.Reclaim, this._data.x, this._data.y);
+        }
+        this.node.parent = null;
     }
 
     protected onClickGiveUp(): void {
@@ -90,6 +101,7 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickOccupy(): void {
+        console.log("onClickOccupy");
         if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
             let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
             let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
