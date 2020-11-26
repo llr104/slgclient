@@ -31,7 +31,7 @@ export default class ArmyCommand {
         cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
         cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
         cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
-        cc.systemEvent.on(ServerConfig.general_armyState, this.onGeneralArmyState, this);
+        cc.systemEvent.on(ServerConfig.general_armyStatePush, this.onGeneralArmyStatePush, this);
     }
 
     public onDestory(): void {
@@ -89,7 +89,7 @@ export default class ArmyCommand {
     }
 
     /**军队状态变更*/
-    protected onGeneralArmyState(data: any): void {
+    protected onGeneralArmyStatePush(data: any): void {
         console.log("onGeneralArmyState", data);
         if (data.code == 0) {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);

@@ -9,13 +9,13 @@ export class GeneralConfig {
     destroy: number = 0;
     cost: number = 0;
 
-    force_grow:number = 0;
-    strategy_grow:number = 0;
-    defense_grow:number = 0;
-    speed_grow:number = 0;
-    destroy_grow:number = 0;
-    physical_power_limit:number = 0;
-    cost_physical_power:number = 0;
+    force_grow: number = 0;
+    strategy_grow: number = 0;
+    defense_grow: number = 0;
+    speed_grow: number = 0;
+    destroy_grow: number = 0;
+    physical_power_limit: number = 0;
+    cost_physical_power: number = 0;
 }
 
 /**武将等级配置*/
@@ -32,7 +32,21 @@ export class GeneralData {
     cost: number = 0;
     exp: number = 0;
     level: number = 0;
-    physical_power:number = 0;
+    physical_power: number = 0;
+
+    public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
+        let data: GeneralData = generalData;
+        if (data == null) {
+            data = new GeneralData();
+        }
+        data.id = serverData.id;
+        data.cfgId = serverData.cfgId;
+        data.cost = serverData.cost;
+        data.exp = serverData.exp;
+        data.level = serverData.level;
+        data.physical_power = serverData.physical_power;
+        return data;
+    }
 }
 
 export default class GeneralProxy {
@@ -42,11 +56,11 @@ export default class GeneralProxy {
     protected _generalTexs: Map<number, cc.SpriteFrame> = new Map<number, cc.SpriteFrame>();
     protected _myGenerals: Map<number, GeneralData> = new Map<number, GeneralData>();
 
-    public clearData():void {
+    public clearData(): void {
         this._myGenerals.clear();
     }
 
-    public initGeneralConfig(cfgs: any[], bCost:any): void {
+    public initGeneralConfig(cfgs: any[], bCost: any): void {
         let cfgData: any = null;
         let levelData: any = null;
         for (let i: number = 0; i < cfgs.length; i++) {
@@ -107,15 +121,19 @@ export default class GeneralProxy {
     public updateMyGenerals(datas: any[]): void {
         this._myGenerals.clear();
         for (var i = 0; i < datas.length; i++) {
-            let data: GeneralData = new GeneralData();
-            data.id = datas[i].id;
-            data.cfgId = datas[i].cfgId;
-            data.cost = datas[i].cost;
-            data.exp = datas[i].exp;
-            data.level = datas[i].level;
-            data.physical_power = datas[i].physical_power;
+            let data: GeneralData = GeneralData.createFromServer(datas[i]);
             this._myGenerals.set(data.id, data);
         }
+    }
+
+    public updateGenerals(datas: any): number[] {
+        let ids:number[] = [];
+        for (var i = 0; i < datas.length; i++) {
+            let data: GeneralData = GeneralData.createFromServer(datas[i], this._myGenerals.get(datas[i].id));
+            this._myGenerals.set(data.id, data);
+            ids.push(data.id);
+        }
+        return ids;
     }
 
     /**武将配置*/

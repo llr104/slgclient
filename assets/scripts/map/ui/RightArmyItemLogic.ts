@@ -1,7 +1,7 @@
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
-import { GeneralData } from "../../general/GeneralProxy";
+import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import DateUtil from "../../utils/DateUtil";
@@ -30,13 +30,16 @@ export default class RightArmyItemLogic extends cc.Component {
     btnSetting: cc.Node = null;
 
     protected _data: ArmyData = null;
+    protected _firstGeneral:GeneralData = null;
 
 
     protected onLoad(): void {
+        cc.systemEvent.on("update_generals", this.onUpdateGenerals, this);
         this.bottomNode.active = false;
     }
 
     protected onDestroy(): void {
+        cc.systemEvent.targetOff(this);
         this._data = null;
     }
 
@@ -46,6 +49,10 @@ export default class RightArmyItemLogic extends cc.Component {
             let time: number = Math.max(0, this._data.endTime - nowTime);
             this.labelPos.string = DateUtil.converSecondStr(time);
         }
+    }
+
+    protected onUpdateGenerals(ids: number[]): void {
+
     }
 
     protected onClickTop(): void {
@@ -61,24 +68,48 @@ export default class RightArmyItemLogic extends cc.Component {
 
     protected onClickSetting(): void {
         if (this._data) {
-
+            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
+            cc.systemEvent.emit("open_general_dispose", cityData);
         }
+    }
+
+    protected updateGeneralByData():void {
+        let stateStr: string = "";
+        if (this._data.state > 0) {
+            if (this._data.cmd == 3) {
+                //撤退
+                stateStr = "[撤退]";
+            } else {
+                stateStr = "[行军]";
+            }
+        } else {
+            if (this._data.cmd == 0) {
+                //撤退
+                stateStr = "[待命]";
+            } else {
+                stateStr = "[停留]";
+            }
+        }
+        
+        var teamName = "";
+        if (this._firstGeneral) {
+            let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._firstGeneral.cfgId);
+            teamName = cfg.name;
+            this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._firstGeneral.cfgId);
+            this.labelStrength.string = "体力 " + this._firstGeneral.physical_power + "/" + cfg.physical_power_limit;
+        }
+        this.labelInfo.string = stateStr + " " + teamName + "队";
+        
     }
 
     protected updateItem(): void {
         if (this._data && this._data.generals[0] != 0) {
             this.node.active = true;
-            let stateStr: string = this._data.state > 0 ? "[行军]" : "[停留]";
-            let generalData: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
-            var teamName = "";
-            if(generalData){
-                teamName =  GeneralCommand.getInstance().proxy.getGeneralCfg(generalData.cfgId).name;
-            }
+            this._firstGeneral = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
+            this.updateGeneralByData();
             
-            let nameStr: string = teamName + "队";
-            this.labelInfo.string = stateStr + " " + nameStr;
             this.labelPos.string = "(" + this._data.x + ", " + this._data.y + ")";
-            this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generalData.cfgId);
+            
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
 
             if (this._data.cmd == 0) {
@@ -94,6 +125,7 @@ export default class RightArmyItemLogic extends cc.Component {
                 this.btnBack.active = false;
             }
         } else {
+            this._firstGeneral = null;
             this.node.active = false;
         }
     }

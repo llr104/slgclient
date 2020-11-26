@@ -26,6 +26,8 @@ export default class GeneralCommand {
 
     constructor() {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onMyGenerals, this);
+        cc.systemEvent.on(ServerConfig.general_push, this.onGeneralPush, this);
+        
     }
 
     public onDestory(): void {
@@ -46,6 +48,14 @@ export default class GeneralCommand {
         if(data.code == 0){
             this._proxy.updateMyGenerals(data.msg.generals);
             cc.systemEvent.emit("update_my_generals");
+        }
+    }
+
+    protected onGeneralPush(data:any):void {
+        console.log("onGeneralPush ", data);
+        if(data.code == 0){
+            let ids:number[] = this._proxy.updateGenerals(data.msg.generals);
+            cc.systemEvent.emit("update_generals", ids);
         }
     }
 
