@@ -90,7 +90,9 @@ export class Tools{
             case 23:
                 str = "不可到达";
             break;
-
+            case 24:
+                str = "体力不足";
+                break;
             default:
                 str = "错误:"+code;
                 break;

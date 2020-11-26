@@ -70,7 +70,8 @@ export default class GeneralDesLogic extends cc.Component {
         this._cfgData = cfgData;
         this.titleLabel.string = cfgData.name;
     
-        var levelExp = GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level + 1).exp;
+        var nextCfg = GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level + 1);
+        var levelExp = nextCfg?nextCfg.exp:"MAX";
         var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();
         this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel + "   经验:"+curData.exp +"/" + levelExp;
         

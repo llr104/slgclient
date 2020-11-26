@@ -17,11 +17,15 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class WarReportLogic extends cc.Component {
 
-    @property(cc.Layout)
-    srollLayout:cc.Layout = null;
+    // @property(cc.Layout)
+    // srollLayout:cc.Layout = null;
 
-    @property(cc.Prefab)
-    warPortPrefab: cc.Prefab = null;
+
+    @property(cc.ScrollView)
+    scrollView:cc.ScrollView = null;
+
+    // @property(cc.Prefab)
+    // warPortPrefab: cc.Prefab = null;
 
     protected onLoad():void{
         cc.systemEvent.on("upate_war_report", this.initView, this);
@@ -44,18 +48,22 @@ export default class WarReportLogic extends cc.Component {
 
     protected initView():void{
         var report:WarReport[] = MapUICommand.getInstance().proxy.getWarReport();
-        this.srollLayout.node.removeAllChildren(true);
-        for(var i = 0;i < report.length ;i++){
-            let item:cc.Node = cc.instantiate(this.warPortPrefab);
-            item.active = true;
-            item.parent = this.srollLayout.node;
+        // this.srollLayout.node.removeAllChildren(true);
+        // for(var i = 0;i < report.length ;i++){
+        //     let item:cc.Node = cc.instantiate(this.warPortPrefab);
+        //     item.active = true;
+        //     item.parent = this.srollLayout.node;
 
 
-            let com = item.getComponent("WarReportItemLogic");
-            if(com){
-                com.setData(report[i]);
-            }
-        }
+        //     let com = item.getComponent("WarReportItemLogic");
+        //     if(com){
+        //         com.setData(report[i]);
+        //     }
+        // }
+
+
+        var comp = this.scrollView.node.getComponent("ListLogic");
+        comp.setData(report);
     }
 
     protected updateView():void{
