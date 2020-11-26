@@ -1,3 +1,12 @@
+/**军队命令*/
+export class ArmyCmd {
+    static Idle: number = 0;//空闲
+    static Attack: number = 1;//攻击
+    static Garrison: number = 2;//驻军
+    static Reclaim: number = 3;//屯田
+    static Return: number = 4;
+}
+
 /**军队数据*/
 export class ArmyData {
     id: number = 0;

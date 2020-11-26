@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import ArmyCommand from "../../general/ArmyCommand";
-import { ArmyData } from "../../general/ArmyProxy";
+import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 
@@ -159,7 +159,7 @@ export default class GeneralDisposeLogic extends cc.Component {
                 return;
             }
 
-            ArmyCommand.getInstance().generalAssignArmy(id, 1, this._outPos.x, this._outPos.y, this._cityData);
+            ArmyCommand.getInstance().generalAssignArmy(id, ArmyCmd.Attack, this._outPos.x, this._outPos.y, this._cityData);
         }
         
     }
@@ -174,7 +174,7 @@ export default class GeneralDisposeLogic extends cc.Component {
                 console.log("第一个武将要配置")
                 return;
             }
-            ArmyCommand.getInstance().generalAssignArmy(id, 2, this._outPos.x, this._outPos.y, this._cityData);
+            ArmyCommand.getInstance().generalAssignArmy(id, ArmyCmd.Garrison, this._outPos.x, this._outPos.y, this._cityData);
         }
         
     }
