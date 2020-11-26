@@ -1,5 +1,5 @@
 import ArmyCommand from "../general/ArmyCommand";
-import { ArmyData } from "../general/ArmyProxy";
+import { ArmyCmd, ArmyData } from "../general/ArmyProxy";
 import { MapBuildAscription, MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
@@ -81,7 +81,7 @@ export default class MapClickUILogic extends cc.Component {
                 console.log("没有队伍");
             } else {
                 // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-                cc.systemEvent.emit("open_general_dispose", myCity, this._data, 2);
+                cc.systemEvent.emit("open_general_dispose", myCity, this._data, ArmyCmd.Garrison);
             }
         } else {
             console.log("只能驻军自己占领的地");
@@ -97,7 +97,7 @@ export default class MapClickUILogic extends cc.Component {
                 console.log("没有队伍");
             } else {
                 // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-                cc.systemEvent.emit("open_general_dispose", myCity, this._data, 1);
+                cc.systemEvent.emit("open_general_dispose", myCity, this._data, ArmyCmd.Attack);
             }
         } else {
             console.log("只能占领自己相邻的地");

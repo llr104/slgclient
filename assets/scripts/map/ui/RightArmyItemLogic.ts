@@ -1,4 +1,4 @@
-import { ArmyData } from "../../general/ArmyProxy";
+import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
@@ -62,7 +62,7 @@ export default class RightArmyItemLogic extends cc.Component {
     protected onClickBack(): void {
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-            ArmyCommand.getInstance().generalAssignArmy(this._data.id, 3, cityData.x, cityData.y, null);
+            ArmyCommand.getInstance().generalAssignArmy(this._data.id, ArmyCmd.Return, cityData.x, cityData.y, null);
         }
     }
 
