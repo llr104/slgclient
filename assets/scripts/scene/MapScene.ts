@@ -33,6 +33,7 @@ export default class MapScene extends cc.Component {
         this._cmd.initData();
         cc.systemEvent.on("map_show_area_change", this.onMapShowAreaChange, this);
         cc.systemEvent.on("scroll_top_map", this.onScrollToMap, this);
+        cc.systemEvent.on("map_center_change", this.onMapCenterChange, this);
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
@@ -96,5 +97,9 @@ export default class MapScene extends cc.Component {
 
     protected onScrollToMap(x:number, y:number):void {
         this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(x, y));
+    }
+
+    protected onMapCenterChange(point: cc.Vec2): void {
+        MapCommand.getInstance().upPosition(point.x, point.y);
     }
 }

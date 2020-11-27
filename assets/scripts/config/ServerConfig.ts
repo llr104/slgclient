@@ -9,10 +9,8 @@ const ServerConfig = {
     role_enterServer: "role.enterServer",
     role_myCity: "role.myCity",
     role_myRoleRes: "role.myRoleRes",
-
-    
-    
     role_myProperty: "role.myProperty",
+    role_upPosition:"role.upPosition",
 
     nationMap_config: "nationMap.config",
     nationMap_scanBlock: "nationMap.scanBlock",
