@@ -36,7 +36,7 @@ export default class MapCommand {
 
     constructor() {
         cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
-        cc.systemEvent.on(ServerConfig.role_buildStatePush, this.onRoleBuildStatePush, this);
+        cc.systemEvent.on(ServerConfig.roleBuild_push, this.onRoleBuildStatePush, this);
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
@@ -89,7 +89,7 @@ export default class MapCommand {
     protected onRoleBuildStatePush(data: any): void {
         console.log("onRoleBuildStatePush", data);
         if (data.code == 0) {
-            this._buildProxy.updateBuild(data.msg.mr_build);
+            this._buildProxy.updateBuild(data.msg);
         }
     }
 

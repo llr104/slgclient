@@ -54,7 +54,7 @@ export default class GeneralCommand {
     protected onGeneralPush(data: any): void {
         console.log("onGeneralPush ", data);
         if (data.code == 0) {
-            let ids: number[] = this._proxy.updateGenerals(data.msg.generals);
+            let ids: number[] = this._proxy.updateGenerals(data.msg);
             cc.systemEvent.emit("update_generals", ids);
         }
     }

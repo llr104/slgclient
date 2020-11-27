@@ -196,6 +196,7 @@ export class NetNode {
             //推送
             if(msg.seq == 0){
                 cc.systemEvent.emit(msg.name, msg);
+                console.log("all_push:",msg.name, msg);
             }else{
                 this.cannelMsgTimer(msg);
 

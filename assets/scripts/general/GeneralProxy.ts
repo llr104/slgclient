@@ -142,13 +142,17 @@ export default class GeneralProxy {
 
     public updateGenerals(datas: any): number[] {
         let ids: number[] = [];
-        for (var i = 0; i < datas.length; i++) {
-            if (datas[i].id > 0) {
-                let data: GeneralData = GeneralData.createFromServer(datas[i], this._myGenerals.get(datas[i].id));
-                this._myGenerals.set(data.id, data);
-                ids.push(data.id);
-            }
-        }
+        // for (var i = 0; i < datas.length; i++) {
+        //     if (datas[i].id > 0) {
+        //         let data: GeneralData = GeneralData.createFromServer(datas[i], this._myGenerals.get(datas[i].id));
+        //         this._myGenerals.set(data.id, data);
+        //         ids.push(data.id);
+        //     }
+        // }
+
+        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id));
+        this._myGenerals.set(data.id, data);
+        ids.push(data.id);
         return ids;
     }
 

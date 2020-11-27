@@ -9,7 +9,9 @@ const ServerConfig = {
     role_enterServer: "role.enterServer",
     role_myCity: "role.myCity",
     role_myRoleRes: "role.myRoleRes",
-    role_buildStatePush: "role.buildStatePush",
+
+    
+    
     role_myProperty: "role.myProperty",
 
     nationMap_config: "nationMap.config",
@@ -24,13 +26,20 @@ const ServerConfig = {
     general_armyList: "general.armyList",
     general_conscript: "general.conscript",
     general_assignArmy: "general.assignArmy",
-    general_armyStatePush: "general.armyStatePush",
-    general_push: "general.push",
+
+    
 
     war_report:"war.report",
-    war_reportPush:"war.reportPush",
-    war_read:"war.read"
+    war_read:"war.read",
 
+
+    war_reportPush:"war.reportPush",
+    general_push: "general.push",
+    army_push: "army.push",
+    roleBuild_push:"roleBuild.push",
+    roleCity_push:"roleCity.push",
+    facility_push:"facility.push",
+    roleRes_push:"roleRes.push",
 }
 
 
