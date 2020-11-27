@@ -88,11 +88,15 @@ export default class MapBuildProxy {
             this._myBuilds[i].id = id;
             this._mapBuilds[id] = this._myBuilds[i];
         }
-        console.log("updateMyBuildIds", this._myBuilds);
     }
 
     /**更新建筑*/
     public updateBuild(build: any): void {
+        if (build.rid == 0) {
+            //代表是放弃领地
+            this.removeBuild(build.x, build.y);
+            return;
+        }
         let id: number = MapUtil.getIdByCellPoint(build.x, build.y);
         let buildData: MapBuildData = null;
         if (this._mapBuilds[id] == null) {
@@ -105,12 +109,32 @@ export default class MapBuildProxy {
         }
         this._mapBuilds[id].ascription = this._mapBuilds[id].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
         cc.systemEvent.emit("update_build", buildData);
+        if (buildData.rid == this.myId) {
+            //代表是自己的领地
+            cc.systemEvent.emit("my_build_change");
+        }
     }
 
     public removeBuild(x: number, y: number): void {
         let id: number = MapUtil.getIdByCellPoint(x, y);
         this._mapBuilds[id] = null;
         cc.systemEvent.emit("delete_build", id, x, y);
+        this.removeMyBuild(x, y);
+    }
+
+    public removeMyBuild(x: number, y:number):void {
+        let index: number = -1;
+        for (let i: number = 0; i < this._myBuilds.length; i++) {
+            if (this._myBuilds[i].x == x 
+                && this._myBuilds[i].y == y) {
+                    index = i;
+                    break;
+            }
+        }
+        if (index != -1) {
+            this._myBuilds.splice(index, 1);
+            cc.systemEvent.emit("my_build_change");
+        }
     }
 
     public setMapScanBlock(scanDatas: any, areaId: number = 0): void {
@@ -168,5 +192,9 @@ export default class MapBuildProxy {
 
     public getBuild(id: number): MapBuildData {
         return this._mapBuilds[id];
+    }
+
+    public getMyBuildList():MapBuildData[] {
+        return this._myBuilds;
     }
 }

@@ -21,9 +21,11 @@ export default class MapScene extends cc.Component {
     armyLayer: cc.Node = null;
 
     protected _cmd: MapCommand = null;
+    protected _centerX: number = 0;
+    protected _centerY: number = 0;
+    protected _lastUpPosTime: number = 0;
 
     protected onLoad(): void {
-        console.log("MapScene onLoad", this.mapLayer);
         this._cmd = MapCommand.getInstance();
 
         //初始化地图
@@ -33,7 +35,6 @@ export default class MapScene extends cc.Component {
         this._cmd.initData();
         cc.systemEvent.on("map_show_area_change", this.onMapShowAreaChange, this);
         cc.systemEvent.on("scroll_top_map", this.onScrollToMap, this);
-        cc.systemEvent.on("map_center_change", this.onMapCenterChange, this);
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
@@ -44,18 +45,29 @@ export default class MapScene extends cc.Component {
     }
 
     protected onDestroy(): void {
-        console.log("MapScene onDestroy");
         cc.systemEvent.targetOff(this);
         this._cmd.proxy.clearData();
         this._cmd = null;
     }
 
     protected onTimer(): void {
+
         if (this._cmd.proxy.qryAreaIds && this._cmd.proxy.qryAreaIds.length > 0) {
             let qryIndex: number = this._cmd.proxy.qryAreaIds.shift();
             let qryData: MapAreaData = this._cmd.proxy.getMapAreaData(qryIndex);
             if (qryData.checkAndUpdateQryTime()) {
                 this._cmd.qryNationMapScanBlock(qryData);
+            }
+        }
+        let nowTime: number = Date.now();
+        if (nowTime - this._lastUpPosTime > 1000) {
+            this._lastUpPosTime = nowTime;
+            //间隔一秒检测中心点是否改变
+            let point: cc.Vec2 = MapCommand.getInstance().proxy.getCurCenterPoint();
+            if (point != null && (this._centerX != point.x || this._centerY != point.y)) {
+                this._centerX = point.x;
+                this._centerY = point.y;
+                MapCommand.getInstance().upPosition(point.x, point.y);
             }
         }
     }
@@ -95,11 +107,7 @@ export default class MapScene extends cc.Component {
         }
     }
 
-    protected onScrollToMap(x:number, y:number):void {
+    protected onScrollToMap(x: number, y: number): void {
         this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(x, y));
-    }
-
-    protected onMapCenterChange(point: cc.Vec2): void {
-        MapCommand.getInstance().upPosition(point.x, point.y);
     }
 }
