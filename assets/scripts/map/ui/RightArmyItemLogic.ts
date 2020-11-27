@@ -86,26 +86,7 @@ export default class RightArmyItemLogic extends cc.Component {
     }
 
     protected updateGeneralByData():void {
-        let stateStr: string = "";
-        if (this._data.state > 0) {
-            if (this._data.cmd == ArmyCmd.Return) {
-                //撤退
-                stateStr = "[撤退]";
-            } else {
-                stateStr = "[行军]";
-            }
-        } else {
-            if (this._data.cmd == ArmyCmd.Idle) {
-                //撤退
-                stateStr = "[待命]";
-            } else if (this._data.cmd == ArmyCmd.Reclaim) {
-                //屯田
-                stateStr = "[屯田]";
-            }else {
-                stateStr = "[停留]";
-            }
-        }
-        
+        let stateStr: string = ArmyCommand.getInstance().getArmyStateDes(this._data);
         var teamName = "";
         if (this._firstGeneral) {
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._firstGeneral.cfgId);

@@ -27,14 +27,14 @@ export default class GeneralCommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onMyGenerals, this);
         cc.systemEvent.on(ServerConfig.general_push, this.onGeneralPush, this);
-        
+
     }
 
     public onDestory(): void {
         cc.systemEvent.targetOff(this);
     }
 
-    public clearData():void {
+    public clearData(): void {
         this._proxy.clearData();
     }
 
@@ -43,25 +43,26 @@ export default class GeneralCommand {
     }
 
     /**我的将领列表*/
-    protected onMyGenerals(data:any): void {
+    protected onMyGenerals(data: any): void {
         console.log("onMyGeneralsonMyGenerals ", data);
-        if(data.code == 0){
+        if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
             cc.systemEvent.emit("update_my_generals");
         }
     }
 
-    protected onGeneralPush(data:any):void {
+    protected onGeneralPush(data: any): void {
         console.log("onGeneralPush ", data);
-        if(data.code == 0){
-            let ids:number[] = this._proxy.updateGenerals(data.msg.generals);
+        if (data.code == 0) {
+            let ids: number[] = this._proxy.updateGenerals(data.msg.generals);
             cc.systemEvent.emit("update_generals", ids);
         }
     }
 
     /**我的角色属性*/
-    public updateMyProperty(data: any): void {
-        
+    public updateMyProperty(datas: any[]): void {
+        this._proxy.updateMyGenerals(datas);
+        cc.systemEvent.emit("update_my_generals");
     }
 
     public qryMyGenerals(): void {

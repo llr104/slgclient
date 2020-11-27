@@ -33,6 +33,8 @@ export default class MapClickUILogic extends cc.Component {
     btnOccupy: cc.Button = null;
     @property(cc.Button)
     btnGiveUp: cc.Button = null;
+    @property(cc.Button)
+    btnReclaim: cc.Button = null;
 
     protected _data: any = null;
     protected _pixelPos: cc.Vec2 = null;
@@ -69,13 +71,7 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickReclaim(): void {
-        let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
-        if (armyData == null) {
-            console.log("没有队伍");
-        } else {
-            ArmyCommand.getInstance().generalAssignArmy(armyData.id, ArmyCmd.Reclaim, this._data.x, this._data.y);
-        }
+        cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Reclaim, this._data.x, this._data.y);
         this.node.parent = null;
     }
 
@@ -86,14 +82,7 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onClickMove(): void {
         if (MapCommand.getInstance().isCanMoveCell(this._data.x, this._data.y)) {
-            let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-            let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
-            if (armyData == null) {
-                console.log("没有队伍");
-            } else {
-                // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-                cc.systemEvent.emit("open_general_dispose", myCity, this._data, ArmyCmd.Garrison);
-            }
+            cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
         } else {
             console.log("只能驻军自己占领的地");
         }
@@ -101,16 +90,8 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickOccupy(): void {
-        console.log("onClickOccupy");
         if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
-            let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-            let armyData: ArmyData = ArmyCommand.getInstance().proxy.getFirstArmy(myCity.cityId);
-            if (armyData == null) {
-                console.log("没有队伍");
-            } else {
-                // ArmyCommand.getInstance().generalAssignArmy(armyData.id, 1, this._data.x, this._data.y, myCity);.
-                cc.systemEvent.emit("open_general_dispose", myCity, this._data, ArmyCmd.Attack);
-            }
+            cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
         } else {
             console.log("只能占领自己相邻的地");
         }
@@ -122,6 +103,7 @@ export default class MapClickUILogic extends cc.Component {
         this._pixelPos = pixelPos;
         this.labelPos.string = "(" + data.x + ", " + data.y + ")";
         this.leftInfoNode.active = true;
+        this.btnReclaim.node.active = false;
         if (this._data instanceof MapResData) {
             //点击的是野外
             this.btnMove.node.active = false;
@@ -136,6 +118,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = true;
                 this.durableNode.active = false;
+                this.btnReclaim.node.active = true;
             } else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;

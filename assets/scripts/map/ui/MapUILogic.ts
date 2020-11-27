@@ -8,6 +8,7 @@
 
 import { ArmyData } from "../../general/ArmyProxy";
 import LoginCommand from "../../login/LoginCommand";
+import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -53,6 +54,9 @@ export default class MapUILogic extends cc.Component {
     @property(cc.Prefab)
     warReportPrefab: cc.Prefab = null;
     protected _warReportNode: cc.Node = null;
+    @property(cc.Prefab)
+    armySelectPrefab: cc.Prefab = null;
+    protected _armySelectNode: cc.Node = null;
 
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
@@ -85,6 +89,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
         cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
+        cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         this.updateRole();
         
     }
@@ -167,6 +172,17 @@ export default class MapUILogic extends cc.Component {
      */
     protected openGeneralChoose(data:number[],position:number = 0):void{
         this.openGeneral(data,1,position,1);
+    }
+
+    /**打开军队选择界面*/
+    protected onOpenArmySelectUI(cmd:number, x:number, y:number):void {
+        if (this._armySelectNode == null) {
+            this._armySelectNode = cc.instantiate(this.armySelectPrefab);
+            this._armySelectNode.parent = this.node;
+        } else {
+            this._armySelectNode.active = true;
+        }
+        this._armySelectNode.getComponent(ArmySelectNodeLogic).setData(cmd, x, y);
     }
 
 

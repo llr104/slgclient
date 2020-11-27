@@ -18,10 +18,10 @@ export enum BGAlignmentType {
 
 @ccclass
 export default class BgScale extends cc.Component {
-    @property
-    alignmentType = BGAlignmentType.CENTER;
-    @property
-    scaleType = BGScaleType.FULL_SCREEN;
+    @property({type: cc.Enum(BGAlignmentType)})
+    alignmentType:BGAlignmentType = BGAlignmentType.CENTER;
+    @property({type: cc.Enum(BGScaleType)})
+    scaleType:BGScaleType = BGScaleType.FULL_SCREEN;
 
     private realW:number = 0;
     private realH:number = 0;

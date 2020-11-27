@@ -1,9 +1,9 @@
 import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "../login/LoginCommand";
 import { NetManager } from "../network/socket/NetManager";
-import ArmyProxy, { ArmyData } from "./ArmyProxy";
+import ArmyProxy, { ArmyCmd, ArmyData } from "./ArmyProxy";
 import GeneralCommand from "./GeneralCommand";
-import { GeneralData } from "./GeneralProxy";
+import { GenaralLevelConfig, GeneralData } from "./GeneralProxy";
 
 
 export default class ArmyCommand {
@@ -40,7 +40,7 @@ export default class ArmyCommand {
         cc.systemEvent.targetOff(this);
     }
 
-    public clearData():void {
+    public clearData(): void {
         this._proxy.clearData();
     }
 
@@ -108,15 +108,81 @@ export default class ArmyCommand {
     }
 
     /**获取军队当前体力*/
-    public getArmyPhysicalPower(armyData: ArmyData):number {
-        let minPower:number = 100;
-        for (let i:number = 0; i < armyData.generals.length; i++) {
-            let general:GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(armyData.generals[i]);
+    public getArmyPhysicalPower(armyData: ArmyData): number {
+        let minPower: number = 100;
+        for (let i: number = 0; i < armyData.generals.length; i++) {
+            let general: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(armyData.generals[i]);
             if (general && minPower > general.physical_power) {
                 minPower = general.physical_power;
             }
         }
         return minPower;
+    }
+
+    /**获取军队将领列表*/
+    public getArmyGenerals(armyData: ArmyData): GeneralData[] {
+        let list: GeneralData[] = [];
+        for (let i: number = 0; i < armyData.generals.length; i++) {
+            let general: GeneralData = GeneralCommand.getInstance().proxy.getMyGeneral(armyData.generals[i]);
+            list.push(general);
+        }
+        return list;
+    }
+
+    /**根据将领列表获取军队体力*/
+    public getArmyPhysicalPowerByGenerals(generals: GeneralData[]): number {
+        let minPower: number = 100;
+        for (let i: number = 0; i < generals.length; i++) {
+            if (generals[i] && minPower > generals[i].physical_power) {
+                minPower = generals[i].physical_power;
+            }
+        }
+        return minPower;
+    }
+
+    /**获取军队当前士兵数*/
+    public getArmyCurSoldierCnt(armyData: ArmyData): number {
+        let cnt: number = 0;
+        for (let i: number = 0; i < armyData.soldiers.length; i++) {
+            cnt += armyData.soldiers[i];
+        }
+        return cnt;
+    }
+
+     /**根据将领列表获取军队总士兵数*/
+    public getArmyTotalSoldierCntByGenerals(generals: GeneralData[]): number {
+        let cnt: number = 0;
+        let levelCfg: GenaralLevelConfig = null;
+        for (let i: number = 0; i < generals.length; i++) {
+            if (generals[i]) {
+                levelCfg = GeneralCommand.getInstance().proxy.getGeneralLevelCfg(generals[i].level);
+                cnt += levelCfg.soldiers;
+            }
+        }
+        return cnt;
+    }
+
+    public getArmyStateDes(armyData: ArmyData): string {
+        let stateStr: string = "";
+        if (armyData.state > 0) {
+            if (armyData.cmd == ArmyCmd.Return) {
+                //撤退
+                stateStr = "[撤退]";
+            } else {
+                stateStr = "[行军]";
+            }
+        } else {
+            if (armyData.cmd == ArmyCmd.Idle) {
+                //撤退
+                stateStr = "[待命]";
+            } else if (armyData.cmd == ArmyCmd.Reclaim) {
+                //屯田
+                stateStr = "[屯田]";
+            }else {
+                stateStr = "[停留]";
+            }
+        }
+        return stateStr;
     }
 
     /**请求自己的军队信息*/
@@ -145,7 +211,7 @@ export default class ArmyCommand {
     }
 
     /**给军队征兵*/
-    public generalConscript(armyId: number = 0, cnts:number[] = [], otherData: any): void {
+    public generalConscript(armyId: number = 0, cnts: number[] = [], otherData: any): void {
         let sendData: any = {
             name: ServerConfig.general_conscript,
             msg: {

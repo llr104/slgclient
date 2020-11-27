@@ -281,8 +281,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -595.856,
-        316.082,
+        -587.5,
+        320.5,
         0,
         0,
         0,
@@ -550,9 +550,9 @@
     "alignMode": 1,
     "_target": null,
     "_alignFlags": 9,
-    "_left": 1.6440000000000055,
+    "_left": 10,
     "_right": 0,
-    "_top": 4.418000000000006,
+    "_top": 0,
     "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
@@ -8769,6 +8769,9 @@
     },
     "warReportPrefab": {
       "__uuid__": "b4c977bf-bdfd-43b1-8169-44168828eb4a"
+    },
+    "armySelectPrefab": {
+      "__uuid__": "8aa291a0-ef19-4a5f-a5b0-418019b76568"
     },
     "srollLayout": {
       "__id__": 114
