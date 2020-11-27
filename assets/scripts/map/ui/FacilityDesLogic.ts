@@ -66,6 +66,8 @@ export default class FacilityDesLogic extends cc.Component {
 
 
         cc.systemEvent.on("update_my_facilities", this.onCityUpFacilities, this);
+        cc.systemEvent.on("upate_my_roleRes", this.onCityUpFacilities, this);
+        
     }
 
     protected onDestroy():void{
