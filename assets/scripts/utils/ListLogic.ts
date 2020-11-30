@@ -369,7 +369,7 @@ export default class ListLogic extends cc.Component {
     /**
      * 创建item
      */
-    protected createItem():void {
+    protected createItem():any {
         var item = null;
         if (this._itemPool.size() > 0) { // 通过 size 接口判断对象池中是否有空闲的对象
             item = this._itemPool.get();

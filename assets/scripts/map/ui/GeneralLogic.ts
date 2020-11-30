@@ -15,11 +15,14 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class GeneralLogic extends cc.Component {
 
-    @property(cc.Layout)
-    srollLayout:cc.Layout = null;
+    // @property(cc.Layout)
+    // srollLayout:cc.Layout = null;
 
-    @property(cc.Prefab)
-    generalItemPrefab: cc.Prefab = null;
+    @property(cc.ScrollView)
+    scrollView:cc.ScrollView = null;
+
+    // @property(cc.Prefab)
+    // generalItemPrefab: cc.Prefab = null;
 
 
 
@@ -44,23 +47,18 @@ export default class GeneralLogic extends cc.Component {
 
 
     protected initGeneralCfg():void{
-        let list:GeneralData[] = GeneralCommand.getInstance().proxy.getMyGenerals();
-        // console.log("initGeneralCfg", list, this.srollLayout.node);
-        this.srollLayout.node.removeAllChildren(true);
-        for (let i:number = 0; i < list.length; i++) {
-            if(this._cunGeneral.indexOf(list[i].id) >= 0 ){
-                continue;
-            }
+        let list:any[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        let listTemp = list.concat();
 
 
-            let item:cc.Node = cc.instantiate(this.generalItemPrefab);
-            item.active = true;
-            item.parent = this.srollLayout.node;
-            let com = item.getComponent("GeneralItemLogic");
-            if(com){
-                com.setData(list[i],this._type,this._position);
-            }
-        }
+        listTemp.forEach(item => {
+            item.type = this._type;
+            item.position = this._position;
+        })
+
+
+        var comp = this.scrollView.node.getComponent("ListLogic");
+        comp.setData(listTemp);
     }
 
 

@@ -48,20 +48,7 @@ export default class WarReportLogic extends cc.Component {
 
     protected initView():void{
         var report:WarReport[] = MapUICommand.getInstance().proxy.getWarReport();
-        // this.srollLayout.node.removeAllChildren(true);
-        // for(var i = 0;i < report.length ;i++){
-        //     let item:cc.Node = cc.instantiate(this.warPortPrefab);
-        //     item.active = true;
-        //     item.parent = this.srollLayout.node;
-
-
-        //     let com = item.getComponent("WarReportItemLogic");
-        //     if(com){
-        //         com.setData(report[i]);
-        //     }
-        // }
-
-
+        
         var comp = this.scrollView.node.getComponent("ListLogic");
         comp.setData(report);
     }

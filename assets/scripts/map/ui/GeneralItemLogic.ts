@@ -37,25 +37,29 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected setData(curData:GeneralData,type:number = 0,position:number = 0):void{
-        this._curData = curData;
         this._type = type;
         this._position = position;
-
-
-        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
-        this.msgLabel.string = cfgData.name +" Lv." +  curData.level +" (" + curData.physical_power+"/"+cfgData.physical_power_limit+")";
-        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
-        this.delNode.active = false;
-
-        
+        this.updateItem(curData);
     }
 
+
+
+    protected updateItem(curData:any):void{
+        this._curData = curData;
+        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
+        this.msgLabel.string = cfgData.name +" Lv." +  curData.level +" (" + curData.physical_power+"/"+cfgData.physical_power_limit+")";
+        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
+        this.delNode.active = false;
+
+
+        this._type = curData.type;
+        this._position = curData.position;
+    }
 
 
     protected setOtherData(cityData:any,orderId:number = 1):void{
         this._cityData = cityData;
         this._orderId = orderId
-
         this.delNode.active = true;
     }
 
