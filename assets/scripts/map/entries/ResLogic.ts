@@ -23,16 +23,16 @@ export default class ResLogic extends cc.Component {
         this._data = data;
         if (data.type == MapResType.WOOD) {
             //木头
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("build_wood");
+            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_2_" + data.level);
         } else if (data.type == MapResType.IRON) {
             //铁
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("build_iron");
+            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_4_" + data.level);
         } else if (data.type == MapResType.STONE) {
             //石头
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("build_stone");
+            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_3_" + data.level);
         } else if (data.type == MapResType.GRAIN) {
             //田
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("build_food");
+            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_1_" + data.level);
         }
     }
 }

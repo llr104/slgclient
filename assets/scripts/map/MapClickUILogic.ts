@@ -50,8 +50,8 @@ export default class MapClickUILogic extends cc.Component {
     protected onEnable(): void {
         cc.systemEvent.on("update_build", this.onUpdateBuild, this);
 
-        this.bgSelect.opacity = 100;
-        let tween: cc.Tween = cc.tween(this.bgSelect).to(0.8, { opacity: 0 }).to(0.8, { opacity: 100 });
+        this.bgSelect.opacity = 255;
+        let tween: cc.Tween = cc.tween(this.bgSelect).to(0.8, { opacity: 0 }).to(0.8, { opacity: 255 });
         tween = tween.repeatForever(tween);
         tween.start();
     }
