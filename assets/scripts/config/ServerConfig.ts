@@ -32,7 +32,7 @@ const ServerConfig = {
     war_read:"war.read",
 
 
-    war_reportPush:"war.reportPush",
+    war_reportPush:"warReport.push",
     general_push: "general.push",
     army_push: "army.push",
     roleBuild_push:"roleBuild.push",

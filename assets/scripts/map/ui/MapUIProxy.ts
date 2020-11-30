@@ -199,37 +199,49 @@ export default class MapUIProxy {
     
 
 
-    public updateWarReport(data:any):void{
+    public updateWarReports(data:any):void{
         var list = data.list;
         for(var i = 0;i < list.length ;i++){
-            var obj = new WarReport();
-            obj.id = list[i].id;
-            obj.attack_rid = list[i].attack_rid;
-            obj.defense_rid = list[i].defense_rid;
-
-            obj.beg_attack_army = JSON.parse(list[i].beg_attack_army);
-            obj.beg_defense_army = JSON.parse(list[i].beg_defense_army);
-            obj.end_attack_army = JSON.parse(list[i].end_attack_army);
-            obj.end_defense_army = JSON.parse(list[i].end_defense_army);
-            obj.beg_attack_general = JSON.parse(list[i].beg_attack_general);
-            obj.beg_defense_general = JSON.parse(list[i].beg_defense_general);
-
-            obj.end_attack_general = JSON.parse(list[i].end_attack_general);
-            obj.end_defense_general = JSON.parse(list[i].end_defense_general);
-
-            obj.attack_is_win = list[i].attack_is_win;
-            obj.defense_is_read = list[i].defense_is_read;
-            obj.attack_is_read = list[i].attack_is_read;
-            
-            obj.is_read = this.isReadObj(obj);
-            obj.destroy_durable = list[i].destroy_durable;
-            obj.occupy = list[i].occupy;
-            obj.x = list[i].x;
-            obj.y = list[i].y;
-            obj.ctime = list[i].ctime;
-
+            var obj:WarReport = this.createWarReprot(list[i]);
             this._warReport.set(obj.id,obj);
         }
+    }
+
+
+    public updateWarReport(data:any):void{
+        var obj:WarReport = this.createWarReprot(data);
+        this._warReport.set(obj.id,obj);
+    }
+
+
+    protected createWarReprot(data:any):WarReport{
+        var obj = new WarReport();
+        obj.id = data.id;
+        obj.attack_rid = data.attack_rid;
+        obj.defense_rid = data.defense_rid;
+
+        obj.beg_attack_army = JSON.parse(data.beg_attack_army);
+        obj.beg_defense_army = JSON.parse(data.beg_defense_army);
+        obj.end_attack_army = JSON.parse(data.end_attack_army);
+        obj.end_defense_army = JSON.parse(data.end_defense_army);
+        obj.beg_attack_general = JSON.parse(data.beg_attack_general);
+        obj.beg_defense_general = JSON.parse(data.beg_defense_general);
+
+        obj.end_attack_general = JSON.parse(data.end_attack_general);
+        obj.end_defense_general = JSON.parse(data.end_defense_general);
+
+        obj.attack_is_win = data.attack_is_win;
+        obj.defense_is_read = data.defense_is_read;
+        obj.attack_is_read = data.attack_is_read;
+        
+        obj.is_read = this.isReadObj(obj);
+        obj.destroy_durable = data.destroy_durable;
+        obj.occupy = data.occupy;
+        obj.x = data.x;
+        obj.y = data.y;
+        obj.ctime = data.ctime;
+
+        return obj;
     }
 
 

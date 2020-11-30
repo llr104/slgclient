@@ -31,7 +31,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
-        cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReport, this);
+        cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
         cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
@@ -85,6 +85,16 @@ export default class MapUICommand {
     }
 
 
+    protected onUpdataWarReports(data:any):void{
+        console.log("onUpdataWarReport :",data);
+        if(data.code == 0){
+            this._proxy.updateWarReports(data.msg);
+            cc.systemEvent.emit("upate_war_report");
+        }
+    }
+
+
+
     protected onUpdataWarReport(data:any):void{
         console.log("onUpdataWarReport :",data);
         if(data.code == 0){
@@ -92,8 +102,6 @@ export default class MapUICommand {
             cc.systemEvent.emit("upate_war_report");
         }
     }
-
-
 
     protected onUpdataWarRead(data:any):void{
         console.log("onUpdataWarRead :",data);

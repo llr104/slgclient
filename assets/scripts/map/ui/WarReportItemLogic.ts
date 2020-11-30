@@ -43,9 +43,6 @@ export default class WarReportItemLogic extends cc.Component {
 
 
     protected updateItem(data:any):void{
-        if(this._curData == data){
-            return;
-        }
         this._curData = data;
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
