@@ -65,8 +65,12 @@ export default class LoginCommand {
             // this._proxy.loginData = data.msg;
             this._proxy.saveLoginData(data.msg);
             LocalCache.setLoginValidation(otherData);
+
+
+            this.role_enterServer(this.proxy.serverId);
+            cc.systemEvent.emit("loginComplete", data.code);
         }
-        cc.systemEvent.emit("loginComplete", data.code);
+        
     }
 
     /**进入服务器回调*/
@@ -82,6 +86,7 @@ export default class LoginCommand {
                 DateUtil.setServerTime(data.msg.time);
                 //进入游戏
                 MapCommand.getInstance().enterMap();
+                cc.systemEvent.emit("enterServerComplete");
             }
         }
     }

@@ -37,23 +37,34 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected setData(curData:GeneralData,type:number = 0,position:number = 0):void{
+        this._curData = curData;
+        this.updateView(this._curData);
+
         this._type = type;
         this._position = position;
-        this.updateItem(curData);
     }
 
 
 
     protected updateItem(curData:any):void{
         this._curData = curData;
+        this.updateView(this._curData);
+        if(curData.type){
+            this._type = curData.type;
+        }
+        
+        if(curData.position){
+            this._position = curData.position;
+        }
+        
+    }
+
+
+    protected updateView(curData:any):void{
         var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
         this.msgLabel.string = cfgData.name +" Lv." +  curData.level +" (" + curData.physical_power+"/"+cfgData.physical_power_limit+")";
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
         this.delNode.active = false;
-
-
-        this._type = curData.type;
-        this._position = curData.position;
     }
 
 
@@ -66,6 +77,7 @@ export default class GeneralItemLogic extends cc.Component {
 
     protected onClickGeneral(event:any): void {
         if(this._curData){
+            console.log("onClickGeneral ._type:",this._type)
             var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
 
             //武将详情
