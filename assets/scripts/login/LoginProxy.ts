@@ -33,24 +33,32 @@ export default class LoginProxy {
 
     public saveEnterData(data:any):void{
         if(data.role){
-            if(!this._roleData){
-                this._roleData = new Role();
-            }
-            this._roleData.rid = data.role.rid;
-            this._roleData.uid = data.role.uid;
-            this._roleData.nickName = data.role.nickName;
-            this._roleData.sex = data.role.sex;
-            this._roleData.sid = data.role.sid;
-            this._roleData.balance = data.role.balance;
-            this._roleData.headId = data.role.headId;
-            this._roleData.profile = data.role.profile;
-
+            this.setRoleData(data.role);
         }
         
         if(data.role_res){
-            this._roleResData = data.role_res;
+            this.setRoleResData(data.role_res);
         }
         
+    }
+
+    public setRoleResData(data:any):void{
+        this._roleResData = data;
+    }
+
+
+    public setRoleData(data:any):void{
+        if(!this._roleData){
+            this._roleData = new Role();
+        }
+        this._roleData.rid = data.rid;
+        this._roleData.uid = data.uid;
+        this._roleData.nickName = data.nickName;
+        this._roleData.sex = data.sex;
+        this._roleData.sid = data.sid;
+        this._roleData.balance = data.balance;
+        this._roleData.headId = data.headId;
+        this._roleData.profile = data.profile;
     }
 
 

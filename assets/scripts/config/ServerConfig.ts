@@ -24,6 +24,7 @@ const ServerConfig = {
     general_armyList: "general.armyList",
     general_conscript: "general.conscript",
     general_assignArmy: "general.assignArmy",
+    general_drawGeneral: "general.drawGeneral",
 
     
 

@@ -133,7 +133,6 @@ export default class GeneralProxy {
     }
 
     public updateMyGenerals(datas: any[]): void {
-        this._myGenerals.clear();
         for (var i = 0; i < datas.length; i++) {
             let data: GeneralData = GeneralData.createFromServer(datas[i]);
             this._myGenerals.set(data.id, data);

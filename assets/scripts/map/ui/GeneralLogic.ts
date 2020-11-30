@@ -80,7 +80,13 @@ export default class GeneralLogic extends cc.Component {
 
 
 
+    protected drawGeneralOnce():void{
+        GeneralCommand.getInstance().drawGenerals();
+    }
 
+    protected drawGeneralTen():void{
+        GeneralCommand.getInstance().drawGenerals(10);
+    }
 
     protected onEnable():void{
 

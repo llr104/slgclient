@@ -34,6 +34,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
+        cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
     }
 
     protected onCityFacilities(data:any):void{
@@ -75,6 +76,13 @@ export default class MapUICommand {
         }
     }
 
+
+    protected updataRoleRes(data:any):void{
+        if(data.code == 0){
+            LoginCommand.getInstance().proxy.setRoleResData(data.msg);
+            cc.systemEvent.emit("upate_my_roleRes");
+        }
+    }
 
 
     protected onUpdataWarReport(data:any):void{

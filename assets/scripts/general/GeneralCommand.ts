@@ -27,6 +27,7 @@ export default class GeneralCommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onMyGenerals, this);
         cc.systemEvent.on(ServerConfig.general_push, this.onGeneralPush, this);
+        cc.systemEvent.on(ServerConfig.general_drawGeneral, this.onMyGenerals, this);
 
     }
 
@@ -69,6 +70,18 @@ export default class GeneralCommand {
         let sendData: any = {
             name: ServerConfig.general_myGenerals,
             msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+
+    public drawGenerals(drawTimes:number = 1): void {
+        let sendData: any = {
+            name: ServerConfig.general_drawGeneral,
+            msg: {
+                drawTimes:drawTimes
             }
         };
         NetManager.getInstance().send(sendData);

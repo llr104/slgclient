@@ -61,6 +61,13 @@ export default class MapUILogic extends cc.Component {
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
+
+    @property(cc.Label)
+    nameLabel: cc.Label = null;
+
+    @property(cc.Label)
+    ridLabel: cc.Label = null;
+
     protected _nameObj:any = {};
 
     protected onLoad():void{
@@ -84,12 +91,13 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
         cc.systemEvent.on("open_facility", this.openFacility, this);
         cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
-        cc.systemEvent.on("upate_my_roleRes", this.updateRole, this);
+        cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
         cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
+        this.updateRoleRes();
         this.updateRole();
         
     }
@@ -272,7 +280,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 角色信息
      */
-    protected updateRole():void{
+    protected updateRoleRes():void{
         var children = this.srollLayout.node.children;
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         var i = 0;
@@ -281,7 +289,13 @@ export default class MapUILogic extends cc.Component {
             i++;
 
         }
+    }
 
+
+    protected updateRole():void{
+        var roleData = LoginCommand.getInstance().proxy.getRoleData();
+        this.nameLabel.string = "昵称: "+roleData.nickName;
+        this.ridLabel.string = "角色ID: " + roleData.rid + "";
     }
 
 }
