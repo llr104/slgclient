@@ -106,6 +106,8 @@ export default class MapCommand {
         if (data.code == 0) {
             this._cityProxy.setMapScanBlock(data.msg, otherData.id);
             this._buildProxy.setMapScanBlock(data.msg, otherData.id);
+            let armyDatas: ArmyData[] =  ArmyCommand.getInstance().proxy.updateArmysNoCity(data.msg.armys);
+            cc.systemEvent.emit("update_army_list", armyDatas);
         }
     }
 

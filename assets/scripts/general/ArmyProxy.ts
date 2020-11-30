@@ -105,6 +105,18 @@ export default class ArmyProxy {
         return list[data.order - 1];
     }
 
+
+    public updateArmysNoCity(datas: any): ArmyData[] {
+        let list: ArmyData[] = [];
+        for(var i = 0; i < datas.length ;i++){
+            let armyData: ArmyData = ArmyData.createFromServer(datas[i]);
+            this.updateArmy(armyData.cityId,armyData);
+            list.push(armyData)
+        }
+
+        return list;
+    }
+
     /**根据id获取军队*/
     public getArmyById(id: number, cityId: number): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);

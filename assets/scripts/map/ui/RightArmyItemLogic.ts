@@ -100,7 +100,7 @@ export default class RightArmyItemLogic extends cc.Component {
 
     protected updateItem(): void {
         if (this._data && this._data.generals[0] != 0) {
-            console.log("updateItem", this._data);
+            // console.log("updateItem", this._data);
             this.node.active = true;
             this._firstGeneral = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
             this.updateGeneralByData();
