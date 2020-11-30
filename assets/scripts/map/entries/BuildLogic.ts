@@ -24,9 +24,9 @@ export default class BuildLogic extends cc.Component {
         this._data = data;
         if (this._data) {
             if (this._data.ascription == MapBuildAscription.Me) {
-                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("world_img_tile_1");
+                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("expansion_of_tips_1_1");
             } else {
-                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("world_img_tile_2");
+                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("expansion_of_tips_3_1");
             }
         }
     }

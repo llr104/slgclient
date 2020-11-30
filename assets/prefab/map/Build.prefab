@@ -40,8 +40,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 256,
-      "height": 128
+      "width": 200,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -94,7 +94,7 @@
     "_prefab": {
       "__id__": 4
     },
-    "_opacity": 100,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -104,8 +104,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 256,
-      "height": 128
+      "width": 200,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -157,7 +157,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "130b456e-5b4d-445b-9a99-6f8cd7dc321f"
+      "__uuid__": "faee1aee-de5b-47c8-8002-6b6717bf8a0d"
     },
     "_type": 0,
     "_sizeMode": 2,
@@ -171,7 +171,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": {
-      "__uuid__": "5e6ba678-106d-44da-8756-36b022994cd5"
+      "__uuid__": "793bfdc8-6031-4d96-9e88-1105056c3b42"
     },
     "_id": ""
   },
@@ -198,7 +198,7 @@
       "__id__": 3
     },
     "buildAtlas": {
-      "__uuid__": "5e6ba678-106d-44da-8756-36b022994cd5"
+      "__uuid__": "793bfdc8-6031-4d96-9e88-1105056c3b42"
     },
     "_id": ""
   },
