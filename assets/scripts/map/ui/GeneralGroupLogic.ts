@@ -74,10 +74,30 @@ export default class GeneralGroupLogic extends cc.Component {
 
     private getAllGenerals():number[]{
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
+        let general:GeneralData = null;
         var arr = [];
         for(var i = 0; i < cityArmyData.length ;i++){
             if(cityArmyData[i]){
                 arr = arr.concat(cityArmyData[i].generals);
+
+                general = GeneralCommand.getInstance().proxy.getMyGeneral(cityArmyData[i].generals[0]);
+                if(general){
+                    arr = arr.concat(GeneralCommand.getInstance().proxy.getGeneralIds(general.cfgId));
+                }
+
+
+                general = GeneralCommand.getInstance().proxy.getMyGeneral(cityArmyData[i].generals[1]);
+                if(general){
+                    arr = arr.concat(GeneralCommand.getInstance().proxy.getGeneralIds(general.cfgId));
+                }
+
+
+                general = GeneralCommand.getInstance().proxy.getMyGeneral(cityArmyData[i].generals[2]);
+                if(general){
+                    arr = arr.concat(GeneralCommand.getInstance().proxy.getGeneralIds(general.cfgId));
+                }
+
+
             }
             
         }

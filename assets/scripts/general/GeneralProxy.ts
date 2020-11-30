@@ -200,4 +200,16 @@ export default class GeneralProxy {
         }
         return null;
     }
+
+
+    public getGeneralIds(cfgId: number):number[]{
+        let myGenerals:GeneralData[] = this.getMyGenerals();
+        let tempGenerals:number[] = [];
+        for(var i = 0;i < myGenerals.length; i++){
+            if(myGenerals[i].cfgId == cfgId){
+                tempGenerals.push(myGenerals[i].id)
+            }
+        }
+        return tempGenerals;
+    }
 }

@@ -57,6 +57,13 @@ export default class GeneralLogic extends cc.Component {
         })
 
 
+        for(var i = 0; i < listTemp.length ;i++){
+            if(this._cunGeneral.indexOf(listTemp[i].id) >= 0 ){
+                listTemp.splice(i,1);
+                i--;
+            }
+        }
+
         var comp = this.scrollView.node.getComponent("ListLogic");
         comp.setData(listTemp);
     }
