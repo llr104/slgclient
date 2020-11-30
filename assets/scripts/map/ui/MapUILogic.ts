@@ -8,6 +8,7 @@
 
 import { ArmyData } from "../../general/ArmyProxy";
 import LoginCommand from "../../login/LoginCommand";
+import MapCommand from "../MapCommand";
 import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 const { ccclass, property } = cc._decorator;
 
@@ -105,6 +106,7 @@ export default class MapUILogic extends cc.Component {
 
     protected onDestroy():void{
         this.clearAllNode();
+        MapCommand.getInstance().proxy.clearData();
         cc.systemEvent.targetOff(this);
     }
 

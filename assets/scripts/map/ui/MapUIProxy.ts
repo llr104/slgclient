@@ -68,6 +68,11 @@ export default class MapUIProxy {
 
 
 
+    public clearData():void{
+        this._warReport.clear();
+        this._myFacility.clear();
+    }
+
     /**
      * 当前城市的设施
      * @param data 

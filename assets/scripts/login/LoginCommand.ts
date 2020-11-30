@@ -53,7 +53,7 @@ export default class LoginCommand {
     private onRegister(data: any, otherData: any): void {
         console.log("LoginProxy register:", data, otherData);
         if (data.code == 0) {
-            this.accountLogin(otherData.username, otherData.username);
+            this.accountLogin(otherData.username, otherData.password);
             LocalCache.setLoginValidation(otherData);
         }
     }
