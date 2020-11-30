@@ -22,7 +22,7 @@ export default class RightCityItemLogic extends cc.Component {
 
     protected onClickBg(): void {
         if (this._data) {
-            cc.systemEvent.emit("scroll_top_map", this._data.x, this._data.y);
+            cc.systemEvent.emit("scroll_to_map", this._data.x, this._data.y);
         }
     }
 

@@ -15,7 +15,7 @@ export default class SmallMapLogic extends cc.Component {
 
     protected onLoad(): void {
         cc.systemEvent.on("map_center_change", this.onMapCenterChange, this);
-        cc.systemEvent.on("scroll_top_map", this.onScrollToMap, this);
+        cc.systemEvent.on("scroll_to_map", this.onScrollToMap, this);
         this.updateView();
     }
 
@@ -46,7 +46,7 @@ export default class SmallMapLogic extends cc.Component {
             && y >= 0 
             && x < MapUtil.mapSize.width 
             && y < MapUtil.mapSize.height) {
-                cc.systemEvent.emit("scroll_top_map", x, y);
+                cc.systemEvent.emit("scroll_to_map", x, y);
         } else {
             console.log("跳转无效位置", x, y);
         }
