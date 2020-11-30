@@ -16,9 +16,13 @@ export default class LoginScene extends cc.Component {
     protected _createNode: cc.Node = null;
     protected _serverListNode: cc.Node = null;
 
+    protected _enterNode: cc.Node = null;
+
     protected onLoad(): void {
         this.openLogin();
         cc.systemEvent.on("CreateRole", this.onCreate, this);
+        // cc.systemEvent.on("enterServerComplete", this.enterServer, this);
+        
     }
 
     protected onDestroy(): void {
@@ -28,7 +32,6 @@ export default class LoginScene extends cc.Component {
     }
 
     protected openLogin(): void {
-        console.log("openLogin");
         if (this._loginNode == null) {
             this._loginNode = cc.instantiate(this.loginPrefab);
             this._loginNode.parent = this.node;
@@ -44,6 +47,11 @@ export default class LoginScene extends cc.Component {
         } else {
             this._createNode.active = true;
         }
+    }
+
+
+    protected enterServer():void{
+        // enterServerComplete
     }
 
     protected onClickEnter(): void {
