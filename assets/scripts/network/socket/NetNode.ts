@@ -207,7 +207,10 @@ export class NetNode {
                     if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                         this._requests.splice(i, 1);
                         i--;
-                        msg.endTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
+                        // msg.endTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
+
+
+                        console.log("返回:",msg.name,"耗时:",new Date().getTime() - req.startTime)
                         cc.systemEvent.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
                         cc.systemEvent.emit(NetEvent.ServerRequestSucess,msg);
@@ -327,7 +330,7 @@ export class NetNode {
      */
     public socketSend(obj:RequestObject){
         obj.seq = obj.json.seq = this._seqId;
-        obj.json.startTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
+        obj.startTime = new Date().getTime()
         this._socket.packAndSend(obj.json);
         this._seqId+=1;
         obj.sended = true;

@@ -19,6 +19,7 @@ export class RequestObject {
     public seq:number = 0;             // 消息的序号
     public sended:boolean = false;        // 是否发送
     public otherData:any = {};
+    public startTime:number = 0
 
     public destroy():void{
         this.json = null;
@@ -27,6 +28,7 @@ export class RequestObject {
         this.seq = 0;
         this.sended = false;
         this.otherData = {};
+        this.startTime = 0;
     }
 }
 
