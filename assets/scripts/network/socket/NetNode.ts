@@ -1,3 +1,4 @@
+import DateUtil from "../../utils/DateUtil";
 import { RequestObject, NetEvent } from "./NetInterface";
 import { NetTimer } from "./NetTimer";
 import { WebSock } from "./WebSock";
@@ -206,6 +207,7 @@ export class NetNode {
                     if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                         this._requests.splice(i, 1);
                         i--;
+                        msg.endTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
                         cc.systemEvent.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
                         cc.systemEvent.emit(NetEvent.ServerRequestSucess,msg);
@@ -325,6 +327,7 @@ export class NetNode {
      */
     public socketSend(obj:RequestObject){
         obj.seq = obj.json.seq = this._seqId;
+        obj.json.startTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
         this._socket.packAndSend(obj.json);
         this._seqId+=1;
         obj.sended = true;
