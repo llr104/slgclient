@@ -1,3 +1,4 @@
+import { NetEvent } from "../socket/NetInterface";
 
 export enum HttpInvokeType {
     GET,
@@ -29,6 +30,7 @@ export class HttpInvoke {
             }
         }
         cc.systemEvent.emit(this._name, json,this._otherData);
+        cc.systemEvent.emit(NetEvent.ServerRequestSucess,json);
         
     }
 

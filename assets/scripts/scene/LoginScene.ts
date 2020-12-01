@@ -1,5 +1,6 @@
 import LoginCommand from "../login/LoginCommand";
 import MapCommand from "../map/MapCommand";
+import { NetEvent } from "../network/socket/NetInterface";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,7 +22,7 @@ export default class LoginScene extends cc.Component {
     protected onLoad(): void {
         this.openLogin();
         cc.systemEvent.on("CreateRole", this.onCreate, this);
-        // cc.systemEvent.on("enterServerComplete", this.enterServer, this);
+        cc.systemEvent.on("enterServerComplete", this.enterServer, this);
         
     }
 
@@ -51,7 +52,7 @@ export default class LoginScene extends cc.Component {
 
 
     protected enterServer():void{
-        // enterServerComplete
+        cc.systemEvent.emit(NetEvent.ServerRequesting, true);
     }
 
     protected onClickEnter(): void {
