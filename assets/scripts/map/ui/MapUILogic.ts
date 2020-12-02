@@ -120,7 +120,7 @@ export default class MapUILogic extends cc.Component {
         }
         this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
-
+    
     /**
      * 武将
      */
@@ -168,7 +168,7 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._generalDesNode.active = true;
         }
-
+        this._generalDesNode.zIndex = 1;
         this._generalDesNode.getComponent("GeneralDesLogic").setData(cfgData,curData);
     }
 

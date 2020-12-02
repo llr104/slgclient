@@ -71,6 +71,7 @@ export default class GeneralLogic extends cc.Component {
 
 
     public setData(data:number[],type:number = 0,position:number = 0):void{
+        this._cunGeneral = [];
         if(data && data.length > 0){
             this._cunGeneral = data;
         }

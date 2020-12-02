@@ -45,6 +45,7 @@ export class GeneralData {
     exp: number = 0;
     level: number = 0;
     physical_power: number = 0;
+    order:number = 0;
 
     public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
         let data: GeneralData = generalData;
@@ -56,6 +57,7 @@ export class GeneralData {
         data.cost = serverData.cost;
         data.exp = serverData.exp;
         data.level = serverData.level;
+        data.order = serverData.order;
         data.physical_power = serverData.physical_power;
         return data;
     }

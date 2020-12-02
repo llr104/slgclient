@@ -44,6 +44,10 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Node)
     delNode:cc.Node = null;
 
+
+    @property(cc.Node)
+    useNode:cc.Node = null;
+
     private _curData:GeneralData = null;
     private _type:number = -1;
     private _position:number = 0;
@@ -79,6 +83,15 @@ export default class GeneralItemLogic extends cc.Component {
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
         this.showStar(cfgData.star);
         this.delNode.active = false;
+
+        if(this.useNode){
+            if(this._type == GeneralItemType.GeneralInfo && this._curData.order > 0){
+                this.useNode.active = true;
+            }else{
+                this.useNode.active = false; 
+            }
+            
+        }
     }
 
 
