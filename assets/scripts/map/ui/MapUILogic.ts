@@ -10,6 +10,8 @@ import { ArmyData } from "../../general/ArmyProxy";
 import LoginCommand from "../../login/LoginCommand";
 import MapCommand from "../MapCommand";
 import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
+import FacilityListLogic from "./FacilityListLogic";
+import FacilityLogic from "./FacilityLogic";
 import MapUICommand from "./MapUICommand";
 const { ccclass, property } = cc._decorator;
 
@@ -136,8 +138,7 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._facilityNode.active = true;
         }
-
-        this._facilityNode.getComponent("FacilityLogic").setData(data);
+        this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
 
 
