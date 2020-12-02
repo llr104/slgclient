@@ -1,17 +1,7 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-
-import { ArmyData } from "../../general/ArmyProxy";
 import LoginCommand from "../../login/LoginCommand";
-import MapCommand from "../MapCommand";
 import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 import FacilityListLogic from "./FacilityListLogic";
-import FacilityLogic from "./FacilityLogic";
 import MapUICommand from "./MapUICommand";
 const { ccclass, property } = cc._decorator;
 
@@ -22,17 +12,9 @@ export default class MapUILogic extends cc.Component {
     facilityPrefab: cc.Prefab = null;
     protected _facilityNode: cc.Node = null;
 
-
-    @property(cc.Prefab)
-    facilityDesPrefab: cc.Prefab = null;
-    protected _facilityDesNode: cc.Node = null;
-
-
     @property(cc.Prefab)
     generalPrefab: cc.Prefab = null;
     protected _generalNode: cc.Node = null;
-
-
 
     @property(cc.Prefab)
     generalDesPrefab: cc.Prefab = null;
@@ -94,7 +76,6 @@ export default class MapUILogic extends cc.Component {
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
         cc.systemEvent.on("open_facility", this.openFacility, this);
-        cc.systemEvent.on("open_facility_des", this.openFacilityDes, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
@@ -120,7 +101,6 @@ export default class MapUILogic extends cc.Component {
 
     protected clearAllNode():void{
         this._facilityNode = null;
-        this._facilityDesNode = null;
         this._generalNode = null;
         this._cityAboutNode = null;
         this._conscriptNode = null;
@@ -140,26 +120,6 @@ export default class MapUILogic extends cc.Component {
         }
         this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
-
-
-
-    /**
-     * 设施详情
-     * @param data 
-     */
-    protected openFacilityDes(data:any):void{
-        if (this._facilityDesNode == null) {
-            this._facilityDesNode = cc.instantiate(this.facilityDesPrefab);
-            this._facilityDesNode.parent = this.node;
-        } else {
-            this._facilityDesNode.active = true;
-        }
-
-        this._facilityDesNode.getComponent("FacilityDesLogic").setData(data);
-    }
-
-
-
 
     /**
      * 武将

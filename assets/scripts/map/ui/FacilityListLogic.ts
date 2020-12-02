@@ -1,7 +1,7 @@
 import FacilityDesLogic from "./FacilityDesLogic";
 import FacilityItemLogic from "./FacilityItemLogic";
 import MapUICommand from "./MapUICommand";
-import { Facility, FacilityConfig, FacilityUpLevel } from "./MapUIProxy";
+import { Facility, FacilityConfig } from "./MapUIProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,7 +20,6 @@ export default class FacilityListLogic extends cc.Component {
         cc.systemEvent.on("update_my_facility", this.updateFacility, this);
         cc.systemEvent.on("select_facility_item", this.onSelectItem, this);
         cc.systemEvent.on("upate_my_roleRes", this.onUpdateMyRoleRes, this);
-        
     }
 
     protected onDestroy(): void {
@@ -35,11 +34,9 @@ export default class FacilityListLogic extends cc.Component {
             let subChildren: cc.Node[] = children[i].children;
             for (let j: number = 0; j < subChildren.length; j++) {
                 let item: cc.Node = subChildren[j];
-                console.log("item", i, j, item);
                 if (item.name.indexOf("CityFacilityItem") == 0) {
                     let type: number = parseInt(item.name.substring(16));
                     let comp: FacilityItemLogic = item.addComponent(FacilityItemLogic);
-                    console.log("comp", comp);
                     comp.labelRate = item.getChildByName("labelRate").getComponent(cc.Label);
                     comp.labelName = item.getChildByName("labelName").getComponent(cc.Label);
                     comp.lockNode = item.getChildByName("lockNode");
@@ -62,7 +59,6 @@ export default class FacilityListLogic extends cc.Component {
                     logic.setData(this._curCityId, data, cfg, isUnlock);
                 }
             });
-            console.log("dataList", dataList);
             if (this._curSelectType == -1) {
                 this.setCurSelectType(0);//默认选中主城
             }
@@ -93,7 +89,7 @@ export default class FacilityListLogic extends cc.Component {
         }
     }
 
-    protected onUpdateMyRoleRes():void {
+    protected onUpdateMyRoleRes(): void {
         this.updateDesView();
     }
 
@@ -106,7 +102,6 @@ export default class FacilityListLogic extends cc.Component {
     protected updateDesView(): void {
         let data: Facility = MapUICommand.getInstance().proxy.getMyFacilityByType(this._curCityId, this._curSelectType);
         let cfg: FacilityConfig = MapUICommand.getInstance().proxy.getFacilityCfgByType(this._curSelectType);
-        console.log("dataList", data, cfg, this._curCityId, this._curSelectType);
         this.node.getComponent(FacilityDesLogic).setData(this._curCityId, data, cfg);
     }
 
