@@ -59,7 +59,8 @@ export class WarReport {
     end_attack_army: any = {};
     end_defense_army: any = {};
 
-    attack_is_win: boolean = false;
+    result:number = 0;
+    rounds:number = 0;
     attack_is_read: boolean = false;
     defense_is_read: boolean = false;
     destroy_durable: number = 0;
@@ -299,7 +300,8 @@ export default class MapUIProxy {
         obj.end_attack_general = JSON.parse(data.end_attack_general);
         obj.end_defense_general = JSON.parse(data.end_defense_general);
 
-        obj.attack_is_win = data.attack_is_win;
+        obj.result = data.result;
+        obj.rounds = data.rounds;
         obj.defense_is_read = data.defense_is_read;
         obj.attack_is_read = data.attack_is_read;
 

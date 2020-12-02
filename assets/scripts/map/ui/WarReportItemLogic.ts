@@ -54,8 +54,8 @@ export default class WarReportItemLogic extends cc.Component {
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
         
-        this.actMsgLabel.string = this.isMe(this._curData.attack_rid) + (this._curData.attack_is_win?"胜":"败");
-        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + (this._curData.attack_is_win?"败":"胜");
+        this.actMsgLabel.string = this.isMe(this._curData.attack_rid) + this.isAttackWin();
+        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + this.isAttackWin();
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
     }
@@ -67,6 +67,19 @@ export default class WarReportItemLogic extends cc.Component {
         }
 
         return "敌方"
+    }
+
+
+    protected isAttackWin():string{
+        if(this._curData.result == 0){
+            return "败"   
+        }
+
+        if(this._curData.result == 1){
+            return "平"   
+        }
+
+        return "胜"   
     }
 
 
