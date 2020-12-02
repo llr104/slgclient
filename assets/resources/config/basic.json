@@ -11,8 +11,10 @@
     "des": "武将的一些配置",
     "physical_power_limit": 100,
     "cost_physical_power": 10,
-    "recovery_physical_power": 10,
-    "reclamation_time": 30
+    "recovery_physical_power": 1,
+    "reclamation_time": 30,
+    "reclamation_cost": 1,
+    "draw_general_cost": 10
   }
 
 }

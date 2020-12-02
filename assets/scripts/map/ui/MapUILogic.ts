@@ -44,6 +44,16 @@ export default class MapUILogic extends cc.Component {
     armySelectPrefab: cc.Prefab = null;
     protected _armySelectNode: cc.Node = null;
 
+
+    @property(cc.Prefab)
+    drawPrefab: cc.Prefab = null;
+    protected _drawNode: cc.Node = null;
+
+
+    @property(cc.Prefab)
+    drawResultrefab: cc.Prefab = null;
+    protected _drawResultNode: cc.Node = null;
+
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
@@ -82,6 +92,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
+        cc.systemEvent.on("open_draw_result", this.openDrawR, this);
         this.updateRoleRes();
         this.updateRole();
         
@@ -120,7 +131,7 @@ export default class MapUILogic extends cc.Component {
         }
         this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
-    
+
     /**
      * 武将
      */
@@ -255,6 +266,30 @@ export default class MapUILogic extends cc.Component {
         }
     }
 
+
+
+    protected openDraw():void{
+        if (this._drawNode == null) {
+            this._drawNode = cc.instantiate(this.drawPrefab);
+            this._drawNode.parent = this.node;
+        } else {
+            this._drawNode.active = true;
+        }
+    }
+
+
+
+
+    protected openDrawR(data:any):void{
+        if (this._drawResultNode == null) {
+            this._drawResultNode = cc.instantiate(this.drawResultrefab);
+            this._drawResultNode.parent = this.node;
+        } else {
+            this._drawResultNode.active = true;
+        }
+        this._drawResultNode.zIndex = 2;
+        this._drawResultNode.getComponent("DrawRLogic").setData(data);
+    }
 
     protected updateRole():void{
         var roleData = LoginCommand.getInstance().proxy.getRoleData();

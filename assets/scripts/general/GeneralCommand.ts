@@ -27,7 +27,7 @@ export default class GeneralCommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onMyGenerals, this);
         cc.systemEvent.on(ServerConfig.general_push, this.onGeneralPush, this);
-        cc.systemEvent.on(ServerConfig.general_drawGeneral, this.onMyGenerals, this);
+        cc.systemEvent.on(ServerConfig.general_drawGeneral, this.onDrawGenerals, this);
 
     }
 
@@ -59,6 +59,16 @@ export default class GeneralCommand {
             cc.systemEvent.emit("update_generals", ids);
         }
     }
+
+    protected onDrawGenerals(data: any): void {
+        console.log("onDrawGenerals ", data);
+        if (data.code == 0) {
+            this._proxy.updateMyGenerals(data.msg.generals);
+            cc.systemEvent.emit("update_my_generals");
+            cc.systemEvent.emit("open_draw_result",data.msg.generals);
+        }
+    }
+    
 
     /**我的角色属性*/
     public updateMyProperty(datas: any[]): void {

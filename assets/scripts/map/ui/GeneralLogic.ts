@@ -47,7 +47,7 @@ export default class GeneralLogic extends cc.Component {
 
 
     protected initGeneralCfg():void{
-        let list:any[] = GeneralCommand.getInstance().proxy.getMyGenerals();
+        let list:any[] = GeneralCommand.getInstance().proxy.getUseGenerals();
         let listTemp = list.concat();
 
 
@@ -63,6 +63,7 @@ export default class GeneralLogic extends cc.Component {
                 i--;
             }
         }
+
 
         var comp = this.scrollView.node.getComponent("ListLogic");
         comp.setData(listTemp);

@@ -34,7 +34,8 @@ export class GeneralCommonConfig {
     physical_power_limit: number = 100;
     cost_physical_power: number = 10;
     recovery_physical_power: number = 10;
-    reclamation_time: number = 3600
+    reclamation_time: number = 3600;
+    draw_general_cost:number = 0;
 }
 
 /**武将数据*/
@@ -130,6 +131,7 @@ export default class GeneralProxy {
         this._commonConfig.cost_physical_power = bCost.general.cost_physical_power;
         this._commonConfig.recovery_physical_power = bCost.general.recovery_physical_power;
         this._commonConfig.reclamation_time = bCost.general.reclamation_time;
+        this._commonConfig.draw_general_cost = bCost.general.draw_general_cost;
     }
 
     public initGeneralTex(texs: cc.SpriteFrame[]): void {
@@ -212,5 +214,23 @@ export default class GeneralProxy {
             }
         }
         return tempGenerals;
+    }
+
+
+    public getUseGenerals():GeneralData[] {
+        var tempArr:GeneralData[] = this.getMyGenerals().concat();
+        var temp:GeneralData[]  = [];
+
+        for(var i = 0; i < tempArr.length ;i++){
+            if(tempArr[i].order > 0){
+                temp.push(tempArr[i]);
+                tempArr.splice(i,1);
+                i--;
+            }
+        }
+
+        temp = temp.concat(tempArr);
+
+        return temp;
     }
 }
