@@ -7,6 +7,8 @@
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
+import LoginCommand from "../../login/LoginCommand";
+import { Role } from "../../login/LoginProxy";
 import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
@@ -51,11 +53,20 @@ export default class WarReportItemLogic extends cc.Component {
         this.setTeams(this.ackNode,this._curData.beg_attack_general);
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
-        this.actMsgLabel.string = this._curData.attack_is_win?"胜":"败";
-        this.defMsgLabel.string = this._curData.attack_is_win?"败":"胜";
-        // console.log("WarReportItemLogic -- _curData:",this._curData);
+        
+        this.actMsgLabel.string = this.isMe(this._curData.attack_rid) + (this._curData.attack_is_win?"胜":"败");
+        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + (this._curData.attack_is_win?"败":"胜");
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
+    }
+
+    protected isMe(rid:number = 0):string{
+        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        if(roleData.rid == rid){
+            return "我方"
+        }
+
+        return "敌方"
     }
 
 

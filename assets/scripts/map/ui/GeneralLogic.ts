@@ -78,8 +78,6 @@ export default class GeneralLogic extends cc.Component {
         this._type = type;
         this._position = position;
 
-        console.log("GeneralLogic:",this._cunGeneral,data)
-
         this.initGeneralCfg();
         GeneralCommand.getInstance().qryMyGenerals();
     }
@@ -87,17 +85,14 @@ export default class GeneralLogic extends cc.Component {
 
 
 
-    protected drawGeneralOnce():void{
-        GeneralCommand.getInstance().drawGenerals();
-    }
+    // protected drawGeneralOnce():void{
+    //     GeneralCommand.getInstance().drawGenerals();
+    // }
 
-    protected drawGeneralTen():void{
-        GeneralCommand.getInstance().drawGenerals(10);
-    }
+    // protected drawGeneralTen():void{
+    //     GeneralCommand.getInstance().drawGenerals(10);
+    // }
 
-    protected onEnable():void{
-
-    }
 
 
 }
