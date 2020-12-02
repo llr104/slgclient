@@ -48,6 +48,8 @@ export default class ListLogic extends cc.Component {
     @property
     updateInterval = 0.1;
 
+    @property
+    scale = 1;
 
     @property([cc.Component.EventHandler])
     itemClickEvents:cc.Component.EventHandler[]  = [];
@@ -56,6 +58,9 @@ export default class ListLogic extends cc.Component {
     
     @property(cc.Boolean)
     isVirtual:boolean  = false;
+
+
+
 
 
     private _curOffset:number = 0;
@@ -82,12 +87,12 @@ export default class ListLogic extends cc.Component {
         this._maxRowColSize = 0;//当前一行或者一列可以显示的最大宽度或者高度
         this._itemWidth = this._itemHeight = 0;
         if (this.itemPrefab) {
-            this._itemWidth = this.itemPrefab.data.width;//item宽度
-            this._itemHeight = this.itemPrefab.data.height;//item高度
+            this._itemWidth = this.itemPrefab.data.width * this.scale;//item宽度
+            this._itemHeight = this.itemPrefab.data.height * this.scale;//item高度
         } else if (this.itemNode) {
             this.itemNode.active = false;
-            this._itemWidth = this.itemNode.width;//item宽度
-            this._itemHeight = this.itemNode.height;//item高度
+            this._itemWidth = this.itemNode.width * this.scale;//item宽度
+            this._itemHeight = this.itemNode.height * this.scale;//item高度
         }
 
         this._isUpdateList = false;//是否正在更新列表
@@ -375,9 +380,11 @@ export default class ListLogic extends cc.Component {
             item = this._itemPool.get();
         } else if (this.itemPrefab) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 cc.instantiate 重新创建
             item = cc.instantiate(this.itemPrefab);
+            item.scale = this.scale;
         } else if (this.itemNode) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 cc.instantiate 重新创建
             item = cc.instantiate(this.itemNode);
             item.acitve = true;
+            item.scale = this.scale;
         }
         item.on(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
         return item;

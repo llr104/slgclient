@@ -31,13 +31,17 @@ export default class GeneralDesLogic extends cc.Component {
     @property(cc.Label)
     powerLabel: cc.Label = null;
 
-    @property(cc.Sprite)
-    spritePic:cc.Sprite = null;
+    @property(cc.Prefab)
+    generalItemPrefab: cc.Prefab = null;
+
+    @property(cc.Node)
+    generalItemParent: cc.Node = null;
 
     private _currData:any = null;
     private _cfgData:any = null;
 
     private _nameObj:any = {};
+    private _generalNode:cc.Node = null;
 
     protected onLoad():void{
         this._nameObj = {
@@ -48,9 +52,8 @@ export default class GeneralDesLogic extends cc.Component {
             destroy:"破坏",
         };
 
-
-
-
+        this._generalNode = cc.instantiate(this.generalItemPrefab);
+        this._generalNode.parent = this.generalItemParent;
 
     }
 
@@ -65,7 +68,6 @@ export default class GeneralDesLogic extends cc.Component {
 
 
     public setData(cfgData:any,curData:any):void{
-        console.log("setData:",cfgData,curData);
         this._currData = curData;
         this._cfgData = cfgData;
         this.titleLabel.string = cfgData.name;
@@ -76,9 +78,6 @@ export default class GeneralDesLogic extends cc.Component {
         this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel + "   经验:"+curData.exp +"/" + levelExp;
         
 
-
-
-
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
@@ -88,21 +87,15 @@ export default class GeneralDesLogic extends cc.Component {
 
         }
 
-        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(cfgData.cfgId);
+        var com = this._generalNode.getComponent("GeneralItemLogic");
+        if(com){
+            com.updateItem(this._currData);
+        }
 
         this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "花费："+cfgData.cost;
     }
 
-
-
-    protected onClickUpGeneral(): void {
-        var otherData = this._currData;
-    }
-
-
-    protected onEnable():void{
-    }
 
 
 }

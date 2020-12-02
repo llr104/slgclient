@@ -16,6 +16,10 @@ export class GeneralConfig {
     destroy_grow: number = 0;
     physical_power_limit: number = 0;
     cost_physical_power: number = 0;
+
+    star:number = 0;
+    arms:number[] = [];
+
 }
 
 /**武将等级配置*/
@@ -102,6 +106,8 @@ export default class GeneralProxy {
                 cfg.physical_power_limit = bCost.general.physical_power_limit;
                 cfg.cost_physical_power = bCost.general.cost_physical_power;
 
+                cfg.star = cfgData[i].star;
+                cfg.arms = cfgData[i].arms;
 
                 this._generalConfigs.set(cfg.cfgId, cfg);
             }
@@ -141,14 +147,6 @@ export default class GeneralProxy {
 
     public updateGenerals(datas: any): number[] {
         let ids: number[] = [];
-        // for (var i = 0; i < datas.length; i++) {
-        //     if (datas[i].id > 0) {
-        //         let data: GeneralData = GeneralData.createFromServer(datas[i], this._myGenerals.get(datas[i].id));
-        //         this._myGenerals.set(data.id, data);
-        //         ids.push(data.id);
-        //     }
-        // }
-
         let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id));
         this._myGenerals.set(data.id, data);
         ids.push(data.id);
@@ -202,6 +200,7 @@ export default class GeneralProxy {
     }
 
 
+    /**相同类型的武将id */
     public getGeneralIds(cfgId: number):number[]{
         let myGenerals:GeneralData[] = this.getMyGenerals();
         let tempGenerals:number[] = [];

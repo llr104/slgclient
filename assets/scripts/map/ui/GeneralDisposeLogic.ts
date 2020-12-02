@@ -22,21 +22,10 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     @property(cc.Node)
     pageNode: cc.Node = null;
-
     
     @property(cc.Layout)
     pageLayout:cc.Layout = null;
 
-
-    @property(cc.Node)
-    outNode: cc.Node = null;
-
-    @property(cc.Node)
-    inNode: cc.Node = null;
-
-    
-    @property(cc.Label)
-    stateNode: cc.Label = null;
 
     private _cityData:any = null;
     private _outPos:any = null;
@@ -45,17 +34,22 @@ export default class GeneralDisposeLogic extends cc.Component {
     private _type:number = 0;//1 占领 2是驻军
 
     protected onLoad():void{
-        // cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
         cc.systemEvent.on("update_army_list", this.onGeneralArmyList, this);
         cc.systemEvent.on("update_army", this.onGeneralArmyList, this);
         this.pageNode.on("scroll-ended",this.onPageChange,this);
         cc.systemEvent.on("chosed_general", this.onChoseGeneral, this);
         cc.systemEvent.on("update_army_assign", this.onClickClose, this);
-
-        this.stateNode.node.active = this.outNode.active = this.inNode.active = false;
-        
+        this.initView();
     }
 
+
+    private initView():void{
+        for(var i = 0; i < this._maxOrder;i++){
+            var group = cc.instantiate(this.generalGroupPrefab);
+            group.parent = this.pageLayout.node;
+            group.y = 40;
+        }
+    }
 
     public setData(data:any,outPos:any = null,type:number = 0):void{
         this._cityData = data;
@@ -82,8 +76,6 @@ export default class GeneralDisposeLogic extends cc.Component {
 
     protected onGeneralArmyList():void{
         let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        // console.log("onGeneralArmyList", cityArmyData, this._orderIndex, this._cityData.cityId);
-        // this.pageLayout.node.removeAllChildren();
         if(cityArmyData != null){
             var children = this.pageLayout.node.children;
 
@@ -108,30 +100,7 @@ export default class GeneralDisposeLogic extends cc.Component {
 
 
     protected updateView():void{
-        let cityArmyData: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(this._cityData.cityId);
-        if(this._outPos && cityArmyData[this._orderIndex]){
-            var state = cityArmyData[this._orderIndex].state;
 
-
-            if(this._type == 1){
-                this.outNode.active = (state == 0?true:false);
-                this.stateNode.node.active = !this.outNode.active;
-    
-                if(state == 1){
-                    this.stateNode.string = '进攻中.....'
-                }else if(state == 3){
-                    this.stateNode.string = '返回中.....'
-                }
-    
-            }else if(this._type == 2){
-                this.inNode.active = true;
-            }
-
-
-        }else{
-            this.stateNode.node.active = this.inNode.active = this.outNode.active = false;
-            
-        }
     }
 
 

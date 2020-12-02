@@ -625,7 +625,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 800,
+      "width": 830,
       "height": 550
     },
     "_anchorPoint": {
@@ -880,6 +880,7 @@
     "spaceColumn": 1,
     "spaceRow": 1,
     "updateInterval": 0.1,
+    "scale": 1,
     "itemClickEvents": [],
     "isVirtual": true,
     "_id": ""
