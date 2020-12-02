@@ -55,7 +55,7 @@ export default class WarReportItemLogic extends cc.Component {
 
         
         this.actMsgLabel.string = this.isMe(this._curData.attack_rid) + this.isAttackWin();
-        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + this.isAttackWin();
+        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + this.isDefensWin();
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
     }
@@ -72,6 +72,19 @@ export default class WarReportItemLogic extends cc.Component {
 
     protected isAttackWin():string{
         if(this._curData.result == 0){
+            return "败"   
+        }
+
+        if(this._curData.result == 1){
+            return "平"   
+        }
+
+        return "胜"   
+    }
+
+
+    protected isDefensWin():string{
+        if(this._curData.result == 2){
             return "败"   
         }
 
