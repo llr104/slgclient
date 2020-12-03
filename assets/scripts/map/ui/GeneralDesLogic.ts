@@ -101,7 +101,7 @@ export default class GeneralDesLogic extends cc.Component {
         }
 
         this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
-        this.costLabel.string = "花费："+cfgData.cost;
+        this.costLabel.string = "cost："+cfgData.cost;
     }
 
 

@@ -46,6 +46,7 @@ export default class WarReportItemLogic extends cc.Component {
 
     protected updateItem(data:any):void{
         this._curData = data;
+        console.log("this._curData:",this._curData)
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         this.node.opacity = isRead?120:255;

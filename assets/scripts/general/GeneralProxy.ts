@@ -48,6 +48,16 @@ export class GeneralData {
     physical_power: number = 0;
     order:number = 0;
     star_lv:number = 0;
+    parentId:number = 0;
+    compose_type:number = 0;
+
+    hasPrPoint:number = 0;
+    usePrPoint:number = 0;
+    force_added:number = 0;
+    strategy_added:number = 0;
+    defense_added:number = 0;
+    speed_added:number = 0;
+    destroy_added:number = 0;
 
     public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
         let data: GeneralData = generalData;
@@ -62,6 +72,17 @@ export class GeneralData {
         data.order = serverData.order;
         data.physical_power = serverData.physical_power;
         data.star_lv = serverData.star_lv;
+        data.parentId = serverData.parentId;
+        data.compose_type = serverData.compose_type;
+
+        data.hasPrPoint = serverData.hasPrPoint;
+        data.usePrPoint = serverData.usePrPoint;
+        data.force_added = serverData.force_added;
+        data.strategy_added = serverData.strategy_added;
+        data.defense_added = serverData.defense_added;
+        data.speed_added = serverData.speed_added;
+        data.destroy_added = serverData.destroy_added;
+
         return data;
     }
 }
@@ -227,8 +248,14 @@ export default class GeneralProxy {
         var temp:GeneralData[]  = [];
 
         for(var i = 0; i < tempArr.length ;i++){
+
             if(tempArr[i].order > 0){
                 temp.push(tempArr[i]);
+                tempArr.splice(i,1);
+                i--;
+            }
+
+            if(tempArr[i].parentId > 0){
                 tempArr.splice(i,1);
                 i--;
             }
@@ -244,7 +271,7 @@ export default class GeneralProxy {
         var tempArr:GeneralData[] = this.getMyGenerals().concat();
 
         for(var i = 0; i < tempArr.length ;i++){
-            if(tempArr[i].order > 0 || tempArr[i].id == id || tempArr[i].cfgId != cfgId){
+            if(tempArr[i].order > 0 || tempArr[i].id == id || tempArr[i].cfgId != cfgId || tempArr[i].parentId > 0){
                 continue
             }
 

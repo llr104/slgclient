@@ -290,16 +290,16 @@ export default class MapUIProxy {
         obj.attack_rid = data.attack_rid;
         obj.defense_rid = data.defense_rid;
 
-        obj.beg_attack_army = JSON.parse(data.beg_attack_army);
-        obj.beg_defense_army = JSON.parse(data.beg_defense_army);
-        obj.end_attack_army = JSON.parse(data.end_attack_army);
-        obj.end_defense_army = JSON.parse(data.end_defense_army);
+        obj.beg_attack_army = this.arrayToObject(JSON.parse(data.beg_attack_army));
+        obj.beg_defense_army = this.arrayToObject(JSON.parse(data.beg_defense_army));
+        obj.end_attack_army = this.arrayToObject(JSON.parse(data.end_attack_army));
+        obj.end_defense_army = this.arrayToObject(JSON.parse(data.end_defense_army));
 
-        obj.beg_attack_general = data.beg_attack_general//JSON.parse(data.beg_attack_general);
-        obj.beg_defense_general = data.beg_defense_general//JSON.parse(data.beg_defense_general);
+        obj.beg_attack_general = this.arrayToObject(JSON.parse(data.beg_attack_general));
+        obj.beg_defense_general = this.arrayToObject(JSON.parse(data.beg_defense_general));
 
-        obj.end_attack_general = data.end_attack_general//JSON.parse(data.end_attack_general);
-        obj.end_defense_general = data.end_defense_general//JSON.parse(data.end_defense_general);
+        obj.end_attack_general = this.arrayToObject(JSON.parse(data.end_attack_general));
+        obj.end_defense_general = this.arrayToObject(JSON.parse(data.end_defense_general));
 
         obj.result = data.result;
         obj.rounds = data.rounds;
@@ -317,6 +317,38 @@ export default class MapUIProxy {
     }
 
 
+
+    protected arrayToObject(arr:any):any{
+        let temp :any =  [];
+        for(var i = 0;i < arr.length;i++){
+            var data = arr[i];
+
+            var obj:any = {}
+            obj.id = data[0];
+            obj.cfgId = data[1];
+            obj.physical_power = data[2];
+            obj.cost = data[3];
+            obj.order = data[4];
+            obj.level = data[5];
+            obj.exp = data[6];
+            obj.cityId = data[7];
+            obj.curArms = data[8];
+            obj.hasPrPoint = data[9];
+            obj.attack_distance = data[10];
+            obj.force_added = data[11];
+            obj.strategy_added = data[12];
+            obj.defense_added = data[13];
+            obj.speed_added = data[14];
+            obj.destroy_added = data[15];
+            obj.star_lv = data[16];
+            obj.star = data[17];
+
+
+            temp.push(obj);
+        }
+
+        return temp;
+    }
 
     public updateWarRead(id: number = 0, isRead: boolean = true) {
         var data = this._warReport.get(id);
