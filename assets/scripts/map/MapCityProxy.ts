@@ -12,6 +12,7 @@ export class MapCityData {
     level: number = 0;
     curDurable: number = 0;
     maxDurable: number = 0;
+    cost:number = 0,
 
     public equalsServerData(data: any) {
         if (this.cityId == data.cityId
@@ -43,6 +44,7 @@ export class MapCityData {
         city.level = data.level;
         city.curDurable = data.cur_durable;
         city.maxDurable = data.max_durable;
+        city.cost = data.cost;
         return city;
     }
 }

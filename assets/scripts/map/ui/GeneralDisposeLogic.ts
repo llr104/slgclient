@@ -9,6 +9,7 @@ import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
+import MapCommand from "../MapCommand";
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,6 +26,9 @@ export default class GeneralDisposeLogic extends cc.Component {
     
     @property(cc.Layout)
     pageLayout:cc.Layout = null;
+
+    @property(cc.Label)
+    costLabel: cc.Label = null;
 
 
     private _cityData:any = null;
@@ -69,6 +73,8 @@ export default class GeneralDisposeLogic extends cc.Component {
         } else {
             this.onGeneralArmyList();
         }
+
+        this.costLabel.string = "cost:" + MapCommand.getInstance().cityProxy.getMyCityById(this._cityData.cityId).cost;
     }
 
 

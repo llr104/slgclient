@@ -36,6 +36,9 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Sprite)
     spritePic:cc.Sprite = null;
 
+    @property(cc.Label)
+    costLabel: cc.Label = null;
+
     
     @property(cc.Layout)
     starLayout:cc.Layout = null;
@@ -94,6 +97,10 @@ export default class GeneralItemLogic extends cc.Component {
             }else{
                 this.useNode.active = false; 
             }
+        }
+
+        if(this.costLabel){
+            this.costLabel.string = cfgData.cost + "";
         }
 
         this._isSelect = false;

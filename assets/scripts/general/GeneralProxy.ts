@@ -255,11 +255,16 @@ export default class GeneralProxy {
                 i--;
             }
 
+        }
+
+
+        for(var i = 0; i < tempArr.length ;i++){
             if(tempArr[i].parentId > 0){
                 tempArr.splice(i,1);
                 i--;
             }
         }
+
 
         temp = temp.concat(tempArr);
 
