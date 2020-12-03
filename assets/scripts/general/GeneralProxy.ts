@@ -47,6 +47,7 @@ export class GeneralData {
     level: number = 0;
     physical_power: number = 0;
     order:number = 0;
+    star_lv:number = 0;
 
     public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
         let data: GeneralData = generalData;
@@ -60,6 +61,7 @@ export class GeneralData {
         data.level = serverData.level;
         data.order = serverData.order;
         data.physical_power = serverData.physical_power;
+        data.star_lv = serverData.star_lv;
         return data;
     }
 }
@@ -217,6 +219,9 @@ export default class GeneralProxy {
     }
 
 
+    /**
+     * 排序 已经使用的
+     */
     public getUseGenerals():GeneralData[] {
         var tempArr:GeneralData[] = this.getMyGenerals().concat();
         var temp:GeneralData[]  = [];
@@ -230,6 +235,21 @@ export default class GeneralProxy {
         }
 
         temp = temp.concat(tempArr);
+
+        return temp;
+    }
+
+    public getComposeGenerals(cfgId:number = 0,id:number = 0):GeneralData[]{
+        var temp:GeneralData[]  = [];
+        var tempArr:GeneralData[] = this.getMyGenerals().concat();
+
+        for(var i = 0; i < tempArr.length ;i++){
+            if(tempArr[i].order > 0 || tempArr[i].id == id || tempArr[i].cfgId != cfgId){
+                continue
+            }
+
+            temp.push(tempArr[i]);
+        }
 
         return temp;
     }

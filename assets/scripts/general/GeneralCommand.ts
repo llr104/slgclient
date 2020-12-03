@@ -28,6 +28,7 @@ export default class GeneralCommand {
         cc.systemEvent.on(ServerConfig.general_myGenerals, this.onMyGenerals, this);
         cc.systemEvent.on(ServerConfig.general_push, this.onGeneralPush, this);
         cc.systemEvent.on(ServerConfig.general_drawGeneral, this.onDrawGenerals, this);
+        cc.systemEvent.on(ServerConfig.general_composeGeneral, this.onComposeGeneral, this);
 
     }
 
@@ -68,6 +69,16 @@ export default class GeneralCommand {
             cc.systemEvent.emit("open_draw_result",data.msg.generals);
         }
     }
+
+    protected onComposeGeneral(data:any):void{
+        console.log("onComposeGeneral ", data);
+        if (data.code == 0) {
+            this._proxy.updateMyGenerals(data.msg.generals);
+            cc.systemEvent.emit("update_my_generals");
+
+            cc.systemEvent.emit("update_one_generals",data.msg.generals[data.msg.generals.length - 1]);
+        }
+    }
     
 
     /**我的角色属性*/
@@ -86,12 +97,33 @@ export default class GeneralCommand {
     }
 
 
-
+    /**
+     * 抽卡
+     * @param drawTimes 
+     */
     public drawGenerals(drawTimes:number = 1): void {
         let sendData: any = {
             name: ServerConfig.general_drawGeneral,
             msg: {
                 drawTimes:drawTimes
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+
+    /**
+     * 
+     * @param compId 
+     * @param gIds 
+     */
+    public composeGeneral(compId:number = 1,gIds:number[] = []): void {
+        let sendData: any = {
+            name: ServerConfig.general_composeGeneral,
+            msg: {
+                compId:compId,
+                gIds:gIds
             }
         };
         NetManager.getInstance().send(sendData);

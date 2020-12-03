@@ -54,6 +54,12 @@ export default class MapUILogic extends cc.Component {
     drawResultrefab: cc.Prefab = null;
     protected _drawResultNode: cc.Node = null;
 
+
+
+    @property(cc.Prefab)
+    composePrefab: cc.Prefab = null;
+    protected _composeNode: cc.Node = null;
+
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
@@ -93,6 +99,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
+        cc.systemEvent.on("open_general_compose", this.openCompose, this);
         this.updateRoleRes();
         this.updateRole();
         
@@ -268,6 +275,9 @@ export default class MapUILogic extends cc.Component {
 
 
 
+    /**
+     * 抽卡
+     */
     protected openDraw():void{
         if (this._drawNode == null) {
             this._drawNode = cc.instantiate(this.drawPrefab);
@@ -280,6 +290,10 @@ export default class MapUILogic extends cc.Component {
 
 
 
+    /**
+     * 抽卡结果
+     * @param data 
+     */
     protected openDrawR(data:any):void{
         if (this._drawResultNode == null) {
             this._drawResultNode = cc.instantiate(this.drawResultrefab);
@@ -290,6 +304,24 @@ export default class MapUILogic extends cc.Component {
         this._drawResultNode.zIndex = 2;
         this._drawResultNode.getComponent("DrawRLogic").setData(data);
     }
+
+
+    /**
+     * 合成
+     * @param cfgData 
+     * @param curData 
+     */
+    protected openCompose(cfgData:any,curData:any):void{
+        if (this._composeNode == null) {
+            this._composeNode = cc.instantiate(this.composePrefab);
+            this._composeNode.parent = this.node;
+        } else {
+            this._composeNode.active = true;
+        }
+        this._composeNode.zIndex = 2;
+        this._composeNode.getComponent("GeneralComposeLogic").setData(cfgData,curData);
+    }
+
 
     protected updateRole():void{
         var roleData = LoginCommand.getInstance().proxy.getRoleData();

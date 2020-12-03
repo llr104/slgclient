@@ -13,6 +13,7 @@ export class GeneralItemType {
     static GeneralDispose: number = 1;//武将上阵
     static GeneralConScript: number = 2;//武将征兵
     static GeneralNoThing: number = 3;//无用
+    static GeneralSelect: number = 4;//选择
 }
 
 
@@ -29,13 +30,11 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Label)
     nameLabel: cc.Label = null;
 
-
     @property(cc.Label)
     lvLabel: cc.Label = null;
 
     @property(cc.Sprite)
     spritePic:cc.Sprite = null;
-
 
     
     @property(cc.Layout)
@@ -44,18 +43,23 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Node)
     delNode:cc.Node = null;
 
-
     @property(cc.Node)
     useNode:cc.Node = null;
+
+
+    @property(cc.Node)
+    selectNode:cc.Node = null;
 
     private _curData:GeneralData = null;
     private _type:number = -1;
     private _position:number = 0;
     private _cityData:any = null;
     private _orderId:number = 1;
+    private _isSelect:boolean = false;
 
     protected onLoad():void{
         this.delNode.active = false;
+        this._isSelect = false;
     }
 
 
@@ -81,7 +85,7 @@ export default class GeneralItemLogic extends cc.Component {
         this.nameLabel.string = cfgData.name 
         this.lvLabel.string = " Lv." +  curData.level ;
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
-        this.showStar(cfgData.star);
+        this.showStar(cfgData.star,curData.star_lv);
         this.delNode.active = false;
 
         if(this.useNode){
@@ -90,17 +94,30 @@ export default class GeneralItemLogic extends cc.Component {
             }else{
                 this.useNode.active = false; 
             }
-            
+        }
+
+        this._isSelect = false;
+        this.select(this._isSelect);
+    }
+
+
+    private select(flag:boolean):void{
+        if(this.selectNode){
+            this.selectNode.active = flag;
         }
     }
 
 
-
-    protected showStar(star:number = 3):void{
+    protected showStar(star:number = 3,star_lv:number = 0):void{
         var childen = this.starLayout.node.children;
         for(var i = 0;i<childen.length;i++){
             if(i < star){
                 childen[i].active = true;
+                if(i < star_lv){
+                    childen[i].color = cc.color(255,0,0);
+                }else{
+                    childen[i].color = cc.color(255,255,255);
+                }
             }else{
                 childen[i].active = false; 
             }
@@ -131,6 +148,12 @@ export default class GeneralItemLogic extends cc.Component {
              //征兵
              else if(this._type == GeneralItemType.GeneralConScript){
                  cc.systemEvent.emit("open_general_conscript", this._orderId,this._cityData);
+             }
+
+             else if(this._type == GeneralItemType.GeneralSelect){
+                this._isSelect = !this._isSelect;
+                this.select(this._isSelect);
+                cc.systemEvent.emit("open_general_select",cfgData,this._curData);
              }
         }
 

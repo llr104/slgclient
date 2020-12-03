@@ -7,6 +7,7 @@
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GenaralLevelConfig } from "../../general/GeneralProxy";
+import { GeneralItemType } from "./GeneralItemLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -55,6 +56,13 @@ export default class GeneralDesLogic extends cc.Component {
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
 
+
+        cc.systemEvent.on("update_one_generals", this.updateOnce, this); 
+        
+    }
+
+    protected updateOnce(curData:any):void{
+        this.setData(this._cfgData,curData)
     }
 
     protected onDestroy():void{
@@ -89,11 +97,16 @@ export default class GeneralDesLogic extends cc.Component {
 
         var com = this._generalNode.getComponent("GeneralItemLogic");
         if(com){
-            com.updateItem(this._currData);
+            com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
         }
 
         this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "花费："+cfgData.cost;
+    }
+
+
+    protected openGeneralCcompose():void{
+        cc.systemEvent.emit("open_general_compose", this._cfgData,this._currData);
     }
 
 

@@ -9395,6 +9395,9 @@
     "drawResultrefab": {
       "__uuid__": "beaeae3e-8e1d-460d-bc0b-aef75a9adb95"
     },
+    "composePrefab": {
+      "__uuid__": "0ca59b09-00c4-4812-8371-ba4713a23b7b"
+    },
     "srollLayout": {
       "__id__": 124
     },

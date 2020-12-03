@@ -294,11 +294,12 @@ export default class MapUIProxy {
         obj.beg_defense_army = JSON.parse(data.beg_defense_army);
         obj.end_attack_army = JSON.parse(data.end_attack_army);
         obj.end_defense_army = JSON.parse(data.end_defense_army);
-        obj.beg_attack_general = JSON.parse(data.beg_attack_general);
-        obj.beg_defense_general = JSON.parse(data.beg_defense_general);
 
-        obj.end_attack_general = JSON.parse(data.end_attack_general);
-        obj.end_defense_general = JSON.parse(data.end_defense_general);
+        obj.beg_attack_general = data.beg_attack_general//JSON.parse(data.beg_attack_general);
+        obj.beg_defense_general = data.beg_defense_general//JSON.parse(data.beg_defense_general);
+
+        obj.end_attack_general = data.end_attack_general//JSON.parse(data.end_attack_general);
+        obj.end_defense_general = data.end_defense_general//JSON.parse(data.end_defense_general);
 
         obj.result = data.result;
         obj.rounds = data.rounds;
