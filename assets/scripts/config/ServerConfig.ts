@@ -18,6 +18,7 @@ const ServerConfig = {
 
     city_facilities: "city.facilities",
     city_upFacility: "city.upFacility",
+    city_upCity: "city.upCity",
 
     general_myGenerals: "general.myGenerals",
     general_dispose: "general.dispose",
@@ -26,8 +27,6 @@ const ServerConfig = {
     general_assignArmy: "general.assignArmy",
     general_drawGeneral: "general.drawGeneral",
     general_composeGeneral: "general.composeGeneral",
-
-    
 
     war_report:"war.report",
     war_read:"war.read",

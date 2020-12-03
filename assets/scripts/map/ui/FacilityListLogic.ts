@@ -80,7 +80,7 @@ export default class FacilityListLogic extends cc.Component {
                     if (cfg.conditions[i].type == type) {
                         //涉及到了解锁条件
                         let data: Facility = MapUICommand.getInstance().proxy.getMyFacilityByType(this._curCityId, logic.data.type);
-                        let isUnlock: boolean = MapUICommand.getInstance().proxy.isFacilityUnlock(this._curCityId, type);
+                        let isUnlock: boolean = MapUICommand.getInstance().proxy.isFacilityUnlock(this._curCityId, logic.data.type);
                         logic.setData(this._curCityId, data, cfg, isUnlock);
                         break;
                     }

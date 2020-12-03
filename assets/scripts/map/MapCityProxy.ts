@@ -127,16 +127,20 @@ export default class MapCityProxy {
     }
 
     /**更新建筑*/
-    public updateMyCity(city: any): void {
-        // let id: number = MapUtil.getIdByCellPoint(city.x, city.y);
-        // let cityData: MapCityData = null;
-        // if (this._mapCitys[id] == null) {
-        //     //代表是新增
-        //     cityData = MapCityData.createCityData(city, id);
-        //     this._mapCitys[id] = cityData;
-        // } else {
-        //     MapCityData.createCityData(city, id, this._mapCitys[id]);
-        // }
+    public updateCity(city: any): MapCityData {
+        let id: number = MapUtil.getIdByCellPoint(city.x, city.y);
+        let cityData: MapCityData = null;
+        if (this._mapCitys[id] == null) {
+            //代表是新增
+            cityData = MapCityData.createCityData(city, id);
+            this._mapCitys[id] = cityData;
+            if (city.rid == this.myId) {
+                this._myCitys.push(cityData);
+            }
+        } else {
+            cityData = MapCityData.createCityData(city, id, this._mapCitys[id]);
+        }
+        return cityData;
     }
 
     public setMapScanBlock(scanDatas: any, areaId: number = 0): void {
