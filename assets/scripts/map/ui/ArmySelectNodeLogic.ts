@@ -30,7 +30,7 @@ export default class ArmySelectNodeLogic extends cc.Component {
         let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let armyList: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(myCity.cityId);
         for (let i: number = 0; i < armyList.length; i++) {
-            if (armyList[i]) {
+            if (armyList[i] && armyList[i].generals[0] > 0) {
                 let item: cc.Node = cc.instantiate(this.itemPrefab);
                 item.parent = this.armyContainer;
                 item.getComponent(ArmySelectItemLogic).setArmyData(armyList[i], cmd, x, y);
