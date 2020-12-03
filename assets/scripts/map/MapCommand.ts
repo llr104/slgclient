@@ -40,6 +40,8 @@ export default class MapCommand {
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
+        cc.systemEvent.on(ServerConfig.city_upCity, this.onCityUpCity, this);
+        cc.systemEvent.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
     }
 
     public onDestory(): void {
@@ -116,31 +118,43 @@ export default class MapCommand {
         }
     }
 
+    protected onCityUpCity(data: any): void {
+        if (data.code == 0) {
+            let cityData: MapCityData = this._cityProxy.updateCity(data.msg.city);
+            cc.systemEvent.emit("update_city", cityData)
+        }
+    }
+
+    protected onRoleCityPush(data: any): void {
+        let cityData: MapCityData = this._cityProxy.updateCity(data.msg);
+        cc.systemEvent.emit("update_city", cityData);
+    }
+
     /**是否是可行军的位置*/
-    public isCanMoveCell(x:number, y:number):boolean {
+    public isCanMoveCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        let buiildData:MapBuildData = this.buildProxy.getBuild(id);
+        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
         if (buiildData && buiildData.rid == this.buildProxy.myId) {
             return true;
         }
-        let cityData:MapCityData = this.cityProxy.getCity(id);
+        let cityData: MapCityData = this.cityProxy.getCity(id);
         if (cityData && cityData.rid == this.cityProxy.myId) {
             return true;
         }
     }
 
-    public isCanOccupyCell(x:number, y:number):boolean {
+    public isCanOccupyCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        let buiildData:MapBuildData = this.buildProxy.getBuild(id);
+        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
         if (buiildData && buiildData.rid == this.buildProxy.myId) {
             return false;//已经占领
         }
-        let cityData:MapCityData = this.cityProxy.getCity(id);
+        let cityData: MapCityData = this.cityProxy.getCity(id);
         if (cityData && cityData.rid == this.cityProxy.myId) {
             return false;//已经建城
         }
-        let ids:number[] = MapUtil.get9GridCellIds(id);
-        for (let i:number = 0; i < ids[i]; i++) {
+        let ids: number[] = MapUtil.get9GridCellIds(id);
+        for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {
                 buiildData = this.buildProxy.getBuild(ids[i]);
                 if (buiildData && buiildData.rid == this.buildProxy.myId) {
@@ -218,7 +232,7 @@ export default class MapCommand {
         NetManager.getInstance().send(sendData);
     }
 
-    public upPosition(x:number, y:number):void {
+    public upPosition(x: number, y: number): void {
         let sendData: any = {
             name: ServerConfig.role_upPosition,
             msg: {

@@ -30,6 +30,7 @@ export default class MapUICommand {
     constructor() {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
         cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
+        cc.systemEvent.on(ServerConfig.city_upCity, this.onCityUpCity, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
         cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
@@ -57,6 +58,15 @@ export default class MapUICommand {
             cc.systemEvent.emit("update_my_facility", data.msg.cityId, facilityData);
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
             cc.systemEvent.emit("upate_my_roleRes");
+        }
+    }
+
+    protected onCityUpCity(data:any):void {
+        console.log("onCityUpCity :", data, data.code == 0);
+        if (data.code == 0) {
+            let facilityData: Facility = this._proxy.updateMyFacility(data.msg.city.cityId, { type: 0, level: data.msg.city.level });
+            console.log("onCityUpCity", data.msg.city.cityId, facilityData);
+            cc.systemEvent.emit("update_my_facility", data.msg.city.cityId, facilityData);
         }
     }
 
@@ -146,7 +156,20 @@ export default class MapUICommand {
         NetManager.getInstance().send(sendData);
     }
 
-
+    /**
+     * 升级城池
+     * @param cityId 
+     * @param ftype 
+     */
+    public upCity(cityId: number = 0): void {
+        let sendData: any = {
+            name: ServerConfig.city_upCity,
+            msg: {
+                cityId: cityId,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
 
     /**
      * 我的角色资源属性

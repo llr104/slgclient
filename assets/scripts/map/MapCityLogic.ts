@@ -11,6 +11,7 @@ export default class MapCityLogic extends MapBaseLayerLogic {
     protected onLoad(): void {
         super.onLoad();
         cc.systemEvent.on("update_citys", this.onUpdateCitys, this);
+        cc.systemEvent.on("update_city", this.onUpdateCity, this);
     }
 
     protected onDestroy(): void {
@@ -30,6 +31,13 @@ export default class MapCityLogic extends MapBaseLayerLogic {
             for (let i: number = 0; i < updateIds.length; i++) {
                 this.updateItem(areaIndex, this._cmd.cityProxy.getCity(updateIds[i]));
             }
+        }
+    }
+
+    protected onUpdateCity(city:MapCityData):void {
+        let areaIndex:number = MapUtil.getAreaIdByCellPoint(city.x, city.y);
+        if (this._itemMap.has(areaIndex)) {
+            this.addItem(areaIndex, city);
         }
     }
 

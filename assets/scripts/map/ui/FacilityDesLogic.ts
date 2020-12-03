@@ -190,6 +190,7 @@ export default class FacilityDesLogic extends cc.Component {
     protected onClickUp(): void {
         if(this._data.type == 0) {
             //升级主城
+            MapUICommand.getInstance().upCity(this._cityId);
         } else {
             MapUICommand.getInstance().upFacility(this._cityId, this._data.type);
         }
