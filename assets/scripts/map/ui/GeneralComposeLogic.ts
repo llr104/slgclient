@@ -101,7 +101,7 @@ export default class GeneralComposeLogic  extends cc.Component {
 
 
     private updataView():void{
-        this.composeNode.active = this._gIdsArr.length > 0?true:false;
+        this.composeNode.active = ((this._gIdsArr.length > 0) && (this._currData.star_lv < this._cfgData.star));
     }
 
 
