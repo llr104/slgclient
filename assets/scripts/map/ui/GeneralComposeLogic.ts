@@ -38,15 +38,10 @@ export default class GeneralComposeLogic  extends cc.Component {
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
         cc.systemEvent.on("open_general_select", this.selectItem, this); 
-        cc.systemEvent.on("update_one_generals", this.updateOnce, this); 
         this.updataView();
     
     }
 
-
-    protected updateOnce(curData:any):void{
-        this.setData(this._cfgData,curData)
-    }
 
 
     private selectItem(cfg:any,curData:any):void{
@@ -59,14 +54,6 @@ export default class GeneralComposeLogic  extends cc.Component {
         }
         this.updataView();
 
-    }
-
-    protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
-    }
-
-    protected onClickClose(): void {
-        this.node.active = false;
     }
 
 
@@ -101,7 +88,7 @@ export default class GeneralComposeLogic  extends cc.Component {
 
 
     private updataView():void{
-        this.composeNode.active = this._gIdsArr.length > 0?true:false;
+        this.composeNode.active = ((this._gIdsArr.length > 0) && (this._currData.star_lv < this._cfgData.star));
     }
 
 

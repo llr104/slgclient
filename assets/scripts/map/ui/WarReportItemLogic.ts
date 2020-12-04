@@ -29,24 +29,25 @@ export default class WarReportItemLogic extends cc.Component {
     @property([cc.Node])
     defNode:cc.Node[] = [];
 
-    @property(cc.Label)
-    actMsgLabel: cc.Label = null;
 
-    @property(cc.Label)
-    defMsgLabel: cc.Label = null;
+    @property(cc.Node)
+    winNode:cc.Node = null;
+
+
+    @property(cc.Node)
+    loseNode:cc.Node = null;
 
 
     @property(cc.Label)
     timeLabel: cc.Label = null;
 
     protected onLoad():void{
-
+        this.winNode.active = this.loseNode.active = false;
     }
 
 
     protected updateItem(data:any):void{
         this._curData = data;
-        console.log("this._curData:",this._curData)
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         this.node.opacity = isRead?120:255;
@@ -54,20 +55,41 @@ export default class WarReportItemLogic extends cc.Component {
         this.setTeams(this.ackNode,this._curData.beg_attack_general);
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
-        
-        this.actMsgLabel.string = this.isMe(this._curData.attack_rid) + this.isAttackWin();
-        this.defMsgLabel.string = this.isMe(this._curData.defense_rid) + this.isDefensWin();
+        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        if(roleData.rid == this._curData.attack_rid){
+            this.isMeWin(this._curData.attack_rid)
+        }else{
+            this.isMeWin(this._curData.defense_rid)
+        }
+
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
     }
 
-    protected isMe(rid:number = 0):string{
+
+
+    protected isMeWin(rid:number = 0):void{
         var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        this.winNode.active = this.loseNode.active = false;
+        
         if(roleData.rid == rid){
-            return "我方"
+            if(this._curData.result == 0){
+                this.winNode.active = false;
+            }else if(this._curData.result == 1){
+
+            }else{
+                this.winNode.active = true;
+            }
+        }else{
+            if(this._curData.result == 0){
+                this.winNode.active = true;
+            }else if(this._curData.result == 1){
+
+            }else{
+                this.winNode.active = false;
+            }
         }
 
-        return "敌方"
     }
 
 

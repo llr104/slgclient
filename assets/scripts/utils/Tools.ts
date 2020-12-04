@@ -93,6 +93,9 @@ export class Tools{
             case 24:
                 str = "体力不足";
                 break;
+            case 31:
+                str = "队伍数量不足";
+                break;
             default:
                 str = "错误:"+code;
                 break;

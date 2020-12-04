@@ -40,6 +40,14 @@ export default class DrawRLogic extends cc.Component {
 
     public setData(data:any):void{
         var children = this.layout.node.children;
+
+        if(data.length == 1){
+            this.layout.type = cc.Layout.Type.NONE
+        }else{
+            this.layout.node.width = 800;
+            this.layout.node.height = 500;
+            this.layout.type = cc.Layout.Type.GRID
+        }
         for(var i = 0; i < this._maxSize;i++){
             var child = children[i];
             if(data[i]){
