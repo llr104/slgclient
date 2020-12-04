@@ -14,12 +14,6 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GeneralDesLogic extends cc.Component {
-
-
-
-    @property(cc.Label)
-    titleLabel: cc.Label = null;
-
     @property(cc.Label)
     lvLabel: cc.Label = null;
 
@@ -55,30 +49,13 @@ export default class GeneralDesLogic extends cc.Component {
 
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
-
-
-        cc.systemEvent.on("update_one_generals", this.updateOnce, this); 
         
     }
-
-    protected updateOnce(curData:any):void{
-        this.setData(this._cfgData,curData)
-    }
-
-    protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
-    }
-
-    protected onClickClose(): void {
-        this.node.active = false;
-    }
-
 
 
     public setData(cfgData:any,curData:any):void{
         this._currData = curData;
         this._cfgData = cfgData;
-        this.titleLabel.string = cfgData.name;
     
         var nextCfg = GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level + 1);
         var levelExp = nextCfg?nextCfg.exp:"MAX";
@@ -105,9 +82,9 @@ export default class GeneralDesLogic extends cc.Component {
     }
 
 
-    protected openGeneralCcompose():void{
-        cc.systemEvent.emit("open_general_compose", this._cfgData,this._currData);
-    }
+    // protected openGeneralCcompose():void{
+    //     cc.systemEvent.emit("open_general_compose", this._cfgData,this._currData);
+    // }
 
 
 

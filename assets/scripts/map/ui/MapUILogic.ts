@@ -56,10 +56,6 @@ export default class MapUILogic extends cc.Component {
 
 
 
-    @property(cc.Prefab)
-    composePrefab: cc.Prefab = null;
-    protected _composeNode: cc.Node = null;
-
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
@@ -187,7 +183,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDesNode.active = true;
         }
         this._generalDesNode.zIndex = 1;
-        this._generalDesNode.getComponent("GeneralDesLogic").setData(cfgData,curData);
+        this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData,curData);
     }
 
 
@@ -303,23 +299,6 @@ export default class MapUILogic extends cc.Component {
         }
         this._drawResultNode.zIndex = 2;
         this._drawResultNode.getComponent("DrawRLogic").setData(data);
-    }
-
-
-    /**
-     * 合成
-     * @param cfgData 
-     * @param curData 
-     */
-    protected openCompose(cfgData:any,curData:any):void{
-        if (this._composeNode == null) {
-            this._composeNode = cc.instantiate(this.composePrefab);
-            this._composeNode.parent = this.node;
-        } else {
-            this._composeNode.active = true;
-        }
-        this._composeNode.zIndex = 2;
-        this._composeNode.getComponent("GeneralComposeLogic").setData(cfgData,curData);
     }
 
 
