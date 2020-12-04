@@ -5550,8 +5550,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "添加",
-    "_N$string": "添加",
+    "_string": "修改",
+    "_N$string": "修改",
     "_fontSize": 30,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -5710,10 +5710,12 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
+    "target": {
+      "__id__": 1
+    },
     "component": "",
-    "_componentId": "146edJ13EBM/Zet/NdH3Y5F",
-    "handler": "onCompose",
+    "_componentId": "53556/JHc5L3ZS5cHBNc4/k",
+    "handler": "onClickAddPr",
     "customEventData": ""
   },
   {
@@ -5854,6 +5856,9 @@
     },
     "prLabel": {
       "__id__": 148
+    },
+    "addPr": {
+      "__id__": 137
     },
     "prItems": [
       {

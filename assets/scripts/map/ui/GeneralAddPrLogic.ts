@@ -24,9 +24,14 @@ export default class GeneralAddPrLogic  extends cc.Component {
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
-
     @property(cc.Label)
     prLabel: cc.Label = null;
+
+
+    @property(cc.Node)
+    addPr: cc.Node = null;
+
+
 
     private _currData:GeneralData = null;
     private _cfgData:GeneralConfig = null;
@@ -37,6 +42,7 @@ export default class GeneralAddPrLogic  extends cc.Component {
     private _addPrArr:string[] = [];
     private _canUsePr:number = -1;
     private _step:number = 100;
+    protected _curAll:number = 0;
 
     @property([cc.Node])
     prItems: cc.Node[] = [];
@@ -53,14 +59,13 @@ export default class GeneralAddPrLogic  extends cc.Component {
             destroy:"破坏",
         };
 
-
-
-
         this._addPrArr = ["force","strategy","defense","speed","destroy"]
     }
 
 
     public setData(cfgData:any,curData:any):void{
+        console.log("curData:",curData)
+        this._canUsePr =-1;
         this._currData = curData;
         this._cfgData = cfgData;
         var com = this._generalNode.getComponent("GeneralItemLogic");
@@ -76,9 +81,8 @@ export default class GeneralAddPrLogic  extends cc.Component {
             destroy:this._currData.destroy_added,
         };
 
-
+        this._curAll = Math.abs(this._currData.hasPrPoint - this._currData.usePrPoint);
         this.updateView();
-
 
 
     }
@@ -89,19 +93,23 @@ export default class GeneralAddPrLogic  extends cc.Component {
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + ((this._cfgData[key])/this._step) 
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + ((this._cfgData[key] + this._addPrObj[key])/this._step) 
             +"(+" + this._cfgData[key+"_grow"]/100 +"%)";
 
             var node:cc.Label = children[i].getChildByName("New Sprite").getChildByName("change Label").getComponent(cc.Label);
             node.string = this._addPrObj[key]/this._step +''
             i++;
         }
-
+        
+        
 
         if(this._canUsePr == -1){
-            this._canUsePr = (this._currData.hasPrPoint - this._currData.usePrPoint);
+            this._canUsePr = Math.abs(this._currData.hasPrPoint - this._currData.usePrPoint);
         }
-        this.prLabel.string = "可用属性点:" + this._canUsePr/this._step + "/" + this._currData.hasPrPoint/this._step
+        this.prLabel.string = "可用属性点:" + this._canUsePr/this._step + "/" + this._curAll/this._step;
+
+
+        this.addPr.active = this._currData.hasPrPoint > 0?true:false;
     }
 
     protected plus(target:any,index:number = 0):void{
@@ -122,8 +130,13 @@ export default class GeneralAddPrLogic  extends cc.Component {
             return
         }
         var num:number = this._addPrObj[this._addPrArr[index]]
-        this._addPrObj[this._addPrArr[index]] = num - this._step;
-        this._canUsePr+=this._step
+        num = num - this._step;
+        num = num < 0?0:num;
+        this._addPrObj[this._addPrArr[index]] = num;
+        if(num > 0){
+            this._canUsePr+=this._step
+        }
+       
         this.updateView();
     }
 
@@ -149,15 +162,15 @@ export default class GeneralAddPrLogic  extends cc.Component {
 
     private isCaneReduce():boolean{
         var all:number = this.getAllUse();
-        if(all - this._step <= 0){
+        if(all - this._step < 0){
             return false;
         }
         return true;
     }
 
 
-    protected addPr():void{
-        
+    protected onClickAddPr():void{
+        GeneralCommand.getInstance().addPrGeneral(this._currData.id,this._addPrObj.force,this._addPrObj.strategy,this._addPrObj.defense,this._addPrObj.speed,this._addPrObj.destroy)
     }
 
 }
