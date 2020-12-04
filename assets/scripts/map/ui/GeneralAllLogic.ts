@@ -89,19 +89,11 @@ export default class GeneralAllLogic  extends cc.Component {
         this.allVisible();
         this._nodeList[index].active = true;
         this.generalToggleContainer.toggleItems[index].isChecked = true;
-        if(index == 0){
-            let com = this._nodeList[index].getComponent("GeneralDesLogic");
-            if(com){
-                com.setData(this._cfgData,this._currData);
-            }
-        }
 
-
-        else if(index == 1){
-            let com = this._nodeList[index].getComponent("GeneralComposeLogic");
-            if(com){
-                com.setData(this._cfgData,this._currData);
-            }
+        let logicNameArr:string[] = ["GeneralDesLogic","GeneralComposeLogic","GeneralAddPrLogic"]
+        let com = this._nodeList[index].getComponent(logicNameArr[index]);
+        if(com){
+            com.setData(this._cfgData,this._currData);
         }
     }
 
