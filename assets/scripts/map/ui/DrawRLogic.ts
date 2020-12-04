@@ -9,6 +9,7 @@ import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCommonConfig } from "../../general/GeneralProxy";
 import LoginCommand from "../../login/LoginCommand";
+import { GeneralItemType } from "./GeneralItemLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -54,7 +55,7 @@ export default class DrawRLogic extends cc.Component {
                 child.active = true;
                 let com = child.getComponent("GeneralItemLogic");
                 if(com){
-                    com.setData(data[i]);
+                    com.setData(data[i],GeneralItemType.GeneralNoThing);
                 }
             }
             else{
