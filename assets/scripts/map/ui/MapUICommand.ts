@@ -47,7 +47,7 @@ export default class MapUICommand {
                 this._proxy.updateMyFacility(cityData.cityId, { type: 0, level: cityData.level });
             }
             cc.systemEvent.emit("update_my_facilities");
-            let addition:CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
+            let addition: CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
             cc.systemEvent.emit("update_city_addition", cityData.cityId, addition);
         }
     }
@@ -60,15 +60,17 @@ export default class MapUICommand {
             cc.systemEvent.emit("update_my_facility", data.msg.cityId, facilityData);
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
             cc.systemEvent.emit("upate_my_roleRes");
+            let addition: CityAddition = this._proxy.updateMyCityAdditions(data.msg.cityId);
+            cc.systemEvent.emit("update_city_addition", data.msg.cityId, addition);
         }
     }
 
-    protected onCityUpCity(data:any):void {
+    protected onCityUpCity(data: any): void {
         console.log("onCityUpCity :", data, data.code == 0);
         if (data.code == 0) {
             let facilityData: Facility = this._proxy.updateMyFacility(data.msg.city.cityId, { type: 0, level: data.msg.city.level });
             cc.systemEvent.emit("update_my_facility", data.msg.city.cityId, facilityData);
-            let addition:CityAddition = this._proxy.updateMyCityAdditions(data.msg.city.cityId);
+            let addition: CityAddition = this._proxy.updateMyCityAdditions(data.msg.city.cityId);
             cc.systemEvent.emit("update_city_addition", data.msg.city.cityId, addition);
         }
     }

@@ -32,7 +32,7 @@ export default class CityAboutLogic extends cc.Component {
             let item = cc.instantiate(this.armyItem);
             item.parent = this.armyLayer;
             let comp: CityArmyItemLogic = item.getComponent(CityArmyItemLogic);
-            comp.id = i + 1;
+            comp.order = i + 1;
             this._armyComps.push(comp);
         }
     }
@@ -53,7 +53,7 @@ export default class CityAboutLogic extends cc.Component {
             } else {
                 //已开启
                 this._armyComps[i].isOpenedArmy(true);
-                this._armyComps[i].setArmyData(armyList[i]);
+                this._armyComps[i].setArmyData(this._cityData.cityId, armyList[i]);
             }
         }
     }

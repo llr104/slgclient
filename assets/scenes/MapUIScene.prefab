@@ -9368,6 +9368,9 @@
     "facilityPrefab": {
       "__uuid__": "b78c7408-9333-4f4d-8717-66e5b17e55da"
     },
+    "armySettingPrefab": {
+      "__uuid__": "6cc810a6-066b-484a-b3af-8d9955dee69d"
+    },
     "generalPrefab": {
       "__uuid__": "e68ad7c0-fbe6-4d0b-b5bd-395140c227d5"
     },
@@ -9394,9 +9397,6 @@
     },
     "drawResultrefab": {
       "__uuid__": "beaeae3e-8e1d-460d-bc0b-aef75a9adb95"
-    },
-    "composePrefab": {
-      "__uuid__": "0ca59b09-00c4-4812-8371-ba4713a23b7b"
     },
     "srollLayout": {
       "__id__": 124

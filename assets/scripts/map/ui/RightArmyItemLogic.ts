@@ -29,9 +29,10 @@ export default class RightArmyItemLogic extends cc.Component {
     @property(cc.Node)
     btnSetting: cc.Node = null;
 
+    public order: number = 0;
     protected _data: ArmyData = null;
-    protected _firstGeneral:GeneralData = null;
-    protected _qryReturnTime:number = 0;
+    protected _firstGeneral: GeneralData = null;
+    protected _qryReturnTime: number = 0;
 
     protected onLoad(): void {
         cc.systemEvent.on("update_generals", this.onUpdateGenerals, this);
@@ -82,10 +83,11 @@ export default class RightArmyItemLogic extends cc.Component {
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
             cc.systemEvent.emit("open_general_dispose", cityData);
+            cc.systemEvent.emit("open_army_setting", this._data.cityId, this.order);
         }
     }
 
-    protected updateGeneralByData():void {
+    protected updateGeneralByData(): void {
         let stateStr: string = ArmyCommand.getInstance().getArmyStateDes(this._data);
         var teamName = "";
         if (this._firstGeneral) {
@@ -95,7 +97,7 @@ export default class RightArmyItemLogic extends cc.Component {
             this.labelStrength.string = "体力 " + this._firstGeneral.physical_power + "/" + cfg.physical_power_limit;
         }
         this.labelInfo.string = stateStr + " " + teamName + "队";
-        
+
     }
 
     protected updateItem(): void {
@@ -104,9 +106,9 @@ export default class RightArmyItemLogic extends cc.Component {
             this.node.active = true;
             this._firstGeneral = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[0]);
             this.updateGeneralByData();
-            
+
             this.labelPos.string = "(" + this._data.x + ", " + this._data.y + ")";
-            
+
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
 
             if (this._data.cmd == 0) {

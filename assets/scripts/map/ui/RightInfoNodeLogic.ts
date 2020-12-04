@@ -49,6 +49,7 @@ export default class RightInfoNodeLogic extends cc.Component {
                 let item: cc.Node = cc.instantiate(this.armyItemPrefabs);
                 item.parent = this.armyScrollView.content;
                 this._armys[i] = item;
+                item.getComponent(RightArmyItemLogic).order = i + 1;
                 item.getComponent(RightArmyItemLogic).setArmyData(datas[i]);
             }
         }

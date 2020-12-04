@@ -38,7 +38,8 @@ export default class CityArmyItemLogic extends cc.Component {
     @property(cc.Label)
     labelVice2: cc.Label = null;
 
-    public id: number = 0;
+    public order: number = 0;
+    protected _cityId: number = 0;
     protected _data: ArmyData = null;
     protected _isOpened: boolean = true;
 
@@ -54,16 +55,13 @@ export default class CityArmyItemLogic extends cc.Component {
 
     protected onUpdateArmy(armyData: ArmyData): void {
         if (this._data && armyData.id == this._data.id) {
-            this.setArmyData(armyData);
+            this.setArmyData(this._cityId, armyData);
         }
     }
 
     protected onClickItem(): void {
         if (this.maskNode.active == false) {
-            if (this._data) {
-                let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
-                cc.systemEvent.emit("open_general_dispose", cityData);
-            }
+                cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
         } else {
 
         }
@@ -86,7 +84,7 @@ export default class CityArmyItemLogic extends cc.Component {
             } else {
                 this.labelState.string = "";
             }
-            this.labelId.string = this.id + "";
+            this.labelId.string = this.order + "";
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generals[0].cfgId);
             this.labelLv.string = generals[0].level + "";
             this.labelName.string = firstGeneralCfg.name;
@@ -119,12 +117,13 @@ export default class CityArmyItemLogic extends cc.Component {
         this.maskNode.active = !this._isOpened;
         this.tipNode.active = !this._isOpened;
         if (this._isOpened == false) {
-            let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(CityAdditionType.ArmyTeams).name;
-            this.labelTip.string = desName + "等级 " + this.id + " 开启";
+            let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(13).name;
+            this.labelTip.string = desName + " 等级" + this.order + "开启";
         }
     }
 
-    public setArmyData(data: ArmyData): void {
+    public setArmyData(cityId: number, data: ArmyData): void {
+        this._cityId = cityId;
         this._data = data;
         this.updateItem();
     }

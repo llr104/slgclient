@@ -133,6 +133,7 @@ export default class ArmyProxy {
     /**根据位置获取军队*/
     public getArmyByOrder(order: number, cityId: number): ArmyData {
         let list: ArmyData[] = this.getArmyList(cityId);
+        console.log("getArmyByOrder", order, cityId, list);
         if (list) {
             return list[order - 1];
         }

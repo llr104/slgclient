@@ -1,6 +1,7 @@
 
 import LoginCommand from "../../login/LoginCommand";
 import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
+import CityArmySettingLogic from "./CityArmySettingLogic";
 import FacilityListLogic from "./FacilityListLogic";
 import MapUICommand from "./MapUICommand";
 const { ccclass, property } = cc._decorator;
@@ -13,6 +14,10 @@ export default class MapUILogic extends cc.Component {
     protected _facilityNode: cc.Node = null;
 
     @property(cc.Prefab)
+    armySettingPrefab: cc.Prefab = null;
+    protected _armySettingNode: cc.Node = null;
+
+    @property(cc.Prefab)
     generalPrefab: cc.Prefab = null;
     protected _generalNode: cc.Node = null;
 
@@ -20,8 +25,6 @@ export default class MapUILogic extends cc.Component {
     generalDesPrefab: cc.Prefab = null;
     protected _generalDesNode: cc.Node = null;
 
-
-    
     @property(cc.Prefab)
     generalDisPosePrefab: cc.Prefab = null;
     protected _generalDisPoseNode: cc.Node = null;
@@ -57,7 +60,7 @@ export default class MapUILogic extends cc.Component {
 
 
     @property(cc.Layout)
-    srollLayout:cc.Layout = null;
+    srollLayout: cc.Layout = null;
 
 
     @property(cc.Label)
@@ -66,28 +69,29 @@ export default class MapUILogic extends cc.Component {
     @property(cc.Label)
     ridLabel: cc.Label = null;
 
-    protected _nameObj:any = {};
+    protected _nameObj: any = {};
 
-    protected onLoad():void{
+    protected onLoad(): void {
 
         this._nameObj = {
-            decree:"令牌x",
-            grain:"谷物x",
-            wood:"木材x",
-            iron:"金属x",
-            stone:"石材x",
-            gold:"金钱x",
-            wood_yield:"木材+",
-            iron_yield:"金属+",
-            stone_yield:"石材+",
-            grain_yield:"谷物+",
-            gold_yield:"金钱+",
-            depot_capacity:"仓库+"
+            decree: "令牌x",
+            grain: "谷物x",
+            wood: "木材x",
+            iron: "金属x",
+            stone: "石材x",
+            gold: "金钱x",
+            wood_yield: "木材+",
+            iron_yield: "金属+",
+            stone_yield: "石材+",
+            grain_yield: "谷物+",
+            gold_yield: "金钱+",
+            depot_capacity: "仓库+"
         };
 
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
         cc.systemEvent.on("open_facility", this.openFacility, this);
+        cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
         cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
@@ -95,25 +99,24 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
-        cc.systemEvent.on("open_general_compose", this.openCompose, this);
         this.updateRoleRes();
         this.updateRole();
-        
+
     }
 
 
-    protected onDestroy():void{
+    protected onDestroy(): void {
         this.clearAllNode();
         MapUICommand.getInstance().proxy.clearData();
         cc.systemEvent.targetOff(this);
     }
 
-    protected onBack():void{
+    protected onBack(): void {
         LoginCommand.getInstance().account_logout();
     }
 
 
-    protected clearAllNode():void{
+    protected clearAllNode(): void {
         this._facilityNode = null;
         this._generalNode = null;
         this._cityAboutNode = null;
@@ -125,7 +128,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 设施
      */
-    protected openFacility(data:any):void{
+    protected openFacility(data: any): void {
         if (this._facilityNode == null) {
             this._facilityNode = cc.instantiate(this.facilityPrefab);
             this._facilityNode.parent = this.node;
@@ -135,10 +138,19 @@ export default class MapUILogic extends cc.Component {
         this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
 
+    protected openArmySetting(cityId: number, order: number): void {
+        if (this._armySettingNode == null) {
+            this._armySettingNode = cc.instantiate(this.armySettingPrefab);
+            this._armySettingNode.parent = this.node;
+        } else {
+            this._armySettingNode.active = true;
+        }
+        this._armySettingNode.getComponent(CityArmySettingLogic).setData(cityId, order);
+    }
     /**
      * 武将
      */
-    protected openGeneral(data:number[],type:number = 0,position:number = 0,zIndex:number = 0):void{
+    protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = cc.instantiate(this.generalPrefab);
             this._generalNode.parent = this.node;
@@ -146,22 +158,22 @@ export default class MapUILogic extends cc.Component {
             this._generalNode.active = true;
         }
 
-        this._generalNode.getComponent("GeneralLogic").setData(data,type,position);
+        this._generalNode.getComponent("GeneralLogic").setData(data, type, position);
         this._generalNode.zIndex = zIndex;
     }
-    
-    
+
+
     /**
      * 武将选择
      * @param data 
      * @param zIndex 
      */
-    protected openGeneralChoose(data:number[],position:number = 0):void{
-        this.openGeneral(data,1,position,1);
+    protected openGeneralChoose(data: number[], position: number = 0): void {
+        this.openGeneral(data, 1, position, 1);
     }
 
     /**打开军队选择界面*/
-    protected onOpenArmySelectUI(cmd:number, x:number, y:number):void {
+    protected onOpenArmySelectUI(cmd: number, x: number, y: number): void {
         if (this._armySelectNode == null) {
             this._armySelectNode = cc.instantiate(this.armySelectPrefab);
             this._armySelectNode.parent = this.node;
@@ -175,7 +187,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将详情
      */
-    protected openGeneralDes(cfgData:any,curData:any):void{
+    protected openGeneralDes(cfgData: any, curData: any): void {
         if (this._generalDesNode == null) {
             this._generalDesNode = cc.instantiate(this.generalDesPrefab);
             this._generalDesNode.parent = this.node;
@@ -183,7 +195,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDesNode.active = true;
         }
         this._generalDesNode.zIndex = 1;
-        this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData,curData);
+        this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData, curData);
     }
 
 
@@ -195,7 +207,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 武将配置
      */
-    protected openGeneralDisPose(data:any,outPos:any = null,type:number = 0):void{
+    protected openGeneralDisPose(data: any, outPos: any = null, type: number = 0): void {
         if (this._generalDisPoseNode == null) {
             this._generalDisPoseNode = cc.instantiate(this.generalDisPosePrefab);
             this._generalDisPoseNode.parent = this.node;
@@ -203,7 +215,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDisPoseNode.active = true;
         }
 
-        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data,outPos,type);
+        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data, outPos, type);
     }
 
 
@@ -212,7 +224,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 城市
      */
-    protected openCityAbout(data:any):void{
+    protected openCityAbout(data: any): void {
         if (this._cityAboutNode == null) {
             this._cityAboutNode = cc.instantiate(this.cityAboutPrefab);
             this._cityAboutNode.parent = this.node;
@@ -228,7 +240,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 征兵
      */
-    protected openConscript(orderId:number = 0,cityData:any):void{
+    protected openConscript(orderId: number = 0, cityData: any): void {
         if (this._conscriptNode == null) {
             this._conscriptNode = cc.instantiate(this.conscriptPrefab);
             this._conscriptNode.parent = this.node;
@@ -236,7 +248,7 @@ export default class MapUILogic extends cc.Component {
             this._conscriptNode.active = true;
         }
 
-        this._conscriptNode.getComponent("ConscriptLogic").setData(orderId,cityData);
+        this._conscriptNode.getComponent("ConscriptLogic").setData(orderId, cityData);
     }
 
 
@@ -244,7 +256,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 战报
      */
-    protected openWarReport():void{
+    protected openWarReport(): void {
         if (this._warReportNode == null) {
             this._warReportNode = cc.instantiate(this.warReportPrefab);
             this._warReportNode.parent = this.node;
@@ -258,11 +270,11 @@ export default class MapUILogic extends cc.Component {
     /**
      * 角色信息
      */
-    protected updateRoleRes():void{
+    protected updateRoleRes(): void {
         var children = this.srollLayout.node.children;
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         var i = 0;
-        for(var key in roleRes){
+        for (var key in roleRes) {
             children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
             i++;
 
@@ -274,7 +286,7 @@ export default class MapUILogic extends cc.Component {
     /**
      * 抽卡
      */
-    protected openDraw():void{
+    protected openDraw(): void {
         if (this._drawNode == null) {
             this._drawNode = cc.instantiate(this.drawPrefab);
             this._drawNode.parent = this.node;
@@ -290,7 +302,7 @@ export default class MapUILogic extends cc.Component {
      * 抽卡结果
      * @param data 
      */
-    protected openDrawR(data:any):void{
+    protected openDrawR(data: any): void {
         if (this._drawResultNode == null) {
             this._drawResultNode = cc.instantiate(this.drawResultrefab);
             this._drawResultNode.parent = this.node;
@@ -302,9 +314,9 @@ export default class MapUILogic extends cc.Component {
     }
 
 
-    protected updateRole():void{
+    protected updateRole(): void {
         var roleData = LoginCommand.getInstance().proxy.getRoleData();
-        this.nameLabel.string = "昵称: "+roleData.nickName;
+        this.nameLabel.string = "昵称: " + roleData.nickName;
         this.ridLabel.string = "角色ID: " + roleData.rid + "";
     }
 
