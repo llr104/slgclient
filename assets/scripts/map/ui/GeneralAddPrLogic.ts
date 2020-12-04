@@ -93,7 +93,7 @@ export default class GeneralAddPrLogic  extends cc.Component {
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + ((this._cfgData[key])/this._step) 
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + ((this._cfgData[key] + this._addPrObj[key])/this._step) 
             +"(+" + this._cfgData[key+"_grow"]/100 +"%)";
 
             var node:cc.Label = children[i].getChildByName("New Sprite").getChildByName("change Label").getComponent(cc.Label);
@@ -131,9 +131,12 @@ export default class GeneralAddPrLogic  extends cc.Component {
         }
         var num:number = this._addPrObj[this._addPrArr[index]]
         num = num - this._step;
-        num < 0?0:num;
+        num = num < 0?0:num;
         this._addPrObj[this._addPrArr[index]] = num;
-        this._canUsePr+=this._step
+        if(num > 0){
+            this._canUsePr+=this._step
+        }
+       
         this.updateView();
     }
 
