@@ -74,7 +74,7 @@ export default class WarReportItemLogic extends cc.Component {
         
         if(roleData.rid == rid){
             if(this._curData.result == 0){
-                this.winNode.active = false;
+                this.loseNode.active = true;
             }else if(this._curData.result == 1){
 
             }else{
@@ -86,37 +86,14 @@ export default class WarReportItemLogic extends cc.Component {
             }else if(this._curData.result == 1){
 
             }else{
-                this.winNode.active = false;
+                this.loseNode.active = true;
             }
         }
 
     }
 
 
-    protected isAttackWin():string{
-        if(this._curData.result == 0){
-            return "败"   
-        }
 
-        if(this._curData.result == 1){
-            return "平"   
-        }
-
-        return "胜"   
-    }
-
-
-    protected isDefensWin():string{
-        if(this._curData.result == 2){
-            return "败"   
-        }
-
-        if(this._curData.result == 1){
-            return "平"   
-        }
-
-        return "胜"   
-    }
 
 
     protected setTeams(node:cc.Node[],generals:any[]){
