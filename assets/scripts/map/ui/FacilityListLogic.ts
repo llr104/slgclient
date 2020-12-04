@@ -119,6 +119,5 @@ export default class FacilityListLogic extends cc.Component {
     public setData(data: any): void {
         this._curCityId = data.cityId;
         this.updateView();
-        MapUICommand.getInstance().qryCityFacilities(this._curCityId);
     }
 }

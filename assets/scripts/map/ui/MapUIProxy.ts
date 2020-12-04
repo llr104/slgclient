@@ -1,5 +1,49 @@
 import LoginCommand from "../../login/LoginCommand";
 
+/**城池加成数据(默认值为无加成时 只列举了客户端需要的数据)*/
+export class CityAddition {
+    cost: number = 0;
+    armyCnt: number = 0;//军队数量
+    vanguardCnt: 0;//军队前锋数量 默认每队只有两个位置 前锋数量影响第三个位置的开启
+    soldierCnt: 0;//带兵数加成
+
+    public clear(): void {
+        this.cost = 0;
+        this.armyCnt = 0;
+        this.vanguardCnt = 0;
+        this.soldierCnt = 0;
+    }
+};
+
+/**城池加成类型*/
+export class CityAdditionType {
+    static Durable: number = 1;//耐久
+    static Cost: number = 2;
+    static ArmyTeams: number = 3;//队伍数量
+    static Speed: number = 4;//速度
+    static Defense: number = 5;//防御
+    static Strategy: number = 6;	//谋略
+    static Force: number = 7;	//攻击武力
+    static ConscriptTime: number = 8;//征兵时间
+    static ReserveLimit: number = 9;//预备役上限
+    static Unkonw: number = 10;
+    static HanAddition: number = 11;
+    static WeiAddition: number = 12;
+    static ShuAddition: number = 13;
+    static WuAddition: number = 14;
+    static QunAddition: number = 15;
+    static DealTaxRate: number = 16;//交易税率
+    static Wood: number = 17;
+    static Iron: number = 18;
+    static Grain: number = 19;
+    static Stone: number = 20;
+    static Tax: number = 21;//税收
+    static ExtendTimes: number = 22;//扩建次数
+    static WarehouseLimit: number = 23;//仓库容量
+    static SoldierLimit: number = 24;//带兵数量
+    static VanguardLimit: number = 25;//前锋数量
+}
+
 /**设施*/
 export class Facility {
     level: number = 0;
@@ -59,8 +103,8 @@ export class WarReport {
     end_attack_army: any = {};
     end_defense_army: any = {};
 
-    result:number = 0;
-    rounds:number = 0;
+    result: number = 0;
+    rounds: number = 0;
     attack_is_read: boolean = false;
     defense_is_read: boolean = false;
     destroy_durable: number = 0;
@@ -83,12 +127,12 @@ export default class MapUIProxy {
     protected _facilityAdditionCfg: Map<number, FacilityAdditionCfg> = new Map<number, FacilityAdditionCfg>();//升级加成配置
     protected _armyBaseCost: ConscriptBaseCost = new ConscriptBaseCost();
     protected _warReport: Map<number, WarReport> = new Map<number, WarReport>();
-
-
+    protected _additions: Map<number, CityAddition> = new Map<number, CityAddition>();
 
     public clearData(): void {
         this._warReport.clear();
         this._myFacility.clear();
+        this._additions.clear();
     }
 
     /**
@@ -121,6 +165,56 @@ export default class MapUIProxy {
         return null;
     }
 
+    /**更新设施加成数据*/
+    public updateMyCityAdditions(cityId: number): CityAddition {
+        if (this._myFacility.has(cityId)) {
+            let addition: CityAddition = null;
+            if (this._additions.has(cityId)) {
+                addition = this._additions.get(cityId);
+            } else {
+                addition = new CityAddition();
+                this._additions.set(cityId, addition);
+            }
+            addition.clear();//清除旧数据 重新计算
+            let list: Map<number, Facility> = this._myFacility.get(cityId);
+            list.forEach((data: Facility, type: number) => {
+                if (data.level > 0) {
+                    let cfg: FacilityConfig = this.getFacilityCfgByType(data.type);
+                    if (cfg) {
+                        let addValue: number = 0;
+                        let index: number = -1;
+                        index = cfg.additions.indexOf(CityAdditionType.ArmyTeams);
+                        if (index != -1) {
+                            //军队数量加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.armyCnt += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.Cost);
+                        if (index != -1) {
+                            //cost加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.cost += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.SoldierLimit);
+                        if (index != -1) {
+                            //带兵数加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.soldierCnt += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.VanguardLimit);
+                        if (index != -1) {
+                            //带兵数加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.vanguardCnt += addValue;
+                        }
+                    }
+                }
+            });
+            return addition;
+        }
+        return null;
+    }
+
     /**
      * 获取当前拥有的设施
      * @param cityId 
@@ -138,6 +232,18 @@ export default class MapUIProxy {
             }
         }
         return null;
+    }
+
+    /**获取城池的加成数据*/
+    public getMyCityAddition(cityId: number): CityAddition {
+        let addition: CityAddition = null;
+        if (this._additions.has(cityId)) {
+            addition = this._additions.get(cityId);
+        } else {
+            addition = new CityAddition();
+            this._additions.set(cityId, addition);
+        }
+        return addition;
     }
 
     /**
@@ -318,12 +424,12 @@ export default class MapUIProxy {
 
 
 
-    protected arrayToObject(arr:any):any{
-        let temp :any =  [];
-        for(var i = 0;i < arr.length;i++){
+    protected arrayToObject(arr: any): any {
+        let temp: any = [];
+        for (var i = 0; i < arr.length; i++) {
             var data = arr[i];
 
-            var obj:any = {}
+            var obj: any = {}
             obj.id = data[0];
             obj.cfgId = data[1];
             obj.physical_power = data[2];

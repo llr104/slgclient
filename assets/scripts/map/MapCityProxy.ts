@@ -12,7 +12,7 @@ export class MapCityData {
     level: number = 0;
     curDurable: number = 0;
     maxDurable: number = 0;
-    cost:number = 0,
+    cost: number = 0;
 
     public equalsServerData(data: any) {
         if (this.cityId == data.cityId
@@ -54,7 +54,7 @@ export default class MapCityProxy {
     protected _lastCityCellIds: Map<number, number[]> = new Map<number, number[]>();
     protected _myCitys: MapCityData[] = [];
     public myId: number = 0;
-    
+
     // 初始化数据
     public initData(): void {
         this._mapCitys.length = MapUtil.mapCellCount;
@@ -125,7 +125,7 @@ export default class MapCityProxy {
             this._myCitys[i].id = id;
             this._mapCitys[id] = this._myCitys[i];
         }
-        
+
     }
 
     /**更新建筑*/
@@ -157,7 +157,7 @@ export default class MapCityProxy {
             let updateCityCellIds: number[] = [];
             let removeCityCellIds: number[] = [];
             for (let i: number = 0; i < cBuilds.length; i++) {
-                let areaIndex:number = MapUtil.getAreaIdByCellPoint(cBuilds[i].x, cBuilds[i].y);
+                let areaIndex: number = MapUtil.getAreaIdByCellPoint(cBuilds[i].x, cBuilds[i].y);
                 if (areaIndex != areaId) {
                     //代表服务端给过来的数据不在当前区域
                     continue;
@@ -206,12 +206,12 @@ export default class MapCityProxy {
         return null;
     }
 
-    public isMyCity(cityId:number):boolean {
+    public isMyCity(cityId: number): boolean {
         return this.getMyCityById(cityId) != null;
     }
 
-    public getMyCityById(cityId:number): MapCityData {
-        for (let i:number = 0; i < this._myCitys.length; i++) {
+    public getMyCityById(cityId: number): MapCityData {
+        for (let i: number = 0; i < this._myCitys.length; i++) {
             if (this._myCitys[i].cityId == cityId) {
                 return this._myCitys[i];
             }
@@ -219,7 +219,7 @@ export default class MapCityProxy {
         return null;
     }
 
-    public getMyCitys():MapCityData[] {
+    public getMyCitys(): MapCityData[] {
         return this._myCitys;
     }
 

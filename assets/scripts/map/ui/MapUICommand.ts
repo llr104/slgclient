@@ -3,7 +3,7 @@ import LoginCommand from "../../login/LoginCommand";
 import { NetManager } from "../../network/socket/NetManager";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
-import MapUIProxy, { Facility } from "./MapUIProxy";
+import MapUIProxy, { CityAddition, Facility } from "./MapUIProxy";
 
 export default class MapUICommand {
     //单例
@@ -47,6 +47,8 @@ export default class MapUICommand {
                 this._proxy.updateMyFacility(cityData.cityId, { type: 0, level: cityData.level });
             }
             cc.systemEvent.emit("update_my_facilities");
+            let addition:CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
+            cc.systemEvent.emit("update_city_addition", cityData.cityId, addition);
         }
     }
 
@@ -65,8 +67,9 @@ export default class MapUICommand {
         console.log("onCityUpCity :", data, data.code == 0);
         if (data.code == 0) {
             let facilityData: Facility = this._proxy.updateMyFacility(data.msg.city.cityId, { type: 0, level: data.msg.city.level });
-            console.log("onCityUpCity", data.msg.city.cityId, facilityData);
             cc.systemEvent.emit("update_my_facility", data.msg.city.cityId, facilityData);
+            let addition:CityAddition = this._proxy.updateMyCityAdditions(data.msg.city.cityId);
+            cc.systemEvent.emit("update_city_addition", data.msg.city.cityId, addition);
         }
     }
 
