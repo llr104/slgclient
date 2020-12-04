@@ -77,7 +77,7 @@ export default class FacilityListLogic extends cc.Component {
             this._itemLogics.forEach((logic: FacilityItemLogic, type: number) => {
                 let cfg: FacilityConfig = MapUICommand.getInstance().proxy.getFacilityCfgByType(logic.data.type);
                 for (let i: number = 0; i < cfg.conditions.length; i++) {
-                    if (cfg.conditions[i].type == type) {
+                    if (cfg.conditions[i].type == data.type) {
                         //涉及到了解锁条件
                         let data: Facility = MapUICommand.getInstance().proxy.getMyFacilityByType(this._curCityId, logic.data.type);
                         let isUnlock: boolean = MapUICommand.getInstance().proxy.isFacilityUnlock(this._curCityId, logic.data.type);
