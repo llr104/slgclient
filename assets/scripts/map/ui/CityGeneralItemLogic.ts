@@ -123,7 +123,6 @@ export default class CityGeneralItemLogic extends cc.Component {
             this.progressBar.progress = this._soldierCnt / this._totalSoldierCnt;
             this.labelCost.string = "Cost " + cfg.cost;
         }
-        console.log("updateItem", this._data, this.index);
     }
 
     public setData(cityId: number, order: number, data: GeneralData, soldierCnt: number, totalSoldierCnt: number, isUnlock: boolean): void {

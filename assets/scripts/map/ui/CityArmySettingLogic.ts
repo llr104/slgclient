@@ -5,7 +5,7 @@ import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
 import MapCommand from "../MapCommand";
 import { MapCityData } from "../MapCityProxy";
-import { CityAddition, ConscriptBaseCost } from "./MapUIProxy";
+import { CityAddition, CityAdditionType, ConscriptBaseCost, Facility } from "./MapUIProxy";
 import CityGeneralItemLogic from "./CityGeneralItemLogic";
 import LoginCommand from "../../login/LoginCommand";
 
@@ -65,6 +65,7 @@ export default class CityArmySettingLogic extends cc.Component {
 
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
         cc.systemEvent.on("chosed_general", this.onChooseGeneral, this);
+        cc.systemEvent.on("update_city_addition", this.onUpdateAddition, this);
     }
 
     protected onDisable(): void {
@@ -94,6 +95,12 @@ export default class CityArmySettingLogic extends cc.Component {
 
     protected onUpdateArmy(armyData: ArmyData): void {
         if (this._data && armyData.id == this._data.id) {
+            this.setData(this._cityId, this._order);
+        }
+    }
+
+    protected onUpdateAddition(cityId:number):void {
+        if (this._cityId == cityId) {
             this.setData(this._cityId, this._order);
         }
     }
@@ -264,6 +271,10 @@ export default class CityArmySettingLogic extends cc.Component {
         this._condition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
         this._isUnlock = this._condition.armyCnt >= this._order;
         console.log("_cityData", this._cityData, this._data, this._condition);
+        let facility:Map<number, Facility> = MapUICommand.getInstance().proxy.getMyFacilitys(this._cityId);
+        if (facility == null) {
+            MapUICommand.getInstance().qryCityFacilities(this._cityId);
+        }
         this.updateView();
     }
 }

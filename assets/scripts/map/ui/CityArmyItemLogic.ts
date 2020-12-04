@@ -3,9 +3,6 @@ import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
-import { CityAdditionType } from "./MapUIProxy";
-import MapCommand from "../MapCommand";
-import { MapCityData } from "../MapCityProxy";
 
 const { ccclass, property } = cc._decorator;
 

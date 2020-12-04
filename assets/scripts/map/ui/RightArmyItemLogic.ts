@@ -82,7 +82,6 @@ export default class RightArmyItemLogic extends cc.Component {
     protected onClickSetting(): void {
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
-            cc.systemEvent.emit("open_general_dispose", cityData);
             cc.systemEvent.emit("open_army_setting", this._data.cityId, this.order);
         }
     }

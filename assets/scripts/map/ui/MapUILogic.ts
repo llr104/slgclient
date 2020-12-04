@@ -26,11 +26,6 @@ export default class MapUILogic extends cc.Component {
     protected _generalDesNode: cc.Node = null;
 
     @property(cc.Prefab)
-    generalDisPosePrefab: cc.Prefab = null;
-    protected _generalDisPoseNode: cc.Node = null;
-
-
-    @property(cc.Prefab)
     cityAboutPrefab: cc.Prefab = null;
     protected _cityAboutNode: cc.Node = null;
 
@@ -94,7 +89,6 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
-        cc.systemEvent.on("open_general_dispose", this.openGeneralDisPose, this);
         cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
@@ -121,7 +115,6 @@ export default class MapUILogic extends cc.Component {
         this._generalNode = null;
         this._cityAboutNode = null;
         this._conscriptNode = null;
-        this._generalDisPoseNode = null;
     }
 
 
@@ -197,28 +190,6 @@ export default class MapUILogic extends cc.Component {
         this._generalDesNode.zIndex = 1;
         this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData, curData);
     }
-
-
-
-
-
-
-
-    /**
-     * 武将配置
-     */
-    protected openGeneralDisPose(data: any, outPos: any = null, type: number = 0): void {
-        if (this._generalDisPoseNode == null) {
-            this._generalDisPoseNode = cc.instantiate(this.generalDisPosePrefab);
-            this._generalDisPoseNode.parent = this.node;
-        } else {
-            this._generalDisPoseNode.active = true;
-        }
-
-        this._generalDisPoseNode.getComponent("GeneralDisposeLogic").setData(data, outPos, type);
-    }
-
-
 
 
     /**

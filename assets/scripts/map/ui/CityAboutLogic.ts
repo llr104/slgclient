@@ -65,7 +65,6 @@ export default class CityAboutLogic extends cc.Component {
     }
 
 
-
     protected onClickFacility(): void {
         //设施
         cc.systemEvent.emit("open_facility", this._cityData);
