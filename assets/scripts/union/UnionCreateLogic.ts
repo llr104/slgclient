@@ -67,6 +67,6 @@ export default class UnionCreateLogic extends cc.Component {
     }
 
     protected onClickClose(): void {
-        this.node.parent.active = false;
+        this.node.active = false;
     }
 }

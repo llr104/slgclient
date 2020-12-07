@@ -28,10 +28,10 @@ export default class UnionCommand {
     //数据model
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.coalition_create, this.onCoalitionCreate, this);
-        cc.systemEvent.on(ServerConfig.coalition_join, this.onCoalitionJoin, this);
-        cc.systemEvent.on(ServerConfig.coalition_list, this.onCoalitionList, this);
-        cc.systemEvent.on(ServerConfig.coalition_member, this.onCoalitionMember, this);
+        cc.systemEvent.on(ServerConfig.union_create, this.onCoalitionCreate, this);
+        cc.systemEvent.on(ServerConfig.union_join, this.onCoalitionJoin, this);
+        cc.systemEvent.on(ServerConfig.union_list, this.onCoalitionList, this);
+        cc.systemEvent.on(ServerConfig.union_member, this.onCoalitionMember, this);
     }
 
     public onDestory(): void {
@@ -51,6 +51,7 @@ export default class UnionCommand {
         console.log("onCoalitionCreate", data);
         if (data.code == 0) {
             cc.systemEvent.emit("create_union_success");
+            this.coalitionList();
         }
     }
 
@@ -65,7 +66,9 @@ export default class UnionCommand {
     protected onCoalitionList(data: any, otherData: any): void {
         console.log("onCoalitionList", data);
         if (data.code == 0) {
+            cc.systemEvent.emit("upate_union_list",data.msg.list);
         }
+
     }
 
 
@@ -80,7 +83,7 @@ export default class UnionCommand {
 
     public coalitionCreate(name:string):void{
         let sendData: any = {
-            name: ServerConfig.coalition_create,
+            name: ServerConfig.union_create,
             msg: {
                 name: name,
             }
@@ -91,7 +94,7 @@ export default class UnionCommand {
 
     public coalitionJoin(id:number = 0):void{
         let sendData: any = {
-            name: ServerConfig.coalition_create,
+            name: ServerConfig.union_join,
             msg: {
                 id: id,
             }
@@ -102,7 +105,7 @@ export default class UnionCommand {
 
     public coalitionList():void{
         let sendData: any = {
-            name: ServerConfig.coalition_list,
+            name: ServerConfig.union_list,
             msg: {
             }
         };
@@ -112,7 +115,18 @@ export default class UnionCommand {
 
     public coalitionMember(id:number = 0):void{
         let sendData: any = {
-            name: ServerConfig.coalition_member,
+            name: ServerConfig.union_member,
+            msg: {
+                id: id,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+    public coalitionApplyList(id:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.union_applyList,
             msg: {
                 id: id,
             }

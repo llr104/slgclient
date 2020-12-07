@@ -32,10 +32,11 @@ const ServerConfig = {
     war_report:"war.report",
     war_read:"war.read",
 
-    coalition_create:"coalition.create",
-    coalition_join:"coalition.join",
-    coalition_list:"coalition.list",
-    coalition_member:"coalition.member",
+    union_create:"union.create",
+    union_join:"union.join",
+    union_list:"union.list",
+    union_member:"union.member",
+    union_applyList:"union.applyList",
     
 
     war_reportPush:"warReport.push",
