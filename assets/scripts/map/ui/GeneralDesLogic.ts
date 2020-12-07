@@ -6,7 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import GeneralCommand from "../../general/GeneralCommand";
-import { GenaralLevelConfig } from "../../general/GeneralProxy";
+import { GenaralLevelConfig, GeneralData } from "../../general/GeneralProxy";
 import { GeneralItemType } from "./GeneralItemLogic";
 
 
@@ -79,8 +79,8 @@ export default class GeneralDesLogic extends cc.Component {
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + (cfgData[key] + this._addPrObj[key])/100 
-            +"(+" + cfgData[key+"_grow"]/100 +"%)";
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + 
+            GeneralData.getPrStr(cfgData[key],this._addPrObj[key],this._currData.level,cfgData[key+"_grow"]);
             i++;
 
         }
@@ -93,12 +93,6 @@ export default class GeneralDesLogic extends cc.Component {
         this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "cost："+cfgData.cost;
     }
-
-
-    // protected openGeneralCcompose():void{
-    //     cc.systemEvent.emit("open_general_compose", this._cfgData,this._currData);
-    // }
-
 
 
 }

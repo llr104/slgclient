@@ -93,8 +93,8 @@ export default class GeneralAddPrLogic  extends cc.Component {
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + ((this._cfgData[key] + this._addPrObj[key])/this._step) 
-            +"(+" + this._cfgData[key+"_grow"]/100 +"%)";
+            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + 
+            GeneralData.getPrStr(this._cfgData[key],this._addPrObj[key],this._currData.level,this._cfgData[key+"_grow"]);
 
             var node:cc.Label = children[i].getChildByName("New Sprite").getChildByName("change Label").getComponent(cc.Label);
             node.string = this._addPrObj[key]/this._step +''
@@ -106,7 +106,7 @@ export default class GeneralAddPrLogic  extends cc.Component {
         if(this._canUsePr == -1){
             this._canUsePr = Math.abs(this._currData.hasPrPoint - this._currData.usePrPoint);
         }
-        this.prLabel.string = "可用属性点:" + this._canUsePr/this._step + "/" + this._curAll/this._step;
+        this.prLabel.string = "可用属性点:" + this._canUsePr/this._step + "/" + this._currData.hasPrPoint/this._step;
 
 
         this.addPr.active = this._currData.hasPrPoint > 0?true:false;
