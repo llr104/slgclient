@@ -119,6 +119,8 @@ export default class WarReportItemLogic extends cc.Component {
         if(!isRead){
             MapUICommand.getInstance().warRead(this._curData.id);
         }
+
+        cc.systemEvent.emit("click_war_report", this._curData);
        
     }
 }

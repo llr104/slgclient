@@ -17,18 +17,16 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class WarReportLogic extends cc.Component {
 
-    // @property(cc.Layout)
-    // srollLayout:cc.Layout = null;
-
-
     @property(cc.ScrollView)
     scrollView:cc.ScrollView = null;
 
-    // @property(cc.Prefab)
-    // warPortPrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    warPortDesPrefab: cc.Prefab = null;
+    private _warPortDesNode:cc.Node = null;
 
     protected onLoad():void{
         cc.systemEvent.on("upate_war_report", this.initView, this);
+        cc.systemEvent.on("click_war_report", this.openWarPortDes, this);
     }
 
 
@@ -38,11 +36,6 @@ export default class WarReportLogic extends cc.Component {
 
     protected onClickClose(): void {
         this.node.active = false;
-    }
-
-
-    protected onEnable():void{
-        
     }
 
 
@@ -56,6 +49,17 @@ export default class WarReportLogic extends cc.Component {
     protected updateView():void{
         this.initView();
         MapUICommand.getInstance().qryWarReport();
+    }
+
+    protected openWarPortDes(data:WarReport):void{
+        if (this._warPortDesNode == null) {
+            this._warPortDesNode = cc.instantiate(this.warPortDesPrefab);
+            this._warPortDesNode.parent = this.node;
+        } else {
+            this._warPortDesNode.active = true;
+        }
+
+        this._warPortDesNode.getComponent("WarReportDesLogic").setData(data);
     }
 
 

@@ -104,7 +104,7 @@ export class WarReport {
     end_defense_army: any = {};
 
     result: number = 0;
-    rounds: number = 0;
+    rounds: any = {};
     attack_is_read: boolean = false;
     defense_is_read: boolean = false;
     destroy_durable: number = 0;
@@ -112,13 +112,24 @@ export class WarReport {
     x: number = 0;
     y: number = 0;
     ctime: number = 0;
-    beg_attack_general: any = {};
-    beg_defense_general: any = {};
+    beg_attack_general: any[] = [];
+    beg_defense_general: any[] = [];
 
-    end_attack_general: any = {};
-    end_defense_general: any = {};
+    end_attack_general: any[] = [];
+    end_defense_general: any[] = [];
 
     is_read: boolean = false;
+
+}
+
+
+export class WarReportRound {
+    attack:any = {};
+    defense:any = {};
+    attackLoss:number = 0;
+    defenseLoss:number = 0;
+    round:number = 0;
+    turn:number = 0;
 }
 
 export default class MapUIProxy {
@@ -396,19 +407,19 @@ export default class MapUIProxy {
         obj.attack_rid = data.attack_rid;
         obj.defense_rid = data.defense_rid;
 
-        obj.beg_attack_army = this.arrayToObject(JSON.parse(data.beg_attack_army));
-        obj.beg_defense_army = this.arrayToObject(JSON.parse(data.beg_defense_army));
-        obj.end_attack_army = this.arrayToObject(JSON.parse(data.end_attack_army));
-        obj.end_defense_army = this.arrayToObject(JSON.parse(data.end_defense_army));
+        obj.beg_attack_army = JSON.parse(data.beg_attack_army);
+        obj.beg_defense_army = JSON.parse(data.beg_defense_army);
+        obj.end_attack_army = JSON.parse(data.end_attack_army);
+        obj.end_defense_army = JSON.parse(data.end_defense_army);
 
         obj.beg_attack_general = this.arrayToObject(JSON.parse(data.beg_attack_general));
         obj.beg_defense_general = this.arrayToObject(JSON.parse(data.beg_defense_general));
-
         obj.end_attack_general = this.arrayToObject(JSON.parse(data.end_attack_general));
         obj.end_defense_general = this.arrayToObject(JSON.parse(data.end_defense_general));
 
         obj.result = data.result;
-        obj.rounds = data.rounds;
+        var temp:any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
+        obj.rounds = this.createRoundsData(data.rounds,temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
         obj.defense_is_read = data.defense_is_read;
         obj.attack_is_read = data.attack_is_read;
 
@@ -422,6 +433,35 @@ export default class MapUIProxy {
         return obj;
     }
 
+
+    private createRoundsData(data:string,generals:any[]):any[]{
+        var _list:any[] = [];
+        var rounds:any[] = JSON.parse(data);
+        for(var i = 0; i < rounds.length;i++){
+            var round:any[] = rounds[i].b;
+            
+            for(var j = 0; j < round.length; j++){
+                var turn = round[j];
+                var attack_id = turn[0];
+                var defense_id = turn[1];
+                var attack_loss = turn[2];
+                var defense_loss = turn[3];
+    
+                var obj = new WarReportRound();
+                obj.attack = this.getMatchGeneral(generals,attack_id);
+                obj.defense = this.getMatchGeneral(generals,defense_id);
+                obj.attackLoss = attack_loss;
+                obj.defenseLoss = defense_loss;
+                obj.round = i + 1;
+                obj.turn = j + 1;
+                _list.push(obj);
+            }
+
+        }
+
+
+        return _list;
+    }
 
 
     protected arrayToObject(arr: any): any {
@@ -454,6 +494,15 @@ export default class MapUIProxy {
         }
 
         return temp;
+    }
+
+    protected getMatchGeneral(generals:any[] ,id:number = 0):any{
+        for(var i = 0;i < generals.length ;i++){
+            if(generals[i].id == id){
+                return generals[i];
+            }
+        }
+        return null;
     }
 
     public updateWarRead(id: number = 0, isRead: boolean = true) {
