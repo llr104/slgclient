@@ -31,6 +31,7 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.coalition_create, this.onCoalitionCreate, this);
         cc.systemEvent.on(ServerConfig.coalition_join, this.onCoalitionJoin, this);
         cc.systemEvent.on(ServerConfig.coalition_list, this.onCoalitionList, this);
+        cc.systemEvent.on(ServerConfig.coalition_member, this.onCoalitionMember, this);
     }
 
     public onDestory(): void {
@@ -68,6 +69,15 @@ export default class UnionCommand {
     }
 
 
+    protected onCoalitionMember(data: any, otherData: any): void {
+        console.log("onCoalitionMember", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("upate_union_member");
+        }
+        
+    }
+
+
     public coalitionCreate(name:string):void{
         let sendData: any = {
             name: ServerConfig.coalition_create,
@@ -94,6 +104,17 @@ export default class UnionCommand {
         let sendData: any = {
             name: ServerConfig.coalition_list,
             msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+    public coalitionMember(id:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.coalition_member,
+            msg: {
+                id: id,
             }
         };
         NetManager.getInstance().send(sendData);
