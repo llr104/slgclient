@@ -1,4 +1,6 @@
+import { NetManager } from "../network/socket/NetManager";
 import UnionProxy from "./UnionProxy";
+import { ServerConfig } from "../config/ServerConfig";
 
 export default class UnionCommand {
     //单例
@@ -26,6 +28,9 @@ export default class UnionCommand {
     //数据model
 
     constructor() {
+        cc.systemEvent.on(ServerConfig.coalition_create, this.onCoalitionCreate, this);
+        cc.systemEvent.on(ServerConfig.coalition_join, this.onCoalitionJoin, this);
+        cc.systemEvent.on(ServerConfig.coalition_list, this.onCoalitionList, this);
     }
 
     public onDestory(): void {
@@ -38,5 +43,59 @@ export default class UnionCommand {
 
     public get proxy(): UnionProxy {
         return this._proxy;
+    }
+
+
+    protected onCoalitionCreate(data: any, otherData: any): void {
+        console.log("onCoalitionCreate", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("create_union_success");
+        }
+    }
+
+
+    protected onCoalitionJoin(data: any, otherData: any): void {
+        console.log("onCoalitionJoin", data);
+        if (data.code == 0) {
+        }
+    }
+
+
+    protected onCoalitionList(data: any, otherData: any): void {
+        console.log("onCoalitionList", data);
+        if (data.code == 0) {
+        }
+    }
+
+
+    public coalitionCreate(name:string):void{
+        let sendData: any = {
+            name: ServerConfig.coalition_create,
+            msg: {
+                name: name,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+    public coalitionJoin(id:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.coalition_create,
+            msg: {
+                id: id,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+    public coalitionList():void{
+        let sendData: any = {
+            name: ServerConfig.coalition_list,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
     }
 }

@@ -54,6 +54,13 @@ export default class MapUILogic extends cc.Component {
 
 
 
+    
+    @property(cc.Prefab)
+    unionPrefab: cc.Prefab = null;
+    protected _unionNode: cc.Node = null;
+
+
+
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
 
@@ -284,6 +291,16 @@ export default class MapUILogic extends cc.Component {
         this._drawResultNode.getComponent("DrawRLogic").setData(data);
     }
 
+
+
+    protected openUnion(): void {
+        if (this._unionNode == null) {
+            this._unionNode = cc.instantiate(this.unionPrefab);
+            this._unionNode.parent = this.node;
+        } else {
+            this._unionNode.active = true;
+        }
+    }
 
     protected updateRole(): void {
         var roleData = LoginCommand.getInstance().proxy.getRoleData();

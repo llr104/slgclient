@@ -32,6 +32,9 @@ const ServerConfig = {
     war_report:"war.report",
     war_read:"war.read",
 
+    coalition_create:"coalition.create",
+    coalition_join:"coalition.join",
+    coalition_list:"coalition.list",
 
     war_reportPush:"warReport.push",
     general_push: "general.push",
