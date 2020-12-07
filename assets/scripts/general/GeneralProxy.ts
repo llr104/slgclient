@@ -85,6 +85,10 @@ export class GeneralData {
 
         return data;
     }
+
+    public static getPrStr(pr:number = 0,add:number = 0,lv:number = 0 ,grow:number = 0):string{
+        return (pr + add)/100 + "+(" + lv * grow/100 + "%)";
+    }
 }
 
 export default class GeneralProxy {
