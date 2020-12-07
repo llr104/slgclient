@@ -197,7 +197,7 @@ export class NetNode {
             //推送
             if(msg.seq == 0){
                 cc.systemEvent.emit(msg.name, msg);
-                console.log("all_push:",msg.name, msg);
+                // console.log("all_push:",msg.name, msg);
             }else{
                 this.cannelMsgTimer(msg);
 
@@ -207,10 +207,7 @@ export class NetNode {
                     if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                         this._requests.splice(i, 1);
                         i--;
-                        // msg.endTime = DateUtil.converTimeStr(new Date().getTime(),"hh:mm:ss:zzz")
-
-
-                        console.log("返回:",msg.name,"耗时:",new Date().getTime() - req.startTime)
+                        // console.log("返回:",msg.name,"耗时:",new Date().getTime() - req.startTime)
                         cc.systemEvent.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
                         cc.systemEvent.emit(NetEvent.ServerRequestSucess,msg);
