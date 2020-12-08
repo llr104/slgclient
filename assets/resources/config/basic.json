@@ -14,7 +14,48 @@
     "recovery_physical_power": 1,
     "reclamation_time": 30,
     "reclamation_cost": 1,
-    "draw_general_cost": 10
+    "draw_general_cost": 100,
+    "pr_pont": 1000
+  },
+  "role": {
+    "des": "角色的一些配置",
+    "wood": 10000,
+    "iron": 10000,
+    "stone": 10000,
+    "grain": 10000,
+    "gold": 10000,
+    "decree": 20,
+    "wood_yield": 100,
+    "iron_yield": 100,
+    "stone_yield": 100,
+    "grain_yield": 100,
+    "gold_yield": 100,
+    "depot_capacity": 10000
+  },
+  "city": {
+    "des": "城池的一些配置",
+    "cost": 75,
+    "durable": 100
+  },
+  "npc": {
+    "des": "npc一些配置",
+    "levels": [
+      {
+        "soilders": 100
+      },
+      {
+        "soilders": 200
+      },
+      {
+        "soilders": 300
+      },
+      {
+        "soilders": 400
+      },
+      {
+        "soilders": 500
+      }
+    ]
   }
 
 }
