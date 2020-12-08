@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { MapCityData } from "../map/MapCityProxy";
+import MapCommand from "../map/MapCommand";
 import UnionCommand from "./UnionCommand";
 
 
@@ -55,10 +57,13 @@ export default class UnionLogic extends cc.Component {
             this.myNode.active = true;
             com.setData(data);
         }
+
+
     }
 
     protected onEnable():void{
        this.lobbyNode.active = true;
+
     }
 
     protected onDisable():void{

@@ -144,7 +144,7 @@ export default class Main extends cc.Component {
 
 
     private onShowToast(msg:any):void{
-        if(msg.code == 0 || msg.code == 9){
+        if(msg.code == undefined || msg.code == 0 || msg.code == 9){
             return;
         }
 

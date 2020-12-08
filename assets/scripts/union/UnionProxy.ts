@@ -1,5 +1,7 @@
 import LoginCommand from "../login/LoginCommand";
 import { Role } from "../login/LoginProxy";
+import { MapCityData } from "../map/MapCityProxy";
+import MapCommand from "../map/MapCommand";
 
 export class Apply {
     id: number = 0;
@@ -110,26 +112,10 @@ export default class UnionProxy {
 
 
 
-    public isInUnion(unionid:number,rid:number):boolean{
-        let union:Union = this._unionMap.get(unionid);
-        if(!union){
-            return false;
-        }
 
-        var major:Member[] = union.major.concat();
-        for(var i = 0;i < major.length;i++){
-            if(major[i].rid == rid){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    public isMeInUnion(unionid:number):boolean{
-        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
-        return this.isInUnion(unionid,roleData.rid);
+    public isMeInUnion():boolean{
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        return city.unionId > 0?true:false; 
     }
 
     public isMeChairman(unionid:number):boolean{
@@ -139,5 +125,9 @@ export default class UnionProxy {
 
     public getMemberList(id:number):Member[]{
         return this._menberMap.get(id);
+    }
+
+    public getUnion(id:number = 0):Union{
+        return this._unionMap.get(id);
     }
 }

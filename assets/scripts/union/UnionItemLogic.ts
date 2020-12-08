@@ -39,7 +39,7 @@ export default class UnionItemLogic extends cc.Component {
     }
 
     protected isCanJoin():boolean{
-        return !UnionCommand.getInstance().proxy.isMeInUnion(this._unionData.id);
+        return !UnionCommand.getInstance().proxy.isMeInUnion();
     }
 
     protected join():void{

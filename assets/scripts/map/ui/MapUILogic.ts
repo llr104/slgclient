@@ -90,7 +90,6 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
-        cc.systemEvent.on("open_general_conscript", this.openConscript, this);
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
