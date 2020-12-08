@@ -38,7 +38,7 @@ export default class UnionMyLogic extends cc.Component {
 
     protected updateApply(data:any[]){
         var comp = this.applyView.node.getComponent("ListLogic");
-        comp.setData(data);
+        comp.setData(data?data:[]);
     }
 
 
@@ -58,7 +58,6 @@ export default class UnionMyLogic extends cc.Component {
 
     protected dismiss():void{
         UnionCommand.getInstance().unionDismiss();
-
     }
 
 }

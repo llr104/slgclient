@@ -3996,7 +3996,7 @@
         "__id__": 170
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 198
@@ -6212,12 +6212,14 @@
       "__id__": 154
     },
     "_enabled": true,
-    "scrollView": null,
+    "scrollView": {
+      "__id__": 160
+    },
     "itemPrefab": null,
     "itemNode": {
       "__id__": 170
     },
-    "itemLogicScriptName": "",
+    "itemLogicScriptName": "UnionApplyItemLogic",
     "isHorizontal": false,
     "columnCount": 1,
     "autoColumnCount": false,
