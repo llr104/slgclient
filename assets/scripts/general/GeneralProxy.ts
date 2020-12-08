@@ -58,8 +58,9 @@ export class GeneralData {
     defense_added:number = 0;
     speed_added:number = 0;
     destroy_added:number = 0;
+    config:GeneralConfig = new GeneralConfig();
 
-    public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
+    public static createFromServer(serverData: any, generalData: GeneralData = null,generalCfg:GeneralConfig): GeneralData {
         let data: GeneralData = generalData;
         if (data == null) {
             data = new GeneralData();
@@ -82,6 +83,7 @@ export class GeneralData {
         data.defense_added = serverData.defense_added;
         data.speed_added = serverData.speed_added;
         data.destroy_added = serverData.destroy_added;
+        data.config = generalCfg
 
         return data;
     }
@@ -171,14 +173,14 @@ export default class GeneralProxy {
 
     public updateMyGenerals(datas: any[]): void {
         for (var i = 0; i < datas.length; i++) {
-            let data: GeneralData = GeneralData.createFromServer(datas[i]);
+            let data: GeneralData = GeneralData.createFromServer(datas[i],null,this._generalConfigs.get(datas[i].cfgId));
             this._myGenerals.set(data.id, data);
         }
     }
 
     public updateGenerals(datas: any): number[] {
         let ids: number[] = [];
-        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id));
+        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id),this._generalConfigs.get(datas.cfgId));
         this._myGenerals.set(data.id, data);
         ids.push(data.id);
         return ids;
@@ -244,21 +246,27 @@ export default class GeneralProxy {
     }
 
 
+    protected sortStar(a:GeneralData,b:GeneralData):number{
+        if(a.config.star > b.config.star){
+            return 1;
+        }
+
+        return -1;
+    }
     /**
      * 排序 已经使用的
      */
     public getUseGenerals():GeneralData[] {
         var tempArr:GeneralData[] = this.getMyGenerals().concat();
+        tempArr.sort(this.sortStar);
         var temp:GeneralData[]  = [];
 
         for(var i = 0; i < tempArr.length ;i++){
-
             if(tempArr[i].order > 0){
                 temp.push(tempArr[i]);
                 tempArr.splice(i,1);
                 i--;
             }
-
         }
 
 

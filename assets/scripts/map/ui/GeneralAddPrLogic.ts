@@ -107,35 +107,33 @@ export default class GeneralAddPrLogic  extends cc.Component {
             this._canUsePr = Math.abs(this._currData.hasPrPoint - this._currData.usePrPoint);
         }
         this.prLabel.string = "可用属性点:" + this._canUsePr/this._step + "/" + this._currData.hasPrPoint/this._step;
-
-
         this.addPr.active = this._currData.hasPrPoint > 0?true:false;
     }
 
     protected plus(target:any,index:number = 0):void{
-        // console.log("plus:",target,index)
-        if(!this.isCanePlus()){
+        var num:number = this._addPrObj[this._addPrArr[index]]
+        if(!this.isCanePlus() || num >= this._currData.hasPrPoint){
             return
         }
 
-        this._addPrObj[this._addPrArr[index]] += this._step;
-        this._canUsePr-=this._step
+        num = num + this._step;
+        num = num > this._currData.hasPrPoint?this._currData.hasPrPoint:num;
+        this._addPrObj[this._addPrArr[index]] = num;
+        this._canUsePr -= this._step
         this.updateView();
     }
 
 
     protected reduce(target:any,index:number = 0):void{
-        // console.log("reduce:",target,index)
-        if(!this.isCaneReduce()){
+        var num:number = this._addPrObj[this._addPrArr[index]]
+        if(!this.isCaneReduce() || num == 0){
             return
         }
-        var num:number = this._addPrObj[this._addPrArr[index]]
+        
         num = num - this._step;
         num = num < 0?0:num;
         this._addPrObj[this._addPrArr[index]] = num;
-        if(num > 0){
-            this._canUsePr+=this._step
-        }
+        this._canUsePr += this._step
        
         this.updateView();
     }

@@ -42,12 +42,14 @@ export default class DrawRLogic extends cc.Component {
     public setData(data:any):void{
         var children = this.layout.node.children;
 
+        this.layout.node.width = 800;
+        this.layout.node.height = 500;
+        this.layout.spacingX = this.layout.spacingY = 10;
+        this.layout.resizeMode = cc.Layout.ResizeMode.CONTAINER;
         if(data.length == 1){
-            this.layout.type = cc.Layout.Type.NONE
+            this.layout.type = cc.Layout.Type.HORIZONTAL
         }else{
-            this.layout.node.width = 800;
-            this.layout.node.height = 500;
-            this.layout.type = cc.Layout.Type.GRID
+            this.layout.type = cc.Layout.Type.GRID;
         }
         for(var i = 0; i < this._maxSize;i++){
             var child = children[i];
