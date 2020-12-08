@@ -98,7 +98,7 @@ export default class CityArmySettingLogic extends cc.Component {
         }
     }
 
-    protected onUpdateAddition(cityId:number):void {
+    protected onUpdateAddition(cityId: number): void {
         if (this._cityId == cityId) {
             this.setData(this._cityId, this._order);
         }
@@ -151,6 +151,7 @@ export default class CityArmySettingLogic extends cc.Component {
                         this.sliders[i].progress = 0;
                         this.editBoxs[i].enabled = false;
                         this.sliders[i].enabled = false;
+                        this.setCurConscriptForIndex(i, 0);
                     } else {
                         this.editBoxs[i].enabled = true;
                         this.sliders[i].enabled = true;
@@ -221,19 +222,24 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onClickQuick(): void {
-        for (let i: number = 0; i < this._totalSoldiers.length; i++) {
-            let maxCnt: number = this._totalSoldiers[i] - this._soldiers[i];
-            if (maxCnt > 0) {
-                this.setCurConscriptForIndex(i, maxCnt);
+        if (this._data && this._data.cmd == 0) {
+            for (let i: number = 0; i < this._totalSoldiers.length; i++) {
+                let maxCnt: number = this._totalSoldiers[i] - this._soldiers[i];
+                if (maxCnt > 0) {
+                    this.setCurConscriptForIndex(i, maxCnt);
+                }
             }
+            this.updateResCost();
         }
-        this.updateResCost();
+
     }
 
     protected onClickSure(): void {
-        let totalCnt: number = this.getTotalConscriptCnt();
-        if (totalCnt > 0) {
-            ArmyCommand.getInstance().generalConscript(this._data.id, this._curConscripts, null);
+        if (this._data && this._data.cmd == 0) {
+            let totalCnt: number = this.getTotalConscriptCnt();
+            if (totalCnt > 0) {
+                ArmyCommand.getInstance().generalConscript(this._data.id, this._curConscripts, null);
+            }
         }
     }
 
@@ -268,7 +274,7 @@ export default class CityArmySettingLogic extends cc.Component {
         this._data = ArmyCommand.getInstance().proxy.getArmyByOrder(order, cityId);
         this._condition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
         this._isUnlock = this._condition.armyCnt >= this._order;
-        let facility:Map<number, Facility> = MapUICommand.getInstance().proxy.getMyFacilitys(this._cityId);
+        let facility: Map<number, Facility> = MapUICommand.getInstance().proxy.getMyFacilitys(this._cityId);
         if (facility == null) {
             MapUICommand.getInstance().qryCityFacilities(this._cityId);
         }
