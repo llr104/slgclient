@@ -27,7 +27,7 @@ export default class CreateLogic extends cc.Component {
 
     protected onLoad():void{
         cc.systemEvent.on(ServerConfig.role_create, this.create, this);
-        this.editName.string = this.getRandomName(4);
+        this.editName.string = this.getRandomName();
     }
 
     protected onCreate() {
