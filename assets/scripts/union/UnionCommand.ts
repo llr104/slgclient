@@ -33,6 +33,8 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.union_list, this.onUnionList, this);
         cc.systemEvent.on(ServerConfig.union_member, this.onUnionMember, this);
         cc.systemEvent.on(ServerConfig.union_dismiss, this.onUnionDisMiss, this);
+        cc.systemEvent.on(ServerConfig.union_applyList, this.onUnionApply, this);
+        cc.systemEvent.on(ServerConfig.union_verify, this.onUnionApply, this);
     }
 
     public onDestory(): void {
@@ -89,6 +91,22 @@ export default class UnionCommand {
         if (data.code == 0) {
             this.unionList();
             cc.systemEvent.emit("dismiss_union_success");
+        }
+    }
+
+
+    protected onUnionApply(data: any, otherData: any): void {
+        console.log("onUnionApply", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("update_union_apply",data.msg.applys);
+        }
+    }
+
+
+    protected onUnionVerify(data: any, otherData: any): void {
+        console.log("onUnionVerify", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("verify_union_success");
         }
     }
 
@@ -156,4 +174,18 @@ export default class UnionCommand {
         };
         NetManager.getInstance().send(sendData);
     }
+
+
+    public unionVerify(id:number = 0,decide:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.union_verify,
+            msg: {
+                id:id,
+                decide:decide
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    
 }

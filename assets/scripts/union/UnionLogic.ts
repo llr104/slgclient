@@ -62,7 +62,7 @@ export default class UnionLogic extends cc.Component {
     }
 
     protected onDisable():void{
-        this.lobbyNode.active = false;
+        this.visibleView();
     }
 
 

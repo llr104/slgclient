@@ -44,6 +44,7 @@ export default class UnionProxy {
     }
 
     public updateUnionList(data:any[]):void{
+        this._unionMap.clear();
         for(var i = 0; i < data.length ;i++){
             var obj = this.createUnion(data[i]);
             this._unionMap.set(obj.id,obj);
