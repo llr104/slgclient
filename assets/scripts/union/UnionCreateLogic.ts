@@ -19,7 +19,7 @@ export default class UnionCreateLogic extends cc.Component {
 
     protected onLoad():void{
         cc.systemEvent.on("create_union_success",this.onClickClose,this)
-        this.editName.string = this.getRandomName(6);
+        this.editName.string = this.getRandomName();
     }
 
 

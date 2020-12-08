@@ -26,7 +26,7 @@ export class HttpInvoke {
             try {
                 json = JSON.parse(data.responseText);
             } catch (e) {
-                
+                console.log("onComplete--e:",e)
             }
         }
         cc.systemEvent.emit(this._name, json,this._otherData);
