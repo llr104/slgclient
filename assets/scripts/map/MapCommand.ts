@@ -123,15 +123,18 @@ export default class MapCommand {
     protected onCityUpCity(data: any): void {
         if (data.code == 0) {
             let cityData: MapCityData = this._cityProxy.updateCity(data.msg.city);
-            if (cityData.cityId == this._cityProxy.getMyMainCity().cityId) {
-                this._cityProxy.myUnionId = this._buildProxy.myUnionId = cityData.unionId;
-            }
             cc.systemEvent.emit("update_city", cityData)
         }
     }
 
     protected onRoleCityPush(data: any): void {
+        console.log("onRoleCityPush", data);
         let cityData: MapCityData = this._cityProxy.updateCity(data.msg);
+        if (cityData.cityId == this._cityProxy.getMyMainCity().cityId) {
+            this._cityProxy.myUnionId = this._buildProxy.myUnionId = cityData.unionId;
+            console.log("my_union_change", this._cityProxy.myUnionId);
+            cc.systemEvent.emit("my_union_change", this._cityProxy.myUnionId);
+        }
         cc.systemEvent.emit("update_city", cityData);
     }
 

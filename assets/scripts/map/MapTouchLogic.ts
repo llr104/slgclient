@@ -39,6 +39,7 @@ export default class MapTouchLogic extends cc.Component {
         let cityData: MapCityData = this._cmd.cityProxy.getCity(cellId);;
         if (cityData != null) {
             //代表点击的是城市
+            clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(cityData.x, cityData.y));
             if (this._cmd.cityProxy.isMyCity(cityData.cityId)) {
                 cc.systemEvent.emit("open_city_about", cityData);
             } else {

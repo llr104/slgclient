@@ -13,11 +13,23 @@ export default class BuildLogic extends cc.Component {
     protected _data: MapBuildData = null;
 
     protected onLoad(): void {
-
+        
     }
 
     protected onDestroy(): void {
         this._data = null;
+    }
+
+    protected onEnable():void {
+        cc.systemEvent.on("my_union_change", this.onUnionChange, this);
+    }
+
+    protected onDisable():void {
+        cc.systemEvent.targetOff(this);
+    }
+
+    protected onUnionChange():void {
+        this.setBuildData(this._data);
     }
 
     public setBuildData(data: MapBuildData): void {
