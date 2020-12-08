@@ -195,7 +195,7 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._generalDesNode.active = true;
         }
-        this._generalDesNode.zIndex = 1;
+        // this._generalDesNode.zIndex = 1;
         this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData, curData);
     }
 
