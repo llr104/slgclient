@@ -17,8 +17,8 @@ export class GeneralConfig {
     physical_power_limit: number = 0;
     cost_physical_power: number = 0;
 
-    star:number = 0;
-    arms:number[] = [];
+    star: number = 0;
+    arms: number[] = [];
 
 }
 
@@ -35,7 +35,7 @@ export class GeneralCommonConfig {
     cost_physical_power: number = 10;
     recovery_physical_power: number = 10;
     reclamation_time: number = 3600;
-    draw_general_cost:number = 0;
+    draw_general_cost: number = 0;
 }
 
 /**武将数据*/
@@ -46,18 +46,18 @@ export class GeneralData {
     exp: number = 0;
     level: number = 0;
     physical_power: number = 0;
-    order:number = 0;
-    star_lv:number = 0;
-    parentId:number = 0;
-    compose_type:number = 0;
+    order: number = 0;
+    star_lv: number = 0;
+    parentId: number = 0;
+    compose_type: number = 0;
 
-    hasPrPoint:number = 0;
-    usePrPoint:number = 0;
-    force_added:number = 0;
-    strategy_added:number = 0;
-    defense_added:number = 0;
-    speed_added:number = 0;
-    destroy_added:number = 0;
+    hasPrPoint: number = 0;
+    usePrPoint: number = 0;
+    force_added: number = 0;
+    strategy_added: number = 0;
+    defense_added: number = 0;
+    speed_added: number = 0;
+    destroy_added: number = 0;
 
     public static createFromServer(serverData: any, generalData: GeneralData = null): GeneralData {
         let data: GeneralData = generalData;
@@ -86,8 +86,12 @@ export class GeneralData {
         return data;
     }
 
-    public static getPrStr(pr:number = 0,add:number = 0,lv:number = 0 ,grow:number = 0):string{
-        return (pr + add)/100 + "+(" + lv * grow/100 + "%)";
+    public static getPrValue(pr: number = 0, add: number = 0): number {
+        return (pr + add) / 100;
+    }
+
+    public static getPrStr(pr: number = 0, add: number = 0, lv: number = 0, grow: number = 0): string {
+        return (pr + add) / 100 + "+(" + lv * grow / 100 + "%)";
     }
 }
 
@@ -232,11 +236,11 @@ export default class GeneralProxy {
 
 
     /**相同类型的武将id */
-    public getGeneralIds(cfgId: number):number[]{
-        let myGenerals:GeneralData[] = this.getMyGenerals();
-        let tempGenerals:number[] = [];
-        for(var i = 0;i < myGenerals.length; i++){
-            if(myGenerals[i].cfgId == cfgId){
+    public getGeneralIds(cfgId: number): number[] {
+        let myGenerals: GeneralData[] = this.getMyGenerals();
+        let tempGenerals: number[] = [];
+        for (var i = 0; i < myGenerals.length; i++) {
+            if (myGenerals[i].cfgId == cfgId) {
                 tempGenerals.push(myGenerals[i].id)
             }
         }
@@ -247,24 +251,24 @@ export default class GeneralProxy {
     /**
      * 排序 已经使用的
      */
-    public getUseGenerals():GeneralData[] {
-        var tempArr:GeneralData[] = this.getMyGenerals().concat();
-        var temp:GeneralData[]  = [];
+    public getUseGenerals(): GeneralData[] {
+        var tempArr: GeneralData[] = this.getMyGenerals().concat();
+        var temp: GeneralData[] = [];
 
-        for(var i = 0; i < tempArr.length ;i++){
+        for (var i = 0; i < tempArr.length; i++) {
 
-            if(tempArr[i].order > 0){
+            if (tempArr[i].order > 0) {
                 temp.push(tempArr[i]);
-                tempArr.splice(i,1);
+                tempArr.splice(i, 1);
                 i--;
             }
 
         }
 
 
-        for(var i = 0; i < tempArr.length ;i++){
-            if(tempArr[i].parentId > 0){
-                tempArr.splice(i,1);
+        for (var i = 0; i < tempArr.length; i++) {
+            if (tempArr[i].parentId > 0) {
+                tempArr.splice(i, 1);
                 i--;
             }
         }
@@ -275,12 +279,12 @@ export default class GeneralProxy {
         return temp;
     }
 
-    public getComposeGenerals(cfgId:number = 0,id:number = 0):GeneralData[]{
-        var temp:GeneralData[]  = [];
-        var tempArr:GeneralData[] = this.getMyGenerals().concat();
+    public getComposeGenerals(cfgId: number = 0, id: number = 0): GeneralData[] {
+        var temp: GeneralData[] = [];
+        var tempArr: GeneralData[] = this.getMyGenerals().concat();
 
-        for(var i = 0; i < tempArr.length ;i++){
-            if(tempArr[i].order > 0 || tempArr[i].id == id || tempArr[i].cfgId != cfgId || tempArr[i].parentId > 0){
+        for (var i = 0; i < tempArr.length; i++) {
+            if (tempArr[i].order > 0 || tempArr[i].id == id || tempArr[i].cfgId != cfgId || tempArr[i].parentId > 0) {
                 continue
             }
 
