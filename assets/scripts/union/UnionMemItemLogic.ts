@@ -20,6 +20,9 @@ export default class UnionMemItemLogic extends cc.Component {
     @property(cc.Label)
     nameLabel: cc.Label = null;
 
+    @property(cc.Node)
+    kickButton: cc.Node = null;
+
     protected _menberData:Member = null;
 
     protected onLoad():void{
@@ -30,6 +33,13 @@ export default class UnionMemItemLogic extends cc.Component {
         this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + this._menberData.name;
 
 
+        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        this.kickButton.active = this._menberData.isMeChairMan && roleData.rid != this._menberData.rid;
+
+    }
+
+    protected kick():void{
+        UnionCommand.getInstance().unionKick(this._menberData.rid);
     }
 
 }

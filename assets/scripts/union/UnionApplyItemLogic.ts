@@ -28,12 +28,13 @@ export default class UnionApplyItemLogic extends cc.Component {
 
     protected updateItem(data:Apply):void{
         this._applyData = data;
+        this.nameLabel.string = this._applyData.nick_name;
     }
 
 
 
     protected verify(event:any,decide:number = 0):void{
-        UnionCommand.getInstance().unionVerify(this._applyData.id,decide);
+        UnionCommand.getInstance().unionVerify(this._applyData.id,Number(decide));
     }
 
 }

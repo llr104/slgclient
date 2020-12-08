@@ -1,3 +1,5 @@
+import LoginCommand from "../login/LoginCommand";
+import { Role } from "../login/LoginProxy";
 
 export class Apply {
     id: number = 0;
@@ -21,6 +23,8 @@ export class Member {
 
         return "普通成员"
     }
+
+    isMeChairMan:boolean = false;
     
 }
 
@@ -87,6 +91,51 @@ export default class UnionProxy {
         this._menberMap.set(id,member);
     }
 
+
+    public isChairman(unionid:number,rid:number):boolean{
+        let union:Union = this._unionMap.get(unionid);
+        if(!union){
+            return false;
+        }
+
+        var major:Member[] = union.major.concat();
+        for(var i = 0;i < major.length;i++){
+            if(major[i].rid == rid && major[i].title == 0){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    public isInUnion(unionid:number,rid:number):boolean{
+        let union:Union = this._unionMap.get(unionid);
+        if(!union){
+            return false;
+        }
+
+        var major:Member[] = union.major.concat();
+        for(var i = 0;i < major.length;i++){
+            if(major[i].rid == rid){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public isMeInUnion(unionid:number):boolean{
+        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        return this.isInUnion(unionid,roleData.rid);
+    }
+
+    public isMeChairman(unionid:number):boolean{
+        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
+        return this.isChairman(unionid,roleData.rid);
+    }
 
     public getMemberList(id:number):Member[]{
         return this._menberMap.get(id);
