@@ -39,14 +39,7 @@ export default class UnionItemLogic extends cc.Component {
     }
 
     protected isCanJoin():boolean{
-        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
-        for(var i = 0; i < this._unionData.major.length;i++){
-            if(this._unionData.major[i].rid == roleData.rid){
-                return false;
-            }
-        }
-
-        return true;
+        return !UnionCommand.getInstance().proxy.isMeInUnion(this._unionData.id);
     }
 
     protected join():void{

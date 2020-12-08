@@ -38,6 +38,10 @@ const ServerConfig = {
     union_member:"union.member",
     union_applyList:"union.applyList",
     union_dismiss:"union.dismiss",
+    union_verify:"union.verify",
+    union_exit:"union.exit",
+    union_kick:"union.kick",
+    
     
 
     war_reportPush:"warReport.push",
