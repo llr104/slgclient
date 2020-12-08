@@ -1,4 +1,5 @@
 import { MapCityData } from "../MapCityProxy";
+import MapCommand from "../MapCommand";
 
 const { ccclass, property } = cc._decorator;
 
@@ -10,6 +11,8 @@ export default class CityLogic extends cc.Component {
     spr: cc.Sprite = null;
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
+    @property(cc.Node)
+    tipNode: cc.Node = null;
 
     protected _data: MapCityData = null;
 
@@ -25,7 +28,13 @@ export default class CityLogic extends cc.Component {
         this._data = data;
         if (this._data) {
             this.labelName.string = this._data.name;
+            if (this._data.rid == MapCommand.getInstance().cityProxy.myId) {
+                this.tipNode.color = cc.Color.GREEN;
+            } else if (this._data.unionId == MapCommand.getInstance().cityProxy.myUnionId) {
+                this.tipNode.color = cc.Color.BLUE;
+            } else {
+                this.tipNode.color = cc.Color.RED;
+            }
         }
-        
     }
 }

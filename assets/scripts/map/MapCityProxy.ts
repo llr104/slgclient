@@ -74,28 +74,28 @@ export default class MapCityProxy {
     public addCityData(data: any, cellId: number): void {
         let cityData: MapCityData = MapCityData.createCityData(data, cellId, this._mapCitys[cellId]);
         this._mapCitys[cellId] = cityData;
-        // this._mapCitys[cellId - 1] = cityData;
-        // this._mapCitys[cellId + 1] = cityData;
-        // this._mapCitys[cellId - MapUtil.mapSize.width] = cityData;
-        // this._mapCitys[cellId - MapUtil.mapSize.width - 1] = cityData;
-        // this._mapCitys[cellId - MapUtil.mapSize.width + 1] = cityData;
-        // this._mapCitys[cellId + MapUtil.mapSize.width] = cityData;
-        // this._mapCitys[cellId + MapUtil.mapSize.width - 1] = cityData;
-        // this._mapCitys[cellId + MapUtil.mapSize.width + 1] = cityData;
+        this._mapCitys[cellId - 1] = cityData;
+        this._mapCitys[cellId + 1] = cityData;
+        this._mapCitys[cellId - MapUtil.mapSize.width] = cityData;
+        this._mapCitys[cellId - MapUtil.mapSize.width - 1] = cityData;
+        this._mapCitys[cellId - MapUtil.mapSize.width + 1] = cityData;
+        this._mapCitys[cellId + MapUtil.mapSize.width] = cityData;
+        this._mapCitys[cellId + MapUtil.mapSize.width - 1] = cityData;
+        this._mapCitys[cellId + MapUtil.mapSize.width + 1] = cityData;
     }
 
     public removeCityData(cellId: number): void {
         let cityData: MapCityData = this._mapCitys[cellId];
         if (cityData) {
             this._mapCitys[cellId] = null;
-            // this.checkAndRemoveCityCell(cellId - 1, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId + 1, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width - 1, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width + 1, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width - 1, cityData.cityId);
-            // this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width + 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId - 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId + 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width - 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId - MapUtil.mapSize.width + 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width - 1, cityData.cityId);
+            this.checkAndRemoveCityCell(cellId + MapUtil.mapSize.width + 1, cityData.cityId);
         }
     }
 
