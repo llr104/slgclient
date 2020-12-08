@@ -29,7 +29,7 @@ export default class UnionLogic extends cc.Component {
         this.visibleView();
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
         cc.systemEvent.on("dismiss_union_success",this.back,this);
-        
+        cc.systemEvent.on("close_union",this.onClickClose,this);
     }
 
 

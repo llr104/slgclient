@@ -27,6 +27,8 @@ export class Member {
     }
 
     isMeChairMan:boolean = false;
+    x:number = 0;
+    y:number = 0;
     
 }
 
@@ -75,6 +77,8 @@ export default class UnionProxy {
         obj.rid = data.rid;
         obj.name = data.name;
         obj.title = data.title;
+        obj.x = data.x;
+        obj.y = data.y;
         return obj
     }
 
