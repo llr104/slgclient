@@ -169,6 +169,14 @@ export default class CityArmySettingLogic extends cc.Component {
         this.labelId.string = "部队" + this._order;
         this.labelCost.string = totalCost + "/" + this._cityData.cost;
         this.labelSoldierCnt.string = soldierCnt + "/" + totalSoldierCnt;
+        if (this._data) {
+            let generals: GeneralData[] = ArmyCommand.getInstance().getArmyGenerals(this._data);
+            let speed: number = ArmyCommand.getInstance().getArmySpeed(generals);
+            this.labelSpeed.string = speed + "";
+        } else {
+            this.labelSpeed.string = "0";
+        }
+
         this.updateResCost();
     }
 

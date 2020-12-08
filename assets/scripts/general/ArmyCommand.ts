@@ -3,7 +3,7 @@ import LoginCommand from "../login/LoginCommand";
 import { NetManager } from "../network/socket/NetManager";
 import ArmyProxy, { ArmyCmd, ArmyData } from "./ArmyProxy";
 import GeneralCommand from "./GeneralCommand";
-import { GenaralLevelConfig, GeneralData } from "./GeneralProxy";
+import { GenaralLevelConfig, GeneralConfig, GeneralData } from "./GeneralProxy";
 
 
 export default class ArmyCommand {
@@ -160,6 +160,19 @@ export default class ArmyCommand {
             }
         }
         return cnt;
+    }
+
+     /**根据将领列表获取军队总士兵数*/
+     public getArmySpeed(generals: GeneralData[]): number {
+        let speed: number = 1000000;
+        let cfg: GeneralConfig = null;
+        for (let i: number = 0; i < generals.length; i++) {
+            if (generals[i]) {
+                cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
+                speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, generals[i].speed_added);
+            }
+        }
+        return speed;
     }
 
     public getArmyStateDes(armyData: ArmyData): string {

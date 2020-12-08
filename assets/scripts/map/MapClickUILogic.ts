@@ -103,6 +103,7 @@ export default class MapClickUILogic extends cc.Component {
         this.labelPos.string = "(" + data.x + ", " + data.y + ")";
         this.leftInfoNode.active = true;
         this.btnReclaim.node.active = false;
+        this.bgSelect.setContentSize(200, 100);
         if (this._data instanceof MapResData) {
             //点击的是野外
             this.btnMove.node.active = false;
@@ -132,6 +133,7 @@ export default class MapClickUILogic extends cc.Component {
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         } else if (this._data instanceof MapCityData) {
             //点击其他城市
+            this.bgSelect.setContentSize(600, 300);
             this.btnMove.node.active = false;
             this.btnOccupy.node.active = true;
             this.btnGiveUp.node.active = false;

@@ -28,6 +28,18 @@ export default class ArmyLogic extends cc.Component {
         this._aniNode = null;
     }
 
+    protected onEnable():void {
+        cc.systemEvent.on("my_union_change", this.onUnionChange, this);
+    }
+
+    protected onDisable():void {
+        cc.systemEvent.targetOff(this);
+    }
+
+    protected onUnionChange():void {
+        this.setArmyData(this._data);
+    }
+
     protected update(): void {
         if (this._data && this._data.state > 0) {
             let nowTime: number = DateUtil.getServerTime();

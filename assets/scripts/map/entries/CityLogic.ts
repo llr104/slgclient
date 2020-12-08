@@ -17,11 +17,23 @@ export default class CityLogic extends cc.Component {
     protected _data: MapCityData = null;
 
     protected onLoad(): void {
-
+        
     }
 
     protected onDestroy(): void {
         this._data = null;
+    }
+
+    protected onEnable():void {
+        cc.systemEvent.on("my_union_change", this.onUnionChange, this);
+    }
+
+    protected onDisable():void {
+        cc.systemEvent.targetOff(this);
+    }
+
+    protected onUnionChange():void {
+        this.setCityData(this._data);
     }
 
     public setCityData(data: MapCityData): void {
