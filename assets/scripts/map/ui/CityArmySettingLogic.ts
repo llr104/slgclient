@@ -82,7 +82,6 @@ export default class CityArmySettingLogic extends cc.Component {
             let comp: CityGeneralItemLogic = item.getComponent(CityGeneralItemLogic);
             comp.index = i;
             this._gengeralLogics.push(comp);
-            console.log("comp index", i, comp);
         }
     }
 
@@ -94,7 +93,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onUpdateArmy(armyData: ArmyData): void {
-        if (this._data && armyData.id == this._data.id) {
+        if (armyData.cityId == this._cityId && armyData.order == this._order) {
             this.setData(this._cityId, this._order);
         }
     }
@@ -106,7 +105,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onChooseGeneral(cfgData: any, curData: any, position: any): void {
-        ArmyCommand.getInstance().generalDispose(this._cityData.cityId, curData.id, this._data.order, Number(position), this._cityData);
+        ArmyCommand.getInstance().generalDispose(this._cityData.cityId, curData.id, this._order, Number(position), this._cityData);
     }
 
     protected updateView(): void {
@@ -164,12 +163,12 @@ export default class CityArmySettingLogic extends cc.Component {
 
                 }
                 comp.setData(this._cityId, this._order, generalData, this._soldiers[i], this._totalSoldiers[i], isUnlock);
-                console.log("compcmpaksdf", comp);
             }
         }
         this.labelId.string = "部队" + this._order;
         this.labelCost.string = totalCost + "/" + this._cityData.cost;
         this.labelSoldierCnt.string = soldierCnt + "/" + totalSoldierCnt;
+        this.updateResCost();
     }
 
     protected setCurConscriptForIndex(index: number, cnt: number = 0): void {
@@ -263,14 +262,12 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     public setData(cityId: number, order: number = 1): void {
-        console.log("setData", arguments)
         this._cityId = cityId;
         this._order = order;
         this._cityData = MapCommand.getInstance().cityProxy.getMyCityById(this._cityId);
         this._data = ArmyCommand.getInstance().proxy.getArmyByOrder(order, cityId);
         this._condition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
         this._isUnlock = this._condition.armyCnt >= this._order;
-        console.log("_cityData", this._cityData, this._data, this._condition);
         let facility:Map<number, Facility> = MapUICommand.getInstance().proxy.getMyFacilitys(this._cityId);
         if (facility == null) {
             MapUICommand.getInstance().qryCityFacilities(this._cityId);

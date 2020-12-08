@@ -7,21 +7,25 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class ArmyLogic extends cc.Component {
 
-    @property(cc.Animation)
-    ani: cc.Animation = null;
+    @property(cc.Prefab)
+    aniPrefab: cc.Prefab = null;
 
     protected _data: ArmyData = null;
+    protected _aniNode: cc.Node = null;
+    protected _aniName: string = "";
     protected _startPixelPos: cc.Vec2 = null;
     protected _endPixelPos: cc.Vec2 = null;
     protected _lenX: number = 0;
     protected _lenY: number = 0;
 
     protected onLoad(): void {
-
+        this._aniNode = cc.instantiate(this.aniPrefab);
+        this._aniNode.parent = this.node;
     }
 
     protected onDestroy(): void {
         this._data = null;
+        this._aniNode = null;
     }
 
     protected update(): void {
@@ -50,5 +54,33 @@ export default class ArmyLogic extends cc.Component {
         this._lenX = this._endPixelPos.x - this._startPixelPos.x;
         this._lenY = this._endPixelPos.y - this._startPixelPos.y;
         this.node.setPosition(MapUtil.mapCellToPixelPoint(cc.v2(this._data.x, this._data.y)));
+        this._aniName = "qb_run_r";
+        if (this._startPixelPos.y == this._endPixelPos.y) {
+            //平行
+            if (this._startPixelPos.x < this._endPixelPos.x) {
+                this._aniName = "qb_run_r";
+            } else {
+                this._aniName = "qb_run_l";
+            }
+        } else if (this._startPixelPos.y < this._endPixelPos.y) {
+            //往上走
+            if (this._startPixelPos.x < this._endPixelPos.x) {
+                this._aniName = "qb_run_ru";
+            } else if (this._startPixelPos.x == this._endPixelPos.x) {
+                this._aniName = "qb_run_u";
+            } else {
+                this._aniName = "qb_run_lu";
+            }
+        } else if (this._startPixelPos.y > this._endPixelPos.y) {
+            //往下走
+            if (this._startPixelPos.x < this._endPixelPos.x) {
+                this._aniName = "qb_run_rd";
+            } else if (this._startPixelPos.x == this._endPixelPos.x) {
+                this._aniName = "qb_run_d";
+            } else {
+                this._aniName = "qb_run_ld";
+            }
+        }
+        this._aniNode.getComponent(cc.Animation).play(this._aniName);
     }
 }
