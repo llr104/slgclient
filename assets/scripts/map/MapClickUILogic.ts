@@ -117,10 +117,10 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = true;
                 this.btnReclaim.node.active = true;
-            } else if ((this._data as MapBuildData).uinonId == MapCommand.getInstance().buildProxy.myUnionId) {
+            } else if ((this._data as MapBuildData).unionId == MapCommand.getInstance().buildProxy.myUnionId) {
                 //盟友的地
-                this.btnMove.node.active = false;
-                this.btnOccupy.node.active = true;
+                this.btnMove.node.active = true;
+                this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
             }else {
                 this.btnMove.node.active = false;

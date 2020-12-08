@@ -1,11 +1,5 @@
 import MapUtil from "./MapUtil";
 
-export enum MapBuildAscription {
-    Me,
-    Friendly,
-    Enemy
-}
-
 /**地图建筑和占领数据*/
 export class MapBuildData {
     id: number = 0;
@@ -19,7 +13,7 @@ export class MapBuildData {
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
-    uinonId: number = 0;
+    unionId: number = 0;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -29,7 +23,7 @@ export class MapBuildData {
             && this.curDurable == data.cur_durable
             && this.maxDurable == data.maxDurable
             && this.defender == data.defender
-            && this.uinonId == data.union_id) {
+            && this.unionId == data.union_id) {
             return true;
         }
         return false;
@@ -50,7 +44,7 @@ export class MapBuildData {
         build.curDurable = data.cur_durable;
         build.maxDurable = data.max_durable;
         build.defender = data.defender;
-        build.uinonId = data.union_id;
+        build.unionId = data.union_id;
         return build;
     }
 }
@@ -110,7 +104,6 @@ export default class MapBuildProxy {
         } else {
             buildData = MapBuildData.createBuildData(build, id, this._mapBuilds[id]);
         }
-        this._mapBuilds[id].ascription = this._mapBuilds[id].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
         cc.systemEvent.emit("update_build", buildData);
         if (buildData.rid == this.myId) {
             //代表是自己的领地
@@ -166,7 +159,6 @@ export default class MapBuildProxy {
                         if (this._mapBuilds[cellId].equalsServerData(rBuilds[i]) == false) {
                             //代表数据不一样需要刷新
                             this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId, this._mapBuilds[cellId]);
-                            this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                             updateBuildCellIds.push(cellId);
                         }
                         lastBuildCellIds.splice(index, 1);//移除重复数据
@@ -176,7 +168,6 @@ export default class MapBuildProxy {
                 }
                 //其他情况就是新数据了
                 this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId);
-                this._mapBuilds[cellId].ascription = this._mapBuilds[cellId].rid == this.myId ? MapBuildAscription.Me : MapBuildAscription.Enemy;
                 addBuildCellIds.push(cellId);
             }
             if (lastBuildCellIds && lastBuildCellIds.length > 0) {
