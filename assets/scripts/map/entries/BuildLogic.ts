@@ -25,7 +25,7 @@ export default class BuildLogic extends cc.Component {
         if (this._data) {
             if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
                 this.spr.node.color = cc.Color.GREEN;
-            } else if (this._data.uinonId == MapCommand.getInstance().buildProxy.myUnionId) {
+            } else if (this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
                 this.spr.node.color = cc.Color.BLUE;
             } else {
                 this.spr.node.color = cc.Color.RED;
