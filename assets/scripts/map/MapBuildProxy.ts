@@ -19,7 +19,7 @@ export class MapBuildData {
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
-    ascription: MapBuildAscription = MapBuildAscription.Me;
+    uinonId: number = 0;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -28,7 +28,8 @@ export class MapBuildData {
             && this.level == data.level
             && this.curDurable == data.cur_durable
             && this.maxDurable == data.maxDurable
-            && this.defender == data.defender) {
+            && this.defender == data.defender
+            && this.uinonId == data.union_id) {
             return true;
         }
         return false;
@@ -49,6 +50,7 @@ export class MapBuildData {
         build.curDurable = data.cur_durable;
         build.maxDurable = data.max_durable;
         build.defender = data.defender;
+        build.uinonId = data.union_id;
         return build;
     }
 }
@@ -58,6 +60,7 @@ export default class MapBuildProxy {
     protected _myBuilds: MapBuildData[] = [];
     protected _lastBuildCellIds: Map<number, number[]> = new Map<number, number[]>();
     public myId: number = 0;
+    public myUnionId: number = 0;
 
     // 初始化数据
     public initData(): void {

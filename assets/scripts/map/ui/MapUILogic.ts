@@ -29,12 +29,6 @@ export default class MapUILogic extends cc.Component {
     cityAboutPrefab: cc.Prefab = null;
     protected _cityAboutNode: cc.Node = null;
 
-
-    @property(cc.Prefab)
-    conscriptPrefab: cc.Prefab = null;
-    protected _conscriptNode: cc.Node = null;
-
-
     @property(cc.Prefab)
     warReportPrefab: cc.Prefab = null;
     protected _warReportNode: cc.Node = null;
@@ -121,7 +115,11 @@ export default class MapUILogic extends cc.Component {
         this._facilityNode = null;
         this._generalNode = null;
         this._cityAboutNode = null;
-        this._conscriptNode = null;
+        this._armySelectNode = null;
+        this._armySettingNode = null;
+        this._drawNode = null;
+        this._drawResultNode = null;
+        this._generalDesNode = null;
     }
 
 
@@ -131,6 +129,7 @@ export default class MapUILogic extends cc.Component {
     protected openFacility(data: any): void {
         if (this._facilityNode == null) {
             this._facilityNode = cc.instantiate(this.facilityPrefab);
+            this._facilityNode.zIndex = 2;
             this._facilityNode.parent = this.node;
         } else {
             this._facilityNode.active = true;
@@ -141,6 +140,7 @@ export default class MapUILogic extends cc.Component {
     protected openArmySetting(cityId: number, order: number): void {
         if (this._armySettingNode == null) {
             this._armySettingNode = cc.instantiate(this.armySettingPrefab);
+            this._armySettingNode.zIndex = 2;
             this._armySettingNode.parent = this.node;
         } else {
             this._armySettingNode.active = true;
@@ -153,13 +153,14 @@ export default class MapUILogic extends cc.Component {
     protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = cc.instantiate(this.generalPrefab);
+            this._generalNode.zIndex = 4;
             this._generalNode.parent = this.node;
         } else {
             this._generalNode.active = true;
         }
 
         this._generalNode.getComponent("GeneralLogic").setData(data, type, position);
-        this._generalNode.zIndex = zIndex;
+        // this._generalNode.zIndex = zIndex;
     }
 
 
@@ -190,6 +191,7 @@ export default class MapUILogic extends cc.Component {
     protected openGeneralDes(cfgData: any, curData: any): void {
         if (this._generalDesNode == null) {
             this._generalDesNode = cc.instantiate(this.generalDesPrefab);
+            this._generalDesNode.zIndex = 4;
             this._generalDesNode.parent = this.node;
         } else {
             this._generalDesNode.active = true;
@@ -205,30 +207,13 @@ export default class MapUILogic extends cc.Component {
     protected openCityAbout(data: any): void {
         if (this._cityAboutNode == null) {
             this._cityAboutNode = cc.instantiate(this.cityAboutPrefab);
+            this._cityAboutNode.zIndex = 1;
             this._cityAboutNode.parent = this.node;
         } else {
             this._cityAboutNode.active = true;
         }
         this._cityAboutNode.getComponent("CityAboutLogic").setData(data);
     }
-
-
-
-
-    /**
-     * 征兵
-     */
-    protected openConscript(orderId: number = 0, cityData: any): void {
-        if (this._conscriptNode == null) {
-            this._conscriptNode = cc.instantiate(this.conscriptPrefab);
-            this._conscriptNode.parent = this.node;
-        } else {
-            this._conscriptNode.active = true;
-        }
-
-        this._conscriptNode.getComponent("ConscriptLogic").setData(orderId, cityData);
-    }
-
 
 
     /**

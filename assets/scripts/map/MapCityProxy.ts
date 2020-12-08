@@ -13,6 +13,7 @@ export class MapCityData {
     curDurable: number = 0;
     maxDurable: number = 0;
     cost: number = 0;
+    unionId:number = 0;
 
     public equalsServerData(data: any) {
         if (this.cityId == data.cityId
@@ -23,7 +24,8 @@ export class MapCityData {
             && this.isMain == data.is_main
             && this.level == data.level
             && this.curDurable == data.cur_durable
-            && this.maxDurable == data.maxDurable) {
+            && this.maxDurable == data.maxDurable
+            && this.unionId == data.union_id) {
             return true;
         }
         return false;
@@ -45,6 +47,7 @@ export class MapCityData {
         city.curDurable = data.cur_durable;
         city.maxDurable = data.max_durable;
         city.cost = data.cost;
+        city.unionId = data.union_id;
         return city;
     }
 }
@@ -54,6 +57,7 @@ export default class MapCityProxy {
     protected _lastCityCellIds: Map<number, number[]> = new Map<number, number[]>();
     protected _myCitys: MapCityData[] = [];
     public myId: number = 0;
+    public myUnionId: number = 0;
 
     // 初始化数据
     public initData(): void {

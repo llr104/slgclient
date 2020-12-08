@@ -1,4 +1,4 @@
-import { MapBuildAscription, MapBuildData } from "../MapBuildProxy";
+import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
 
 const { ccclass, property } = cc._decorator;
@@ -23,10 +23,12 @@ export default class BuildLogic extends cc.Component {
     public setBuildData(data: MapBuildData): void {
         this._data = data;
         if (this._data) {
-            if (this._data.ascription == MapBuildAscription.Me) {
-                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("expansion_of_tips_1_1");
+            if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
+                this.spr.node.color = cc.Color.GREEN;
+            } else if (this._data.uinonId == MapCommand.getInstance().buildProxy.myUnionId) {
+                this.spr.node.color = cc.Color.BLUE;
             } else {
-                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("expansion_of_tips_3_1");
+                this.spr.node.color = cc.Color.RED;
             }
         }
     }

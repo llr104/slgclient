@@ -1,6 +1,5 @@
-import ArmyCommand from "../general/ArmyCommand";
-import { ArmyCmd, ArmyData } from "../general/ArmyProxy";
-import { MapBuildAscription, MapBuildData } from "./MapBuildProxy";
+import { ArmyCmd} from "../general/ArmyProxy";
+import {MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
 import { MapResConfig, MapResData } from "./MapProxy";
@@ -112,13 +111,18 @@ export default class MapClickUILogic extends cc.Component {
             this.durableNode.active = false;
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
-            if ((this._data as MapBuildData).ascription == MapBuildAscription.Me) {
+            if ((this._data as MapBuildData).rid == MapCommand.getInstance().buildProxy.myId) {
                 //我自己的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = true;
                 this.btnReclaim.node.active = true;
-            } else {
+            } else if ((this._data as MapBuildData).uinonId == MapCommand.getInstance().buildProxy.myUnionId) {
+                //盟友的地
+                this.btnMove.node.active = false;
+                this.btnOccupy.node.active = true;
+                this.btnGiveUp.node.active = false;
+            }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
