@@ -24,7 +24,7 @@ export default class UnionCreateLogic extends cc.Component {
 
 
     protected onCreate() {
-        UnionCommand.getInstance().coalitionCreate(this.editName.string);
+        UnionCommand.getInstance().unionCreate(this.editName.string);
     }
 
 

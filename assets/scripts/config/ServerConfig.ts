@@ -37,6 +37,7 @@ const ServerConfig = {
     union_list:"union.list",
     union_member:"union.member",
     union_applyList:"union.applyList",
+    union_dismiss:"union.dismiss",
     
 
     war_reportPush:"warReport.push",

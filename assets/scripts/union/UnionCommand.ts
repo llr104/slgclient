@@ -28,10 +28,11 @@ export default class UnionCommand {
     //数据model
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.union_create, this.onCoalitionCreate, this);
-        cc.systemEvent.on(ServerConfig.union_join, this.onCoalitionJoin, this);
-        cc.systemEvent.on(ServerConfig.union_list, this.onCoalitionList, this);
-        cc.systemEvent.on(ServerConfig.union_member, this.onCoalitionMember, this);
+        cc.systemEvent.on(ServerConfig.union_create, this.onUnionCreate, this);
+        cc.systemEvent.on(ServerConfig.union_join, this.onUnionJoin, this);
+        cc.systemEvent.on(ServerConfig.union_list, this.onUnionList, this);
+        cc.systemEvent.on(ServerConfig.union_member, this.onUnionMember, this);
+        cc.systemEvent.on(ServerConfig.union_dismiss, this.onUnionDisMiss, this);
     }
 
     public onDestory(): void {
@@ -47,41 +48,52 @@ export default class UnionCommand {
     }
 
 
-    protected onCoalitionCreate(data: any, otherData: any): void {
-        console.log("onCoalitionCreate", data);
+    protected onUnionCreate(data: any, otherData: any): void {
+        console.log("onUnionCreate", data);
         if (data.code == 0) {
             cc.systemEvent.emit("create_union_success");
-            this.coalitionList();
+            this.unionList();
         }
     }
 
 
-    protected onCoalitionJoin(data: any, otherData: any): void {
-        console.log("onCoalitionJoin", data);
+    protected onUnionJoin(data: any, otherData: any): void {
+        console.log("onUnionJoin", data);
         if (data.code == 0) {
         }
     }
 
 
-    protected onCoalitionList(data: any, otherData: any): void {
-        console.log("onCoalitionList", data);
+    protected onUnionList(data: any, otherData: any): void {
+        console.log("onUnionList", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("upate_union_list",data.msg.list);
+            this._proxy.updateUnionList(data.msg.list);
+            cc.systemEvent.emit("update_union_list",data.msg.list);
         }
 
     }
 
 
-    protected onCoalitionMember(data: any, otherData: any): void {
-        console.log("onCoalitionMember", data);
+    protected onUnionMember(data: any, otherData: any): void {
+        console.log("onUnionMember", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("upate_union_member");
+            this._proxy.updateMemberList(data.msg.id,data.msg.Members);
+            cc.systemEvent.emit("update_union_member",data.msg.Members);
         }
         
     }
 
 
-    public coalitionCreate(name:string):void{
+    protected onUnionDisMiss(data: any, otherData: any): void {
+        console.log("onUnionDisMiss", data);
+        if (data.code == 0) {
+            this.unionList();
+            cc.systemEvent.emit("dismiss_union_success");
+        }
+    }
+
+
+    public unionCreate(name:string):void{
         let sendData: any = {
             name: ServerConfig.union_create,
             msg: {
@@ -92,7 +104,7 @@ export default class UnionCommand {
     }
 
 
-    public coalitionJoin(id:number = 0):void{
+    public unionJoin(id:number = 0):void{
         let sendData: any = {
             name: ServerConfig.union_join,
             msg: {
@@ -103,7 +115,7 @@ export default class UnionCommand {
     }
 
 
-    public coalitionList():void{
+    public unionList():void{
         let sendData: any = {
             name: ServerConfig.union_list,
             msg: {
@@ -113,7 +125,7 @@ export default class UnionCommand {
     }
 
 
-    public coalitionMember(id:number = 0):void{
+    public unionMember(id:number = 0):void{
         let sendData: any = {
             name: ServerConfig.union_member,
             msg: {
@@ -124,11 +136,22 @@ export default class UnionCommand {
     }
 
 
-    public coalitionApplyList(id:number = 0):void{
+    public unionApplyList(id:number = 0):void{
         let sendData: any = {
             name: ServerConfig.union_applyList,
             msg: {
                 id: id,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+
+
+    public unionDismiss():void{
+        let sendData: any = {
+            name: ServerConfig.union_dismiss,
+            msg: {
             }
         };
         NetManager.getInstance().send(sendData);

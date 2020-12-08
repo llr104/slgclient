@@ -16,19 +16,18 @@ export default class UnionLogic extends cc.Component {
     @property(cc.Node)
     createNode:cc.Node = null;
 
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
+
+    @property(cc.Node)
+    lobbyNode:cc.Node = null;
+
+    @property(cc.Node)
+    myNode:cc.Node = null;
 
     protected onLoad():void{
-        cc.systemEvent.on("upate_union_list",this.updateUnion,this)
+        this.visibleView();
+        cc.systemEvent.on("open_my_union",this.openMyUnion,this);
+        cc.systemEvent.on("dismiss_union_success",this.back,this);
         
-    }
-
-
-
-    protected updateUnion(data:any[]){
-        var comp = this.scrollView.node.getComponent("ListLogic");
-        comp.setData(data);
     }
 
 
@@ -44,7 +43,32 @@ export default class UnionLogic extends cc.Component {
         this.createNode.active = true;
     }
 
-    protected onEnable():void{
-        UnionCommand.getInstance().coalitionList();
+
+    protected visibleView():void{
+        this.myNode.active = this.createNode.active = this.lobbyNode.active = false;
     }
+
+    protected openMyUnion(data:any):void{
+        this.visibleView();
+        var com = this.myNode.getComponent("UnionMyLogic");
+        if(com){
+            this.myNode.active = true;
+            com.setData(data);
+        }
+    }
+
+    protected onEnable():void{
+       this.lobbyNode.active = true;
+    }
+
+    protected onDisable():void{
+        this.lobbyNode.active = false;
+    }
+
+
+    protected back():void{
+        this.visibleView();
+        this.lobbyNode.active = true;
+    }
+
 }
