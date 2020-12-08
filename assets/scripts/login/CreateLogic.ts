@@ -45,34 +45,20 @@ export default class CreateLogic extends cc.Component {
     }
 
     protected onRandomName():void{
-        this.editName.string = this.getRandomName(4);
+        this.editName.string = this.getRandomName();
     }
-    // 获取指定范围内的随机数
-    protected randomAccess(min,max):number{
-        return Math.floor(Math.random() * (min - max) + max)
-    }
-    // 解码
-    protected decodeUnicode(str) :string{
-        //Unicode显示方式是\u4e00
-        str = "\\u"+str
-        str = str.replace(/\\/g, "%");
-        //转换中文
-        str = unescape(str);
-        //将其他受影响的转换回原来
-        str = str.replace(/%/g, "\\");
-        return str;
-    }
+
 
     /*
     *@param Number NameLength 要获取的名字长度
     */
-   protected getRandomName(NameLength):string{
+   protected getRandomName():string{
        let name = ""
-       for(let i = 0;i<NameLength;i++){
-           let unicodeNum  = ""
-           unicodeNum = this.randomAccess(0x4e00,0x9fa5).toString(16)
-           name += this.decodeUnicode(unicodeNum)
-        }
+       var firstname:string[] = ["李","西门","沈","张","上官","司徒","欧阳","轩辕"];
+       var nameq:string[] = ["彪","巨昆","锐","翠花","小小","撒撒","熊大","宝强"];
+       var xingxing = firstname[Math.floor(Math.random() * (firstname.length))];
+       var mingming = nameq[Math.floor(Math.random() * (nameq.length))];
+       name = xingxing + mingming;
         return name
     }
 

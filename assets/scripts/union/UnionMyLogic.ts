@@ -60,7 +60,11 @@ export default class UnionMyLogic extends cc.Component {
 
 
     protected getApply():void{
-        UnionCommand.getInstance().unionApplyList(this._unionData.id);
+        var isMe:boolean = UnionCommand.getInstance().proxy.isMeChairman(this._unionData.id);
+        if(isMe){
+            UnionCommand.getInstance().unionApplyList(this._unionData.id);
+        }
+        
     }
 
 
