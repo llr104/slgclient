@@ -481,6 +481,9 @@ export default class MapUIProxy {
         var rounds: any[] = JSON.parse(data);
         for (var i = 0; i < rounds.length; i++) {
             var round: any[] = rounds[i].b;
+            if(!round){
+                continue;
+            }
 
             for (var j = 0; j < round.length; j++) {
                 var turn = round[j];
