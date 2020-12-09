@@ -261,9 +261,10 @@ export default class GeneralProxy {
 
 
     protected sortStar(a: GeneralData, b: GeneralData): number {
-        if (a.config.star > b.config.star) {
+        if(a.cfgId < b.cfgId){
             return 1;
         }
+
 
         return -1;
     }
