@@ -79,7 +79,7 @@ export default class CityGeneralItemLogic extends cc.Component {
                 arr = arr.concat(cityArmyData[i].generals);
                 for (let j: number = 0; j < cityArmyData[i].generals.length; j++) {
                     if (cityArmyData[i].generals[j] > 0) {
-                        general = GeneralCommand.getInstance().proxy.getMyGeneral(cityArmyData[i].generals[i]);
+                        general = GeneralCommand.getInstance().proxy.getMyGeneral(cityArmyData[i].generals[j]);
                         if (general) {
                             arr = arr.concat(GeneralCommand.getInstance().proxy.getGeneralIds(general.cfgId));
                         }

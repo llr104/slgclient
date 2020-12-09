@@ -152,7 +152,7 @@ export default class MapUILogic extends cc.Component {
     protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = cc.instantiate(this.generalPrefab);
-            this._generalNode.zIndex = 4;
+            this._generalNode.zIndex = 3;
             this._generalNode.parent = this.node;
         } else {
             this._generalNode.active = true;
