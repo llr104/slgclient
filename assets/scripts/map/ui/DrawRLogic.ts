@@ -22,50 +22,62 @@ export default class DrawRLogic extends cc.Component {
     generalItemPrefab: cc.Prefab = null;
 
     @property(cc.Layout)
-    layout:cc.Layout = null;
+    tenLayout:cc.Layout = null;
+
+    @property(cc.Layout)
+    oneLayout:cc.Layout = null;
 
     private _maxSize:number = 10;
+    private _scale:number = 0.4;
 
     protected onLoad():void{
 
         for(var i = 0; i < this._maxSize;i++){
             let _generalNode = cc.instantiate(this.generalItemPrefab);
-            _generalNode.parent = this.layout.node;
-            _generalNode.scale = 0.4;
+            _generalNode.parent = this.tenLayout.node;
+            _generalNode.scale = this._scale;
             _generalNode.active = false;
-
         }
+
+
+        let _generalNode = cc.instantiate(this.generalItemPrefab);
+        _generalNode.parent = this.oneLayout.node;
+        _generalNode.scale = this._scale
+        _generalNode.active = false;
 
     }
 
 
-    public setData(data:any):void{
-        var children = this.layout.node.children;
 
-        this.layout.node.width = 800;
-        this.layout.node.height = 500;
-        this.layout.spacingX = this.layout.spacingY = 10;
-        this.layout.resizeMode = cc.Layout.ResizeMode.CONTAINER;
+    public setData(data:any):void{
+        this.tenLayout.node.active = this.oneLayout.node.active = false;
         if(data.length == 1){
-            this.layout.type = cc.Layout.Type.HORIZONTAL
+            this.oneLayout.node.active = true;
+            var children = this.oneLayout.node.children;
+            let com = children[0].getComponent("GeneralItemLogic");
+            children[0].active = true;
+            if(com){
+                com.setData(data[0],GeneralItemType.GeneralNoThing);
+            }
+
         }else{
-            this.layout.type = cc.Layout.Type.GRID;
-        }
-        for(var i = 0; i < this._maxSize;i++){
-            var child = children[i];
-            if(data[i]){
-                child.active = true;
-                let com = child.getComponent("GeneralItemLogic");
-                if(com){
-                    com.setData(data[i],GeneralItemType.GeneralNoThing);
+            this.tenLayout.node.active = true;
+            var children = this.tenLayout.node.children;
+            for(var i = 0; i < this._maxSize;i++){
+                var child = children[i];
+                if(data[i]){
+                    child.active = true;
+                    let com = child.getComponent("GeneralItemLogic");
+                    if(com){
+                        com.setData(data[i],GeneralItemType.GeneralNoThing);
+                    }
+                }
+                else{
+                    child.active = false;
                 }
             }
-            else{
-                child.active = false;
-            }
-
-
         }
+
     }
 
     protected onDestroy():void{
