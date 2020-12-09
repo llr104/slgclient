@@ -84,7 +84,7 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected updateView(curData:any):void{
-        var cfgData = this._curData.config;
+        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
         this.nameLabel.string = cfgData.name 
         this.lvLabel.string = " Lv." +  curData.level ;
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
