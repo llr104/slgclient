@@ -292,4 +292,8 @@ export default class MapUILogic extends cc.Component {
         this.ridLabel.string = "角色ID: " + roleData.rid + "";
     }
 
+    protected onClickCollection():void {
+        MapUICommand.getInstance().interiorCollection();
+    }
+
 }

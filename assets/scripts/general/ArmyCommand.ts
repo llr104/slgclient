@@ -169,10 +169,29 @@ export default class ArmyCommand {
         for (let i: number = 0; i < generals.length; i++) {
             if (generals[i]) {
                 cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
-                speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, generals[i].speed_added);
+                speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, generals[i].speed_added));
             }
         }
         return speed;
+    }
+
+     /**根据将领列表获取军队阵营*/
+     public getArmyCamp(generals: GeneralData[]): number {
+        let cnt:number = 0;
+        let lastCamp: number = 0;
+        for (let i: number = 0; i < generals.length; i++) {
+            if (generals[i] && (generals[i].config.camp == lastCamp || lastCamp == 0)) {
+                lastCamp = generals[i].config.camp;
+                cnt++;
+            } else {
+                break;
+            }
+        }
+        if (cnt >= 3) {
+            return lastCamp;
+        }
+        console.log("getArmyCamp", cnt, lastCamp);
+        return 0;
     }
 
     public getArmyStateDes(armyData: ArmyData): string {

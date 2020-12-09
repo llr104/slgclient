@@ -36,8 +36,10 @@ export default class ArmyLogic extends cc.Component {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onUnionChange():void {
-        this.setArmyData(this._data);
+    protected onUnionChange(rid:number, cityId:number, isMine:boolean):void {
+        if (isMine || cityId == this._data.cityId) {
+            this.setArmyData(this._data);
+        }
     }
 
     protected update(): void {

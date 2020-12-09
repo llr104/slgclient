@@ -1,7 +1,7 @@
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
-import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
 import MapCommand from "../MapCommand";
 import { MapCityData } from "../MapCityProxy";
@@ -26,6 +26,12 @@ export default class CityArmySettingLogic extends cc.Component {
     @property(cc.Label)
     labelAddition: cc.Label = null;
     @property(cc.Label)
+    labelAdditionTip: cc.Label = null;
+    @property(cc.Node)
+    additionTouchNode: cc.Node = null;
+    @property(cc.Node)
+    additionTipNode: cc.Node = null;
+    @property(cc.Label)
     labelResCost: cc.Label = null;
     @property(cc.Node)
     generalLayer: cc.Node = null;
@@ -44,7 +50,7 @@ export default class CityArmySettingLogic extends cc.Component {
     protected _cityData: MapCityData = null;
     protected _isUnlock: boolean = false;
     protected _data: ArmyData = null;
-    protected _condition: CityAddition = null;
+    protected _addition: CityAddition = null;
     protected _gengeralLogics: CityGeneralItemLogic[] = [];
     protected _soldiers: number[] = null;
     protected _totalSoldiers: number[] = null;
@@ -52,9 +58,14 @@ export default class CityArmySettingLogic extends cc.Component {
 
     protected onLoad(): void {
         this.initView();
+        this.additionTipNode.active = false;
+        this.additionTouchNode.on(cc.Node.EventType.TOUCH_START, this.onShowAdditionTip, this);
+        this.additionTouchNode.on(cc.Node.EventType.TOUCH_END, this.onHideAdditionTip, this);
+        this.additionTouchNode.on(cc.Node.EventType.TOUCH_CANCEL, this.onHideAdditionTip, this);
     }
 
     protected onDestroy(): void {
+        this.additionTouchNode.targetOff(this);
         this._gengeralLogics.length = 0;
     }
 
@@ -71,7 +82,7 @@ export default class CityArmySettingLogic extends cc.Component {
     protected onDisable(): void {
         cc.systemEvent.targetOff(this);
         this._data = null;
-        this._condition = null;
+        this._addition = null;
         this._cityData = null;
     }
 
@@ -83,6 +94,16 @@ export default class CityArmySettingLogic extends cc.Component {
             comp.index = i;
             this._gengeralLogics.push(comp);
         }
+    }
+
+    protected onShowAdditionTip(): void {
+        if (this._data && this.labelAddition.string != "无") {
+            this.additionTipNode.active = true;
+        }
+    }
+
+    protected onHideAdditionTip(): void {
+        this.additionTipNode.active = false;
     }
 
     protected clearSoldiers(): void {
@@ -124,14 +145,14 @@ export default class CityArmySettingLogic extends cc.Component {
                 isUnlock = true;
                 if (i == 2) {
                     //只有第二个副将才需要判断是否解锁
-                    isUnlock = this._condition.vanguardCnt >= this._order;
+                    isUnlock = this._addition.vanguardCnt >= this._order;
                 }
                 if (this._data && this._data.generals[i] > 0) {
                     generalData = GeneralCommand.getInstance().proxy.getMyGeneral(this._data.generals[i]);
                     generalCfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generalData.cfgId);
                     totalCost += generalCfg.cost;
                     this._soldiers[i] = this._data.soldiers[i];
-                    this._totalSoldiers[i] = generalData.level * 100 + this._condition.soldierCnt;
+                    this._totalSoldiers[i] = generalData.level * 100 + this._addition.soldierCnt;
                     soldierCnt += this._soldiers[i];
                     totalSoldierCnt += this._totalSoldiers[i];
                 }
@@ -169,10 +190,31 @@ export default class CityArmySettingLogic extends cc.Component {
         this.labelId.string = "部队" + this._order;
         this.labelCost.string = totalCost + "/" + this._cityData.cost;
         this.labelSoldierCnt.string = soldierCnt + "/" + totalSoldierCnt;
+        this.labelAddition.string = "无";
         if (this._data) {
             let generals: GeneralData[] = ArmyCommand.getInstance().getArmyGenerals(this._data);
             let speed: number = ArmyCommand.getInstance().getArmySpeed(generals);
             this.labelSpeed.string = speed + "";
+
+            let camp: number = ArmyCommand.getInstance().getArmyCamp(generals);
+            if (camp > 0) {
+                if (camp == GeneralCampType.Han && this._addition.han > 0) {
+                    this.labelAdditionTip.string = "汉阵营加成：" + this._addition.han;
+                    this.labelAddition.string = "阵营";
+                } else if (camp == GeneralCampType.Qun && this._addition.han > 0) {
+                    this.labelAdditionTip.string = "群阵营加成：" + this._addition.qun;
+                    this.labelAddition.string = "阵营";
+                } else if (camp == GeneralCampType.Wei && this._addition.han > 0) {
+                    this.labelAdditionTip.string = "魏阵营加成：" + this._addition.wei;
+                    this.labelAddition.string = "阵营";
+                } else if (camp == GeneralCampType.Shu && this._addition.han > 0) {
+                    this.labelAdditionTip.string = "蜀阵营加成：" + this._addition.shu;
+                    this.labelAddition.string = "阵营";
+                } else if (camp == GeneralCampType.Wu && this._addition.han > 0) {
+                    this.labelAdditionTip.string = "吴阵营加成：" + this._addition.wu;
+                    this.labelAddition.string = "阵营";
+                }
+            }
         } else {
             this.labelSpeed.string = "0";
         }
@@ -255,7 +297,7 @@ export default class CityArmySettingLogic extends cc.Component {
         this._curConscripts = [0, 0, 0];
         if (this._order == 1) {
             //第一个就跳到最后一个
-            this.setData(this._cityId, this._condition.armyCnt);
+            this.setData(this._cityId, this._addition.armyCnt);
         } else {
             this.setData(this._cityId, this._order - 1);
         }
@@ -263,7 +305,7 @@ export default class CityArmySettingLogic extends cc.Component {
 
     protected onClickNext(): void {
         this._curConscripts = [0, 0, 0];
-        if (this._order == this._condition.armyCnt) {
+        if (this._order == this._addition.armyCnt) {
             //最后一个就跳到第一个
             this.setData(this._cityId, 1);
         } else {
@@ -280,8 +322,8 @@ export default class CityArmySettingLogic extends cc.Component {
         this._order = order;
         this._cityData = MapCommand.getInstance().cityProxy.getMyCityById(this._cityId);
         this._data = ArmyCommand.getInstance().proxy.getArmyByOrder(order, cityId);
-        this._condition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
-        this._isUnlock = this._condition.armyCnt >= this._order;
+        this._addition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
+        this._isUnlock = this._addition.armyCnt >= this._order;
         let facility: Map<number, Facility> = MapUICommand.getInstance().proxy.getMyFacilitys(this._cityId);
         if (facility == null) {
             MapUICommand.getInstance().qryCityFacilities(this._cityId);

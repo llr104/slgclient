@@ -35,6 +35,7 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
+        cc.systemEvent.on(ServerConfig.interior_collection, this.onCollection, this);
         cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
     }
 
@@ -119,7 +120,11 @@ export default class MapUICommand {
         }
     }
 
-
+    protected onCollection(data:any):void {
+        console.log("onCollection :", data);
+        if (data.code == 0) {
+        }
+    }
 
     public onDestory(): void {
         cc.systemEvent.targetOff(this);
@@ -230,6 +235,13 @@ export default class MapUICommand {
         NetManager.getInstance().send(sendData);
     }
 
-
+    public interiorCollection(): void {
+        let sendData: any = {
+            name: ServerConfig.interior_collection,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
 
 }

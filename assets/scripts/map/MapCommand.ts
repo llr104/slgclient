@@ -130,12 +130,19 @@ export default class MapCommand {
     protected onRoleCityPush(data: any): void {
         console.log("onRoleCityPush", data);
         let cityData: MapCityData = this._cityProxy.updateCity(data.msg);
-        if (cityData.cityId == this._cityProxy.getMyMainCity().cityId) {
-            this._cityProxy.myUnionId = this._buildProxy.myUnionId = cityData.unionId;
-            console.log("my_union_change", this._cityProxy.myUnionId);
-            cc.systemEvent.emit("my_union_change", this._cityProxy.myUnionId);
-        }
         cc.systemEvent.emit("update_city", cityData);
+
+        let id:number = MapUtil.getIdByCellPoint(data.msg.x, data.msg.y);
+        let oldCityData:MapCityData = this._cityProxy.getCity(id);
+        if (oldCityData == null || oldCityData.unionId != data.msg.union_id) {
+            //代表联盟数据改变
+            if (data.msg.rid == this._cityProxy.myId) {
+                //我自己的联盟改变 就更新全数据
+                cc.systemEvent.emit("my_union_change", data.msg.rid, data.msg.cityId, true);
+            } else {
+                cc.systemEvent.emit("my_union_change", data.msg.rid, data.msg.cityId, false);
+            }
+        } 
     }
 
     /**是否是可行军的位置*/

@@ -1,5 +1,5 @@
-import { ArmyCmd} from "../general/ArmyProxy";
-import {MapBuildData } from "./MapBuildProxy";
+import { ArmyCmd } from "../general/ArmyProxy";
+import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
 import { MapResConfig, MapResData } from "./MapProxy";
@@ -34,6 +34,8 @@ export default class MapClickUILogic extends cc.Component {
     btnGiveUp: cc.Button = null;
     @property(cc.Button)
     btnReclaim: cc.Button = null;
+    @property(cc.Button)
+    btnEnter: cc.Button = null;
 
     protected _data: any = null;
     protected _pixelPos: cc.Vec2 = null;
@@ -67,6 +69,11 @@ export default class MapClickUILogic extends cc.Component {
             && this._data.y == data.y) {
             this.setCellData(data, this._pixelPos);
         }
+    }
+
+    protected onClickEnter(): void {
+        cc.systemEvent.emit("open_city_about", this._data);
+        this.node.parent = null;
     }
 
     protected onClickReclaim(): void {
@@ -103,6 +110,7 @@ export default class MapClickUILogic extends cc.Component {
         this.labelPos.string = "(" + data.x + ", " + data.y + ")";
         this.leftInfoNode.active = true;
         this.btnReclaim.node.active = false;
+        this.btnEnter.node.active = false;
         this.bgSelect.setContentSize(200, 100);
         if (this._data instanceof MapResData) {
             //点击的是野外
@@ -118,12 +126,13 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = true;
                 this.btnReclaim.node.active = true;
-            } else if ((this._data as MapBuildData).unionId == MapCommand.getInstance().buildProxy.myUnionId) {
+            } else if ((this._data as MapBuildData).unionId > 0
+                && (this._data as MapBuildData).unionId == MapCommand.getInstance().buildProxy.myUnionId) {
                 //盟友的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
-            }else {
+            } else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
@@ -133,10 +142,25 @@ export default class MapClickUILogic extends cc.Component {
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         } else if (this._data instanceof MapCityData) {
             //点击其他城市
+            if (this._data.rid == MapCommand.getInstance().cityProxy.myId) {
+                //我自己的城池
+                this.btnEnter.node.active = true;
+                this.btnMove.node.active = false;
+                this.btnOccupy.node.active = false;
+                this.btnGiveUp.node.active = false;
+            } else if ((this._data as MapCityData).unionId > 0
+                && (this._data as MapCityData).unionId == MapCommand.getInstance().cityProxy.myUnionId) {
+                //盟友的城池
+                this.btnMove.node.active = true;
+                this.btnOccupy.node.active = false;
+                this.btnGiveUp.node.active = false;
+            } else {
+                this.btnMove.node.active = false;
+                this.btnOccupy.node.active = true;
+                this.btnGiveUp.node.active = false;
+            }
             this.bgSelect.setContentSize(600, 300);
-            this.btnMove.node.active = false;
-            this.btnOccupy.node.active = true;
-            this.btnGiveUp.node.active = false;
+
             this.durableNode.active = true;
             this.leftInfoNode.active = false;
             this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;

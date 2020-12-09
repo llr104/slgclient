@@ -6,12 +6,23 @@ export class CityAddition {
     armyCnt: number = 0;//军队数量
     vanguardCnt: 0;//军队前锋数量 默认每队只有两个位置 前锋数量影响第三个位置的开启
     soldierCnt: 0;//带兵数加成
+    han: number = 0;//汉阵营加成
+    qun: number = 0;//群阵营加成
+    wei: number = 0;//魏阵营加成
+    shu: number = 0;//蜀阵营加成
+    wu: number = 0;//吴阵营加成
+
 
     public clear(): void {
         this.cost = 0;
         this.armyCnt = 0;
         this.vanguardCnt = 0;
         this.soldierCnt = 0;
+        this.han = 0;
+        this.qun = 0;
+        this.wei = 0;
+        this.shu = 0;
+        this.wu = 0;
     }
 };
 
@@ -28,10 +39,10 @@ export class CityAdditionType {
     static ReserveLimit: number = 9;//预备役上限
     static Unkonw: number = 10;
     static HanAddition: number = 11;
-    static WeiAddition: number = 12;
-    static ShuAddition: number = 13;
-    static WuAddition: number = 14;
-    static QunAddition: number = 15;
+    static QunAddition: number = 12;
+    static WeiAddition: number = 13;
+    static ShuAddition: number = 14;
+    static WuAddition: number = 15;
     static DealTaxRate: number = 16;//交易税率
     static Wood: number = 17;
     static Iron: number = 18;
@@ -124,12 +135,12 @@ export class WarReport {
 
 
 export class WarReportRound {
-    attack:any = {};
-    defense:any = {};
-    attackLoss:number = 0;
-    defenseLoss:number = 0;
-    round:number = 0;
-    turn:number = 0;
+    attack: any = {};
+    defense: any = {};
+    attackLoss: number = 0;
+    defenseLoss: number = 0;
+    round: number = 0;
+    turn: number = 0;
 }
 
 export default class MapUIProxy {
@@ -218,9 +229,40 @@ export default class MapUIProxy {
                             addValue = cfg.upLevels[data.level - 1].values[index];
                             addition.vanguardCnt += addValue;
                         }
+                        index = cfg.additions.indexOf(CityAdditionType.HanAddition);
+                        if (index != -1) {
+                            //汉阵营加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.han += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.QunAddition);
+                        if (index != -1) {
+                            //群阵营加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.qun += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.WeiAddition);
+                        if (index != -1) {
+                            //魏阵营加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.wei += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.ShuAddition);
+                        if (index != -1) {
+                            //蜀阵营加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.shu += addValue;
+                        }
+                        index = cfg.additions.indexOf(CityAdditionType.WuAddition);
+                        if (index != -1) {
+                            //吴阵营加成
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.wu += addValue;
+                        }
                     }
                 }
             });
+            console.log("updateMyCityAdditions", cityId, addition);
             return addition;
         }
         return null;
@@ -418,8 +460,8 @@ export default class MapUIProxy {
         obj.end_defense_general = this.arrayToObject(JSON.parse(data.end_defense_general));
 
         obj.result = data.result;
-        var temp:any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
-        obj.rounds = this.createRoundsData(data.rounds,temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
+        var temp: any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
+        obj.rounds = this.createRoundsData(data.rounds, temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
         obj.defense_is_read = data.defense_is_read;
         obj.attack_is_read = data.attack_is_read;
 
@@ -434,22 +476,22 @@ export default class MapUIProxy {
     }
 
 
-    private createRoundsData(data:string,generals:any[]):any[]{
-        var _list:any[] = [];
-        var rounds:any[] = JSON.parse(data);
-        for(var i = 0; i < rounds.length;i++){
-            var round:any[] = rounds[i].b;
-            
-            for(var j = 0; j < round.length; j++){
+    private createRoundsData(data: string, generals: any[]): any[] {
+        var _list: any[] = [];
+        var rounds: any[] = JSON.parse(data);
+        for (var i = 0; i < rounds.length; i++) {
+            var round: any[] = rounds[i].b;
+
+            for (var j = 0; j < round.length; j++) {
                 var turn = round[j];
                 var attack_id = turn[0];
                 var defense_id = turn[1];
                 var attack_loss = turn[2];
                 var defense_loss = turn[3];
-    
+
                 var obj = new WarReportRound();
-                obj.attack = this.getMatchGeneral(generals,attack_id);
-                obj.defense = this.getMatchGeneral(generals,defense_id);
+                obj.attack = this.getMatchGeneral(generals, attack_id);
+                obj.defense = this.getMatchGeneral(generals, defense_id);
                 obj.attackLoss = attack_loss;
                 obj.defenseLoss = defense_loss;
                 obj.round = i + 1;
@@ -496,9 +538,9 @@ export default class MapUIProxy {
         return temp;
     }
 
-    protected getMatchGeneral(generals:any[] ,id:number = 0):any{
-        for(var i = 0;i < generals.length ;i++){
-            if(generals[i].id == id){
+    protected getMatchGeneral(generals: any[], id: number = 0): any {
+        for (var i = 0; i < generals.length; i++) {
+            if (generals[i].id == id) {
                 return generals[i];
             }
         }

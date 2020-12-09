@@ -19,7 +19,7 @@ export class GeneralConfig {
 
     star: number = 0;
     arms: number[] = [];
-
+    camp: number = 0;
 }
 
 /**武将等级配置*/
@@ -27,6 +27,15 @@ export class GenaralLevelConfig {
     level: number = 0;
     exp: number = 0;
     soldiers: number = 0;
+}
+
+/**武将阵营枚举*/
+export class GeneralCampType {
+    static Han: number = 1;
+    static Qun: number = 2;
+    static Wei: number = 3;
+    static Shu: number = 4;
+    static Wu: number = 5;
 }
 
 /**武将共有配置*/
@@ -46,22 +55,22 @@ export class GeneralData {
     exp: number = 0;
     level: number = 0;
     physical_power: number = 0;
-    order:number = 0;
-    star_lv:number = 0;
-    parentId:number = 0;
-    compose_type:number = 0;
+    order: number = 0;
+    star_lv: number = 0;
+    parentId: number = 0;
+    compose_type: number = 0;
 
-    hasPrPoint:number = 0;
-    usePrPoint:number = 0;
-    force_added:number = 0;
-    strategy_added:number = 0;
-    defense_added:number = 0;
-    speed_added:number = 0;
-    destroy_added:number = 0;
-    config:GeneralConfig = new GeneralConfig();
+    hasPrPoint: number = 0;
+    usePrPoint: number = 0;
+    force_added: number = 0;
+    strategy_added: number = 0;
+    defense_added: number = 0;
+    speed_added: number = 0;
+    destroy_added: number = 0;
+    config: GeneralConfig = new GeneralConfig();
 
 
-    public static createFromServer(serverData: any, generalData: GeneralData = null,generalCfg:GeneralConfig): GeneralData {
+    public static createFromServer(serverData: any, generalData: GeneralData = null, generalCfg: GeneralConfig): GeneralData {
         let data: GeneralData = generalData;
         if (data == null) {
             data = new GeneralData();
@@ -145,7 +154,7 @@ export default class GeneralProxy {
 
                 cfg.star = cfgData[i].star;
                 cfg.arms = cfgData[i].arms;
-
+                cfg.camp = cfgData[i].camp;
                 this._generalConfigs.set(cfg.cfgId, cfg);
             }
         }
@@ -178,14 +187,14 @@ export default class GeneralProxy {
 
     public updateMyGenerals(datas: any[]): void {
         for (var i = 0; i < datas.length; i++) {
-            let data: GeneralData = GeneralData.createFromServer(datas[i],null,this._generalConfigs.get(datas[i].cfgId));
+            let data: GeneralData = GeneralData.createFromServer(datas[i], null, this._generalConfigs.get(datas[i].cfgId));
             this._myGenerals.set(data.id, data);
         }
     }
 
     public updateGenerals(datas: any): number[] {
         let ids: number[] = [];
-        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id),this._generalConfigs.get(datas.cfgId));
+        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id), this._generalConfigs.get(datas.cfgId));
         this._myGenerals.set(data.id, data);
         ids.push(data.id);
         return ids;
@@ -251,8 +260,8 @@ export default class GeneralProxy {
     }
 
 
-    protected sortStar(a:GeneralData,b:GeneralData):number{
-        if(a.config.star > b.config.star){
+    protected sortStar(a: GeneralData, b: GeneralData): number {
+        if (a.config.star > b.config.star) {
             return 1;
         }
 
@@ -261,14 +270,14 @@ export default class GeneralProxy {
     /**
      * 排序 已经使用的
      */
-    
-    public getUseGenerals():GeneralData[] {
-        var tempArr:GeneralData[] = this.getMyGenerals().concat();
-        tempArr.sort(this.sortStar);
-        var temp:GeneralData[]  = [];
 
-        for(var i = 0; i < tempArr.length ;i++){
-            if(tempArr[i].order > 0){
+    public getUseGenerals(): GeneralData[] {
+        var tempArr: GeneralData[] = this.getMyGenerals().concat();
+        tempArr.sort(this.sortStar);
+        var temp: GeneralData[] = [];
+
+        for (var i = 0; i < tempArr.length; i++) {
+            if (tempArr[i].order > 0) {
                 temp.push(tempArr[i]);
                 tempArr.splice(i, 1);
                 i--;

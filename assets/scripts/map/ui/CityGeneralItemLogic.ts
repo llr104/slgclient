@@ -1,7 +1,7 @@
 import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
 
 const { ccclass, property } = cc._decorator;
@@ -30,6 +30,8 @@ export default class CityGeneralItemLogic extends cc.Component {
     labelSoldierCnt: cc.Label = null;
     @property(cc.Label)
     labelCost: cc.Label = null;
+    @property(cc.Label)
+    labelCamp: cc.Label = null;
     @property(cc.Label)
     labelTip: cc.Label = null;
     @property(cc.ProgressBar)
@@ -122,6 +124,27 @@ export default class CityGeneralItemLogic extends cc.Component {
             this.labelSoldierCnt.string = this._soldierCnt + "/" + this._totalSoldierCnt;
             this.progressBar.progress = this._soldierCnt / this._totalSoldierCnt;
             this.labelCost.string = "Cost " + cfg.cost;
+            switch (this._data.config.camp) {
+                case GeneralCampType.Han:
+                    this.labelCamp.string = "汉";
+                    break;
+                case GeneralCampType.Qun:
+                    this.labelCamp.string = "群";
+                    break;
+                case GeneralCampType.Wei:
+                    this.labelCamp.string = "魏";
+                    break;
+                case GeneralCampType.Shu:
+                    this.labelCamp.string = "蜀";
+                    break;
+                case GeneralCampType.Wu:
+                    this.labelCamp.string = "吴";
+                    break;
+                default:
+                    this.labelCamp.string = "无";
+                    break;
+            }
+
         }
     }
 

@@ -28,8 +28,10 @@ export default class BuildLogic extends cc.Component {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onUnionChange():void {
-        this.setBuildData(this._data);
+    protected onUnionChange(rid:number, cityId:number, isMine:boolean):void {
+        if (isMine || rid == this._data.rid) {
+            this.setArmyData(this._data);
+        }
     }
 
     public setBuildData(data: MapBuildData): void {
