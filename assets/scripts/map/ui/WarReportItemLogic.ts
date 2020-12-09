@@ -41,6 +41,14 @@ export default class WarReportItemLogic extends cc.Component {
     @property(cc.Label)
     timeLabel: cc.Label = null;
 
+
+    @property(cc.Label)
+    leftLabel: cc.Label = null;
+
+
+    @property(cc.Label)
+    rightLabel: cc.Label = null;
+
     protected onLoad():void{
         this.winNode.active = this.loseNode.active = false;
     }
@@ -62,6 +70,8 @@ export default class WarReportItemLogic extends cc.Component {
             this.isMeWin(this._curData.defense_rid)
         }
 
+        this.leftLabel.string = roleData.rid == this._curData.attack_rid?"我":"敌";
+        this.rightLabel.string = roleData.rid == this._curData.defense_rid?"我":"敌"
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
     }
