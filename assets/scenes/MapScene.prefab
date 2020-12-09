@@ -597,7 +597,10 @@
       "__id__": 10
     },
     "armyPrefab": {
-      "__uuid__": "cc36996e-9f43-49fc-bb01-cfbc6953ca8d"
+      "__uuid__": "4339d53f-207a-401a-a1d5-70d5c9c6cc65"
+    },
+    "arrowPrefab": {
+      "__uuid__": "b0865c2a-666e-4b7d-b398-6fb4ab645ee2"
     },
     "_id": ""
   },

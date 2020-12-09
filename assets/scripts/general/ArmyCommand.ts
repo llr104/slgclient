@@ -34,6 +34,7 @@ export default class ArmyCommand {
         cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
         cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
         cc.systemEvent.on(ServerConfig.army_push, this.onGeneralArmyStatePush, this);
+        cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
     }
 
     public onDestory(): void {
@@ -99,6 +100,15 @@ export default class ArmyCommand {
         }
     }
 
+    protected onNationMapScanBlock(data: any): void {
+        if (data.code == 0) {
+            for (let i: number = 0; i < data.msg.armys.length; i++) {
+                let armyData: ArmyData = this._proxy.updateArmy(data.msg.armys[i].cityId, data.msg.armys[i]);
+                cc.systemEvent.emit("update_army", armyData);
+            }
+        }
+    }
+
     /**我的角色属性*/
     public updateMyProperty(datas: any[]): void {
         if (datas.length > 0) {
@@ -149,7 +159,7 @@ export default class ArmyCommand {
         return cnt;
     }
 
-     /**根据将领列表获取军队总士兵数*/
+    /**根据将领列表获取军队总士兵数*/
     public getArmyTotalSoldierCntByGenerals(generals: GeneralData[]): number {
         let cnt: number = 0;
         let levelCfg: GenaralLevelConfig = null;
@@ -162,8 +172,8 @@ export default class ArmyCommand {
         return cnt;
     }
 
-     /**根据将领列表获取军队总士兵数*/
-     public getArmySpeed(generals: GeneralData[]): number {
+    /**根据将领列表获取军队总士兵数*/
+    public getArmySpeed(generals: GeneralData[]): number {
         let speed: number = 1000000;
         let cfg: GeneralConfig = null;
         for (let i: number = 0; i < generals.length; i++) {
@@ -175,9 +185,9 @@ export default class ArmyCommand {
         return speed;
     }
 
-     /**根据将领列表获取军队阵营*/
-     public getArmyCamp(generals: GeneralData[]): number {
-        let cnt:number = 0;
+    /**根据将领列表获取军队阵营*/
+    public getArmyCamp(generals: GeneralData[]): number {
+        let cnt: number = 0;
         let lastCamp: number = 0;
         for (let i: number = 0; i < generals.length; i++) {
             if (generals[i] && (generals[i].config.camp == lastCamp || lastCamp == 0)) {
@@ -190,7 +200,6 @@ export default class ArmyCommand {
         if (cnt >= 3) {
             return lastCamp;
         }
-        console.log("getArmyCamp", cnt, lastCamp);
         return 0;
     }
 
@@ -210,7 +219,7 @@ export default class ArmyCommand {
             } else if (armyData.cmd == ArmyCmd.Reclaim) {
                 //屯田
                 stateStr = "[屯田]";
-            }else {
+            } else {
                 stateStr = "[停留]";
             }
         }

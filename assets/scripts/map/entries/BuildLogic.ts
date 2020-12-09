@@ -30,7 +30,7 @@ export default class BuildLogic extends cc.Component {
 
     protected onUnionChange(rid:number, cityId:number, isMine:boolean):void {
         if (isMine || rid == this._data.rid) {
-            this.setArmyData(this._data);
+            this.setBuildData(this._data);
         }
     }
 

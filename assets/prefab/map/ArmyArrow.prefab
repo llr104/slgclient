@@ -13,14 +13,18 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Army",
+    "_name": "ArmyArrow",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
     "_active": true,
-    "_components": [],
+    "_components": [
+      {
+        "__id__": 2
+      }
+    ],
     "_prefab": {
-      "__id__": 2
+      "__id__": 3
     },
     "_opacity": 255,
     "_color": {
@@ -32,13 +36,13 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 96,
-      "height": 96
+      "width": 20,
+      "height": 36
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 1
     },
     "_trs": {
       "__type__": "TypedArray",
@@ -65,8 +69,40 @@
     "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
-    "_groupIndex": 2,
-    "groupIndex": 2,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Sprite",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_spriteFrame": {
+      "__uuid__": "b5c26119-1caf-47f7-bb24-85b4e762b188"
+    },
+    "_type": 1,
+    "_sizeMode": 0,
+    "_fillType": 0,
+    "_fillCenter": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_fillStart": 0,
+    "_fillRange": 1,
+    "_isTrimmedMode": true,
+    "_atlas": null,
     "_id": ""
   },
   {
@@ -75,7 +111,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "cc36996e-9f43-49fc-bb01-cfbc6953ca8d"
+      "__uuid__": "b0865c2a-666e-4b7d-b398-6fb4ab645ee2"
     },
     "fileId": "",
     "sync": false

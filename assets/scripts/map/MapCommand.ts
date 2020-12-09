@@ -199,6 +199,42 @@ export default class MapCommand {
         return false;
     }
 
+    public isCanOccupyCityCell(x: number, y: number): boolean {
+        let id: number = MapUtil.getIdByCellPoint(x, y);
+        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
+        if (buiildData
+            && (buiildData.rid == this.buildProxy.myId
+                || (buiildData.unionId > 0
+                    && buiildData.unionId == this.buildProxy.myUnionId))) {
+            return false;//已经占领
+        }
+        let cityData: MapCityData = this.cityProxy.getCity(id);
+        if (cityData && (cityData.rid == this.cityProxy.myId
+            || (cityData.unionId > 0
+                && cityData.unionId == this.cityProxy.myUnionId))) {
+            return false;//已经建城
+        }
+        let ids: number[] = MapUtil.getSideIdsForCity(id);
+        for (let i: number = 0; i < ids[i]; i++) {
+            if (ids[i] != id) {
+                buiildData = this.buildProxy.getBuild(ids[i]);
+                if (buiildData
+                    && (buiildData.rid == this.buildProxy.myId
+                        || (buiildData.unionId > 0
+                            && buiildData.unionId == this.buildProxy.myUnionId))) {
+                    return true;//已经占领相邻格子
+                }
+                cityData = this.cityProxy.getCity(ids[i]);
+                if (cityData && (cityData.rid == this.cityProxy.myId
+                    || (cityData.unionId > 0
+                        && cityData.unionId == this.cityProxy.myUnionId))) {
+                    return true;//已经在相邻格子建城
+                }
+            }
+        }
+        return false;
+    }
+
     public enterMap(): void {
         if (this._proxy.hasResConfig() == false) {
             this.qryNationMapConfig();

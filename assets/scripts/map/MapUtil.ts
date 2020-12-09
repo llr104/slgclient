@@ -89,6 +89,16 @@ export default class MapUtil {
         ];
     }
 
+    public static getSideIdsForCity(id:number):number[] {
+        return [
+            id + this._mapSize.width * 2 - 2, id + this._mapSize.width * 2 - 1, id + this._mapSize.width * 2, id + this._mapSize.width * 2 + 1, id + this._mapSize.width * 2 + 2,
+            id + this._mapSize.width - 2, id + this._mapSize.width + 2,
+            id - 2, id + 2,
+            id - this._mapSize.width - 2, id - this._mapSize.width + 2,
+            id - this._mapSize.width * 2 - 2, id - this._mapSize.width * 2 - 1, id - this._mapSize.width - 1, id - this._mapSize.width * 2 + 1, id - this._mapSize.width * 2 + 2
+        ];
+    }
+
     /**获取区域为中点的九宫格id列表*/
     public static get9GridAreaIds(id: number): number[] {
         return [

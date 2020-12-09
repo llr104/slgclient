@@ -1,7 +1,6 @@
 import ArmyCommand from "../general/ArmyCommand";
 import { ArmyData } from "../general/ArmyProxy";
 import ArmyLogic from "./entries/ArmyLogic";
-import MapCommand from "./MapCommand";
 
 const { ccclass, property } = cc._decorator;
 
@@ -11,9 +10,12 @@ export default class MapArmyLogic extends cc.Component {
     parentLayer: cc.Node = null;
     @property(cc.Prefab)
     armyPrefab: cc.Prefab = null;
+    @property(cc.Prefab)
+    arrowPrefab: cc.Prefab = null;
 
-    protected _armys: Map<number, cc.Node> = new Map<number, cc.Node>();
+    protected _armyLogics: Map<number, ArmyLogic> = new Map<number, ArmyLogic>();
     protected _armyPool: cc.NodePool = new cc.NodePool();
+    protected _arrowPool: cc.NodePool = new cc.NodePool();
 
     protected onLoad(): void {
         cc.systemEvent.on("update_army_list", this.onUpdateArmyList, this);
@@ -23,13 +25,22 @@ export default class MapArmyLogic extends cc.Component {
 
     protected onDestroy(): void {
         cc.systemEvent.targetOff(this);
+        this._armyPool.clear();
+        this._arrowPool.clear();
+        this._armyLogics.forEach((logic:ArmyLogic) => {
+            logic.destroy();
+        })
+    }
+
+    protected update():void {
+        this._armyLogics.forEach((logic:ArmyLogic) => {
+            logic.update();
+        });
     }
 
     protected initArmys(): void {
-        let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
-        let datas: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(cityId);
-        console.log("initArmys", datas);
-        if (datas) {
+        let datas: ArmyData[] = ArmyCommand.getInstance().proxy.getAllArmys();
+        if (datas && datas.length > 0) {
             this.onUpdateArmyList(datas);
         }
     }
@@ -44,20 +55,29 @@ export default class MapArmyLogic extends cc.Component {
 
     protected onUpdateArmy(data: ArmyData): void {
         console.log("update_army", data);
-        let node: cc.Node = null;
+        let aniNode: cc.Node = null;
+        let arrowNode: cc.Node = null;
         if (data.cmd == 0) {
             //代表不在地图上
             this.removeArmyById(data.id);
             return;
         }
-        if (this._armys.has(data.id) == false) {
-            node = this.createArmy();
-            node.parent = this.parentLayer;
-            this._armys.set(data.id, node);
+        let logic:ArmyLogic = this._armyLogics.get(data.id);
+        if (logic == null) {
+            logic = new ArmyLogic();
+            aniNode = this.createArmy();
+            aniNode.zIndex = 1;
+            aniNode.parent = this.parentLayer;
+            arrowNode = this.createArrow();
+            arrowNode.zIndex = 2;
+            arrowNode.parent = this.parentLayer;
+            this._armyLogics.set(data.id, logic);
         } else {
-            node = this._armys.get(data.id);
+            aniNode = logic.aniNode;
+            arrowNode = logic.arrowNode;
+            logic = this._armyLogics.get(data.id);
         }
-        node.getComponent(ArmyLogic).setArmyData(data);
+        logic.setArmyData(data, aniNode, arrowNode);
     }
 
     protected createArmy(): cc.Node {
@@ -68,12 +88,22 @@ export default class MapArmyLogic extends cc.Component {
         }
     }
 
+    protected createArrow():cc.Node {
+        if (this._arrowPool.size() > 0) {
+            return this._arrowPool.get();
+        } else {
+            return cc.instantiate(this.arrowPrefab);
+        }
+    }
+
     protected removeArmyById(id: number): void {
-        if (this._armys.has(id)) {
-            let node:cc.Node = this._armys.get(id);
-            this._armyPool.put(node);
-            this._armys.delete(id);
-            console.log("removeArmyById", id, node);
+        if (this._armyLogics.has(id)) {
+            let logic:ArmyLogic = this._armyLogics.get(id);
+            this._armyPool.put(logic.aniNode);
+            this._arrowPool.put(logic.arrowNode);
+            logic.clear();
+            this._armyLogics.delete(id);
+            console.log("removeArmyById", id);
         }
     }
 }

@@ -140,15 +140,11 @@ export default class ArmyProxy {
         return null;
     }
 
-    public getFirstArmy(cityId: number): ArmyData {
-        let list: ArmyData[] = this.getArmyList(cityId);
-        if (list) {
-            for (let i: number = 0; i < list.length; i++) {
-                if (list[i]) {
-                    return list[i];
-                }
-            }
-        }
-        return null;
+    public getAllArmys(): ArmyData[] {
+        let list:ArmyData[] = [];
+        this._armys.forEach((datas:ArmyData[]) => {
+            list = list.concat(datas);
+        })
+        return list;
     }
 }
