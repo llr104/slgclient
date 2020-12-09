@@ -8,6 +8,7 @@
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import UnionCommand from "./UnionCommand";
+import { Union } from "./UnionProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -29,8 +30,11 @@ export default class UnionLogic extends cc.Component {
         this.visibleView();
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
         cc.systemEvent.on("dismiss_union_success",this.back,this);
-        cc.systemEvent.on("close_union",this.onClickClose,this);
+        cc.systemEvent.on("close_union",this.onClickClose,this);+
+        cc.systemEvent.on("update_union_list",this.updateUnion,this);
     }
+
+
 
 
     protected onDestroy():void{
@@ -61,9 +65,22 @@ export default class UnionLogic extends cc.Component {
 
     }
 
-    protected onEnable():void{
-       this.lobbyNode.active = true;
+    protected updateUnion():void{
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId)
+        if(city.unionId > 0 && unionData){
+            this.openMyUnion(unionData);
+        }else{
+            this.lobbyNode.active = true;
+        }
+    }
 
+    protected getUnionList():void{
+
+    }
+
+    protected onEnable():void{
+        UnionCommand.getInstance().unionList();
     }
 
     protected onDisable():void{

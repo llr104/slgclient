@@ -31,7 +31,7 @@ export default class UnionMemItemLogic extends cc.Component {
 
     protected updateItem(data:Member):void{
         this._menberData = data;
-        this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + this._menberData.name + "(" + this._menberData.x + "," + this._menberData.y+")";
+        this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + this._menberData.name + " 坐标:(" + this._menberData.x + "," + this._menberData.y+")";
 
 
         var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();

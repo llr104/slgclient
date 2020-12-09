@@ -29,14 +29,7 @@ export default class UnionLobbyLogic extends cc.Component {
     protected updateUnion(data:any[]){
         var comp = this.scrollView.node.getComponent("ListLogic");
         var list:Union[] = UnionCommand.getInstance().proxy.getUnionList();
-        comp.setData(list);
-
-        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        if(city.unionId > 0 && this._isFrist){
-            this._isFrist = false;
-            cc.systemEvent.emit("open_my_union",UnionCommand.getInstance().proxy.getUnion(city.unionId))
-        }
-        
+        comp.setData(list);   
     }
 
     protected onEnable():void{

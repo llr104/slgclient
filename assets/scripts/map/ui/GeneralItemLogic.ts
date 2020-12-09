@@ -84,7 +84,7 @@ export default class GeneralItemLogic extends cc.Component {
 
 
     protected updateView(curData:any):void{
-        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
+        var cfgData = this._curData.config;
         this.nameLabel.string = cfgData.name 
         this.lvLabel.string = " Lv." +  curData.level ;
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
@@ -140,7 +140,7 @@ export default class GeneralItemLogic extends cc.Component {
 
     protected onClickGeneral(event:any): void {
         if(this._curData){
-            var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
+            var cfgData = this._curData.config;
 
             //武将详情
              if(this._type == GeneralItemType.GeneralInfo){
@@ -174,7 +174,7 @@ export default class GeneralItemLogic extends cc.Component {
      * 下阵
      */
     protected onDelete():void{
-        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
+        var cfgData = this._curData.config;
         cc.systemEvent.emit("chosed_general",cfgData,this._curData,-1);
     }
 
