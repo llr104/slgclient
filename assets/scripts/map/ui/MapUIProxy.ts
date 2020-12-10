@@ -606,13 +606,13 @@ export default class MapUIProxy {
         arr = arr.concat();
 
         var backArr: WarReport[] = [];
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i].is_read == true) {
-                backArr.push(arr[i]);
-                arr.splice(i, 1);
-                i--;
-            }
-        }
+        // for (var i = 0; i < arr.length; i++) {
+        //     if (arr[i].is_read == true) {
+        //         backArr.push(arr[i]);
+        //         arr.splice(i, 1);
+        //         i--;
+        //     }
+        // }
 
 
         backArr = arr.concat(backArr);

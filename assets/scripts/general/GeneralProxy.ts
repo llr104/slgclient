@@ -276,9 +276,11 @@ export default class GeneralProxy {
         var tempArr: GeneralData[] = this.getMyGenerals().concat();
         tempArr.sort(this.sortStar);
         var temp: GeneralData[] = [];
+        
 
         for (var i = 0; i < tempArr.length; i++) {
             if (tempArr[i].order > 0) {
+                console.log("tempArr[i].order:",tempArr[i].order,tempArr[i].config.name)
                 temp.push(tempArr[i]);
                 tempArr.splice(i, 1);
                 i--;
