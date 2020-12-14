@@ -463,19 +463,24 @@ export default class MapUIProxy {
         obj.attack_rid = data.a_rid;
         obj.defense_rid = data.d_rid;
 
-        obj.beg_attack_army = JSON.parse(data.b_a_army);
-        obj.beg_defense_army = JSON.parse(data.b_d_army);
-        obj.end_attack_army = JSON.parse(data.e_a_army);
-        obj.end_defense_army = JSON.parse(data.e_d_army);
-
         obj.beg_attack_general = this.arrayToObject(JSON.parse(data.b_a_general));
-        obj.beg_defense_general = this.arrayToObject(JSON.parse(data.b_d_general));
         obj.end_attack_general = this.arrayToObject(JSON.parse(data.e_a_general));
-        obj.end_defense_general = this.arrayToObject(JSON.parse(data.e_d_general));
+        obj.end_attack_army = JSON.parse(data.e_a_army);
+        obj.beg_attack_army = JSON.parse(data.b_a_army);
+      
+        try {
+            obj.beg_defense_army = JSON.parse(data.b_d_army);
+            obj.end_defense_army = JSON.parse(data.e_d_army);
+            obj.beg_defense_general = this.arrayToObject(JSON.parse(data.b_d_general));
+            obj.end_defense_general = this.arrayToObject(JSON.parse(data.e_d_general));
+            var temp: any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
+            obj.rounds = this.createRoundsData(data.rounds, temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
+        } catch (error) {
+            
+        }
 
         obj.result = data.result;
-        var temp: any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
-        obj.rounds = this.createRoundsData(data.rounds, temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
+       
         obj.defense_is_read = data.d_is_read;
         obj.attack_is_read = data.a_is_read;
 

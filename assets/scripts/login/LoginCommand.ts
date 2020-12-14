@@ -42,11 +42,17 @@ export default class LoginCommand {
         cc.systemEvent.on(ServerConfig.role_create, this.onRoleCreate, this);
         cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
+        cc.systemEvent.on(ServerConfig.account_robLogin, this.onAccountRobLogin, this)
 
     }
 
     public onDestory(): void {
         cc.systemEvent.targetOff(this);
+    }
+
+    //抢登录
+    private onAccountRobLogin(): void{
+        console.log("onAccountRobLogin")
     }
 
     /**注册回调*/

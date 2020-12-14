@@ -3,6 +3,7 @@ const ServerConfig = {
     account_login: "account.login",
     account_logout: "account.logout",
     account_reLogin: "account.reLogin",
+    account_robLogin:"robLogin",
     
     role_create: "role.create",
     role_roleList: "role.roleList",
