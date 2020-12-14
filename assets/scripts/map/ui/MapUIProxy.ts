@@ -11,6 +11,8 @@ export class CityAddition {
     wei: number = 0;//魏阵营加成
     shu: number = 0;//蜀阵营加成
     wu: number = 0;//吴阵营加成
+    taxRate:number = 0;//交换的税率
+    
 
 
     public clear(): void {
@@ -150,6 +152,7 @@ export default class MapUIProxy {
     protected _armyBaseCost: ConscriptBaseCost = new ConscriptBaseCost();
     protected _warReport: Map<number, WarReport> = new Map<number, WarReport>();
     protected _additions: Map<number, CityAddition> = new Map<number, CityAddition>();
+    public bTransformRate:number = 0;
 
     public clearData(): void {
         this._warReport.clear();
@@ -259,6 +262,15 @@ export default class MapUIProxy {
                             addValue = cfg.upLevels[data.level - 1].values[index];
                             addition.wu += addValue;
                         }
+
+                        index = cfg.additions.indexOf(CityAdditionType.DealTaxRate);
+                        if (index != -1) {
+                            //交易税收
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.taxRate += addValue;
+                        }
+
+                        
                     }
                 }
             });
@@ -423,6 +435,8 @@ export default class MapUIProxy {
         this._armyBaseCost.cost_wood = data.json.conscript.cost_wood;
         this._armyBaseCost.cost_grain = data.json.conscript.cost_grain;
         this._armyBaseCost.cost_stone = data.json.conscript.cost_stone;
+
+        this.bTransformRate = data.json.city.transform_rate
     }
 
     public getBaseCost(): ConscriptBaseCost {

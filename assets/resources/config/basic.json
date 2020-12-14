@@ -10,11 +10,11 @@
   "general": {
     "des": "武将的一些配置",
     "physical_power_limit": 100,
-    "cost_physical_power": 10,
-    "recovery_physical_power": 1,
+    "cost_physical_power": 1,
+    "recovery_physical_power": 10,
     "reclamation_time": 30,
     "reclamation_cost": 1,
-    "draw_general_cost": 100,
+    "draw_general_cost": 30,
     "pr_pont": 1000
   },
   "role": {
@@ -30,12 +30,14 @@
     "stone_yield": 100,
     "grain_yield": 100,
     "gold_yield": 100,
-    "depot_capacity": 10000
+    "depot_capacity": 10000,
+    "build_limit": 20
   },
   "city": {
     "des": "城池的一些配置",
     "cost": 75,
-    "durable": 100
+    "durable": 100,
+    "transform_rate": 50
   },
   "npc": {
     "des": "npc一些配置",
@@ -56,6 +58,10 @@
         "soilders": 500
       }
     ]
+  },
+  "union": {
+    "des": "联盟的一些配置",
+    "member_limit": 100
   }
 
 }

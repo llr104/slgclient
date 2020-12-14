@@ -43,6 +43,7 @@ const ServerConfig = {
     union_kick:"union.kick",
     
     interior_collection: "interior.collection",
+    interior_transform: "interior.transform",
 
     war_reportPush:"warReport.push",
     general_push: "general.push",

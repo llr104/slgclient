@@ -244,4 +244,15 @@ export default class MapUICommand {
         NetManager.getInstance().send(sendData);
     }
 
+    public interiorTransform(from:number[],to:number[]): void {
+        let sendData: any = {
+            name: ServerConfig.interior_transform,
+            msg: {
+                from:from,
+                to:to
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
 }

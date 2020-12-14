@@ -54,6 +54,10 @@ export default class MapUILogic extends cc.Component {
     protected _unionNode: cc.Node = null;
 
 
+    @property(cc.Prefab)
+    transFormPrefab: cc.Prefab = null;
+    protected _transFormNode: cc.Node = null;
+
 
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
@@ -284,6 +288,19 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._unionNode.active = true;
         }
+    }
+
+
+
+    protected openTr(): void {
+        if (this._transFormNode == null) {
+            this._transFormNode = cc.instantiate(this.transFormPrefab);
+            this._transFormNode.parent = this.node;
+        } else {
+            this._transFormNode.active = true;
+        }
+
+        this._transFormNode.getComponent("TransformLogic").initView();
     }
 
     protected updateRole(): void {
