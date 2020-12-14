@@ -53,6 +53,7 @@ export default class LoginCommand {
     //抢登录
     private onAccountRobLogin(): void{
         console.log("onAccountRobLogin")
+        cc.systemEvent.emit("robLoginUI");
     }
 
     /**注册回调*/

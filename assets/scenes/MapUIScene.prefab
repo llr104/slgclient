@@ -10613,6 +10613,9 @@
     "armySettingPrefab": {
       "__uuid__": "6cc810a6-066b-484a-b3af-8d9955dee69d"
     },
+    "dialog": {
+      "__uuid__": "483456ba-0bfe-4339-8a1e-91b20a426fea"
+    },
     "generalPrefab": {
       "__uuid__": "e68ad7c0-fbe6-4d0b-b5bd-395140c227d5"
     },

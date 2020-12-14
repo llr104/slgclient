@@ -4,6 +4,9 @@ import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 import CityArmySettingLogic from "./CityArmySettingLogic";
 import FacilityListLogic from "./FacilityListLogic";
 import MapUICommand from "./MapUICommand";
+import Dialog from "./Dialog";
+
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -16,6 +19,10 @@ export default class MapUILogic extends cc.Component {
     @property(cc.Prefab)
     armySettingPrefab: cc.Prefab = null;
     protected _armySettingNode: cc.Node = null;
+
+    @property(cc.Prefab)
+    dialog: cc.Prefab = null;
+    protected _dialogNode: cc.Node = null;
 
     @property(cc.Prefab)
     generalPrefab: cc.Prefab = null;
@@ -36,18 +43,13 @@ export default class MapUILogic extends cc.Component {
     armySelectPrefab: cc.Prefab = null;
     protected _armySelectNode: cc.Node = null;
 
-
     @property(cc.Prefab)
     drawPrefab: cc.Prefab = null;
     protected _drawNode: cc.Node = null;
 
-
     @property(cc.Prefab)
     drawResultrefab: cc.Prefab = null;
     protected _drawResultNode: cc.Node = null;
-
-
-
     
     @property(cc.Prefab)
     unionPrefab: cc.Prefab = null;
@@ -58,10 +60,8 @@ export default class MapUILogic extends cc.Component {
     transFormPrefab: cc.Prefab = null;
     protected _transFormNode: cc.Node = null;
 
-
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
-
 
     @property(cc.Label)
     nameLabel: cc.Label = null;
@@ -97,9 +97,23 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_choose", this.openGeneralChoose, this);
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
+        cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
+
         this.updateRoleRes();
         this.updateRole();
 
+    }
+
+    protected robLoginUI(): void {
+        if (this._dialogNode == null){
+            this._dialogNode = cc.instantiate(this.dialog)
+            this._dialogNode.zIndex = 10;
+            this._dialogNode.parent = this.node;
+        }else{
+            this._dialogNode.active = true;
+        }
+
+        this._dialogNode.getComponent(Dialog).text("账号在其他地方登录");
     }
 
 
@@ -123,6 +137,7 @@ export default class MapUILogic extends cc.Component {
         this._drawNode = null;
         this._drawResultNode = null;
         this._generalDesNode = null;
+        this._dialogNode = null
     }
 
 
