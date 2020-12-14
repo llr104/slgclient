@@ -64,12 +64,8 @@ export default class WarReportItemLogic extends cc.Component {
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
         var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
-        if(roleData.rid == this._curData.attack_rid){
-            this.isMeWin(this._curData.attack_rid)
-        }else{
-            this.isMeWin(this._curData.defense_rid)
-        }
-
+        this.isMeWin(this._curData.attack_rid)
+        
         this.leftLabel.string = roleData.rid == this._curData.attack_rid?"我":"敌";
         this.rightLabel.string = roleData.rid == this._curData.defense_rid?"我":"敌"
 
