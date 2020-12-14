@@ -114,6 +114,9 @@ export default class MapUILogic extends cc.Component {
         }
 
         this._dialogNode.getComponent(Dialog).text("账号在其他地方登录");
+        this._dialogNode.getComponent(Dialog).setClose(function () {
+            cc.systemEvent.emit("enter_login");
+        })
     }
 
 

@@ -13,15 +13,22 @@ export default class Dialog extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null;
 
-    start () {
-
-    }
+    protected closeCallBack: Function = null;
 
     protected onClickClose(): void {
+        if (this.closeCallBack){
+            this.closeCallBack()
+        }
+
         this.node.active = false;
     }
 
     public text(text: any): void {
        this.label.string = text
     }
+
+    public setClose(close :Function){
+        this.closeCallBack = close
+    }
+
 }
