@@ -460,27 +460,27 @@ export default class MapUIProxy {
     protected createWarReprot(data: any): WarReport {
         var obj = new WarReport();
         obj.id = data.id;
-        obj.attack_rid = data.attack_rid;
-        obj.defense_rid = data.defense_rid;
+        obj.attack_rid = data.a_rid;
+        obj.defense_rid = data.d_rid;
 
-        obj.beg_attack_army = JSON.parse(data.beg_attack_army);
-        obj.beg_defense_army = JSON.parse(data.beg_defense_army);
-        obj.end_attack_army = JSON.parse(data.end_attack_army);
-        obj.end_defense_army = JSON.parse(data.end_defense_army);
+        obj.beg_attack_army = JSON.parse(data.b_a_army);
+        obj.beg_defense_army = JSON.parse(data.b_d_army);
+        obj.end_attack_army = JSON.parse(data.e_a_army);
+        obj.end_defense_army = JSON.parse(data.e_d_army);
 
-        obj.beg_attack_general = this.arrayToObject(JSON.parse(data.beg_attack_general));
-        obj.beg_defense_general = this.arrayToObject(JSON.parse(data.beg_defense_general));
-        obj.end_attack_general = this.arrayToObject(JSON.parse(data.end_attack_general));
-        obj.end_defense_general = this.arrayToObject(JSON.parse(data.end_defense_general));
+        obj.beg_attack_general = this.arrayToObject(JSON.parse(data.b_a_general));
+        obj.beg_defense_general = this.arrayToObject(JSON.parse(data.b_d_general));
+        obj.end_attack_general = this.arrayToObject(JSON.parse(data.e_a_general));
+        obj.end_defense_general = this.arrayToObject(JSON.parse(data.e_d_general));
 
         obj.result = data.result;
         var temp: any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
         obj.rounds = this.createRoundsData(data.rounds, temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
-        obj.defense_is_read = data.defense_is_read;
-        obj.attack_is_read = data.attack_is_read;
+        obj.defense_is_read = data.d_is_read;
+        obj.attack_is_read = data.a_is_read;
 
         obj.is_read = this.isReadObj(obj);
-        obj.destroy_durable = data.destroy_durable;
+        obj.destroy_durable = data.destroy;
         obj.occupy = data.occupy;
         obj.x = data.x;
         obj.y = data.y;
@@ -581,6 +581,12 @@ export default class MapUIProxy {
 
             this._warReport.set(id, data);
         }
+    }
+
+    public updateAllWarRead(isRead: boolean = true) {
+        this._warReport.forEach(element => {
+            this.updateWarRead(element.id, isRead)
+        });
     }
 
 

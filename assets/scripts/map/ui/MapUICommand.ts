@@ -115,7 +115,12 @@ export default class MapUICommand {
         console.log("onUpdataWarRead :", data);
         if (data.code == 0) {
             var id = data.msg.id;
-            this._proxy.updateWarRead(id, true);
+            if (id == 0) {
+                this._proxy.updateAllWarRead(true);
+            }else{
+                this._proxy.updateWarRead(id, true);
+            }
+           
             cc.systemEvent.emit("upate_war_report");
         }
     }

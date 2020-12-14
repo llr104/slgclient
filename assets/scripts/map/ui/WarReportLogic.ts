@@ -62,5 +62,7 @@ export default class WarReportLogic extends cc.Component {
         this._warPortDesNode.getComponent("WarReportDesLogic").setData(data);
     }
 
-
+    protected allRead():void{
+        MapUICommand.getInstance().warRead(0);
+    }
 }
