@@ -134,7 +134,13 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
-            } else {
+            } else if ((this._data as MapBuildData).parentId > 0
+            && (this._data as MapBuildData).parentId == MapCommand.getInstance().buildProxy.myUnionId) {
+                //俘虏的地
+                this.btnMove.node.active = true;
+                this.btnOccupy.node.active = false;
+                this.btnGiveUp.node.active = false;
+            }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
@@ -156,7 +162,13 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
-            } else {
+            }else if ((this._data as MapCityData).parentId > 0
+                && (this._data as MapCityData).parentId == MapCommand.getInstance().cityProxy.myUnionId) {
+                //俘虏的城池
+                this.btnMove.node.active = true;
+                this.btnOccupy.node.active = false;
+                this.btnGiveUp.node.active = false;
+            }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;

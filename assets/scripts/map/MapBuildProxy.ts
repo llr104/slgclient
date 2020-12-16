@@ -14,6 +14,7 @@ export class MapBuildData {
     maxDurable: number = 0;
     defender: number = 0;
     unionId: number = 0;
+    parentId: number = 0;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -23,7 +24,8 @@ export class MapBuildData {
             && this.curDurable == data.cur_durable
             && this.maxDurable == data.maxDurable
             && this.defender == data.defender
-            && this.unionId == data.union_id) {
+            && this.unionId == data.union_id
+            && this.parentId == data.parent_id) {
             return true;
         }
         return false;
@@ -45,6 +47,7 @@ export class MapBuildData {
         build.maxDurable = data.max_durable;
         build.defender = data.defender;
         build.unionId = data.union_id;
+        build.parentId = data.parent_id;
         return build;
     }
 }

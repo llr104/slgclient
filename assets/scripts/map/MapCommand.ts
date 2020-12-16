@@ -145,54 +145,78 @@ export default class MapCommand {
         } 
     }
 
+    public isBuildSub(id: number): boolean {
+        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
+        if (buiildData) {
+            if (buiildData.rid == this.buildProxy.myId){
+                return true;
+            }
+
+            if (buiildData.unionId > 0 && buiildData.unionId == this.buildProxy.myUnionId){
+                return true
+            }
+
+            if (buiildData.parentId > 0 && buiildData.parentId == this.buildProxy.myUnionId){
+                return true
+            }
+        }
+        return false
+    }
+
+    
+    public isCitySub(id: number): boolean {
+        let cityData: MapCityData = this.cityProxy.getCity(id);
+        if (cityData) {
+            if (cityData.rid == this.cityProxy.myId){
+                return true
+            }
+
+            if (cityData.unionId > 0 && cityData.unionId == this.cityProxy.myUnionId){
+                return true
+            }
+
+            if (cityData.parentId > 0 && cityData.parentId == this.cityProxy.myUnionId){
+                return true
+            }
+        }
+        return false
+    }
+
     /**是否是可行军的位置*/
     public isCanMoveCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
-        if (buiildData
-            && (buiildData.rid == this.buildProxy.myId
-                || (buiildData.unionId > 0
-                    && buiildData.unionId == this.buildProxy.myUnionId))) {
-            return true;
+        if (this.isBuildSub(id)){
+            return true
         }
-        let cityData: MapCityData = this.cityProxy.getCity(id);
-        if (cityData && (cityData.rid == this.cityProxy.myId
-            || (cityData.unionId > 0
-                && cityData.unionId == this.cityProxy.myUnionId))) {
-            return true;
+
+        if (this.isCitySub(id)){
+            return true
         }
+
+        return false
     }
 
     public isCanOccupyCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
-        if (buiildData
-            && (buiildData.rid == this.buildProxy.myId
-                || (buiildData.unionId > 0
-                    && buiildData.unionId == this.buildProxy.myUnionId))) {
-            return false;//已经占领
+        
+        if (this.isBuildSub(id)){
+            return false
         }
-        let cityData: MapCityData = this.cityProxy.getCity(id);
-        if (cityData && (cityData.rid == this.cityProxy.myId
-            || (cityData.unionId > 0
-                && cityData.unionId == this.cityProxy.myUnionId))) {
-            return false;//已经建城
+
+        if (this.isCitySub(id)){
+            return false
         }
+        
+
         let ids: number[] = MapUtil.get9GridCellIds(id);
         for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {
-                buiildData = this.buildProxy.getBuild(ids[i]);
-                if (buiildData
-                    && (buiildData.rid == this.buildProxy.myId
-                        || (buiildData.unionId > 0
-                            && buiildData.unionId == this.buildProxy.myUnionId))) {
-                    return true;//已经占领相邻格子
+                if (this.isBuildSub(ids[i])){
+                    return true
                 }
-                cityData = this.cityProxy.getCity(ids[i]);
-                if (cityData && (cityData.rid == this.cityProxy.myId
-                    || (cityData.unionId > 0
-                        && cityData.unionId == this.cityProxy.myUnionId))) {
-                    return true;//已经在相邻格子建城
+                
+                if (this.isCitySub(ids[i])){
+                    return true
                 }
             }
         }
@@ -201,34 +225,21 @@ export default class MapCommand {
 
     public isCanOccupyCityCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
-        if (buiildData
-            && (buiildData.rid == this.buildProxy.myId
-                || (buiildData.unionId > 0
-                    && buiildData.unionId == this.buildProxy.myUnionId))) {
-            return false;//已经占领
+        if (this.isBuildSub(id)){
+            return false
         }
-        let cityData: MapCityData = this.cityProxy.getCity(id);
-        if (cityData && (cityData.rid == this.cityProxy.myId
-            || (cityData.unionId > 0
-                && cityData.unionId == this.cityProxy.myUnionId))) {
-            return false;//已经建城
+        if (this.isCitySub(id)){
+            return false
         }
         let ids: number[] = MapUtil.getSideIdsForCity(id);
         for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {
-                buiildData = this.buildProxy.getBuild(ids[i]);
-                if (buiildData
-                    && (buiildData.rid == this.buildProxy.myId
-                        || (buiildData.unionId > 0
-                            && buiildData.unionId == this.buildProxy.myUnionId))) {
-                    return true;//已经占领相邻格子
+                if (this.isBuildSub(ids[i])){
+                    return true
                 }
-                cityData = this.cityProxy.getCity(ids[i]);
-                if (cityData && (cityData.rid == this.cityProxy.myId
-                    || (cityData.unionId > 0
-                        && cityData.unionId == this.cityProxy.myUnionId))) {
-                    return true;//已经在相邻格子建城
+                
+                if (this.isCitySub(ids[i])){
+                    return true
                 }
             }
         }
