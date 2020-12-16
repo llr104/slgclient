@@ -4,7 +4,10 @@ import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 import CityArmySettingLogic from "./CityArmySettingLogic";
 import FacilityListLogic from "./FacilityListLogic";
 import MapUICommand from "./MapUICommand";
+
 import Dialog from "./Dialog";
+import UnionCommand from "../../union/UnionCommand";
+import MapCommand from "../MapCommand";
 
 
 const { ccclass, property } = cc._decorator;
@@ -101,7 +104,10 @@ export default class MapUILogic extends cc.Component {
 
         this.updateRoleRes();
         this.updateRole();
-
+        let unionId = MapCommand.getInstance().cityProxy.myUnionId;
+        if (unionId > 0) {
+            UnionCommand.getInstance().unionApplyList(unionId);
+        }
     }
 
     protected robLoginUI(): void {
