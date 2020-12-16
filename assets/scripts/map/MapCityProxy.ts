@@ -61,6 +61,7 @@ export default class MapCityProxy {
     protected _myCitys: MapCityData[] = [];
     public myId: number = 0;
     public myUnionId: number = 0;
+    public myParentId: number = 0;
 
     // 初始化数据
     public initData(): void {

@@ -58,7 +58,7 @@ export default class MapBuildProxy {
     protected _lastBuildCellIds: Map<number, number[]> = new Map<number, number[]>();
     public myId: number = 0;
     public myUnionId: number = 0;
-
+    public myParentId: number = 0;
     // 初始化数据
     public initData(): void {
         this._mapBuilds.length = MapUtil.mapCellCount;

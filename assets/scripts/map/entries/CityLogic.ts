@@ -44,9 +44,13 @@ export default class CityLogic extends cc.Component {
             this.labelName.string = this._data.name;
             if (this._data.rid == MapCommand.getInstance().cityProxy.myId) {
                 this.tipNode.color = cc.Color.GREEN;
-            } else if (this._data.unionId == MapCommand.getInstance().cityProxy.myUnionId) {
+            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().cityProxy.myUnionId) {
                 this.tipNode.color = cc.Color.BLUE;
-            } else {
+            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().cityProxy.myParentId) {
+                this.tipNode.color = cc.Color.MAGENTA;
+            }else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().cityProxy.myUnionId) {
+                this.tipNode.color = cc.Color.YELLOW;
+            }else {
                 this.tipNode.color = cc.Color.RED;
             }
         }

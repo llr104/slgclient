@@ -85,7 +85,10 @@ export default class MapCommand {
             this._cityProxy.myId = this._cityProxy.getMyPlayerId();
             this._buildProxy.myId = this._cityProxy.getMyPlayerId();
             this._cityProxy.myUnionId = this._cityProxy.getMyMainCity().unionId;
+            this._cityProxy.myParentId = this._cityProxy.getMyMainCity().parentId;
             this._buildProxy.myUnionId = this._cityProxy.getMyMainCity().unionId;
+            this._buildProxy.myParentId = this._cityProxy.getMyMainCity().parentId;
+            
             this.enterMap();
         }
     }

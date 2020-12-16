@@ -39,9 +39,13 @@ export default class BuildLogic extends cc.Component {
         if (this._data) {
             if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
                 this.spr.node.color = cc.Color.GREEN;
-            } else if (this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.spr.node.color = cc.Color.BLUE;
-            } else {
+            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
+                this.spr.node.color = cc.Color.BLUE
+            }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
+                this.spr.node.color = cc.Color.MAGENTA;
+            } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
+                this.spr.node.color = cc.Color.YELLOW;
+            }else {
                 this.spr.node.color = cc.Color.RED;
             }
         }
