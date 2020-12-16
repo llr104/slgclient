@@ -194,4 +194,11 @@ export default class MapBuildProxy {
     public getMyBuildList():MapBuildData[] {
         return this._myBuilds;
     }
+
+    public updateSub(rid: number, unionId: number, parentId: number): void {
+        if (rid == this.myId){
+            this.myUnionId = unionId;
+            this.myParentId = parentId;
+        }
+    }
 }

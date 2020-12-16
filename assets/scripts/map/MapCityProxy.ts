@@ -146,9 +146,15 @@ export default class MapCityProxy {
             this._mapCitys[id] = cityData;
             if (city.rid == this.myId) {
                 this._myCitys.push(cityData);
+                this.myUnionId = cityData.unionId
+                this.myParentId = cityData.parentId
             }
         } else {
             cityData = MapCityData.createCityData(city, id, this._mapCitys[id]);
+            if (city.rid == this.myId) {
+                this.myUnionId = cityData.unionId
+                this.myParentId = cityData.parentId
+            }
         }
         return cityData;
     }

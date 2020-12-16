@@ -131,13 +131,12 @@ export default class MapCommand {
     }
 
     protected onRoleCityPush(data: any): void {
-        console.log("onRoleCityPush", data);
-        let cityData: MapCityData = this._cityProxy.updateCity(data.msg);
-        cc.systemEvent.emit("update_city", cityData);
-
+        console.log("onRoleCityPush:", data)
+        this._buildProxy.updateSub(data.msg.rid, data.msg.union_id, data.msg.parent_id)
         let id:number = MapUtil.getIdByCellPoint(data.msg.x, data.msg.y);
         let oldCityData:MapCityData = this._cityProxy.getCity(id);
         if (oldCityData == null || oldCityData.unionId != data.msg.union_id) {
+            this._cityProxy.updateCity(data.msg);
             //代表联盟数据改变
             if (data.msg.rid == this._cityProxy.myId) {
                 //我自己的联盟改变 就更新全数据
@@ -145,7 +144,11 @@ export default class MapCommand {
             } else {
                 cc.systemEvent.emit("my_union_change", data.msg.rid, data.msg.cityId, false);
             }
-        } 
+        }else{
+            this._cityProxy.updateCity(data.msg);
+        }
+
+       
     }
 
     public isBuildSub(id: number): boolean {
