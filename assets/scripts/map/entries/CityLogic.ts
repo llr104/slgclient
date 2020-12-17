@@ -25,21 +25,27 @@ export default class CityLogic extends cc.Component {
     }
 
     protected onEnable(): void {
-        cc.systemEvent.on("my_union_change", this.onUnionChange, this);
+        cc.systemEvent.on("unionChange", this.onUnionChange, this);
     }
 
     protected onDisable(): void {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onUnionChange(rid: number, cityId: number, isMine: boolean): void {
-        if (isMine || rid == this._data.rid) {
-            this.setCityData(this._data);
+    protected onUnionChange(rid: number, unionId: number, parentId: number): void {
+        if (this._data.rid == rid ){
+            this._data.unionId = unionId;
+            this._data.parentId = parentId;
         }
+        this.updateUI();
     }
 
     public setCityData(data: MapCityData): void {
         this._data = data;
+        this.updateUI();
+    }
+
+    public updateUI(): void {
         if (this._data) {
             this.labelName.string = this._data.name;
             if (this._data.rid == MapCommand.getInstance().cityProxy.myId) {

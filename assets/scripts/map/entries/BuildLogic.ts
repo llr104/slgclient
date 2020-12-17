@@ -21,21 +21,28 @@ export default class BuildLogic extends cc.Component {
     }
 
     protected onEnable():void {
-        cc.systemEvent.on("my_union_change", this.onUnionChange, this);
+        cc.systemEvent.on("unionChange", this.onUnionChange, this);
     }
 
     protected onDisable():void {
         cc.systemEvent.targetOff(this);
     }
 
-    protected onUnionChange(rid:number, cityId:number, isMine:boolean):void {
-        if (isMine || rid == this._data.rid) {
-            this.setBuildData(this._data);
+    protected onUnionChange(rid: number, unionId: number, parentId: number): void {
+        if (this._data.rid == rid ){
+            this._data.unionId = unionId;
+            this._data.parentId = parentId;
         }
-    }
-
-    public setBuildData(data: MapBuildData): void {
+        this.updateUI();
+     }
+ 
+     public setBuildData(data: MapBuildData): void {
         this._data = data;
+        this.updateUI();
+     }
+
+    public updateUI(): void {
+     
         if (this._data) {
             if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
                 this.spr.node.color = cc.Color.GREEN;
