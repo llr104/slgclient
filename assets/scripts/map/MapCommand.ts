@@ -135,7 +135,7 @@ export default class MapCommand {
         this._buildProxy.updateSub(data.msg.rid, data.msg.union_id, data.msg.parent_id)
         let id:number = MapUtil.getIdByCellPoint(data.msg.x, data.msg.y);
         let oldCityData:MapCityData = this._cityProxy.getCity(id);
-        if (oldCityData == null || oldCityData.unionId != data.msg.union_id) {
+        if (oldCityData == null || oldCityData.unionId != data.msg.union_id || oldCityData.parentId != data.msg.parent_id) {
             this._cityProxy.updateCity(data.msg);
             //代表联盟数据改变
             if (data.msg.rid == this._cityProxy.myId) {

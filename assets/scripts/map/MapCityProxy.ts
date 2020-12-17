@@ -15,6 +15,7 @@ export class MapCityData {
     cost: number = 0;
     unionId:number = 0;
     parentId:number = 0;
+    unionName:string = "";
 
     public equalsServerData(data: any) {
         if (this.cityId == data.cityId
@@ -27,7 +28,8 @@ export class MapCityData {
             && this.curDurable == data.cur_durable
             && this.maxDurable == data.maxDurable
             && this.unionId == data.union_id
-            && this.parentId == data.parent_id) {
+            && this.parentId == data.parent_id 
+            && this.unionName == data.union_name) {
             return true;
         }
         return false;
@@ -51,6 +53,7 @@ export class MapCityData {
         city.cost = data.cost;
         city.unionId = data.union_id;
         city.parentId = data.parent_id;
+        city.unionName = data.union_name;
         return city;
     }
 }

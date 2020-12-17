@@ -13,6 +13,10 @@ export default class MapClickUILogic extends cc.Component {
     @property(cc.Label)
     labelName: cc.Label = null;
     @property(cc.Label)
+    labelUnion: cc.Label = null;
+    @property(cc.Label)
+    labelLunxian: cc.Label = null;
+    @property(cc.Label)
     labelPos: cc.Label = null;
     @property(cc.Node)
     durableNode: cc.Node = null;
@@ -180,6 +184,7 @@ export default class MapClickUILogic extends cc.Component {
             this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         }
+
         if (this.leftInfoNode.active) {
             let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
             let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);
@@ -189,6 +194,23 @@ export default class MapClickUILogic extends cc.Component {
             console.log("resData", resData, resCfg);
         } else {
             this.labelName.string = this._data.name;
+        }
+
+        //归属属性
+        if (this._data.rid == null || this._data.rid == 0){
+            this.labelUnion.string = "空地";
+        }else{
+            if (this._data.unionId > 0){
+                this.labelUnion.string = this._data.unionName;
+            }else{
+                this.labelUnion.string = "在野";
+            }
+        }
+
+        if (this._data.parentId > 0){
+            this.labelLunxian.string = "沦陷";
+        }else{
+            this.labelLunxian.string = "";
         }
     }
 }

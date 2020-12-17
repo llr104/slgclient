@@ -26,6 +26,9 @@ export default class UnionLogic extends cc.Component {
     @property(cc.Node)
     myNode:cc.Node = null;
 
+    @property(cc.Label)
+    nameLab:cc.Label = null;
+
     protected onLoad():void{
         this.visibleView();
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
@@ -61,8 +64,6 @@ export default class UnionLogic extends cc.Component {
             this.myNode.active = true;
             com.setData(data);
         }
-
-
     }
 
     protected updateUnion():void{
@@ -70,8 +71,10 @@ export default class UnionLogic extends cc.Component {
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId)
         if(city.unionId > 0 && unionData){
             this.openMyUnion(unionData);
+            this.nameLab.string = unionData.name;
         }else{
             this.lobbyNode.active = true;
+            this.nameLab.string = "联盟";
         }
     }
 
