@@ -19,12 +19,17 @@ export default class UnionLogic extends cc.Component {
     @property(cc.Node)
     createNode:cc.Node = null;
 
+    @property(cc.Node)
+    mainNode:cc.Node = null;
 
     @property(cc.Node)
     lobbyNode:cc.Node = null;
 
     @property(cc.Node)
-    myNode:cc.Node = null;
+    memberNode:cc.Node = null;
+
+    @property(cc.Node)
+    applyNode:cc.Node = null;
 
     @property(cc.Label)
     nameLab:cc.Label = null;
@@ -33,11 +38,8 @@ export default class UnionLogic extends cc.Component {
         this.visibleView();
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
         cc.systemEvent.on("dismiss_union_success",this.back,this);
-        cc.systemEvent.on("close_union",this.onClickClose,this);+
-        cc.systemEvent.on("update_union_list",this.updateUnion,this);
+        cc.systemEvent.on("close_union",this.onClickClose,this);
     }
-
-
 
 
     protected onDestroy():void{
@@ -45,7 +47,18 @@ export default class UnionLogic extends cc.Component {
     }
 
     protected onClickClose(): void {
+        console.log("onClickClose");
         this.node.active = false;
+    }
+
+    protected onClickMember(): void {
+        this.memberNode.active = true;
+        this.mainNode.active = false;
+    }
+
+    protected onClickApply(): void {
+        this.mainNode.active = false;
+        this.applyNode.active = true;
     }
 
     protected openCreate():void{
@@ -54,36 +67,26 @@ export default class UnionLogic extends cc.Component {
 
 
     protected visibleView():void{
-        this.myNode.active = this.createNode.active = this.lobbyNode.active = false;
+        this.memberNode.active = this.createNode.active = this.lobbyNode.active = this.applyNode.active  = false;
     }
 
-    protected openMyUnion(data:any):void{
+    protected openMyUnion():void{
         this.visibleView();
-        var com = this.myNode.getComponent("UnionMyLogic");
-        if(com){
-            this.myNode.active = true;
-            com.setData(data);
-        }
+        this.mainNode.active = true
     }
 
-    protected updateUnion():void{
-        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId)
-        if(city.unionId > 0 && unionData){
-            this.openMyUnion(unionData);
-            this.nameLab.string = unionData.name;
-        }else{
-            this.lobbyNode.active = true;
-            this.nameLab.string = "联盟";
-        }
-    }
-
-    protected getUnionList():void{
-
-    }
 
     protected onEnable():void{
-        UnionCommand.getInstance().unionList();
+
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
+        if(city.unionId > 0 && unionData){
+            this.openMyUnion();
+        }else{
+            this.mainNode.active = false;
+            this.lobbyNode.active = true;
+            UnionCommand.getInstance().unionList();
+        }
     }
 
     protected onDisable():void{
