@@ -37,7 +37,8 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.union_verify, this.onUnionVerify, this);
         cc.systemEvent.on(ServerConfig.union_exit, this.onUnionDisMiss, this);
         cc.systemEvent.on(ServerConfig.union_kick, this.onUnionKick, this);
-        cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush);
+        cc.systemEvent.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
+        cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
     }
 
     public onDestory(): void {
@@ -120,6 +121,15 @@ export default class UnionCommand {
         if (data.code == 0) {
             cc.systemEvent.emit("kick_union_success");
         }
+    }
+
+    protected onUnionNotice(data: any, otherData: any): void {
+        console.log("onUnionNotice", data);
+        if(data.code == 0){
+            this._proxy.updateNotice(data.msg.id, data.msg.text)
+            cc.systemEvent.emit("union_notice", data.msg);
+        }
+        
     }
 
     protected onUnionApplyPush(data: any, otherData: any): void {
@@ -224,4 +234,17 @@ export default class UnionCommand {
         };
         NetManager.getInstance().send(sendData);
     }
+
+    
+    public modNotice(text:string):void{
+        let sendData: any = {
+            name: ServerConfig.union_modNotice,
+            msg: {
+                text:text,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    
 }

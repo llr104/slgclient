@@ -38,7 +38,28 @@ export class Union {
     name: string = "";
     cnt: number = 0;
     notice: string = "";
-    major:Member[] = []
+    major:Member[] = [];
+
+
+    public getChairman():Member{
+        var major:Member[] = this.major.concat();
+        for(var i = 0;i < major.length;i++){
+            if(major[i].title == 0){
+                return major[i];
+            }
+        }
+        return new Member()
+    }
+
+    public isMajor(rid:number):boolean{
+        var major:Member[] = this.major.concat();
+        for(var i = 0;i < major.length;i++){
+            if(major[i].rid == rid){
+                return true
+            }
+        }
+        return false
+    }
 }
 
 
@@ -69,9 +90,6 @@ export default class UnionProxy {
         return obj
     }
 
-
-
-    
     protected createMember(data:any):Member{
         var obj = new Member();
         obj.rid = data.rid;
@@ -97,6 +115,12 @@ export default class UnionProxy {
         this._menberMap.set(id,member);
     }
 
+    public updateNotice(unionid:number,text:string):void{
+        let union:Union = this._unionMap.get(unionid);
+        if(union){
+            union.notice = text
+        }
+    }
 
     public isChairman(unionid:number,rid:number):boolean{
         let union:Union = this._unionMap.get(unionid);
@@ -113,9 +137,6 @@ export default class UnionProxy {
 
         return false;
     }
-
-
-
 
     public isMeInUnion():boolean{
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
