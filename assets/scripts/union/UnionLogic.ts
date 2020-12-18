@@ -39,6 +39,7 @@ export default class UnionLogic extends cc.Component {
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
         cc.systemEvent.on("dismiss_union_success",this.back,this);
         cc.systemEvent.on("close_union",this.onClickClose,this);
+        cc.systemEvent.on("create_union_success",this.openMyUnion,this);
     }
 
 
@@ -77,15 +78,13 @@ export default class UnionLogic extends cc.Component {
 
 
     protected onEnable():void{
-
+        
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
-        if(city.unionId > 0 && unionData){
+        if(city.unionId > 0){
             this.openMyUnion();
         }else{
             this.mainNode.active = false;
             this.lobbyNode.active = true;
-            UnionCommand.getInstance().unionList();
         }
     }
 

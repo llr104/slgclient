@@ -43,6 +43,7 @@ const ServerConfig = {
     union_exit:"union.exit",
     union_kick:"union.kick",
     union_modNotice:"union.modNotice",
+    union_info:"union.info",
     union_apply_push: "unionApply.push",
     
     interior_collection: "interior.collection",

@@ -34,12 +34,34 @@ export default class UnionMainLogic extends cc.Component {
 
     @property(cc.Button)
     applyBtn: cc.Button = null;
+
+    @property(cc.Node)
+    applyRedDot: cc.Node = null;
     
     onLoad () {
         cc.systemEvent.on("union_notice",this.onUnionNotice,this);
+        cc.systemEvent.on("union_info",this.onInfo, this);
+        cc.systemEvent.on("update_union_apply", this.onUnionApply, this);
+    }
+
+    
+    protected onDestroy():void{
+        cc.systemEvent.targetOff(this);
     }
 
     onEnable() {
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        UnionCommand.getInstance().unionInfo(city.unionId);
+        this.updateRedDot()
+    }
+
+    updateRedDot(){
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let cnt = UnionCommand.getInstance().proxy.getApplyCnt(city.unionId);
+        this.applyRedDot.active = cnt > 0;
+    }
+
+    onInfo(){
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         this.nameLab.string = "联盟:" + unionData.name;
@@ -60,6 +82,10 @@ export default class UnionMainLogic extends cc.Component {
         this.noticeLab.string = data.text;
     }
 
+    onUnionApply(){
+       this.updateRedDot();
+    }
+
     onEditSubmit(){
         this.noticeLab.node.active = true;
         this.editNode.active = false;
@@ -67,7 +93,6 @@ export default class UnionMainLogic extends cc.Component {
 
         var str = this.editBox.string
         UnionCommand.getInstance().modNotice(str);
-
     }
 
     onModify(){

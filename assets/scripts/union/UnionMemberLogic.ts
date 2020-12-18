@@ -31,6 +31,9 @@ export default class UnionMemberLogic extends cc.Component {
         cc.systemEvent.on("kick_union_success",this.getMember,this);
     }
 
+    protected onDestroy():void{
+        cc.systemEvent.targetOff(this);
+    }
 
     protected updateMember(data:any[]){
 
@@ -55,7 +58,25 @@ export default class UnionMemberLogic extends cc.Component {
     }
 
     protected onEnable():void{
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
+        if(unionData.getChairman().rid == city.rid){
+            this.exitButton.active = false;
+            this.disMissButton.active = true;
+        }else{
+            this.exitButton.active = true;
+            this.disMissButton.active = false;
+        }
+        
         this.getMember()
+    }
+
+    protected dismiss():void{
+        UnionCommand.getInstance().unionDismiss();
+    }
+
+    protected exit():void{
+        UnionCommand.getInstance().unionExit();
     }
 
 

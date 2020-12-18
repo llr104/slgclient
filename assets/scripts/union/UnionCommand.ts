@@ -1,6 +1,8 @@
 import { NetManager } from "../network/socket/NetManager";
 import UnionProxy from "./UnionProxy";
 import { ServerConfig } from "../config/ServerConfig";
+import { MapCityData } from "../map/MapCityProxy";
+import MapCommand from "../map/MapCommand";
 
 export default class UnionCommand {
     //单例
@@ -38,6 +40,7 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.union_exit, this.onUnionDisMiss, this);
         cc.systemEvent.on(ServerConfig.union_kick, this.onUnionKick, this);
         cc.systemEvent.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
+        cc.systemEvent.on(ServerConfig.union_info, this.onUnionInfo, this)
         cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
     }
 
@@ -102,6 +105,7 @@ export default class UnionCommand {
     protected onUnionApply(data: any, otherData: any): void {
         console.log("onUnionApply", data);
         if (data.code == 0) {
+            this._proxy.updateApplyList(data.msg.id, data.msg.applys);
             cc.systemEvent.emit("update_union_apply", data.msg.applys);
         }
     }
@@ -132,9 +136,23 @@ export default class UnionCommand {
         
     }
 
+    protected onUnionInfo(data: any, otherData: any): void {
+        console.log("onUnionInfo", data);
+        if(data.code == 0){
+            let l = []
+            l.push(data.msg.info)
+            this._proxy.updateUnionList(l);
+
+            cc.systemEvent.emit("union_info", data.msg);
+        }
+    }
+    
+
     protected onUnionApplyPush(data: any, otherData: any): void {
         console.log("onUnionApplyPush", data);
-        cc.systemEvent.emit("update_union_apply_push", data.msg);
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        this._proxy.updateApply(city.unionId, data.msg);
+        cc.systemEvent.emit("update_union_apply", data.msg);
     }
 
 
@@ -164,6 +182,16 @@ export default class UnionCommand {
         let sendData: any = {
             name: ServerConfig.union_list,
             msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public unionInfo(id:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.union_info,
+            msg: {
+                id:id
             }
         };
         NetManager.getInstance().send(sendData);

@@ -67,6 +67,8 @@ export default class UnionProxy {
 
     private _unionMap:Map<number,Union> = new Map<number,Union>();
     private _menberMap:Map<number,Member[]> = new Map<number,Member[]>();
+    private _applyMap:Map<number,Apply[]> = new Map<number,Apply[]>();
+
     public clearData(): void {
         this._unionMap.clear();
         this._menberMap.clear();
@@ -122,6 +124,27 @@ export default class UnionProxy {
         }
     }
 
+    public updateApplyList(id:number,data:any[]):void{
+        var apply:Apply[] = [];
+        for(var i = 0; i < data.length ;i++){
+            var obj = data[i]
+            apply.push(obj);
+        }
+        this._applyMap.set(id,apply);
+    }
+
+    public updateApply(id:number,data:any):void{
+        var apply = this._applyMap.get(id);
+        if (apply != null) {
+            apply.push(data)
+            this._applyMap.set(id, apply)
+        }else{
+            var t = []
+            t.push(data)
+            this.updateApplyList(id, t)
+        }
+    }
+
     public isChairman(unionid:number,rid:number):boolean{
         let union:Union = this._unionMap.get(unionid);
         if(!union){
@@ -154,5 +177,14 @@ export default class UnionProxy {
 
     public getUnion(id:number = 0):Union{
         return this._unionMap.get(id);
+    }
+
+    public getApplyCnt(id:number = 0):number{
+        let t = this._applyMap.get(id);
+        if (t == null){
+            return 0
+        }
+        console.log("getApplyCnt:", t)
+        return t.length
     }
 }

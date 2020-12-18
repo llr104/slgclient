@@ -24,6 +24,11 @@ export default class UnionApplyLogic extends cc.Component {
         cc.systemEvent.on("verify_union_success",this.getApply,this);
     }
 
+    
+    protected onDestroy():void{
+        cc.systemEvent.targetOff(this);
+    }
+    
     protected updateApply(data:any[]){
         var comp = this.applyView.node.getComponent("ListLogic");
         comp.setData(data?data:[]);

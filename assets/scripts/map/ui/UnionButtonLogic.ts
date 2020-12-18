@@ -5,11 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ArmyData } from "../../general/ArmyProxy";
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
-import LoginCommand from "../../login/LoginCommand";
-import MapUICommand from "./MapUICommand";
+import UnionCommand from "../../union/UnionCommand";
+import { MapCityData } from "../MapCityProxy";
+import MapCommand from "../MapCommand";
 
 
 const { ccclass, property } = cc._decorator;
@@ -23,20 +21,14 @@ export default class WarButtonLogic extends cc.Component {
 
     protected onLoad():void{
         cc.systemEvent.on("update_union_apply", this.updateView, this);
-        cc.systemEvent.on("update_union_apply_push", this.updateViewPush, this)
-        this.updateView(0);
+        this.tipsNode.active = false;
     }
 
 
-    protected updateView(applys):void{
-        this.tipsNode.active = applys.length > 0;
-    }
-
-    protected updateViewPush(data):void{
-        console.log("updateViewPush", data)
-        if (data.rid != LoginCommand.getInstance().proxy.getRoleData().rid){
-            this.tipsNode.active = true;
-        }
+    protected updateView():void{
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let cnt = UnionCommand.getInstance().proxy.getApplyCnt(city.unionId);
+        this.tipsNode.active = cnt > 0;
     }
 
     protected onDestroy():void{

@@ -25,6 +25,11 @@ export default class UnionLobbyLogic extends cc.Component {
         cc.systemEvent.on("update_union_list",this.updateUnion,this);
     }
 
+    
+    protected onDestroy():void{
+        cc.systemEvent.targetOff(this);
+    }
+
 
     protected updateUnion(data:any[]){
         var comp = this.scrollView.node.getComponent("ListLogic");
