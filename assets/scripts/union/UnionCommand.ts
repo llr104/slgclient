@@ -1,5 +1,5 @@
 import { NetManager } from "../network/socket/NetManager";
-import UnionProxy from "./UnionProxy";
+import UnionProxy, { Union } from "./UnionProxy";
 import { ServerConfig } from "../config/ServerConfig";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
@@ -151,8 +151,11 @@ export default class UnionCommand {
     protected onUnionApplyPush(data: any, otherData: any): void {
         console.log("onUnionApplyPush", data);
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        this._proxy.updateApply(city.unionId, data.msg);
-        cc.systemEvent.emit("update_union_apply", data.msg);
+        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
+        if (unionData.isMajor(city.rid)){
+            this._proxy.updateApply(city.unionId, data.msg);
+            cc.systemEvent.emit("update_union_apply", data.msg);
+        }
     }
 
 
