@@ -30,8 +30,9 @@ export default class ChatCommand {
     //数据model
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.chat_chat, this.onChat, this)
+        // cc.systemEvent.on(ServerConfig.chat_chat, this.onChat, this)
         cc.systemEvent.on(ServerConfig.chat_history, this.onChatHistory, this)
+        cc.systemEvent.on(ServerConfig.chat_push, this.onChat, this)
     }
 
     protected onChat(data:any):void{
@@ -46,7 +47,7 @@ export default class ChatCommand {
     protected onChatHistory(data:any):void{
         console.log("onChatHistory:",data)
         if (data.code == 0) {
-            this._proxy.updateChatList(data.msg);
+            this._proxy.updateChatList(data.msg.msgs);
             cc.systemEvent.emit("update_chat_history");
         }
     }

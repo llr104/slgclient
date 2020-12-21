@@ -63,6 +63,7 @@ const ServerConfig = {
     chat_login:"chat.login",
     chat_chat:"chat.chat",
     chat_history:"chat.history",
+    chat_push:"chat.push",
 }
 
 

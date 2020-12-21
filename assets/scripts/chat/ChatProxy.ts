@@ -19,12 +19,14 @@ export default class ChatProxy {
 
 
     public updateChatList(data:any[]):void{
+        this._chatMsgList = [];
         for(var i = 0; i < data.length;i++){
             var chat = new ChatMsg();
             chat.msg = data[i].msg;
             chat.rid = data[i].rid;
             chat.type = data[i].type;
             chat.time = data[i].time;
+            chat.nick_name = data[i].nickName
             this._chatMsgList.push(chat);
         }
     }
@@ -36,6 +38,7 @@ export default class ChatProxy {
         chat.rid = data.rid;
         chat.type = data.type;
         chat.time = data.time;
+        chat.nick_name = data.nickName
         this._chatMsgList.push(chat);
     }
 
