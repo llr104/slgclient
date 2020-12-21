@@ -28,7 +28,7 @@ export default class UnionApplyLogic extends cc.Component {
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
     }
-    
+
     protected updateApply(data:any[]){
         var comp = this.applyView.node.getComponent("ListLogic");
         comp.setData(data?data:[]);
@@ -38,14 +38,14 @@ export default class UnionApplyLogic extends cc.Component {
     protected getApply():void{
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
-        var isMe:boolean = UnionCommand.getInstance().proxy.isMeChairman(unionData.id);
-        if(isMe){
+        if(unionData.isMajor(city.rid)){
             UnionCommand.getInstance().unionApplyList(unionData.id);
         }
     }
 
 
     protected onEnable():void{
+        console.log("getApply");
         this.getApply()
     }
 }

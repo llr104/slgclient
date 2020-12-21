@@ -16,13 +16,8 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class UnionMemItemLogic extends cc.Component {
 
-
     @property(cc.Label)
     nameLabel: cc.Label = null;
-
-    @property(cc.Node)
-    kickButton: cc.Node = null;
-
 
     protected _menberData:Member = null;
 
@@ -31,18 +26,27 @@ export default class UnionMemItemLogic extends cc.Component {
 
     protected updateItem(data:Member):void{
         this._menberData = data;
-        this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + this._menberData.name + " 坐标:(" + this._menberData.x + "," + this._menberData.y+")";
+        this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + 
+        this._menberData.name + " 坐标:(" + this._menberData.x + "," + this._menberData.y+")";
+    }
 
-
-        var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
-        this.kickButton.active = this._menberData.isMeChairMan && roleData.rid != this._menberData.rid;
-
+    protected click():void{
+        cc.systemEvent.emit("clickUnionMemberItem", this._menberData);
     }
 
     protected kick():void{
         UnionCommand.getInstance().unionKick(this._menberData.rid);
     }
 
+    
+    protected appoint():void{
+        UnionCommand.getInstance().unionKick(this._menberData.rid);
+    }
+
+    protected abdicate():void{
+        UnionCommand.getInstance().unionKick(this._menberData.rid);
+    }
+    
     protected jump():void{
         cc.systemEvent.emit("close_union");
         cc.systemEvent.emit("scroll_to_map", this._menberData.x, this._menberData.y);

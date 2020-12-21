@@ -25,14 +25,40 @@ export default class UnionMemberLogic extends cc.Component {
     @property(cc.Node)
     exitButton: cc.Node = null;
 
+    @property(cc.Node)
+    opNode: cc.Node = null;
+
+    protected _op: cc.Node = null;
+
     protected onLoad():void{
 
         cc.systemEvent.on("update_union_member",this.updateMember,this);
         cc.systemEvent.on("kick_union_success",this.getMember,this);
+        cc.systemEvent.on("union_appoint",this.getMember,this);
+        cc.systemEvent.on("union_abdicate",this.getMember,this);
+        cc.systemEvent.on("clickUnionMemberItem",this.onClickItem,this);
+        
+
     }
 
     protected onDestroy():void{
         cc.systemEvent.targetOff(this);
+    }
+
+    protected click():void{
+        if(this._op != null){
+            this._op.active = false;
+        }
+    }
+
+    protected onClickItem(menberData):void{
+        if (this._op == null){
+            var node = cc.instantiate(this.opNode);
+            node.parent = this.node;
+            this._op = node;
+        }
+        this._op.active = true;
+        this._op.getComponent("UnionMemberItemOpLogic").setData(menberData);
     }
 
     protected updateMember(data:any[]){
@@ -42,10 +68,6 @@ export default class UnionMemberLogic extends cc.Component {
 
         var comp = this.memberView.node.getComponent("ListLogic");
         var list:Member[] = UnionCommand.getInstance().proxy.getMemberList(unionData.id).concat();
-
-        list.forEach(item => {
-            item.isMeChairMan = UnionCommand.getInstance().proxy.isMeChairman(unionData.id)
-        })
 
         comp.setData(list);
     }

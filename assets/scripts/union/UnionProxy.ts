@@ -25,8 +25,6 @@ export class Member {
 
         return "普通成员"
     }
-
-    isMeChairMan:boolean = false;
     x:number = 0;
     y:number = 0;
     
@@ -45,6 +43,16 @@ export class Union {
         var major:Member[] = this.major.concat();
         for(var i = 0;i < major.length;i++){
             if(major[i].title == 0){
+                return major[i];
+            }
+        }
+        return new Member()
+    }
+
+    public getViceChairman():Member{
+        var major:Member[] = this.major.concat();
+        for(var i = 0;i < major.length;i++){
+            if(major[i].title == 1){
                 return major[i];
             }
         }
@@ -110,9 +118,17 @@ export default class UnionProxy {
 
     public updateMemberList(id:number,data:any[]):void{
         var member:Member[] = [];
+        var union = this._unionMap.get(id);
+        if(union != null){
+            union.major = []
+        }
         for(var i = 0; i < data.length ;i++){
             var obj = this.createMember(data[i]);
             member.push(obj);
+
+            if(obj.title == 0 || obj.title == 1){
+                union.major.push(obj)
+            }
         }
         this._menberMap.set(id,member);
     }

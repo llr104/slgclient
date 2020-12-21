@@ -39,6 +39,8 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.union_verify, this.onUnionVerify, this);
         cc.systemEvent.on(ServerConfig.union_exit, this.onUnionDisMiss, this);
         cc.systemEvent.on(ServerConfig.union_kick, this.onUnionKick, this);
+        cc.systemEvent.on(ServerConfig.union_appoint, this.onUnionAppoint, this);
+        cc.systemEvent.on(ServerConfig.union_abdicate, this.onUnionAbdicate, this);
         cc.systemEvent.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
         cc.systemEvent.on(ServerConfig.union_info, this.onUnionInfo, this)
         cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
@@ -126,6 +128,21 @@ export default class UnionCommand {
             cc.systemEvent.emit("kick_union_success");
         }
     }
+
+    protected onUnionAppoint(data: any, otherData: any): void {
+        console.log("onUnionAppoint", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("union_appoint", data.msg);
+        }
+    }
+
+    protected onUnionAbdicate(data: any, otherData: any): void {
+        console.log("onUnionAbdicate", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("union_abdicate", data.msg);
+        }
+    }
+
 
     protected onUnionNotice(data: any, otherData: any): void {
         console.log("onUnionNotice", data);
@@ -263,15 +280,46 @@ export default class UnionCommand {
                 rid:rid,
             }
         };
+        console.log("unionKick");
         NetManager.getInstance().send(sendData);
     }
 
-    
+    public unionAppoint(rid:number = 0, title=1):void{
+        let sendData: any = {
+            name: ServerConfig.union_appoint,
+            msg: {
+                rid:rid,
+                title:title
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public unionAbdicate(rid:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.union_abdicate,
+            msg: {
+                rid:rid
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
     public modNotice(text:string):void{
         let sendData: any = {
             name: ServerConfig.union_modNotice,
             msg: {
                 text:text,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public appoint(rid:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.union_kick,
+            msg: {
+                rid:rid,
             }
         };
         NetManager.getInstance().send(sendData);
