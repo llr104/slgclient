@@ -2542,6 +2542,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "editConent": {
+      "__id__": 20
+    },
     "chatView": {
       "__id__": 49
     },

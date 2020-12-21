@@ -1,4 +1,4 @@
-import { NetManager } from "../network/socket/NetManager";
+import { ChatNetManager, NetManager } from "../network/socket/NetManager";
 import { ServerConfig } from "../config/ServerConfig";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
@@ -30,7 +30,25 @@ export default class ChatCommand {
     //数据model
 
     constructor() {
+        cc.systemEvent.on(ServerConfig.chat_chat, this.onChat, this)
+        cc.systemEvent.on(ServerConfig.chat_history, this.onChatHistory, this)
+    }
 
+    protected onChat(data:any):void{
+        console.log("onChat:",data)
+        if (data.code == 0) {
+            this._proxy.updateChat(data.msg);
+            cc.systemEvent.emit("update_chat_history");
+        }
+    }
+
+
+    protected onChatHistory(data:any):void{
+        console.log("onChatHistory:",data)
+        if (data.code == 0) {
+            this._proxy.updateChatList(data.msg);
+            cc.systemEvent.emit("update_chat_history");
+        }
     }
 
     public onDestory(): void {
@@ -46,14 +64,25 @@ export default class ChatCommand {
     }
 
 
-    public appoint(rid:number = 0):void{
+    public chat(msg:string,type:number = 0):void{
         let sendData: any = {
-            name: ServerConfig.union_kick,
+            name: ServerConfig.chat_chat,
             msg: {
-                rid:rid,
+                msg:msg,
+                type:type,
             }
         };
-        NetManager.getInstance().send(sendData);
+        ChatNetManager.getInstance().send(sendData);
+    }
+
+    public chatHistory(type:number = 0):void{
+        let sendData: any = {
+            name: ServerConfig.chat_history,
+            msg: {
+                type:type,
+            }
+        };
+        ChatNetManager.getInstance().send(sendData);
     }
 
     

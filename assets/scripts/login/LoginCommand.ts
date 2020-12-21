@@ -97,7 +97,7 @@ export default class LoginCommand {
                 cc.systemEvent.emit("enterServerComplete");
 
                 var roleData = this._proxy.getRoleData();
-                this.chatLogin(roleData.rid);
+                this.chatLogin(roleData.rid,roleData.nickName);
             }
         }
     }

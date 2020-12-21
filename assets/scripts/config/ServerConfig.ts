@@ -60,7 +60,9 @@ const ServerConfig = {
     roleRes_push:"roleRes.push",
 
 
-    chat_login:"chat.login"
+    chat_login:"chat.login",
+    chat_chat:"chat.chat",
+    chat_history:"chat.history",
 }
 
 
