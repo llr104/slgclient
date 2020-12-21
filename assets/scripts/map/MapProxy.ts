@@ -32,7 +32,7 @@ export class MapResData {
 
 /**地图区域数据*/
 export class MapAreaData {
-    static MAX_TIME: number = 30000;
+    static MAX_TIME: number = 10000;
     id: number = 0;
     x: number = 0;
     y: number = 0;
