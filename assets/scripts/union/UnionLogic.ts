@@ -94,8 +94,7 @@ export default class UnionLogic extends cc.Component {
 
 
     protected back():void{
-        this.visibleView();
-        this.lobbyNode.active = true;
+       this.openMyUnion();
     }
 
 }
