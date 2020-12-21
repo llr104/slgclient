@@ -7,7 +7,8 @@ import MapCommand from "./scripts/map/MapCommand";
 import MapUICommand from "./scripts/map/ui/MapUICommand";
 import { HttpManager } from "./scripts/network/http/HttpManager";
 import { NetEvent } from "./scripts/network/socket/NetInterface";
-import { NetManager } from "./scripts/network/socket/NetManager";
+import { ChatNetManager, NetManager } from "./scripts/network/socket/NetManager";
+import { NetNodeType } from "./scripts/network/socket/NetNode";
 import { Tools } from "./scripts/utils/Tools";
 
 const { ccclass, property } = cc._decorator;
@@ -40,7 +41,8 @@ export default class Main extends cc.Component {
 
     protected onLoad(): void {
         //初始化连接
-        NetManager.getInstance().connect({ url: GameConfig.serverUrl });
+        NetManager.getInstance().connect({ url: GameConfig.serverUrl , type:NetNodeType.BaseServer });
+        ChatNetManager.getInstance().connect({url:GameConfig.chatServerUrl,type:NetNodeType.BaseServer})
         HttpManager.getInstance().setWebUrl(GameConfig.webUrl);
 
         //初始化业务模块

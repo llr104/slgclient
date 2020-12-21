@@ -28,12 +28,19 @@ export enum NetNodeState {
 }
 
 
+export enum NetNodeType {
+    BaseServer,                     //主要服务器
+    ChatServer,                     //聊天服务器
+}
+ 
+
 
 export interface NetConnectOptions {
     host?: string,              // 地址
     port?: number,              // 端口
     url?: string,               // url，与地址+端口二选一
     autoReconnect?: number,     // -1 永久重连，0不自动重连，其他正整数为自动重试次数
+    type?:NetNodeType,          //服务器类型
 }
 
 export class NetNode {
@@ -117,8 +124,15 @@ export class NetNode {
 
     protected onGetKey(){
         this._state = NetNodeState.Working;
+
+        // if(this._connectOptions.type == NetNodeType.BaseServer){
+            
+        // }else{
+        //     this.onChecked();
+        // }
+
         cc.systemEvent.emit(NetEvent.ServerCheckLogin);
-        // this.onChecked();
+        
     }
 
 

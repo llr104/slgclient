@@ -58,6 +58,9 @@ const ServerConfig = {
     roleCity_push:"roleCity.push",
     facility_push:"facility.push",
     roleRes_push:"roleRes.push",
+
+
+    chat_login:"chat.login"
 }
 
 

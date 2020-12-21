@@ -2,7 +2,7 @@
 import { HttpConfig } from "../config/HttpConfig";
 import { ServerConfig } from "../config/ServerConfig";
 import { HttpManager } from "../network/http/HttpManager";
-import { NetManager } from "../network/socket/NetManager";
+import { ChatNetManager, NetManager } from "../network/socket/NetManager";
 import { Tools } from "../utils/Tools";
 import CryptoJS = require("../libs/crypto/crypto-js.min");
 import LoginProxy from "./LoginProxy";
@@ -43,6 +43,7 @@ export default class LoginCommand {
         cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
         cc.systemEvent.on(ServerConfig.account_robLogin, this.onAccountRobLogin, this)
+        cc.systemEvent.on(ServerConfig.chat_login, this.onChatLogin, this)
 
     }
 
@@ -74,7 +75,7 @@ export default class LoginCommand {
             LocalCache.setLoginValidation(otherData);
 
 
-            this.role_enterServer(this.proxy.serverId);
+            this.role_enterServer(this.proxy.serverId);           
             cc.systemEvent.emit("loginComplete", data.code);
         }
         
@@ -94,6 +95,9 @@ export default class LoginCommand {
                 //进入游戏
                 MapCommand.getInstance().enterMap();
                 cc.systemEvent.emit("enterServerComplete");
+
+                var roleData = this._proxy.getRoleData();
+                this.chatLogin(roleData.rid);
             }
         }
     }
@@ -144,6 +148,12 @@ export default class LoginCommand {
         if (data.code == 0) {
             this._proxy.saveEnterData(data.msg);
         }
+    }
+
+
+    //聊天登录
+    private onChatLogin(data: any): void{
+        console.log("onChatLogin:",data);
     }
 
     public get proxy(): LoginProxy {
@@ -252,5 +262,18 @@ export default class LoginCommand {
             }
         };
         NetManager.getInstance().send(send_data);
+    }
+
+
+    public chatLogin(rid:number = 0,nick_name:string = ''):void{
+        var api_name = ServerConfig.chat_login;
+        var send_data = {
+            name: api_name,
+            msg: {
+                rid:rid,
+                nickName:nick_name
+            }
+        };
+        ChatNetManager.getInstance().send(send_data);
     }
 }
