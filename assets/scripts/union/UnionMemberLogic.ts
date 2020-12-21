@@ -70,16 +70,11 @@ export default class UnionMemberLogic extends cc.Component {
         var list:Member[] = UnionCommand.getInstance().proxy.getMemberList(unionData.id).concat();
 
         comp.setData(list);
+
+        this.updateBtn();
     }
 
-
-    protected getMember():void{
-        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
-        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
-        UnionCommand.getInstance().unionMember(unionData.id);
-    }
-
-    protected onEnable():void{
+    protected updateBtn(){
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         if(unionData.getChairman().rid == city.rid){
@@ -89,8 +84,17 @@ export default class UnionMemberLogic extends cc.Component {
             this.exitButton.active = true;
             this.disMissButton.active = false;
         }
-        
-        this.getMember()
+    }
+
+    protected getMember():void{
+        let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+        let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
+        UnionCommand.getInstance().unionMember(unionData.id);
+    }
+
+    protected onEnable():void{
+        this.updateBtn();
+        this.getMember();
     }
 
     protected dismiss():void{
