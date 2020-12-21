@@ -97,7 +97,7 @@ export default class LoginCommand {
                 cc.systemEvent.emit("enterServerComplete");
 
                 var roleData = this._proxy.getRoleData();
-                this.chatLogin(roleData.rid,roleData.nickName);
+                this.chatLogin(roleData.rid, data.msg.token, roleData.nickName);
             }
         }
     }
@@ -265,15 +265,18 @@ export default class LoginCommand {
     }
 
 
-    public chatLogin(rid:number = 0,nick_name:string = ''):void{
+    public chatLogin(rid:number, token: string, nick_name:string = ''):void{
         var api_name = ServerConfig.chat_login;
         var send_data = {
             name: api_name,
             msg: {
                 rid:rid,
+                token:token,
                 nickName:nick_name
             }
         };
+
+        console.log("send_data:", send_data);
         ChatNetManager.getInstance().send(send_data);
     }
 }

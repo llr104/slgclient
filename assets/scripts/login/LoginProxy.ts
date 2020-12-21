@@ -24,10 +24,14 @@ export default class LoginProxy {
 
     //角色资源
     private _roleResData:any = null;
+
+    private _token:string = null;
+
     public clear() {
         this._loginData = null;
         this._roleData = null;
         this._roleResData = null;
+        this._token = ""
     }
 
 
@@ -38,6 +42,10 @@ export default class LoginProxy {
         
         if(data.role_res){
             this.setRoleResData(data.role_res);
+        }
+
+        if(data.token){
+            this._token = data.token
         }
         
     }
@@ -78,5 +86,9 @@ export default class LoginProxy {
 
     public getLoginData():any{
         return this._loginData;
+    }
+
+    public getToken():string{
+        return this._token;
     }
 }
