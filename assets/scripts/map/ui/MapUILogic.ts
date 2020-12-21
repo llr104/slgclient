@@ -58,6 +58,10 @@ export default class MapUILogic extends cc.Component {
     unionPrefab: cc.Prefab = null;
     protected _unionNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    chatPrefab: cc.Prefab = null;
+    protected _chatNode: cc.Node = null;
+
 
     @property(cc.Prefab)
     transFormPrefab: cc.Prefab = null;
@@ -311,6 +315,16 @@ export default class MapUILogic extends cc.Component {
             this._unionNode.parent = this.node;
         } else {
             this._unionNode.active = true;
+        }
+    }
+
+
+    protected openChat(): void {
+        if (this._chatNode == null) {
+            this._chatNode = cc.instantiate(this.chatPrefab);
+            this._chatNode.parent = this.node;
+        } else {
+            this._chatNode.active = true;
         }
     }
 

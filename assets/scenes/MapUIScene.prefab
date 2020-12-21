@@ -3657,10 +3657,12 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
+    "target": {
+      "__id__": 1
+    },
     "component": "",
     "_componentId": "db03dDBJ39EiL9LfLKyZ+VK",
-    "handler": "openTr",
+    "handler": "openChat",
     "customEventData": ""
   },
   {
@@ -11160,6 +11162,9 @@
     },
     "unionPrefab": {
       "__uuid__": "1e9b4c9f-a438-4925-8e8b-5bfbc5d19ed6"
+    },
+    "chatPrefab": {
+      "__uuid__": "bae22600-2e25-43e2-afc9-16aa76d35378"
     },
     "transFormPrefab": {
       "__uuid__": "e24a8bb9-9f6d-4e5e-9ba9-df59e493ee4b"
