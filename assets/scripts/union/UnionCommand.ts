@@ -169,7 +169,7 @@ export default class UnionCommand {
         console.log("onUnionApplyPush", data);
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
-        if (unionData.isMajor(city.rid)){
+        if (unionData && unionData.isMajor(city.rid)){
             this._proxy.updateApply(city.unionId, data.msg);
             cc.systemEvent.emit("update_union_apply", data.msg);
         }

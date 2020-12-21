@@ -37,7 +37,7 @@ export default class UnionLogic extends cc.Component {
     protected onLoad():void{
         this.visibleView();
         cc.systemEvent.on("open_my_union",this.openMyUnion,this);
-        cc.systemEvent.on("dismiss_union_success",this.back,this);
+        cc.systemEvent.on("dismiss_union_success",this.exit,this);
         cc.systemEvent.on("close_union",this.onClickClose,this);
         cc.systemEvent.on("create_union_success",this.openMyUnion,this);
     }
@@ -68,7 +68,7 @@ export default class UnionLogic extends cc.Component {
 
 
     protected visibleView():void{
-        this.memberNode.active = this.createNode.active = this.lobbyNode.active = this.applyNode.active  = false;
+        this.memberNode.active = this.createNode.active = this.lobbyNode.active = this.applyNode.active = this.memberNode.active = false;
     }
 
     protected openMyUnion():void{
@@ -95,6 +95,11 @@ export default class UnionLogic extends cc.Component {
 
     protected back():void{
        this.openMyUnion();
+    }
+
+    protected exit():void{
+        this.visibleView();
+        this.lobbyNode.active = true
     }
 
 }
