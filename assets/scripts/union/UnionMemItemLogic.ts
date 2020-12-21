@@ -19,6 +19,12 @@ export default class UnionMemItemLogic extends cc.Component {
     @property(cc.Label)
     nameLabel: cc.Label = null;
 
+    @property(cc.Label)
+    titleLabel: cc.Label = null;
+
+    @property(cc.Label)
+    posLabel: cc.Label = null;
+
     protected _menberData:Member = null;
 
     protected onLoad():void{
@@ -26,8 +32,9 @@ export default class UnionMemItemLogic extends cc.Component {
 
     protected updateItem(data:Member):void{
         this._menberData = data;
-        this.nameLabel.string = "(" + this._menberData.titleDes + ")  " + 
-        this._menberData.name + " 坐标:(" + this._menberData.x + "," + this._menberData.y+")";
+        this.titleLabel.string = "(" + this._menberData.titleDes + ")";
+        this.nameLabel.string = this._menberData.name;
+        this.posLabel.string = "坐标:(" + this._menberData.x + "," + this._menberData.y+")";
     }
 
     protected click():void{
