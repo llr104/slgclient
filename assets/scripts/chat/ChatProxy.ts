@@ -12,14 +12,15 @@ export class ChatMsg {
 export default class ChatProxy {
 
 
-    private _chatMsgList:ChatMsg[] = [];
+    private _worldMsgList:ChatMsg[] = [];
+    private _unionMsgList:ChatMsg[] = [];
+    ]
     public clearData(): void {
+
     }
 
-
-
-    public updateChatList(data:any[]):void{
-        this._chatMsgList = [];
+    public updateWorldChatList(data:any[]):void{
+        this._worldMsgList = [];
         for(var i = 0; i < data.length;i++){
             var chat = new ChatMsg();
             chat.msg = data[i].msg;
@@ -27,23 +28,51 @@ export default class ChatProxy {
             chat.type = data[i].type;
             chat.time = data[i].time;
             chat.nick_name = data[i].nickName
-            this._chatMsgList.push(chat);
+            this._worldMsgList.push(chat);
         }
     }
 
 
-    public updateChat(data:any):void{
+    public updateUnionChatList(data:any[]):void{
+        this._unionMsgList = [];
+        for(var i = 0; i < data.length;i++){
+            var chat = new ChatMsg();
+            chat.msg = data[i].msg;
+            chat.rid = data[i].rid;
+            chat.type = data[i].type;
+            chat.time = data[i].time;
+            chat.nick_name = data[i].nickName
+            this._unionMsgList.push(chat);
+        }
+    }
+
+
+    public updateWorldChat(data:any):void{
         var chat = new ChatMsg();
         chat.msg = data.msg;
         chat.rid = data.rid;
         chat.type = data.type;
         chat.time = data.time;
         chat.nick_name = data.nickName
-        this._chatMsgList.push(chat);
+        this._worldMsgList.push(chat);
+    }
+
+    public updateUnionChat(data:any):void{
+        var chat = new ChatMsg();
+        chat.msg = data.msg;
+        chat.rid = data.rid;
+        chat.type = data.type;
+        chat.time = data.time;
+        chat.nick_name = data.nickName
+        this._unionMsgList.push(chat);
     }
 
 
-    public getChatList():ChatMsg[]{
-        return this._chatMsgList;
+    public getWorldChatList():ChatMsg[]{
+        return this._worldMsgList;
+    }
+
+    public getUnionChatList():ChatMsg[]{
+        return this._unionMsgList;
     }
 }

@@ -38,7 +38,11 @@ export default class ChatCommand {
     protected onChat(data:any):void{
         console.log("onChat:",data)
         if (data.code == 0) {
-            this._proxy.updateChat(data.msg);
+            if(data.msg.type == 0){
+                this._proxy.updateWorldChat(data.msg);
+            }else if (data.msg.type == 1){
+                this._proxy.updateUnionChat(data.msg);
+            }
             cc.systemEvent.emit("update_chat_history");
         }
     }
@@ -47,7 +51,11 @@ export default class ChatCommand {
     protected onChatHistory(data:any):void{
         console.log("onChatHistory:",data)
         if (data.code == 0) {
-            this._proxy.updateChatList(data.msg.msgs);
+            if(data.msg.type == 0){
+                this._proxy.updateWorldChatList(data.msg.msgs);
+            }else if(data.msg.type == 1){
+                this._proxy.updateUnionChatList(data.msg.msgs);
+            }
             cc.systemEvent.emit("update_chat_history");
         }
     }
@@ -76,7 +84,29 @@ export default class ChatCommand {
         ChatNetManager.getInstance().send(sendData);
     }
 
-    public chatHistory(type:number = 0):void{
+    public join(type:number,id:number):void{
+        let sendData: any = {
+            name: ServerConfig.chat_join,
+            msg: {
+                type:type,
+                id:id,
+            }
+        };
+        ChatNetManager.getInstance().send(sendData);
+    }
+
+    public exit(type:number,id:number):void{
+        let sendData: any = {
+            name: ServerConfig.chat_exit,
+            msg: {
+                type:type,
+                id:id,
+            }
+        };
+        ChatNetManager.getInstance().send(sendData);
+    }
+
+    public chatHistory(type:number):void{
         let sendData: any = {
             name: ServerConfig.chat_history,
             msg: {

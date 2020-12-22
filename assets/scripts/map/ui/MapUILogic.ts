@@ -326,7 +326,6 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._chatNode.active = true;
         }
-        this._chatNode.getComponent("ChatLogic").updateView();
         
     }
 
