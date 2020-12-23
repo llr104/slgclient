@@ -91,4 +91,8 @@ export default class LoginProxy {
     public getToken():string{
         return this._token;
     }
+
+    public getSession():string{
+        return this._loginData.session;
+    }
 }

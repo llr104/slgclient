@@ -75,7 +75,7 @@ export default class LoginCommand {
             LocalCache.setLoginValidation(otherData);
 
 
-            this.role_enterServer(this.proxy.serverId);           
+            this.role_enterServer(this._proxy.getSession());           
             cc.systemEvent.emit("loginComplete", data.code);
         }
         
@@ -129,7 +129,7 @@ export default class LoginCommand {
     private onRoleCreate(data: any): void {
         //重换成功再次调用
         if (data.code == 0) {
-            this.role_enterServer(this._proxy.serverId);
+            this.role_enterServer();
         }
     }
 
@@ -217,16 +217,12 @@ export default class LoginCommand {
     }
 
 
-    /**
-     * enterServer
-     * @param sid 
-     */
-    public role_enterServer(sid: number = 0) {
+    public role_enterServer(session: string) {
         var api_name = ServerConfig.role_enterServer;
         var send_data = {
             name: api_name,
             msg: {
-                sid: sid,
+                session: session,
             }
         };
         NetManager.getInstance().send(send_data);
