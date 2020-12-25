@@ -82,8 +82,8 @@ export default class LoginCommand {
     }
 
     /**进入服务器回调*/
-    private onEnterServer(data: any): void {
-        console.log("LoginProxy  enter:", data);
+    private onEnterServer(data: any,isLoadMap:boolean): void {
+        console.log("LoginProxy  enter:", data,isLoadMap);
         //没有创建打开创建
         if (data.code == 9) {
             cc.systemEvent.emit("CreateRole");
@@ -92,12 +92,20 @@ export default class LoginCommand {
             if(data.code == 0){
                 this._proxy.saveEnterData(data.msg);
                 DateUtil.setServerTime(data.msg.time);
-                //进入游戏
-                MapCommand.getInstance().enterMap();
-                cc.systemEvent.emit("enterServerComplete");
 
-                var roleData = this._proxy.getRoleData();
-                this.chatLogin(roleData.rid, data.msg.token, roleData.nickName);
+                // var roleData = this._proxy.getRoleData();
+                // this.chatLogin(roleData.rid, data.msg.token, roleData.nickName);
+
+                 //进入游戏
+                if(isLoadMap == true){
+                    MapCommand.getInstance().enterMap();
+                    cc.systemEvent.emit("enterServerComplete");
+                }else{
+                    cc.systemEvent.emit(NetEvent.ServerHandShake);
+                }
+
+
+
             }
         }
     }
@@ -121,7 +129,8 @@ export default class LoginCommand {
         //断线重新登录
         console.log("LoginProxy  relogin:", data);
         if(data.code == 0){
-            cc.systemEvent.emit(NetEvent.ServerHandShake);
+            // cc.systemEvent.emit(NetEvent.ServerHandShake);
+            this.role_enterServer(this._proxy.getSession(),false);
         }
     }
 
@@ -217,7 +226,7 @@ export default class LoginCommand {
     }
 
 
-    public role_enterServer(session: string) {
+    public role_enterServer(session: string,isLoadMap:boolean = true) {
         var api_name = ServerConfig.role_enterServer;
         var send_data = {
             name: api_name,
@@ -225,7 +234,7 @@ export default class LoginCommand {
                 session: session,
             }
         };
-        NetManager.getInstance().send(send_data);
+        NetManager.getInstance().send(send_data,isLoadMap);
     }
 
     /**
