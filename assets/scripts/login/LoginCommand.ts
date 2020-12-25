@@ -129,7 +129,7 @@ export default class LoginCommand {
     private onRoleCreate(data: any): void {
         //重换成功再次调用
         if (data.code == 0) {
-            this.role_enterServer();
+            this.role_enterServer(this._proxy.getSession());
         }
     }
 
