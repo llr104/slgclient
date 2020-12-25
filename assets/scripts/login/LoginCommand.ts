@@ -110,7 +110,7 @@ export default class LoginCommand {
         console.log("LoginProxy  conneted:", loginData,roleData);
         
         if (loginData) {
-            this.account_reLogin(loginData.session,roleData.rid);
+            this.account_reLogin(loginData.session);
         }else{
             cc.systemEvent.emit(NetEvent.ServerHandShake);
         }
@@ -232,14 +232,13 @@ export default class LoginCommand {
      * 重新登录
      * @param session 
      */
-    public account_reLogin(session: string,rid:number = 0) {
+    public account_reLogin(session: string) {
         var api_name = ServerConfig.account_reLogin;
         var send_data = {
             name: api_name,
             msg: {
                 session: session,
-                hardware: Tools.getUUID(),
-                rid:rid,
+                hardware: Tools.getUUID()
             }
         };
         NetManager.getInstance().send(send_data);
