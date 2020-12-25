@@ -2,7 +2,6 @@
 const GameConfig = {
     serverUrl: "ws://192.168.0.20:8004",
     webUrl: "http://192.168.0.20:8088",
-    chatServerUrl: "ws://192.168.0.20:8002",
 }
 
 export { GameConfig };

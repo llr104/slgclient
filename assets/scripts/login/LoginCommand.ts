@@ -2,7 +2,7 @@
 import { HttpConfig } from "../config/HttpConfig";
 import { ServerConfig } from "../config/ServerConfig";
 import { HttpManager } from "../network/http/HttpManager";
-import { ChatNetManager, NetManager } from "../network/socket/NetManager";
+import { NetManager } from "../network/socket/NetManager";
 import { Tools } from "../utils/Tools";
 import CryptoJS = require("../libs/crypto/crypto-js.min");
 import LoginProxy from "./LoginProxy";
@@ -273,6 +273,6 @@ export default class LoginCommand {
         };
 
         console.log("send_data:", send_data);
-        ChatNetManager.getInstance().send(send_data);
+        NetManager.getInstance().send(send_data);
     }
 }

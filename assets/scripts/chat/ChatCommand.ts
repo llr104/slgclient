@@ -1,4 +1,4 @@
-import { ChatNetManager, NetManager } from "../network/socket/NetManager";
+import { NetManager } from "../network/socket/NetManager";
 import { ServerConfig } from "../config/ServerConfig";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
@@ -81,7 +81,7 @@ export default class ChatCommand {
                 type:type,
             }
         };
-        ChatNetManager.getInstance().send(sendData);
+        NetManager.getInstance().send(sendData);
     }
 
     public join(type:number,id:number):void{
@@ -92,7 +92,7 @@ export default class ChatCommand {
                 id:id,
             }
         };
-        ChatNetManager.getInstance().send(sendData);
+        NetManager.getInstance().send(sendData);
     }
 
     public exit(type:number,id:number):void{
@@ -103,7 +103,7 @@ export default class ChatCommand {
                 id:id,
             }
         };
-        ChatNetManager.getInstance().send(sendData);
+        NetManager.getInstance().send(sendData);
     }
 
     public chatHistory(type:number):void{
@@ -113,7 +113,7 @@ export default class ChatCommand {
                 type:type,
             }
         };
-        ChatNetManager.getInstance().send(sendData);
+        NetManager.getInstance().send(sendData);
     }
 
     
