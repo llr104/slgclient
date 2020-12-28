@@ -187,6 +187,18 @@ export default class MapCommand {
         return false
     }
 
+    public isCityWarFree(id: number): boolean {
+        let cityData: MapCityData = this.cityProxy.getCity(id);
+        if (cityData && cityData.parentId > 0) {
+            var diff = DateUtil.getServerTime() - cityData.occupyTime;
+            if(diff < MapCommand.getInstance().proxy.getWarFree()){
+                return true;
+            }
+        }
+        return false
+    }
+
+
     /**是否是可行军的位置*/
     public isCanMoveCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
@@ -212,11 +224,7 @@ export default class MapCommand {
             return false
         }
 
-        if (this.isCitySub(id)){
-            return false
-        }
         
-
         let ids: number[] = MapUtil.get9GridCellIds(id);
         for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {
@@ -234,12 +242,14 @@ export default class MapCommand {
 
     public isCanOccupyCityCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        if (this.isBuildSub(id)){
-            return false
-        }
         if (this.isCitySub(id)){
             return false
         }
+
+        if(this.isCityWarFree(id)){
+            return false
+        }
+
         let ids: number[] = MapUtil.getSideIdsForCity(id);
         for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {

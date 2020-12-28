@@ -1,4 +1,5 @@
 import { ArmyCmd } from "../general/ArmyProxy";
+import DateUtil from "../utils/DateUtil";
 import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
@@ -18,6 +19,11 @@ export default class MapClickUILogic extends cc.Component {
     labelLunxian: cc.Label = null;
     @property(cc.Label)
     labelPos: cc.Label = null;
+    @property(cc.Label)
+    labelMian: cc.Label = null;
+    @property(cc.Node)
+    bgMain: cc.Node = null;
+
     @property(cc.Node)
     durableNode: cc.Node = null;
     @property(cc.Label)
@@ -64,6 +70,7 @@ export default class MapClickUILogic extends cc.Component {
     protected onDisable(): void {
         cc.systemEvent.targetOff(this);
         cc.Tween.stopAllByTarget(this.bgSelect);
+        this.stopCountDown();
     }
 
     protected onUpdateBuild(data: MapBuildData): void {
@@ -218,5 +225,48 @@ export default class MapClickUILogic extends cc.Component {
         }else{
             this.labelLunxian.string = "";
         }
+
+
+        //免战信息
+        var limitTime = MapCommand.getInstance().proxy.getWarFree();
+        var diff = DateUtil.getServerTime() - this._data.occupyTime;
+        if (this._data instanceof MapBuildData){
+            if(diff > limitTime){
+                this.bgMain.active = false;
+                this.labelMian.string = "";
+            }else{
+                this.bgMain.active = true;
+                this.schedule(this.countDown.bind(this), 1);
+                this.countDown()
+            }
+
+        }else if(this._data instanceof MapCityData){
+            if(diff < limitTime && this._data.parentId > 0){
+                this.bgMain.active = true;
+                this.schedule(this.countDown.bind(this), 1);
+                this.countDown()
+            }else{
+                this.bgMain.active = false;
+                this.labelMian.string = "";
+            }
+        }
+    }
+
+    public countDown() {
+        var diff = DateUtil.getServerTime() - this._data.occupyTime;
+        var limitTime = MapCommand.getInstance().proxy.getWarFree();
+        if (diff>limitTime){
+            this.stopCountDown();
+            
+        }else{
+            var str = DateUtil.converSecondStr(limitTime-diff);
+            this.labelMian.string = "免战：" + str;
+        }
+    }
+
+    public stopCountDown() {
+        this.unscheduleAllCallbacks();
+        this.labelMian.string = "";
+        this.bgMain.active = false;
     }
 }

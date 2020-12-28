@@ -1,3 +1,4 @@
+import DateUtil from "../../utils/DateUtil";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 
@@ -14,10 +15,14 @@ export default class CityLogic extends cc.Component {
     @property(cc.Node)
     tipNode: cc.Node = null;
 
+    @property(cc.Node)
+    mianNode: cc.Node = null;
+
     protected _data: MapCityData = null;
+    protected _limitTime: number = 0;
 
     protected onLoad(): void {
-
+        this._limitTime = MapCommand.getInstance().proxy.getWarFree();
     }
 
     protected onDestroy(): void {
@@ -42,6 +47,7 @@ export default class CityLogic extends cc.Component {
 
     public setCityData(data: MapCityData): void {
         this._data = data;
+        console.log("setCityData:", data);
         this.updateUI();
     }
 
@@ -59,6 +65,28 @@ export default class CityLogic extends cc.Component {
             }else {
                 this.tipNode.color = cc.Color.RED;
             }
+
+            var diff = DateUtil.getServerTime() - this._data.occupyTime;
+            console.log("diff", diff, this._limitTime);
+            if (this._data.parentId > 0 && diff<this._limitTime){
+                this.mianNode.active = true;
+                this.stopCountDown();
+                this.schedule(this.countDown.bind(this), 1.0);
+            }else{
+                this.mianNode.active = false;
+            }
         }
+    }
+
+    public countDown() {
+        var diff = DateUtil.getServerTime() - this._data.occupyTime;
+        if (diff>this._limitTime){
+            this.stopCountDown();
+            this.mianNode.active = false;
+        }
+    }
+
+    public stopCountDown() {
+        this.unscheduleAllCallbacks();
     }
 }
