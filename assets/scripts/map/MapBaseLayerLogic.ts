@@ -57,6 +57,7 @@ export default class MapBaseLayerLogic extends cc.Component {
         }
     }
 
+    //子类重写
     public setItemData(item: cc.Node, data: any): void {
 
     }

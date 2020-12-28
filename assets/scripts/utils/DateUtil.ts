@@ -53,6 +53,8 @@ export default class DateUtil {
     public static converSecondStr(ms: number, format: string = "hh:mm:ss"): string {
         let second: number = Math.floor(ms / 1000);
         let hour: number = Math.floor(second / 3600);
+        // console.log("hour:", hour);
+
         second -= hour * 3600;
         let minute:number = Math.floor(second / 60);
         second -= minute * 60;

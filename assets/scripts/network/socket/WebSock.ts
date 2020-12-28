@@ -34,7 +34,7 @@ export class WebSock implements ISocket {
 
 
     onMessage(msg):void{
-        // console.log("websocket onMessage0:",msg)
+        //console.log("websocket onMessage0:",msg)
         var ab = msg
         // deserialize
         var zipLen = ab.byteLength

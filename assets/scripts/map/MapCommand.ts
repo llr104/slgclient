@@ -2,6 +2,7 @@ import { ServerConfig } from "../config/ServerConfig";
 import ArmyCommand from "../general/ArmyCommand";
 import GeneralCommand from "../general/GeneralCommand";
 import { NetManager } from "../network/socket/NetManager";
+import DateUtil from "../utils/DateUtil";
 import MapBuildProxy, { MapBuildData } from "./MapBuildProxy";
 import MapCityProxy, { MapCityData } from "./MapCityProxy";
 import MapProxy, { MapAreaData } from "./MapProxy";
@@ -156,6 +157,17 @@ export default class MapCommand {
         return false
     }
 
+    public isBuildWarFree(id: number): boolean {
+        let buiildData: MapBuildData = this.buildProxy.getBuild(id);
+        if (buiildData) {
+            var diff = DateUtil.getServerTime() - buiildData.occupyTime;
+            if(diff < MapCommand.getInstance().proxy.getWarFree()){
+                return true;
+            }
+        }
+        return false
+    }
+
     
     public isCitySub(id: number): boolean {
         let cityData: MapCityData = this.cityProxy.getCity(id);
@@ -193,6 +205,10 @@ export default class MapCommand {
         let id: number = MapUtil.getIdByCellPoint(x, y);
         
         if (this.isBuildSub(id)){
+            return false
+        }
+
+        if(this.isBuildWarFree(id)){
             return false
         }
 

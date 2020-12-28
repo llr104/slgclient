@@ -1,4 +1,5 @@
 import MapBuildLogic from "../map/MapBuildLogic";
+import MapBuildWarFreeLogic from "../map/MapBuildWarFreeLogic";
 import MapCityLogic from "../map/MapCityLogic";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
@@ -76,11 +77,13 @@ export default class MapScene extends cc.Component {
         console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildLogic: MapBuildLogic = this.node.getComponent(MapBuildLogic);
+        let buildWarFreeLogic: MapBuildWarFreeLogic = this.node.getComponent(MapBuildWarFreeLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);
 
         //更新展示区域
         resLogic.udpateShowAreas(addIds, removeIds);
         buildLogic.udpateShowAreas(addIds, removeIds);
+        buildWarFreeLogic.udpateShowAreas(addIds, removeIds);
         cityLogic.udpateShowAreas(addIds, removeIds);
 
         //更新区域内的具体节点

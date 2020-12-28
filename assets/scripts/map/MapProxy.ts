@@ -72,6 +72,7 @@ export class MapAreaData {
 }
 
 export default class MapProxy {
+    public warFree:number = 0; //免战时间
     public tiledMapAsset: cc.TiledMapAsset = null;
     //当前地图中心点
     protected _curCenterPoint: cc.Vec2 = null;
@@ -112,6 +113,14 @@ export default class MapProxy {
             cfg.defender = configList[i].defender;
             this._mapResConfigs.set(configList[i].type + "_" + cfg.level, cfg);
         }
+    }
+
+    public setWarFree(time) {
+        this.warFree = time;
+    }
+
+    public getWarFree(): number{
+        return this.warFree*1000
     }
 
     public initMapResConfig(jsonData: any): void {
