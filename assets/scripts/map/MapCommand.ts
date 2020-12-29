@@ -41,7 +41,6 @@ export default class MapCommand {
         cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
-        cc.systemEvent.on(ServerConfig.city_upCity, this.onCityUpCity, this);
         cc.systemEvent.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
     }
 
@@ -124,12 +123,7 @@ export default class MapCommand {
         }
     }
 
-    protected onCityUpCity(data: any): void {
-        if (data.code == 0) {
-            let cityData: MapCityData = this._cityProxy.updateCity(data.msg.city);
-            cc.systemEvent.emit("update_city", cityData)
-        }
-    }
+
 
     protected onRoleCityPush(data: any): void {
         console.log("onRoleCityPush:", data)

@@ -1,4 +1,5 @@
 import LoginCommand from "../../login/LoginCommand";
+import DateUtil from "../../utils/DateUtil";
 import FacilityAdditionItemLogic from "./FacilityAdditionItemLogic";
 import MapUICommand from "./MapUICommand";
 import { Facility, FacilityAdditionCfg, FacilityConfig, FacilityUpLevel } from "./MapUIProxy";
@@ -19,6 +20,10 @@ export default class FacilityDesLogic extends cc.Component {
     btnUp: cc.Button = null;
     @property(cc.Label)
     labelUp: cc.Label = null;
+
+    @property(cc.Label)
+    labelNeedTime: cc.Label = null;
+
     @property(cc.Node)
     additionNode: cc.Node = null;
     @property(cc.Prefab)
@@ -153,6 +158,11 @@ export default class FacilityDesLogic extends cc.Component {
         }
     }
 
+    public updateNeedTime(): void {
+        var level = this._cfg.upLevels[this._data.level];
+        this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
+    }
+
     //更新升级按钮
     public updateUpBtn(): void {
         if (this._isLevelMax) {
@@ -184,15 +194,11 @@ export default class FacilityDesLogic extends cc.Component {
         this.updateAdditionView();
         this.updateContidionView();
         this.updateNeedView();
+        this.updateNeedTime();
         this.updateUpBtn();
     }
 
     protected onClickUp(): void {
-        if(this._data.type == 0) {
-            //升级主城
-            MapUICommand.getInstance().upCity(this._cityId);
-        } else {
-            MapUICommand.getInstance().upFacility(this._cityId, this._data.type);
-        }
+        MapUICommand.getInstance().upFacility(this._cityId, this._data.type);
     }
 }

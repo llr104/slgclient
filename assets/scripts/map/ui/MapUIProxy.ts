@@ -61,6 +61,7 @@ export class CityAdditionType {
 export class Facility {
     level: number = 0;
     type: number = 0;
+    upTime:number = 0;  //升级的时间，0为该等级已经升级成功
 }
 
 /**设施(配置)*/
@@ -95,6 +96,7 @@ export class FacilityUpLevel {
     stone: number = 0;
     grain: number = 0;
     decree: number = 0;
+    time:number = 0;
 }
 
 /**征兵基础消耗*/
@@ -165,17 +167,22 @@ export default class MapUIProxy {
      * @param data 
      */
     public updateMyFacilityList(cityId: number, datas: any[]): void {
+        console.log("updateMyFacilityList:", datas);
         let list: Map<number, Facility> = new Map<number, Facility>();
         this._myFacility.set(cityId, list);
         for (var i = 0; i < datas.length; i++) {
             var obj = new Facility();
             obj.level = datas[i].level;
             obj.type = datas[i].type;
+            obj.upTime = datas[i].up_time;
             list.set(obj.type, obj);
         }
+
+        console.log("list:", list);
     }
 
     public updateMyFacility(cityId: number, data: any): Facility {
+        console.log("updateMyFacility:", data);
         if (this._myFacility.has(cityId)) {
             let list: Map<number, Facility> = this._myFacility.get(cityId);
             let facilityData: Facility = list.get(data.type);
@@ -185,6 +192,7 @@ export default class MapUIProxy {
             }
             facilityData.level = data.level;
             facilityData.type = data.type;
+            facilityData.upTime = data.up_time;
             return facilityData;
         }
         return null;
@@ -382,7 +390,10 @@ export default class MapUIProxy {
                         upLevelData.grain = jsonList[i].levels[k].need.grain;
                         upLevelData.wood = jsonList[i].levels[k].need.wood;
                         upLevelData.stone = jsonList[i].levels[k].need.stone;
+                        upLevelData.time = jsonList[i].levels[k].time;
                         cfgData.upLevels[upLevelData.level - 1] = upLevelData;
+
+                        console.log("upLevelData:", upLevelData)
                     }
                 }
             }

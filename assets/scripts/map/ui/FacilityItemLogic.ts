@@ -1,3 +1,4 @@
+import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 import { Facility, FacilityConfig } from "./MapUIProxy";
 
@@ -9,6 +10,10 @@ export default class FacilityItemLogic extends cc.Component {
     labelRate: cc.Label = null;
     @property(cc.Label)
     labelName: cc.Label = null;
+
+    @property(cc.Label)
+    labelTime: cc.Label = null;
+
     @property(cc.Node)
     lockNode: cc.Node = null;
 
@@ -42,6 +47,37 @@ export default class FacilityItemLogic extends cc.Component {
         this.data = data;
         this.cfg = cfg;
         this.isUnlock = isUnlock;
+        
+        if(this.data.upTime > 0){
+            this.startUpTime();
+        }else{
+            this.stopCountDown();
+        }
+ 
         this.updateItem();
+    }
+
+    protected countDown(){
+        var costTime = this.cfg.upLevels[this.data.level+1].time*1000;
+        var serverTime = DateUtil.getServerTime();
+        var diff = serverTime - this.data.upTime+costTime
+        console.log("diff:", diff);
+        if (diff>0){
+            this.labelTime.string = DateUtil.converSecondStr(diff);
+        }else{
+            this.stopCountDown();
+        }
+    }
+
+    protected stopCountDown(){
+        this.unscheduleAllCallbacks();
+        this.labelTime.string = "";
+    }
+
+    protected startUpTime(){
+        console.log("startUpTime");
+        this.stopCountDown();
+        this.schedule(this.countDown.bind(this), 1.0);
+        this.countDown();
     }
 }

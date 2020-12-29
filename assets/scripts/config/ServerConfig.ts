@@ -19,7 +19,7 @@ const ServerConfig = {
 
     city_facilities: "city.facilities",
     city_upFacility: "city.upFacility",
-    city_upCity: "city.upCity",
+
 
     general_myGenerals: "general.myGenerals",
     general_dispose: "general.dispose",

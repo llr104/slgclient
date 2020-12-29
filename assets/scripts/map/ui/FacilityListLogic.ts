@@ -39,7 +39,9 @@ export default class FacilityListLogic extends cc.Component {
                     let comp: FacilityItemLogic = item.addComponent(FacilityItemLogic);
                     comp.labelRate = item.getChildByName("labelRate").getComponent(cc.Label);
                     comp.labelName = item.getChildByName("labelName").getComponent(cc.Label);
+                    comp.labelTime = item.getChildByName("labelTime").getComponent(cc.Label);
                     comp.lockNode = item.getChildByName("lockNode");
+                    comp.labelTime.string = "";
                     comp.type = type;
                     this._itemLogics.set(type, comp);
                 }
