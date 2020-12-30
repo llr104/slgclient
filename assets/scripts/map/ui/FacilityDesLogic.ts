@@ -39,7 +39,7 @@ export default class FacilityDesLogic extends cc.Component {
     protected _additionPool: cc.NodePool = new cc.NodePool();
 
     protected onLoad(): void {
-
+        this.schedule(this.updateNeedTime);
     }
 
     protected onDestroy(): void {
@@ -159,8 +159,13 @@ export default class FacilityDesLogic extends cc.Component {
     }
 
     public updateNeedTime(): void {
+        
         var level = this._cfg.upLevels[this._data.level];
-        this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
+        if (this.isUping() == false){
+            this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
+        }else{
+            this.labelNeedTime.string = DateUtil.converSecondStr(this.upLastTime());
+        }
     }
 
     //更新升级按钮
@@ -178,11 +183,27 @@ export default class FacilityDesLogic extends cc.Component {
                 //资源不足
                 this.btnUp.interactable = false;
                 this.labelUp.string = "升级";
-            } else {
+            } else if(this.isUping()){
+                //正在升级中
+                this.btnUp.interactable = false;
+                this.labelUp.string = "升级中";
+            }
+            else {
                 this.btnUp.interactable = true;
                 this.labelUp.string = "升级";
             }
         }
+    }
+
+    protected isUping(){
+        return this.upLastTime() > 0
+    }
+
+    protected upLastTime(): number{
+        var costTime = this._cfg.upLevels[this._data.level+1].time;
+        var serverTime = DateUtil.getServerTime();
+        var diff =  (this._data.upTime+costTime)*1000 - serverTime;
+        return diff
     }
 
     public setData(cityId: number, data: Facility, cfg: FacilityConfig): void {

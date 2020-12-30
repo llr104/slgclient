@@ -43,9 +43,6 @@ export default class MapUICommand {
         if (data.code == 0) {
             this._proxy.updateMyFacilityList(data.msg.cityId, data.msg.facilities);
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
-            if (cityData) {
-                this._proxy.updateMyFacility(cityData.cityId, { type: 0, level: cityData.level });
-            }
             cc.systemEvent.emit("update_my_facilities");
             let addition: CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
             cc.systemEvent.emit("update_city_addition", cityData.cityId, addition);

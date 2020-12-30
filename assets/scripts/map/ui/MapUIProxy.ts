@@ -390,7 +390,7 @@ export default class MapUIProxy {
                         upLevelData.grain = jsonList[i].levels[k].need.grain;
                         upLevelData.wood = jsonList[i].levels[k].need.wood;
                         upLevelData.stone = jsonList[i].levels[k].need.stone;
-                        upLevelData.time = jsonList[i].levels[k].time;
+                        upLevelData.time = 200 //jsonList[i].levels[k].time;
                         cfgData.upLevels[upLevelData.level - 1] = upLevelData;
 
                         console.log("upLevelData:", upLevelData)

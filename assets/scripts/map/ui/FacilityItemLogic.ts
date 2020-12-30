@@ -43,6 +43,8 @@ export default class FacilityItemLogic extends cc.Component {
     }
 
     public setData(cityId: number, data: Facility, cfg:FacilityConfig, isUnlock:boolean): void {
+        console.log("setData:", data);
+
         this.cityId = cityId;
         this.data = data;
         this.cfg = cfg;
@@ -58,10 +60,9 @@ export default class FacilityItemLogic extends cc.Component {
     }
 
     protected countDown(){
-        var costTime = this.cfg.upLevels[this.data.level+1].time*1000;
+        var costTime = this.cfg.upLevels[this.data.level+1].time;
         var serverTime = DateUtil.getServerTime();
-        var diff = serverTime - this.data.upTime+costTime
-        console.log("diff:", diff);
+        var diff =  (this.data.upTime+costTime)*1000 - serverTime;
         if (diff>0){
             this.labelTime.string = DateUtil.converSecondStr(diff);
         }else{
@@ -75,7 +76,6 @@ export default class FacilityItemLogic extends cc.Component {
     }
 
     protected startUpTime(){
-        console.log("startUpTime");
         this.stopCountDown();
         this.schedule(this.countDown.bind(this), 1.0);
         this.countDown();
