@@ -66,6 +66,8 @@ export default class FacilityItemLogic extends cc.Component {
         if (diff>0){
             this.labelTime.string = DateUtil.converSecondStr(diff);
         }else{
+            //倒计时完，请求最新的等级
+            MapUICommand.getInstance().qryCityFacilities(this.cityId);
             this.stopCountDown();
         }
     }

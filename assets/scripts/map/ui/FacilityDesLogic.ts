@@ -40,6 +40,7 @@ export default class FacilityDesLogic extends cc.Component {
 
     protected onLoad(): void {
         this.schedule(this.updateNeedTime);
+        
     }
 
     protected onDestroy(): void {
