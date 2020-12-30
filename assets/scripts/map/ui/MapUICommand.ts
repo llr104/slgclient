@@ -29,35 +29,57 @@ export default class MapUICommand {
 
     constructor() {
         cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
-        cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacilities, this);
+        cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacility, this);
         cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
         cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
         cc.systemEvent.on(ServerConfig.interior_collection, this.onCollection, this);
         cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
+        
+
+        setInterval(() => {
+           let list: Map<number, Map<number, Facility>> = this._proxy.getMyAllFacilitys();
+           list.forEach((fs, key) => { 
+                fs.forEach(f => {
+                    if(f.isNeedUpdateLevel()){
+                        //倒计时完，请求最新的等级
+                        console.log("有设施升级完了，需要刷新");
+                        this.qryCityFacilities(key);
+                        return
+                    }
+                });
+           });
+        }, 1000);
     }
 
     protected onCityFacilities(data: any): void {
         console.log("onCityFacilities :", data);
         if (data.code == 0) {
             this._proxy.updateMyFacilityList(data.msg.cityId, data.msg.facilities);
-            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             cc.systemEvent.emit("update_my_facilities");
+
+            //刷新城池附加加成
+            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
-            cc.systemEvent.emit("update_city_addition", cityData.cityId, addition);
+            cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
+            cc.systemEvent.emit("update_city_addition", data.msg.cityId, addition);
         }
     }
 
 
-    protected onCityUpFacilities(data: any): void {
-        console.log("onCityUpFacilities :", data);
+    protected onCityUpFacility(data: any): void {
+        console.log("onCityUpFacility :", data);
         if (data.code == 0) {
             let facilityData: Facility = this._proxy.updateMyFacility(data.msg.cityId, data.msg.facility);
             cc.systemEvent.emit("update_my_facility", data.msg.cityId, facilityData);
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
             cc.systemEvent.emit("upate_my_roleRes");
+
+            //刷新城池附加加成
+            let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(data.msg.cityId);
+            cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
             cc.systemEvent.emit("update_city_addition", data.msg.cityId, addition);
         }
     }

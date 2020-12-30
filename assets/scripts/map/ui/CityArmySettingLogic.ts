@@ -188,7 +188,7 @@ export default class CityArmySettingLogic extends cc.Component {
             }
         }
         this.labelId.string = "部队" + this._order;
-        this.labelCost.string = totalCost + "/" + this._cityData.cost;
+        this.labelCost.string = totalCost + "/" + MapUICommand.getInstance().proxy.getMyCityCost(this._cityId);
         this.labelSoldierCnt.string = soldierCnt + "/" + totalSoldierCnt;
         this.labelAddition.string = "无";
         if (this._data) {
@@ -243,7 +243,7 @@ export default class CityArmySettingLogic extends cc.Component {
         let totalCnt: number = this.getTotalConscriptCnt();
         if (totalCnt > 0) {
             var myRoleRes = LoginCommand.getInstance().proxy.getRoleResData();
-            var baseCost: ConscriptBaseCost = MapUICommand.getInstance().proxy.getBaseCost();
+            var baseCost: ConscriptBaseCost = MapUICommand.getInstance().proxy.getConscriptBaseCost();
             let str: string = "消耗:  " + "金币:" + totalCnt * baseCost.cost_gold + "/" + myRoleRes.gold;
             str += " 木材:" + totalCnt * baseCost.cost_wood + "/" + myRoleRes.wood;
             str += " 金属:" + totalCnt * baseCost.cost_iron + "/" + myRoleRes.iron;

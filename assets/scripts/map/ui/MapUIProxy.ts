@@ -1,4 +1,6 @@
 import LoginCommand from "../../login/LoginCommand";
+import DateUtil from "../../utils/DateUtil";
+import MapUICommand from "./MapUICommand";
 
 /**城池加成数据(默认值为无加成时 只列举了客户端需要的数据)*/
 export class CityAddition {
@@ -12,7 +14,7 @@ export class CityAddition {
     shu: number = 0;//蜀阵营加成
     wu: number = 0;//吴阵营加成
     taxRate:number = 0;//交换的税率
-    
+    durable:number = 0;//耐久
 
 
     public clear(): void {
@@ -25,6 +27,7 @@ export class CityAddition {
         this.wei = 0;
         this.shu = 0;
         this.wu = 0;
+        this.durable = 0;
     }
 };
 
@@ -62,7 +65,29 @@ export class Facility {
     level: number = 0;
     type: number = 0;
     upTime:number = 0;  //升级的时间，0为该等级已经升级成功
+
+    public isUping(): boolean{
+        return this.upLastTime() > 0
+    }
+
+    public isNeedUpdateLevel(): boolean{
+        return this.upLastTime() < 0
+    }
+
+    public upLastTime(): number{
+        if(this.upTime > 0){
+            let cfg:FacilityConfig = MapUICommand.getInstance().proxy.getFacilityCfgByType(this.type);
+            var costTime = cfg.upLevels[this.level+1].time;
+            var serverTime = DateUtil.getServerTime();
+            var diff =  (this.upTime+costTime)*1000 - serverTime;
+            return diff
+        }else{
+            return 0
+        }
+    }
 }
+
+
 
 /**设施(配置)*/
 export class FacilityConfig {
@@ -154,7 +179,11 @@ export default class MapUIProxy {
     protected _armyBaseCost: ConscriptBaseCost = new ConscriptBaseCost();
     protected _warReport: Map<number, WarReport> = new Map<number, WarReport>();
     protected _additions: Map<number, CityAddition> = new Map<number, CityAddition>();
+    protected _cityBaseCost: number = 0;
+    protected _cityBaseDurable: number = 0;
+    
     public bTransformRate:number = 0;
+
 
     public clearData(): void {
         this._warReport.clear();
@@ -278,7 +307,13 @@ export default class MapUIProxy {
                             addition.taxRate += addValue;
                         }
 
-                        
+                        index = cfg.additions.indexOf(CityAdditionType.Durable);
+                        if (index != -1) {
+                            //console.log("CityAdditionType.Durable:", cfg.upLevels, addValue, index);
+                            //耐久
+                            addValue = cfg.upLevels[data.level - 1].values[index];
+                            addition.durable += addValue;
+                        }
                     }
                 }
             });
@@ -294,6 +329,10 @@ export default class MapUIProxy {
      */
     public getMyFacilitys(cityId: number = 0): Map<number, Facility> {
         return this._myFacility.get(cityId);
+    }
+
+    public getMyAllFacilitys(): Map<number, Map<number, Facility>> {
+        return this._myFacility;
     }
 
     /**获取指定的设施数据*/
@@ -317,6 +356,19 @@ export default class MapUIProxy {
             this._additions.set(cityId, addition);
         }
         return addition;
+    }
+
+    public getMyCityCost(cityId: number):number{
+        let addition = this.getMyCityAddition(cityId);
+        console.log("getMyCityCost:", cityId, addition, this._cityBaseCost);
+        return addition.cost + this._cityBaseCost;
+    }
+
+    //最大耐久
+    public getMyCityMaxDurable(cityId: number):number{
+        let addition = this.getMyCityAddition(cityId);
+        console.log("getMyCityMaxDurable:", cityId, addition, this._cityBaseDurable);
+        return addition.durable + this._cityBaseDurable;
     }
 
     /**
@@ -440,19 +492,23 @@ export default class MapUIProxy {
         return isUnlock;
     }
 
-    public setBaseCost(data: any): void {
+    public setBasic(data: any): void {
         this._armyBaseCost.cost_gold = data.json.conscript.cost_gold;
         this._armyBaseCost.cost_iron = data.json.conscript.cost_iron;
         this._armyBaseCost.cost_wood = data.json.conscript.cost_wood;
         this._armyBaseCost.cost_grain = data.json.conscript.cost_grain;
         this._armyBaseCost.cost_stone = data.json.conscript.cost_stone;
+        this.bTransformRate = data.json.city.transform_rate;
 
-        this.bTransformRate = data.json.city.transform_rate
+        this._cityBaseCost = data.json.city.cost;
+        this._cityBaseDurable = data.json.city.durable;
     }
 
-    public getBaseCost(): ConscriptBaseCost {
+
+    public getConscriptBaseCost(): ConscriptBaseCost {
         return this._armyBaseCost;
     }
+
 
     public updateWarReports(data: any): void {
         var list = data.list;

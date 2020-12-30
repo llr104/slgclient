@@ -65,6 +65,8 @@ export default class FacilityListLogic extends cc.Component {
                 this.setCurSelectType(0);//默认选中主城
             }
         }
+
+        this.updateDesView();
     }
 
     protected updateFacility(cityId: number, data: Facility): void {
@@ -89,6 +91,7 @@ export default class FacilityListLogic extends cc.Component {
                 }
             })
         }
+        this.updateDesView();
     }
 
     protected onUpdateMyRoleRes(): void {

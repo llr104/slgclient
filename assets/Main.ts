@@ -98,7 +98,7 @@ export default class Main extends cc.Component {
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
                 GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as cc.JsonAsset).json);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
-                MapUICommand.getInstance().proxy.setBaseCost(datas[5]);
+                MapUICommand.getInstance().proxy.setBasic(datas[5]);
 
                 var d = (datas[5] as cc.JsonAsset).json
                 MapCommand.getInstance().proxy.setWarFree(d.build.war_free);

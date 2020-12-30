@@ -162,10 +162,10 @@ export default class FacilityDesLogic extends cc.Component {
     public updateNeedTime(): void {
         
         var level = this._cfg.upLevels[this._data.level];
-        if (this.isUping() == false){
+        if (this._data.isUping() == false){
             this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
         }else{
-            this.labelNeedTime.string = DateUtil.converSecondStr(this.upLastTime());
+            this.labelNeedTime.string = DateUtil.converSecondStr(this._data.upLastTime());
         }
     }
 
@@ -184,7 +184,7 @@ export default class FacilityDesLogic extends cc.Component {
                 //资源不足
                 this.btnUp.interactable = false;
                 this.labelUp.string = "升级";
-            } else if(this.isUping()){
+            } else if(this._data.isUping()){
                 //正在升级中
                 this.btnUp.interactable = false;
                 this.labelUp.string = "升级中";
@@ -194,17 +194,6 @@ export default class FacilityDesLogic extends cc.Component {
                 this.labelUp.string = "升级";
             }
         }
-    }
-
-    protected isUping(){
-        return this.upLastTime() > 0
-    }
-
-    protected upLastTime(): number{
-        var costTime = this._cfg.upLevels[this._data.level+1].time;
-        var serverTime = DateUtil.getServerTime();
-        var diff =  (this._data.upTime+costTime)*1000 - serverTime;
-        return diff
     }
 
     public setData(cityId: number, data: Facility, cfg: FacilityConfig): void {
