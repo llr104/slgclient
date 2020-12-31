@@ -1,3 +1,5 @@
+import DateUtil from "../utils/DateUtil";
+
 /**军队命令*/
 export class ArmyCmd {
     static Idle: number = 0;//空闲
@@ -68,6 +70,17 @@ export class ArmyData {
         data.endTime = serverData.end * 1000;
 
         return data;
+    }
+
+    public isGenConEnd():boolean {
+        for (let index = 0; index < this.conTimes.length; index++) {
+            const conTime = this.conTimes[index];
+            if (conTime == 0) {
+                continue
+            }
+            return DateUtil.isAfterServerTime(conTime*1000);
+        }
+        return false
     }
 }
 

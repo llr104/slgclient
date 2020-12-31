@@ -1,5 +1,7 @@
 import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "../login/LoginCommand";
+import { MapCityData } from "../map/MapCityProxy";
+import MapCommand from "../map/MapCommand";
 import { NetManager } from "../network/socket/NetManager";
 import ArmyProxy, { ArmyCmd, ArmyData } from "./ArmyProxy";
 import GeneralCommand from "./GeneralCommand";
@@ -29,12 +31,29 @@ export default class ArmyCommand {
     protected _proxy: ArmyProxy = new ArmyProxy();
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.general_armyList, this.onQryArmyList, this);
+        cc.systemEvent.on(ServerConfig.army_myList, this.onQryArmyList, this);
+        cc.systemEvent.on(ServerConfig.army_myOne, this.onQryArmyOne, this);
+
         cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
         cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
         cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
         cc.systemEvent.on(ServerConfig.army_push, this.onGeneralArmyStatePush, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
+
+        //定时检测自己的军队是否有武将已经征兵完，如果是请求刷新
+        setInterval(() => {
+            let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
+            if (myCity != null){
+                let armyList: ArmyData[] = this.proxy.getArmyList(myCity.cityId);
+                for (let i: number = 0; i < armyList.length; i++) {
+                    var army = armyList[i];
+                    if (army != null && army.isGenConEnd()){
+                        this.qryArmyOne(army.cityId, army.order);
+                    }
+                }
+            }
+            
+         }, 1000);
     }
 
     public onDestory(): void {
@@ -57,6 +76,18 @@ export default class ArmyCommand {
             cc.systemEvent.emit("update_army_list", armyDatas);
         }
     }
+
+    protected onQryArmyOne(data: any, otherData: any): void {
+        console.log("onQryArmyOne", data);
+        if (data.code == 0) {
+            let armyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
+            let armyDatas: ArmyData[] = this._proxy.getArmyList(data.msg.army.cityId);
+            cc.systemEvent.emit("update_army_list", armyDatas);
+            cc.systemEvent.emit("update_army", armyData);
+        }
+    }
+
+    
 
     /**配置将领回调*/
     protected onGeneralDispose(data: any, otherData: any): void {
@@ -229,9 +260,20 @@ export default class ArmyCommand {
     /**请求自己的军队信息*/
     public qryArmyList(cityId: number): void {
         let sendData: any = {
-            name: ServerConfig.general_armyList,
+            name: ServerConfig.army_myList,
             msg: {
                 cityId: cityId
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public qryArmyOne(cityId: number, order: number): void {
+        let sendData: any = {
+            name: ServerConfig.army_myOne,
+            msg: {
+                cityId: cityId,
+                order:order,
             }
         };
         NetManager.getInstance().send(sendData);

@@ -23,13 +23,15 @@ const ServerConfig = {
 
     general_myGenerals: "general.myGenerals",
     general_dispose: "general.dispose",
-    general_armyList: "general.armyList",
     general_conscript: "general.conscript",
     general_assignArmy: "general.assignArmy",
     general_drawGeneral: "general.drawGeneral",
     general_composeGeneral: "general.composeGeneral",
     general_addPrGeneral: "general.addPrGeneral",
 
+    army_myList: "army.myList",
+    army_myOne: "army.myOne",
+    
     war_report:"war.report",
     war_read:"war.read",
 
