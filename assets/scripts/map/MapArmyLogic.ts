@@ -1,5 +1,5 @@
 import ArmyCommand from "../general/ArmyCommand";
-import { ArmyData } from "../general/ArmyProxy";
+import { ArmyCmd, ArmyData } from "../general/ArmyProxy";
 import ArmyLogic from "./entries/ArmyLogic";
 
 const { ccclass, property } = cc._decorator;
@@ -57,7 +57,7 @@ export default class MapArmyLogic extends cc.Component {
         console.log("update_army", data);
         let aniNode: cc.Node = null;
         let arrowNode: cc.Node = null;
-        if (data.cmd == 0) {
+        if (data.cmd == ArmyCmd.Idle || data.cmd == ArmyCmd.Conscript) {
             //代表不在地图上
             this.removeArmyById(data.id);
             return;

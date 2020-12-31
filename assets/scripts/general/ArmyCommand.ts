@@ -48,7 +48,7 @@ export default class ArmyCommand {
                 if (armyList == null){
                     return
                 }
-                
+
                 for (let i: number = 0; i < armyList.length; i++) {
                     var army = armyList[i];
                     if (army != null && army.isGenConEnd()){
@@ -207,7 +207,7 @@ export default class ArmyCommand {
         return cnt;
     }
 
-    /**根据将领列表获取军队总士兵数*/
+    /**获取速度**/
     public getArmySpeed(generals: GeneralData[]): number {
         let empyt: boolean = true;
         let speed: number = 1000000;
@@ -223,6 +223,24 @@ export default class ArmyCommand {
             return 0;
         }else{
             return speed;
+        }
+    }
+
+    public getArmyDestroy(generals: GeneralData[]): number {
+        let empyt: boolean = true;
+        let destory: number = 0;
+        let cfg: GeneralConfig = null;
+        for (let i: number = 0; i < generals.length; i++) {
+            if (generals[i]) {
+                cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
+                destory += GeneralData.getPrValue(cfg.destroy, generals[i].destroy_added);
+                empyt = false;
+            }
+        }
+        if (empyt){
+            return 0;
+        }else{
+            return destory;
         }
     }
 
@@ -260,7 +278,10 @@ export default class ArmyCommand {
             } else if (armyData.cmd == ArmyCmd.Reclaim) {
                 //屯田
                 stateStr = "[屯田]";
-            } else {
+            } else if (armyData.cmd == ArmyCmd.Conscript) {
+                //征兵
+                stateStr = "[征兵]";
+            }else {
                 stateStr = "[停留]";
             }
         }

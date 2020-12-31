@@ -110,9 +110,12 @@ export default class RightArmyItemLogic extends cc.Component {
 
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
 
-            if (this._data.cmd == 0) {
+            if (this._data.cmd == ArmyCmd.Idle) {
                 //代表在城池里面
                 this.btnSetting.active = true;
+                this.btnBack.active = false;
+            } else if (this._data.cmd == ArmyCmd.Conscript){
+                this.btnSetting.active = false;
                 this.btnBack.active = false;
             } else if (this._data.state == 0 && this._data.cmd != ArmyCmd.Reclaim) {
                 //停留的时候才能配置队伍和撤退

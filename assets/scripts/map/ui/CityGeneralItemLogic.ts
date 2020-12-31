@@ -55,8 +55,11 @@ export default class CityGeneralItemLogic extends cc.Component {
     protected _isUnlock: boolean = false;
 
     protected onLoad(): void {
+        this.schedule(this.updateCon, 1.0);
+    }
+
+    protected onEnable(): void{
         this.conBg.active = false;
-        this.schedule(this.updateConTime, 1.0);
     }
 
     protected onDestroy(): void {
@@ -129,6 +132,7 @@ export default class CityGeneralItemLogic extends cc.Component {
             this.lockNode.active = false;
             this.btnDown.active = true;
             
+            this.updateCon();
 
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._data.cfgId);
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._data.cfgId);
@@ -161,7 +165,7 @@ export default class CityGeneralItemLogic extends cc.Component {
         }
     }
 
-    protected updateConTime(){
+    protected updateCon(){
         if (DateUtil.isAfterServerTime(this._conTime*1000)){
             this.conBg.active = false;
             this.labelConTime.string = "";

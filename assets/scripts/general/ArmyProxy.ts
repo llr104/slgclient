@@ -7,6 +7,7 @@ export class ArmyCmd {
     static Garrison: number = 2;//驻军
     static Reclaim: number = 3;//屯田
     static Return: number = 4;//撤退
+    static Conscript: number = 5;//征兵
 }
 
 /**军队数据*/
@@ -57,7 +58,7 @@ export class ArmyData {
             data.toX = serverData.to_x;
             data.toY = serverData.to_y;
         }
-        if (data.cmd == 0) {
+        if (data.cmd == ArmyCmd.Idle || data.cmd == ArmyCmd.Conscript) {
             //代表是停留在城池中
             data.x = data.fromX;
             data.y = data.fromY;

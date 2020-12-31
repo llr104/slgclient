@@ -76,6 +76,8 @@ export default class CityArmyItemLogic extends cc.Component {
             if (this._data.cmd == ArmyCmd.Reclaim) {
                 //屯田中
                 this.labelState.string = "屯田中...";
+            } else if(this._data.cmd == ArmyCmd.Conscript){
+                this.labelState.string = "征兵中...";
             } else if (this._data.cmd > 0) {
                 this.labelState.string = "队伍外派中...";
             } else {

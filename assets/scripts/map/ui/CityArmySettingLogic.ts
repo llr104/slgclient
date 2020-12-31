@@ -1,4 +1,4 @@
-import { ArmyData } from "../../general/ArmyProxy";
+import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
@@ -174,7 +174,7 @@ export default class CityArmySettingLogic extends cc.Component {
                     this.sliders[i].node.active = true;
 
                     let totalValue: number = this._totalSoldiers[i] - this._soldiers[i];
-                    if (this._data && this._data.cmd > 0 || totalValue <= 0) {
+                    if (this._data && this._data.cmd > ArmyCmd.Idle || totalValue <= 0) {
                         //不可征兵
                         this.editBoxs[i].string = "0";
                         this.sliders[i].progress = 0;
@@ -203,6 +203,9 @@ export default class CityArmySettingLogic extends cc.Component {
             let generals: GeneralData[] = ArmyCommand.getInstance().getArmyGenerals(this._data);
             let speed: number = ArmyCommand.getInstance().getArmySpeed(generals);
             this.labelSpeed.string = speed + "";
+
+            let destroy: number = ArmyCommand.getInstance().getArmyDestroy(generals);
+            this.labelAtkCity.string = destroy + "";
 
             let camp: number = ArmyCommand.getInstance().getArmyCamp(generals);
             if (camp > 0) {
@@ -280,7 +283,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onClickQuick(): void {
-        if (this._data && this._data.cmd == 0) {
+        if (this._data && this._data.cmd == ArmyCmd.Idle) {
             for (let i: number = 0; i < this._totalSoldiers.length; i++) {
                 let maxCnt: number = this._totalSoldiers[i] - this._soldiers[i];
                 if (maxCnt > 0) {
@@ -293,7 +296,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onClickSure(): void {
-        if (this._data && this._data.cmd == 0) {
+        if (this._data && this._data.cmd == ArmyCmd.Idle) {
             let totalCnt: number = this.getTotalConscriptCnt();
             if (totalCnt > 0) {
                 ArmyCommand.getInstance().generalConscript(this._data.id, this._curConscripts, null);
