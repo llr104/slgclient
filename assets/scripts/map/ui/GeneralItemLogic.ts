@@ -154,7 +154,7 @@ export default class GeneralItemLogic extends cc.Component {
 
              //征兵
              else if(this._type == GeneralItemType.GeneralConScript){
-                 cc.systemEvent.emit("open_general_conscript", this._orderId,this._cityData);
+                 cc.systemEvent.emit("open_army_conscript", this._orderId,this._cityData);
              }
 
              else if(this._type == GeneralItemType.GeneralSelect){

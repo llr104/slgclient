@@ -78,11 +78,9 @@ export class Facility {
         if(this.upTime > 0){
             let cfg:FacilityConfig = MapUICommand.getInstance().proxy.getFacilityCfgByType(this.type);
             var costTime = cfg.upLevels[this.level+1].time;
-            var serverTime = DateUtil.getServerTime();
-            var diff =  (this.upTime+costTime)*1000 - serverTime;
-            return diff
+            return DateUtil.leftTime((this.upTime+costTime)*1000);
         }else{
-            return 0
+            return 0;
         }
     }
 }

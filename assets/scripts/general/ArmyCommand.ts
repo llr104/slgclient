@@ -34,9 +34,9 @@ export default class ArmyCommand {
         cc.systemEvent.on(ServerConfig.army_myList, this.onQryArmyList, this);
         cc.systemEvent.on(ServerConfig.army_myOne, this.onQryArmyOne, this);
 
-        cc.systemEvent.on(ServerConfig.general_dispose, this.onGeneralDispose, this);
-        cc.systemEvent.on(ServerConfig.general_conscript, this.onGeneralConscript, this);
-        cc.systemEvent.on(ServerConfig.general_assignArmy, this.onGeneralAssignArmy, this);
+        cc.systemEvent.on(ServerConfig.army_dispose, this.onGeneralDispose, this);
+        cc.systemEvent.on(ServerConfig.army_conscript, this.onGeneralConscript, this);
+        cc.systemEvent.on(ServerConfig.army_assign, this.onGeneralAssignArmy, this);
         cc.systemEvent.on(ServerConfig.army_push, this.onGeneralArmyStatePush, this);
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
 
@@ -45,6 +45,10 @@ export default class ArmyCommand {
             let myCity: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
             if (myCity != null){
                 let armyList: ArmyData[] = this.proxy.getArmyList(myCity.cityId);
+                if (armyList == null){
+                    return
+                }
+                
                 for (let i: number = 0; i < armyList.length; i++) {
                     var army = armyList[i];
                     if (army != null && army.isGenConEnd()){
@@ -205,15 +209,21 @@ export default class ArmyCommand {
 
     /**根据将领列表获取军队总士兵数*/
     public getArmySpeed(generals: GeneralData[]): number {
+        let empyt: boolean = true;
         let speed: number = 1000000;
         let cfg: GeneralConfig = null;
         for (let i: number = 0; i < generals.length; i++) {
             if (generals[i]) {
                 cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
                 speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, generals[i].speed_added));
+                empyt = false;
             }
         }
-        return speed;
+        if (empyt){
+            return 0;
+        }else{
+            return speed;
+        }
     }
 
     /**根据将领列表获取军队阵营*/
@@ -282,7 +292,7 @@ export default class ArmyCommand {
     /**给军队配置将领*/
     public generalDispose(cityId: number = 0, generalId: number = 0, order: number = 0, position: number = 0, otherData: any): void {
         let sendData: any = {
-            name: ServerConfig.general_dispose,
+            name: ServerConfig.army_dispose,
             msg: {
                 cityId: cityId,
                 generalId: generalId,
@@ -296,7 +306,7 @@ export default class ArmyCommand {
     /**给军队征兵*/
     public generalConscript(armyId: number = 0, cnts: number[] = [], otherData: any): void {
         let sendData: any = {
-            name: ServerConfig.general_conscript,
+            name: ServerConfig.army_conscript,
             msg: {
                 armyId: armyId,
                 cnts: cnts,
@@ -308,7 +318,7 @@ export default class ArmyCommand {
     /**出兵*/
     public generalAssignArmy(armyId: number = 0, cmd: number = 0, x: number = 0, y: Number = 0, otherData: any = null): void {
         let sendData: any = {
-            name: ServerConfig.general_assignArmy,
+            name: ServerConfig.army_assign,
             msg: {
                 armyId: armyId,
                 cmd: cmd,
