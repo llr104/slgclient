@@ -2,6 +2,7 @@ import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 
 const { ccclass, property } = cc._decorator;
@@ -34,9 +35,14 @@ export default class CityGeneralItemLogic extends cc.Component {
     labelCamp: cc.Label = null;
     @property(cc.Label)
     labelTip: cc.Label = null;
+    @property(cc.Label)
+    labelConTime: cc.Label = null;
+    @property(cc.Label)
+    labelConCnt: cc.Label = null;
     @property(cc.ProgressBar)
     progressBar: cc.ProgressBar = null;
-
+    @property(cc.Node)
+    conBg: cc.Node = null;
 
     public index: number = 0;
     protected _order: number = 0;
@@ -44,10 +50,13 @@ export default class CityGeneralItemLogic extends cc.Component {
     protected _data: GeneralData = null;
     protected _soldierCnt: number = 0;
     protected _totalSoldierCnt: number = 0;
+    protected _conCnt: number = 0;
+    protected _conTime: number = 0;
     protected _isUnlock: boolean = false;
 
     protected onLoad(): void {
-
+        this.conBg.active = false;
+        this.schedule(this.updateConTime, 1.0);
     }
 
     protected onDestroy(): void {
@@ -104,18 +113,22 @@ export default class CityGeneralItemLogic extends cc.Component {
             this.btnDown.active = false;
             let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(14).name;
             this.labelTip.string = desName + " 等级" + this._order + "开启";
+            this.conBg.active = false;
         } else if (this._data == null) {
             //未配置武将
             this.infoNode.active = false;
             this.addNode.active = true;
             this.lockNode.active = false;
             this.btnDown.active = false;
+            this.conBg.active = false;
+            
         } else {
             //展示武将信息
             this.infoNode.active = true;
             this.addNode.active = false;
             this.lockNode.active = false;
             this.btnDown.active = true;
+            
 
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._data.cfgId);
             this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._data.cfgId);
@@ -148,12 +161,28 @@ export default class CityGeneralItemLogic extends cc.Component {
         }
     }
 
-    public setData(cityId: number, order: number, data: GeneralData, soldierCnt: number, totalSoldierCnt: number, isUnlock: boolean): void {
+    protected updateConTime(){
+        if (DateUtil.isAfterServerTime(this._conTime*1000)){
+            this.conBg.active = false;
+            this.labelConTime.string = "";
+            this.labelConCnt.string = "";
+        }else{
+            this.conBg.active = true;
+            this.labelConTime.string = DateUtil.leftTimeStr(this._conTime*1000);
+            this.labelConCnt.string = "+" + this._conCnt;
+        }
+    }
+ 
+    public setData(cityId: number, order: number, data: GeneralData, 
+        soldierCnt: number, totalSoldierCnt: number, conCnt:number, 
+        conTime:number, isUnlock: boolean): void {
         this._cityId = cityId;
         this._order = order;
         this._data = data;
         this._soldierCnt = soldierCnt;
         this._totalSoldierCnt = totalSoldierCnt;
+        this._conCnt = conCnt;
+        this._conTime = conTime;
         this._isUnlock = isUnlock;
         this.updateItem();
     }

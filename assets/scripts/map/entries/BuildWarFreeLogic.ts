@@ -41,7 +41,6 @@ export default class BuildWarFreeLogic extends cc.Component {
     }
 
     public countDown() {
-        console.log("countDown")
         var diff = DateUtil.getServerTime() - this._data.occupyTime;
         if (diff>this._limitTime){
             this.stopCountDown();

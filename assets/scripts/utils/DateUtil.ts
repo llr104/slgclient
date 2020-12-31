@@ -12,6 +12,22 @@ export default class DateUtil {
         return nowTime - this._getServerTime + this._serverTime;
     }
 
+    //是否在该时间之后
+    public static isAfterServerTime(stms:number):boolean{
+        var st = this.getServerTime();
+        return st - stms > 0;
+    }
+
+    public static leftTime(stms:number):number{
+        var st = this.getServerTime();
+        return stms - st;
+    }
+
+    public static leftTimeStr(stms:number):string{
+        var diff = this.leftTime(stms);
+        return this.converSecondStr(diff);
+    }
+
     /**补零*/
     public static fillZero(str: string, num: number = 2): string {
         while (str.length < num) {

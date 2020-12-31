@@ -14,6 +14,8 @@ export class ArmyData {
     order: number = 0;
     generals: number[] = [];
     soldiers: number[] = [];
+    conTimes: number[] = [];
+    conCnts: number[] = [];
     cmd: number = 0;
     state: number = 0;
     fromX: number = 0;
@@ -35,6 +37,10 @@ export class ArmyData {
         data.order = serverData.order;
         data.generals = serverData.generals;
         data.soldiers = serverData.soldiers;
+
+        data.conTimes = serverData.con_times;
+        data.conCnts = serverData.con_cnts;
+
         data.state = serverData.state;
         data.cmd = serverData.cmd;
         if (data.cmd == ArmyCmd.Return) {

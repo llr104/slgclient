@@ -56,6 +56,9 @@ export default class CityArmySettingLogic extends cc.Component {
     protected _totalSoldiers: number[] = null;
     protected _curConscripts: number[] = null;//当前征兵数
 
+    protected _conTimes: number[] = null;
+    protected _conCnts: number[] = null;
+
     protected onLoad(): void {
         this.initView();
         this.additionTipNode.active = false;
@@ -73,6 +76,8 @@ export default class CityArmySettingLogic extends cc.Component {
         this._soldiers = [0, 0, 0];
         this._totalSoldiers = [0, 0, 0];
         this._curConscripts = [0, 0, 0];
+        this._conTimes = [0, 0, 0];
+        this._conCnts = [0, 0, 0];
 
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
         cc.systemEvent.on("chosed_general", this.onChooseGeneral, this);
@@ -155,6 +160,9 @@ export default class CityArmySettingLogic extends cc.Component {
                     this._totalSoldiers[i] = generalData.level * 100 + this._addition.soldierCnt;
                     soldierCnt += this._soldiers[i];
                     totalSoldierCnt += this._totalSoldiers[i];
+                    this._conTimes[i] = this._data.conTimes[i];
+                    this._conCnts[i] = this._data.conCnts[i];
+
                 }
                 if (isUnlock == false || generalData == null) {
                     this.tipNodes[i].active = true;
@@ -184,7 +192,7 @@ export default class CityArmySettingLogic extends cc.Component {
                     }
 
                 }
-                comp.setData(this._cityId, this._order, generalData, this._soldiers[i], this._totalSoldiers[i], isUnlock);
+                comp.setData(this._cityId, this._order, generalData, this._soldiers[i], this._totalSoldiers[i], this._conCnts[i], this._conTimes[i], isUnlock);
             }
         }
         this.labelId.string = "部队" + this._order;
