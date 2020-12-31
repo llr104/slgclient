@@ -52,6 +52,7 @@ export default class ArmyCommand {
                 for (let i: number = 0; i < armyList.length; i++) {
                     var army = armyList[i];
                     if (army != null && army.isGenConEnd()){
+                        console.log("有武将征兵完了");
                         this.qryArmyOne(army.cityId, army.order);
                     }
                 }

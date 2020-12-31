@@ -174,7 +174,9 @@ export default class CityArmySettingLogic extends cc.Component {
                     this.sliders[i].node.active = true;
 
                     let totalValue: number = this._totalSoldiers[i] - this._soldiers[i];
-                    if (this._data && this._data.cmd > ArmyCmd.Idle || totalValue <= 0) {
+                    if(this._data && this._data.cmd == ArmyCmd.Conscript){
+                        this.sliders[i].enabled = this._conCnts[i] == 0;
+                    }else if(this._data && this._data.cmd > ArmyCmd.Idle || totalValue <= 0) {
                         //不可征兵
                         this.editBoxs[i].string = "0";
                         this.sliders[i].progress = 0;
@@ -283,11 +285,16 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onClickQuick(): void {
-        if (this._data && this._data.cmd == ArmyCmd.Idle) {
+        if (this._data && this._data.cmd == ArmyCmd.Idle || this._data.cmd == ArmyCmd.Conscript) {
             for (let i: number = 0; i < this._totalSoldiers.length; i++) {
-                let maxCnt: number = this._totalSoldiers[i] - this._soldiers[i];
-                if (maxCnt > 0) {
-                    this.setCurConscriptForIndex(i, maxCnt);
+                if(this._conCnts[i] > 0){
+                    //正在征兵的不能重复征兵
+                    this.setCurConscriptForIndex(i, 0);
+                }else{
+                    let maxCnt: number = this._totalSoldiers[i] - this._soldiers[i];
+                    if (maxCnt > 0) {
+                        this.setCurConscriptForIndex(i, maxCnt);
+                    }
                 }
             }
             this.updateResCost();
@@ -296,7 +303,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     protected onClickSure(): void {
-        if (this._data && this._data.cmd == ArmyCmd.Idle) {
+        if (this._data && this._data.cmd == ArmyCmd.Idle || this._data.cmd == ArmyCmd.Conscript) {
             let totalCnt: number = this.getTotalConscriptCnt();
             if (totalCnt > 0) {
                 ArmyCommand.getInstance().generalConscript(this._data.id, this._curConscripts, null);

@@ -79,7 +79,9 @@ export class ArmyData {
             if (conTime == 0) {
                 continue
             }
-            return DateUtil.isAfterServerTime(conTime*1000);
+            if (DateUtil.isAfterServerTime(conTime*1000)){
+                return true;
+            }
         }
         return false
     }
