@@ -175,7 +175,11 @@ export default class CityArmySettingLogic extends cc.Component {
 
                     let totalValue: number = this._totalSoldiers[i] - this._soldiers[i];
                     if(this._data && this._data.cmd == ArmyCmd.Conscript){
-                        this.sliders[i].enabled = this._conCnts[i] == 0;
+                        var can = this._conCnts[i] == 0
+                        this.sliders[i].enabled = can;
+                        this.editBoxs[i].string = "0";
+                        this.sliders[i].progress = 0;
+                        this.editBoxs[i].enabled = can;
                     }else if(this._data && this._data.cmd > ArmyCmd.Idle || totalValue <= 0) {
                         //不可征兵
                         this.editBoxs[i].string = "0";
@@ -336,6 +340,7 @@ export default class CityArmySettingLogic extends cc.Component {
     }
 
     public setData(cityId: number, order: number = 1): void {
+        this._curConscripts = [0, 0, 0];
         this._cityId = cityId;
         this._order = order;
         this._cityData = MapCommand.getInstance().cityProxy.getMyCityById(this._cityId);
