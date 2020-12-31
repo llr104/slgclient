@@ -70,7 +70,11 @@ export default class ArmySelectItemLogic extends cc.Component {
             let curSoldierCnt: number = ArmyCommand.getInstance().getArmyCurSoldierCnt(this._data);
             let totalSoldierCnt: number = ArmyCommand.getInstance().getArmyTotalSoldierCntByGenerals(generals);
 
-            if (power < commonCfg.recovery_physical_power) {
+            if (this._data.cmd == ArmyCmd.Conscript) {
+                //体力不足
+                this.tipNode.active = true;
+                this.labelTip.string = "征兵中...";
+            }else if (power < commonCfg.recovery_physical_power) {
                 //体力不足
                 this.tipNode.active = true;
                 this.labelTip.string = "体力不足";

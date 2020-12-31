@@ -215,7 +215,7 @@ export default class ArmyCommand {
         for (let i: number = 0; i < generals.length; i++) {
             if (generals[i]) {
                 cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
-                speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, generals[i].speed_added));
+                speed = Math.min(speed, GeneralData.getPrValue(cfg.speed, cfg.speed_grow*generals[i].level, generals[i].speed_added));
                 empyt = false;
             }
         }
@@ -233,7 +233,7 @@ export default class ArmyCommand {
         for (let i: number = 0; i < generals.length; i++) {
             if (generals[i]) {
                 cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[i].cfgId);
-                destory += GeneralData.getPrValue(cfg.destroy, generals[i].destroy_added);
+                destory += GeneralData.getPrValue(cfg.destroy, cfg.destroy_grow*generals[i].level, generals[i].destroy_added);
                 empyt = false;
             }
         }

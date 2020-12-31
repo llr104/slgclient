@@ -98,8 +98,8 @@ export class GeneralData {
         return data;
     }
 
-    public static getPrValue(pr: number = 0, add: number = 0): number {
-        return (pr + add) / 100;
+    public static getPrValue(pr: number = 0, group:number, add: number = 0): number {
+        return (pr + group + add) / 100;
     }
 
     public static getPrStr(pr: number = 0, add: number = 0, lv: number = 0, grow: number = 0): string {
