@@ -118,9 +118,7 @@ export default class MapCommand {
 
     protected onNationMapGiveUp(data: any, otherData: any): void {
         console.log("onNationMapGiveUp", data, otherData);
-        if (data.code == 0) {
-            this._buildProxy.removeBuild(data.msg.x, data.msg.y);
-        }
+    
     }
 
 

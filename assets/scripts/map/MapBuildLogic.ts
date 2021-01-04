@@ -23,7 +23,7 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
     }
 
     protected onUpdateBuilds(areaIndex: number, addIds: number[], removeIds: number[], updateIds: number[]): void {
-        // console.log("update_builds", arguments);
+  
         if (this._itemMap.has(areaIndex)) {
             for (let i: number = 0; i < addIds.length; i++) {
                 this.addItem(areaIndex, this._cmd.buildProxy.getBuild(addIds[i]));

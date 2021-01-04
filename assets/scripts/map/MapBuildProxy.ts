@@ -17,6 +17,7 @@ export class MapBuildData {
     parentId: number = 0;
     unionName: string;
     occupyTime: number;
+    giveUpTime: number;
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
@@ -29,7 +30,8 @@ export class MapBuildData {
             && this.unionId == data.union_id
             && this.parentId == data.parent_id
             && this.unionName == data.union_name
-            && this.occupyTime == data.occupy_time) {
+            && this.occupyTime == data.occupy_time
+            && this.giveUpTime == data.giveUp_time) {
             return true;
         }
         return false;
@@ -54,6 +56,7 @@ export class MapBuildData {
         build.parentId = data.parent_id;
         build.unionName = data.union_name;
         build.occupyTime = data.occupy_time;
+        build.giveUpTime = data.giveUp_time;
         return build;
     }
 }

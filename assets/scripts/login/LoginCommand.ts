@@ -41,7 +41,6 @@ export default class LoginCommand {
         cc.systemEvent.on(ServerConfig.account_reLogin, this.onAccountRelogin, this);
         cc.systemEvent.on(ServerConfig.role_create, this.onRoleCreate, this);
         cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
-        cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
         cc.systemEvent.on(ServerConfig.account_robLogin, this.onAccountRobLogin, this)
         cc.systemEvent.on(ServerConfig.chat_login, this.onChatLogin, this)
 
@@ -153,11 +152,7 @@ export default class LoginCommand {
         }
     }
 
-    protected onNationMapGiveUp(data: any, otherData: any): void {
-        if (data.code == 0) {
-            this._proxy.saveEnterData(data.msg);
-        }
-    }
+
 
 
     //聊天登录
