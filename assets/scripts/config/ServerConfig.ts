@@ -48,6 +48,7 @@ const ServerConfig = {
     union_abdicate:"union.abdicate",
     union_modNotice:"union.modNotice",
     union_info:"union.info",
+    union_log:"union.log",
     union_apply_push: "unionApply.push",
     
     interior_collection: "interior.collection",

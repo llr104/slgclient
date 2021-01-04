@@ -31,6 +31,10 @@ export default class UnionLogic extends cc.Component {
     @property(cc.Node)
     applyNode:cc.Node = null;
 
+    
+    @property(cc.Node)
+    logNode:cc.Node = null;
+
     @property(cc.Label)
     nameLab:cc.Label = null;
 
@@ -62,13 +66,24 @@ export default class UnionLogic extends cc.Component {
         this.applyNode.active = true;
     }
 
+    protected onClickLog(): void {
+        this.mainNode.active = false;
+        this.logNode.active = true;
+    }
+
+
     protected openCreate():void{
         this.createNode.active = true;
     }
 
 
     protected visibleView():void{
-        this.memberNode.active = this.createNode.active = this.lobbyNode.active = this.applyNode.active = this.memberNode.active = false;
+        this.memberNode.active = 
+        this.createNode.active = 
+        this.lobbyNode.active = 
+        this.applyNode.active = 
+        this.memberNode.active = 
+        this.logNode.active = false;
     }
 
     protected openMyUnion():void{

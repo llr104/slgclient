@@ -42,7 +42,8 @@ export default class UnionCommand {
         cc.systemEvent.on(ServerConfig.union_appoint, this.onUnionAppoint, this);
         cc.systemEvent.on(ServerConfig.union_abdicate, this.onUnionAbdicate, this);
         cc.systemEvent.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
-        cc.systemEvent.on(ServerConfig.union_info, this.onUnionInfo, this)
+        cc.systemEvent.on(ServerConfig.union_info, this.onUnionInfo, this);
+        cc.systemEvent.on(ServerConfig.union_log, this.onUnionLog, this);
         cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
     }
 
@@ -163,8 +164,14 @@ export default class UnionCommand {
             cc.systemEvent.emit("union_info", data.msg);
         }
     }
-    
 
+    protected onUnionLog(data: any, otherData: any): void {
+        console.log("onUnionLog", data);
+        if(data.code == 0){
+            cc.systemEvent.emit("union_log", data.msg.logs);
+        }
+    }
+    
     protected onUnionApplyPush(data: any, otherData: any): void {
         console.log("onUnionApplyPush", data);
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
@@ -325,5 +332,12 @@ export default class UnionCommand {
         NetManager.getInstance().send(sendData);
     }
 
-    
+    public unionLog():void{
+        let sendData: any = {
+            name: ServerConfig.union_log,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
 }
