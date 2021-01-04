@@ -29,7 +29,7 @@ export default class UnionLogLogic extends cc.Component {
     }
 
     protected updateLog(data:any[]){
-        console.log("updateLog");
+        
         var comp = this.logView.node.getComponent("ListLogic");
         comp.setData(data?data:[]);
     }
