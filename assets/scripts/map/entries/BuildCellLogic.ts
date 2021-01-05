@@ -6,13 +6,10 @@ import { MapResType } from "../MapProxy";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ResCellLogic extends cc.Component {
+export default class BuildLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
 
-    @property(cc.Sprite)
-    cspr: cc.Sprite = null;
-    
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
 
@@ -57,27 +54,10 @@ export default class ResCellLogic extends cc.Component {
     public updateUI(): void {
      
         if (this._data) {
-            if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
-                if(this._data.giveUpTime > 0){
-                    this.startGiveUp();
-                }else{
-                    this.stopGiveUp();
-                }
-                this.spr.node.color = cc.Color.GREEN;
-            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.spr.node.color = cc.Color.BLUE
-            }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
-                this.spr.node.color = cc.Color.MAGENTA;
-            } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.spr.node.color = cc.Color.YELLOW;
-            }else {
-                this.spr.node.color = cc.Color.RED;
-            }
-
             if (this._data.type == MapResType.Fortress){
-                this.cspr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
+                this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
             }else{
-                this.cspr.spriteFrame = null;
+                this.spr.spriteFrame = null;
             }
         }
     }

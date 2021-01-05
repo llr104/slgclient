@@ -15,6 +15,7 @@ export class MapResConfig {
 
 /**地图资源类型*/
 export class MapResType {
+    static Fortress: number = 50; //要塞
     static WOOD: number = 52;
     static IRON: number = 53;
     static STONE: number = 54;

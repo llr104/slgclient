@@ -10,12 +10,6 @@ export default class ResCellLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
 
-    @property(cc.Sprite)
-    cspr: cc.Sprite = null;
-    
-    @property(cc.SpriteAtlas)
-    buildAtlas: cc.SpriteAtlas = null;
-
     @property(cc.Node)
     giveUpNode: cc.Node = null;
 
@@ -72,12 +66,6 @@ export default class ResCellLogic extends cc.Component {
                 this.spr.node.color = cc.Color.YELLOW;
             }else {
                 this.spr.node.color = cc.Color.RED;
-            }
-
-            if (this._data.type == MapResType.Fortress){
-                this.cspr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
-            }else{
-                this.cspr.spriteFrame = null;
             }
         }
     }

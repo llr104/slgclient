@@ -269,9 +269,9 @@ export default class MapUILogic extends cc.Component {
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         var i = 0;
         for (var key in roleRes) {
+   
             children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
             i++;
-
         }
     }
 

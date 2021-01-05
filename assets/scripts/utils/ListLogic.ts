@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import BuildLogic from "../map/entries/BuildLogic";
+import ResCellLogic from "../map/entries/ResCellLogic";
 
 const {ccclass, property} = cc._decorator;
 

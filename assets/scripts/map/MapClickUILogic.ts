@@ -46,6 +46,8 @@ export default class MapClickUILogic extends cc.Component {
     btnReclaim: cc.Button = null;
     @property(cc.Button)
     btnEnter: cc.Button = null;
+    @property(cc.Button)
+    btnBuild: cc.Button = null;
 
     protected _data: any = null;
     protected _pixelPos: cc.Vec2 = null;
@@ -94,6 +96,11 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onClickGiveUp(): void {
         MapCommand.getInstance().giveUpBuild(this._data.x, this._data.y);
+        this.node.parent = null;
+    }
+
+    protected onClickBuild(): void {
+        MapCommand.getInstance().build(this._data.x, this._data.y, 50);
         this.node.parent = null;
     }
 

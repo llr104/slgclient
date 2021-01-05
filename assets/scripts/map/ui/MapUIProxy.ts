@@ -443,7 +443,7 @@ export default class MapUIProxy {
                         upLevelData.time = jsonList[i].levels[k].time;
                         cfgData.upLevels[upLevelData.level - 1] = upLevelData;
 
-                        console.log("upLevelData:", upLevelData)
+                        //console.log("upLevelData:", upLevelData)
                     }
                 }
             }

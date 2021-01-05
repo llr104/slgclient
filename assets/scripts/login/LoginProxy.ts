@@ -40,6 +40,10 @@ export default class LoginProxy {
             this.setRoleData(data.role);
         }
         
+        if(data.role_res){
+            this.setRoleResData(data.role_res);
+        }
+        
         if(data.token){
             this._token = data.token
         }

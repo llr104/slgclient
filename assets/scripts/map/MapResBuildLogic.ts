@@ -1,4 +1,4 @@
-import BuildCellLogic from "./entries/BuildCellLogic";
+import ResCellLogic from "./entries/ResCellLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
@@ -7,7 +7,7 @@ import MapUICommand from "./ui/MapUICommand";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class MapBuildLogic extends MapBaseLayerLogic {
+export default class MapResBuildLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
@@ -52,6 +52,6 @@ export default class MapBuildLogic extends MapBaseLayerLogic {
         let buildData: MapBuildData = data as MapBuildData;
         let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(buildData.x, buildData.y));
         item.setPosition(position);
-        item.getComponent(BuildCellLogic).setBuildData(buildData);
+        item.getComponent(ResCellLogic).setBuildData(buildData);
     }
 }

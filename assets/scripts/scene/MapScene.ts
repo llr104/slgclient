@@ -1,4 +1,4 @@
-import MapBuildLogic from "../map/MapBuildLogic";
+import MapResBuildLogic from "../map/MapResBuildLogic";
 import MapBuildWarFreeLogic from "../map/MapBuildWarFreeLogic";
 import MapCityLogic from "../map/MapCityLogic";
 import { MapCityData } from "../map/MapCityProxy";
@@ -7,6 +7,7 @@ import MapLogic from "../map/MapLogic";
 import { MapAreaData, MapResType } from "../map/MapProxy";
 import MapResLogic from "../map/MapResLogic";
 import MapUtil from "../map/MapUtil";
+import MapBuildLogic from "../map/MapBuildLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -76,12 +77,14 @@ export default class MapScene extends cc.Component {
     protected onMapShowAreaChange(centerPoint: cc.Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
         console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
+        let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
         let buildLogic: MapBuildLogic = this.node.getComponent(MapBuildLogic);
         let buildWarFreeLogic: MapBuildWarFreeLogic = this.node.getComponent(MapBuildWarFreeLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);
 
         //更新展示区域
         resLogic.udpateShowAreas(addIds, removeIds);
+        buildResLogic.udpateShowAreas(addIds, removeIds);
         buildLogic.udpateShowAreas(addIds, removeIds);
         buildWarFreeLogic.udpateShowAreas(addIds, removeIds);
         cityLogic.udpateShowAreas(addIds, removeIds);
