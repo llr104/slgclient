@@ -266,7 +266,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "resCellNode",
+    "_name": "resBuildNode",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -337,7 +337,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "buildCellNode",
+    "_name": "cityNode",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -403,12 +403,12 @@
     "asset": {
       "__uuid__": "7a00bf6f-664b-4422-9f7e-52591081d659"
     },
-    "fileId": "c2yl1AAodBuL43E9lZYozx",
+    "fileId": "93oHkKDpZHZZS1ZKCJwcqf",
     "sync": false
   },
   {
     "__type__": "cc.Node",
-    "_name": "cityNode",
+    "_name": "facilityBuildNode",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -474,7 +474,7 @@
     "asset": {
       "__uuid__": "7a00bf6f-664b-4422-9f7e-52591081d659"
     },
-    "fileId": "93oHkKDpZHZZS1ZKCJwcqf",
+    "fileId": "c2yl1AAodBuL43E9lZYozx",
     "sync": false
   },
   {
@@ -732,7 +732,7 @@
     },
     "_enabled": true,
     "parentLayer": {
-      "__id__": 8
+      "__id__": 10
     },
     "entryPrefab": {
       "__uuid__": "033cb244-f508-4146-9fd6-1da1668ded6b"
@@ -748,10 +748,26 @@
     },
     "_enabled": true,
     "parentLayer": {
-      "__id__": 10
+      "__id__": 8
     },
     "entryPrefab": {
       "__uuid__": "6553c998-56ea-4dcd-aff6-5082420a027a"
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "8f3bcL0J/NCGLDRBb1UYtHx",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "parentLayer": {
+      "__id__": 12
+    },
+    "entryPrefab": {
+      "__uuid__": "7a158aad-aa9a-429e-a30b-5a78eca850d6"
     },
     "_id": ""
   },
@@ -771,22 +787,6 @@
     },
     "arrowPrefab": {
       "__uuid__": "b0865c2a-666e-4b7d-b398-6fb4ab645ee2"
-    },
-    "_id": ""
-  },
-  {
-    "__type__": "8f3bcL0J/NCGLDRBb1UYtHx",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "parentLayer": {
-      "__id__": 12
-    },
-    "entryPrefab": {
-      "__uuid__": "7a158aad-aa9a-429e-a30b-5a78eca850d6"
     },
     "_id": ""
   },

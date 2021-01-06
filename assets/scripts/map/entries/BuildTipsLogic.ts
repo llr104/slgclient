@@ -77,9 +77,7 @@ export default class BuildTipsLogic extends cc.Component {
     }
 
     protected updateGiveUpTime(){
-        console.log("updateGiveUpTime");
-        var diff = DateUtil.leftTime(this._data.giveUpTime)
-        if (diff <= 0){
+        if (this._data.isInGiveUp() == false){
             this.stopGiveUp();
         }else{
             this.giveUpNode.active = true;

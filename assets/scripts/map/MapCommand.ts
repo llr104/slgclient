@@ -153,13 +153,11 @@ export default class MapCommand {
 
     public isBuildWarFree(id: number): boolean {
         let buiildData: MapBuildData = this.buildProxy.getBuild(id);
-        if (buiildData) {
-            var diff = DateUtil.getServerTime() - buiildData.occupyTime;
-            if(diff < MapCommand.getInstance().proxy.getWarFree()){
-                return true;
-            }
+        if(buiildData){
+            return buiildData.isWarFree();
+        }else{
+            return false;
         }
-        return false
     }
 
     

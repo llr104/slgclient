@@ -137,6 +137,7 @@ export default class MapClickUILogic extends cc.Component {
             this.btnMove.node.active = false;
             this.btnOccupy.node.active = true;
             this.btnGiveUp.node.active = false;
+            this.btnBuild.node.active = false;
             this.durableNode.active = false;
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
@@ -144,24 +145,36 @@ export default class MapClickUILogic extends cc.Component {
                 //我自己的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
-                this.btnGiveUp.node.active = true;
+                this.btnGiveUp.node.active = this._data.isInGiveUp() == false;
                 this.btnReclaim.node.active = true;
+                this.btnBuild.node.active = !this._data.isWarFree();
+                if (this._data.isResBuild() == false){
+                    this.btnBuild.node.active = false;
+                }
+
+                if (this._data.isInGiveUp()){
+                    this.btnBuild.node.active = false;
+                }
+
             } else if ((this._data as MapBuildData).unionId > 0
                 && (this._data as MapBuildData).unionId == MapCommand.getInstance().buildProxy.myUnionId) {
                 //盟友的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
             } else if ((this._data as MapBuildData).parentId > 0
             && (this._data as MapBuildData).parentId == MapCommand.getInstance().buildProxy.myUnionId) {
                 //俘虏的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
             }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
             }
             this.durableNode.active = true;
             this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
@@ -208,7 +221,7 @@ export default class MapClickUILogic extends cc.Component {
             console.log("resData", resData, resCfg);
 
             if (this._data.nickName != null){
-                this.labelName.string = this._data.nickName + ":" + resCfg.name;
+                this.labelName.string = this._data.nickName + ":" + this._data.name;
             }else{
                 this.labelName.string = resCfg.name;
             }

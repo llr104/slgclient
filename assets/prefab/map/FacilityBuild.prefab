@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "ResCell",
+    "_name": "FacilityBuild",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -200,8 +200,6 @@
     "buildAtlas": {
       "__uuid__": "1ecf2021-4458-495e-aec1-458624434baf"
     },
-    "giveUpNode": null,
-    "giveUpLabTime": null,
     "_id": ""
   },
   {

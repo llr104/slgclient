@@ -10,17 +10,8 @@ export default class ResCellLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
 
-    @property(cc.Sprite)
-    cspr: cc.Sprite = null;
-    
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
-
-    @property(cc.Node)
-    giveUpNode: cc.Node = null;
-
-    @property(cc.Label)
-    giveUpLabTime: cc.Label = null;
 
     protected _data: MapBuildData = null;
 
@@ -33,7 +24,6 @@ export default class ResCellLogic extends cc.Component {
     }
 
     protected onEnable():void {
-        this.giveUpNode.active = false;
         cc.systemEvent.on("unionChange", this.onUnionChange, this);
     }
 
@@ -58,11 +48,6 @@ export default class ResCellLogic extends cc.Component {
      
         if (this._data) {
             if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
-                if(this._data.giveUpTime > 0){
-                    this.startGiveUp();
-                }else{
-                    this.stopGiveUp();
-                }
                 this.spr.node.color = cc.Color.GREEN;
             } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
                 this.spr.node.color = cc.Color.BLUE
@@ -73,33 +58,7 @@ export default class ResCellLogic extends cc.Component {
             }else {
                 this.spr.node.color = cc.Color.RED;
             }
-
-            if (this._data.type == MapResType.Fortress){
-                this.cspr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
-            }else{
-                this.cspr.spriteFrame = null;
-            }
         }
     }
 
-    protected startGiveUp(){
-        this.unscheduleAllCallbacks();
-        this.schedule(this.updateGiveUpTime, 1);
-        this.updateGiveUpTime();
-    }
-
-    protected stopGiveUp(){
-        this.unscheduleAllCallbacks();
-        this.giveUpNode.active = false;
-    }
-
-    protected updateGiveUpTime(){
-        var diff = DateUtil.leftTime(this._data.giveUpTime)
-        if (diff <= 0){
-            this.stopGiveUp();
-        }else{
-            this.giveUpNode.active = true;
-            this.giveUpLabTime.string = DateUtil.leftTimeStr(this._data.giveUpTime);
-        }
-    }
 }

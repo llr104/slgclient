@@ -7,7 +7,7 @@ import MapLogic from "../map/MapLogic";
 import { MapAreaData, MapResType } from "../map/MapProxy";
 import MapResLogic from "../map/MapResLogic";
 import MapUtil from "../map/MapUtil";
-import MapBuildLogic from "../map/MapBuildLogic";
+import MapFacilityBuildLogic from "../map/MapFacilityBuildLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -78,14 +78,14 @@ export default class MapScene extends cc.Component {
         console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
-        let buildLogic: MapBuildLogic = this.node.getComponent(MapBuildLogic);
+        let buildFacilityLogic: MapFacilityBuildLogic = this.node.getComponent(MapFacilityBuildLogic);
         let buildTipsLogic: MapBuildTipsLogic = this.node.getComponent(MapBuildTipsLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);
 
         //更新展示区域
         resLogic.udpateShowAreas(addIds, removeIds);
         buildResLogic.udpateShowAreas(addIds, removeIds);
-        buildLogic.udpateShowAreas(addIds, removeIds);
+        buildFacilityLogic.udpateShowAreas(addIds, removeIds);
         buildTipsLogic.udpateShowAreas(addIds, removeIds);
         cityLogic.udpateShowAreas(addIds, removeIds);
 
@@ -102,7 +102,7 @@ export default class MapScene extends cc.Component {
                     }
                     //建筑
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
-                        buildLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
+                        buildFacilityLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
                     }
                     //城池
                     if (this._cmd.cityProxy.getCity(cellId) != null) {

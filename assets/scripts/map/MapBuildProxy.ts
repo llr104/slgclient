@@ -1,3 +1,5 @@
+import DateUtil from "../utils/DateUtil";
+import MapCommand from "./MapCommand";
 import MapUtil from "./MapUtil";
 
 /**地图建筑和占领数据*/
@@ -22,6 +24,7 @@ export class MapBuildData {
 
     public equalsServerData(data: any) {
         if (this.rid == data.rid
+            && this.name == data.name
             && this.nickName == data.RNick
             && this.type == data.type
             && this.level == data.level
@@ -47,6 +50,7 @@ export class MapBuildData {
         build.id = id;
         build.rid = data.rid;
         build.nickName = data.RNick;
+        build.name = data.name;
         build.x = data.x;
         build.y = data.y;
         build.type = data.type;
@@ -61,6 +65,24 @@ export class MapBuildData {
         build.giveUpTime = data.giveUp_time;
         build.endTime = data.end_time;
         return build;
+    }
+
+
+    public isWarFree(): boolean {
+        var diff = DateUtil.getServerTime() - this.occupyTime;
+        if(diff < MapCommand.getInstance().proxy.getWarFree()){
+            return true;
+        }
+        return false
+    }
+
+    public isResBuild(): boolean{
+        return this.type>=52
+    }
+
+    public isInGiveUp(): boolean {
+        var diff = DateUtil.leftTime(this.giveUpTime);
+        return diff > 0
     }
 }
 
