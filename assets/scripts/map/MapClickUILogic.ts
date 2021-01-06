@@ -48,6 +48,8 @@ export default class MapClickUILogic extends cc.Component {
     btnEnter: cc.Button = null;
     @property(cc.Button)
     btnBuild: cc.Button = null;
+    @property(cc.Button)
+    btnTransfer: cc.Button = null;
 
     protected _data: any = null;
     protected _pixelPos: cc.Vec2 = null;
@@ -104,6 +106,12 @@ export default class MapClickUILogic extends cc.Component {
         this.node.parent = null;
     }
 
+    protected onClickTransfer(): void{
+        console.log("onClickTransfer");
+        this.node.parent = null;
+        cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Transfer, this._data.x, this._data.y);
+    }
+
     protected onClickMove(): void {
         if (MapCommand.getInstance().isCanMoveCell(this._data.x, this._data.y)) {
             cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
@@ -138,6 +146,7 @@ export default class MapClickUILogic extends cc.Component {
             this.btnOccupy.node.active = true;
             this.btnGiveUp.node.active = false;
             this.btnBuild.node.active = false;
+            this.btnTransfer.node.active = false;
             this.durableNode.active = false;
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
@@ -145,15 +154,22 @@ export default class MapClickUILogic extends cc.Component {
                 //我自己的地
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
-                this.btnGiveUp.node.active = this._data.isInGiveUp() == false;
+                this.btnGiveUp.node.active = !this._data.isInGiveUp();
                 this.btnReclaim.node.active = true;
                 this.btnBuild.node.active = !this._data.isWarFree();
                 if (this._data.isResBuild() == false){
                     this.btnBuild.node.active = false;
+                    this.btnTransfer.node.active = true;
+                }else{
+                    this.btnTransfer.node.active = false;
                 }
 
                 if (this._data.isInGiveUp()){
                     this.btnBuild.node.active = false;
+                }
+
+                if (this._data.isWarFree()){
+                    this.btnGiveUp.node.active = false;
                 }
 
             } else if ((this._data as MapBuildData).unionId > 0
@@ -163,6 +179,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
                 this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             } else if ((this._data as MapBuildData).parentId > 0
             && (this._data as MapBuildData).parentId == MapCommand.getInstance().buildProxy.myUnionId) {
                 //俘虏的地
@@ -170,11 +187,13 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
                 this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
                 this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             }
             this.durableNode.active = true;
             this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
@@ -187,22 +206,30 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             } else if ((this._data as MapCityData).unionId > 0
                 && (this._data as MapCityData).unionId == MapCommand.getInstance().cityProxy.myUnionId) {
                 //盟友的城池
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             }else if ((this._data as MapCityData).parentId > 0
                 && (this._data as MapCityData).parentId == MapCommand.getInstance().cityProxy.myUnionId) {
                 //俘虏的城池
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             }else {
                 this.btnMove.node.active = false;
                 this.btnOccupy.node.active = true;
                 this.btnGiveUp.node.active = false;
+                this.btnBuild.node.active = false;
+                this.btnTransfer.node.active = false;
             }
             this.bgSelect.setContentSize(600, 300);
 
@@ -218,8 +245,7 @@ export default class MapClickUILogic extends cc.Component {
             
             this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
             this.labelSoldierCnt.string = "守备兵力 " + (resData.level * 100) + "x1";
-            console.log("resData", resData, resCfg);
-
+            
             if (this._data.nickName != null){
                 this.labelName.string = this._data.nickName + ":" + this._data.name;
             }else{

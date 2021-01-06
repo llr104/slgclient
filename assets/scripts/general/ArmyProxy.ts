@@ -8,6 +8,7 @@ export class ArmyCmd {
     static Reclaim: number = 3;//屯田
     static Return: number = 4;//撤退
     static Conscript: number = 5;//征兵
+    static Transfer: number = 6;//调动
 }
 
 /**军队数据*/

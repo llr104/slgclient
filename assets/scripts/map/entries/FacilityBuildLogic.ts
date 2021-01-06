@@ -1,7 +1,7 @@
 import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
-import { MapResType } from "../MapProxy";
+import { MapResConfig, MapResData, MapResType } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -9,6 +9,9 @@ const { ccclass, property } = cc._decorator;
 export default class BuildLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
+
+    @property(cc.Label)
+    nameLab: cc.Label = null;
 
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
@@ -49,6 +52,16 @@ export default class BuildLogic extends cc.Component {
         if (this._data) {
             if (this._data.type == MapResType.Fortress){
                 this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
+
+                let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
+                let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);
+                
+                if (this._data.nickName != null){
+                    this.nameLab.string = this._data.nickName + ":" + this._data.name;
+                }else{
+                    this.nameLab.string = resCfg.name;
+                }
+
             }else{
                 this.spr.spriteFrame = null;
             }
