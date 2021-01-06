@@ -13,12 +13,6 @@ export default class BuildLogic extends cc.Component {
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
 
-    @property(cc.Node)
-    giveUpNode: cc.Node = null;
-
-    @property(cc.Label)
-    giveUpLabTime: cc.Label = null;
-
     protected _data: MapBuildData = null;
 
     protected onLoad(): void {
@@ -30,7 +24,6 @@ export default class BuildLogic extends cc.Component {
     }
 
     protected onEnable():void {
-        this.giveUpNode.active = false;
         cc.systemEvent.on("unionChange", this.onUnionChange, this);
     }
 
@@ -59,27 +52,6 @@ export default class BuildLogic extends cc.Component {
             }else{
                 this.spr.spriteFrame = null;
             }
-        }
-    }
-
-    protected startGiveUp(){
-        this.unscheduleAllCallbacks();
-        this.schedule(this.updateGiveUpTime, 1);
-        this.updateGiveUpTime();
-    }
-
-    protected stopGiveUp(){
-        this.unscheduleAllCallbacks();
-        this.giveUpNode.active = false;
-    }
-
-    protected updateGiveUpTime(){
-        var diff = DateUtil.leftTime(this._data.giveUpTime)
-        if (diff <= 0){
-            this.stopGiveUp();
-        }else{
-            this.giveUpNode.active = true;
-            this.giveUpLabTime.string = DateUtil.leftTimeStr(this._data.giveUpTime);
         }
     }
 }

@@ -1,7 +1,7 @@
 
 
 
-import BuildWarFreeLogic from "./entries/BuildWarFreeLogic";
+import BuildTipsLogic from "./entries/BuildTipsLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
@@ -10,7 +10,7 @@ import MapUtil from "./MapUtil";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class MapBuildWarFreeLogic extends MapBaseLayerLogic {
+export default class MapBuildTipsLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
@@ -51,10 +51,10 @@ export default class MapBuildWarFreeLogic extends MapBaseLayerLogic {
     }
 
     public setItemData(item: cc.Node, data: any): void {
-        console.log("setItemData")
+  
         let buildData: MapBuildData = data as MapBuildData;
         let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(buildData.x, buildData.y));
         item.setPosition(position);
-        item.getComponent(BuildWarFreeLogic).setBuildData(buildData);
+        item.getComponent(BuildTipsLogic).setBuildData(buildData);
     }
 }
