@@ -159,7 +159,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnBuild.node.active = !this._data.isWarFree();
                 if (this._data.isResBuild() == false){
                     this.btnBuild.node.active = false;
-                    this.btnTransfer.node.active = true;
+                    this.btnTransfer.node.active = !this._data.isBuilding();
                 }else{
                     this.btnTransfer.node.active = false;
                 }
@@ -282,14 +282,14 @@ export default class MapClickUILogic extends cc.Component {
                 this.labelMian.string = "";
             }else{
                 this.bgMain.active = true;
-                this.schedule(this.countDown.bind(this), 1);
+                this.schedule(this.countDown, 1);
                 this.countDown()
             }
 
         }else if(this._data instanceof MapCityData){
             if(diff < limitTime && this._data.parentId > 0){
                 this.bgMain.active = true;
-                this.schedule(this.countDown.bind(this), 1);
+                this.schedule(this.countDown, 1);
                 this.countDown()
             }else{
                 this.bgMain.active = false;

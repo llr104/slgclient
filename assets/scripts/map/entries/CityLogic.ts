@@ -71,7 +71,7 @@ export default class CityLogic extends cc.Component {
             if (this._data.parentId > 0 && diff<this._limitTime){
                 this.mianNode.active = true;
                 this.stopCountDown();
-                this.schedule(this.countDown.bind(this), 1.0);
+                this.schedule(this.countDown, 1.0);
             }else{
                 this.mianNode.active = false;
             }

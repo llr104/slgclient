@@ -74,7 +74,7 @@ export default class FacilityItemLogic extends cc.Component {
 
     protected startUpTime(){
         this.stopCountDown();
-        this.schedule(this.countDown.bind(this), 1.0);
+        this.schedule(this.countDown, 1.0);
         this.countDown();
     }
 }

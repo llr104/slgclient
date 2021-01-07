@@ -1,7 +1,7 @@
 import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
-import { MapResConfig, MapResData, MapResType } from "../MapProxy";
+import { MapAreaData, MapResConfig, MapResData, MapResType } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -12,6 +12,9 @@ export default class BuildLogic extends cc.Component {
 
     @property(cc.Label)
     nameLab: cc.Label = null;
+
+    @property(cc.Label)
+    tipsLab: cc.Label = null;
 
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
@@ -27,21 +30,13 @@ export default class BuildLogic extends cc.Component {
     }
 
     protected onEnable():void {
-        cc.systemEvent.on("unionChange", this.onUnionChange, this);
+       
     }
 
     protected onDisable():void {
-        cc.systemEvent.targetOff(this);
+        
     }
 
-    protected onUnionChange(rid: number, unionId: number, parentId: number): void {
-        if (this._data.rid == rid ){
-            this._data.unionId = unionId;
-            this._data.parentId = parentId;
-        }
-        this.updateUI();
-     }
- 
      public setBuildData(data: MapBuildData): void {
         this._data = data;
         this.updateUI();
@@ -62,9 +57,43 @@ export default class BuildLogic extends cc.Component {
                     this.nameLab.string = resCfg.name;
                 }
 
+                if (this._data.isBuilding() || this._data.isUping()){
+                    this.startCountDownTime();
+                }
+                else{
+                    this.tipsLab.string = "";
+                }
             }else{
                 this.spr.spriteFrame = null;
             }
         }
+    }
+
+    public startCountDownTime(){
+        console.log("startCountDownTime");
+        this.stopCountDownTime();
+        this.schedule(this.countDownTime, 1.0);
+        this.countDownTime();
+    }
+
+    public countDownTime() {
+        if (this._data.isBuilding()){
+            this.tipsLab.string = "建设中..." + DateUtil.leftTimeStr(this._data.endTime);
+        } else if(this._data.isUping()){
+            this.tipsLab.string = "升级中..." + DateUtil.leftTimeStr(this._data.endTime);
+        } else{
+            this.tipsLab.string = "";
+            this.stopCountDownTime();
+            //请求刷新
+            let qryData: MapAreaData = new MapAreaData();
+            qryData.startCellX = this._data.x;
+            qryData.startCellY = this._data.y;
+            qryData.len = 1;
+            MapCommand.getInstance().qryNationMapScanBlock(qryData);
+        }
+    }
+
+    public stopCountDownTime() {
+        this.unschedule(this.countDownTime);
     }
 }

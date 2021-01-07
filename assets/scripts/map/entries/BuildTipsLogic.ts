@@ -45,7 +45,7 @@ export default class BuildTipsLogic extends cc.Component {
 
             if (isShow){
                 this.stopWarFree();
-                this.schedule(this.countDownWarFree.bind(this), 1.0);
+                this.schedule(this.countDownWarFree, 1.0);
                 this.countDownWarFree();
             }
 

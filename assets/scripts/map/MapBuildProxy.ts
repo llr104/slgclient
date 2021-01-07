@@ -84,6 +84,18 @@ export class MapBuildData {
         var diff = DateUtil.leftTime(this.giveUpTime);
         return diff > 0
     }
+
+    //正在建设中
+    public isBuilding(): boolean {
+        var diff = DateUtil.leftTime(this.endTime);
+        return diff > 0 && this.level == 0
+    }
+
+    //正在升级中
+    public isUping(): boolean {
+        var diff = DateUtil.leftTime(this.endTime);
+        return diff > 0 && this.level > 0
+    }
 }
 
 export default class MapBuildProxy {
