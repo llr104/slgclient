@@ -111,9 +111,17 @@ export default class RightArmyItemLogic extends cc.Component {
             this.labelSoldierCnt.string = "骑兵 " + (this._data.soldiers[0] + this._data.soldiers[1] + this._data.soldiers[2]);
 
             if (this._data.cmd == ArmyCmd.Idle) {
-                //代表在城池里面
+                
                 this.btnSetting.active = true;
-                this.btnBack.active = false;
+                let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
+                if (cityData && cityData.x == this._data.fromX && cityData.y == this._data.fromY){
+                    //代表在城池里面
+                    this.btnBack.active = false;
+                }else{
+                    //代表在城外据点待命
+                    this.btnBack.active = true;
+                }
+
             } else if (this._data.cmd == ArmyCmd.Conscript){
                 this.btnSetting.active = false;
                 this.btnBack.active = false;

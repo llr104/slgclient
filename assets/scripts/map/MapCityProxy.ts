@@ -12,7 +12,6 @@ export class MapCityData {
     level: number = 0;
     curDurable: number = 0;
     maxDurable: number = 0;
-    cost: number = 0;
     unionId:number = 0;
     parentId:number = 0;
     unionName:string = "";
@@ -52,7 +51,6 @@ export class MapCityData {
         city.level = data.level;
         city.curDurable = data.cur_durable;
         city.maxDurable = data.max_durable;
-        city.cost = data.cost;
         city.unionId = data.union_id;
         city.parentId = data.parent_id;
         city.unionName = data.union_name;
