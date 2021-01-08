@@ -26,7 +26,10 @@ export default class FacilityBuildLogic extends cc.Component {
     }
 
     protected onEnable():void {
-       
+       this.nameLab.string = "";
+       this.tipsLab.string = "";
+       this.spr.spriteFrame = null;
+
     }
 
     protected onDisable(): void {
