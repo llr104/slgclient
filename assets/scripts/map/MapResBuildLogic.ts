@@ -1,4 +1,4 @@
-import ResCellLogic from "./entries/ResCellLogic";
+import ResBuildLogic from "./entries/ResBuildLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
@@ -49,9 +49,10 @@ export default class MapResBuildLogic extends MapBaseLayerLogic {
     }
 
     public setItemData(item: cc.Node, data: any): void {
+        console.log("ResBuildLogic 11111");
         let buildData: MapBuildData = data as MapBuildData;
         let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(buildData.x, buildData.y));
         item.setPosition(position);
-        item.getComponent(ResCellLogic).setBuildData(buildData);
+        item.getComponent(ResBuildLogic).setBuildData(buildData);
     }
 }

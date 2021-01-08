@@ -6,12 +6,9 @@ import { MapResType } from "../MapProxy";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ResCellLogic extends cc.Component {
+export default class ResBuildLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
-
-    @property(cc.SpriteAtlas)
-    buildAtlas: cc.SpriteAtlas = null;
 
     protected _data: MapBuildData = null;
 
@@ -20,6 +17,7 @@ export default class ResCellLogic extends cc.Component {
     }
 
     protected onDestroy(): void {
+        
     }
 
     protected onEnable():void {

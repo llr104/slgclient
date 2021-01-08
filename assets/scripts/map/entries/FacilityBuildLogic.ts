@@ -6,7 +6,7 @@ import { MapAreaData, MapResConfig, MapResData, MapResType } from "../MapProxy";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BuildLogic extends cc.Component {
+export default class FacilityBuildLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
 

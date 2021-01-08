@@ -111,6 +111,7 @@ export default class MapBaseLayerLogic extends cc.Component {
     }
 
     public udpateShowAreas(addIndexs: number[], removeIndexs: number[]): void {
+       
         for (let i: number = 0; i < removeIndexs.length; i++) {
             this.removeArea(removeIndexs[i]);
         }

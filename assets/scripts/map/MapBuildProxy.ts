@@ -228,6 +228,7 @@ export default class MapBuildProxy {
             }
             this._lastBuildCellIds.set(areaId, buildCellIds);
             if (addBuildCellIds.length > 0 || removeBuildCellIds.length > 0 || updateBuildCellIds.length > 0) {
+                console.log("update_builds", areaId, addBuildCellIds, removeBuildCellIds, updateBuildCellIds);
                 cc.systemEvent.emit("update_builds", areaId, addBuildCellIds, removeBuildCellIds, updateBuildCellIds);
             }
         }

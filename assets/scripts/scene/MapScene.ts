@@ -102,8 +102,17 @@ export default class MapScene extends cc.Component {
                     }
                     //建筑
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
+                        buildResLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
+                    }
+
+                    if (this._cmd.buildProxy.getBuild(cellId) != null) {
                         buildFacilityLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
                     }
+
+                    if (this._cmd.buildProxy.getBuild(cellId) != null) {
+                        buildTipsLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
+                    }
+
                     //城池
                     if (this._cmd.cityProxy.getCity(cellId) != null) {
                         cityLogic.addItem(addIds[i], this._cmd.cityProxy.getCity(cellId));

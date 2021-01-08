@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "ResCell",
+    "_name": "ResBuild",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -197,8 +197,6 @@
     "spr": {
       "__id__": 3
     },
-    "giveUpNode": null,
-    "giveUpLabTime": null,
     "_id": ""
   },
   {
