@@ -26,7 +26,7 @@ export default class CityLogic extends cc.Component {
     }
 
     protected onDestroy(): void {
-        this._data = null;
+        
     }
 
     protected onEnable(): void {
@@ -34,6 +34,8 @@ export default class CityLogic extends cc.Component {
     }
 
     protected onDisable(): void {
+        this._data = null;
+        this.unscheduleAllCallbacks();
         cc.systemEvent.targetOff(this);
     }
 

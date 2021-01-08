@@ -25,16 +25,13 @@ export default class BuildLogic extends cc.Component {
         
     }
 
-    protected onDestroy(): void {
-        this._data = null;
-    }
-
     protected onEnable():void {
        
     }
 
-    protected onDisable():void {
-        
+    protected onDisable(): void {
+        this._data = null;
+        this.unscheduleAllCallbacks();
     }
 
      public setBuildData(data: MapBuildData): void {
@@ -84,6 +81,7 @@ export default class BuildLogic extends cc.Component {
         } else{
             this.tipsLab.string = "";
             this.stopCountDownTime();
+            console.log("qryNationMapScanBlock");
             //请求刷新
             let qryData: MapAreaData = new MapAreaData();
             qryData.startCellX = this._data.x;

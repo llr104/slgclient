@@ -93,6 +93,10 @@ export default class MapBaseLayerLogic extends cc.Component {
         if (this._itemMap.has(areaIndex)) {
             let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
             list.forEach((node: cc.Node, key: number) => {
+                if (node.name == "FacilityBuild"){
+                    console.log("node:", node);
+                }
+                
                 this._itemPool.put(node);
             });
             list.clear();

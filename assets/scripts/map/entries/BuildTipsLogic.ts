@@ -28,8 +28,9 @@ export default class BuildTipsLogic extends cc.Component {
         this._warFreeTime = MapCommand.getInstance().proxy.getWarFree();
     }
 
-    protected onDestroy(): void {
+    protected onDisable(): void {
         this._data = null;
+        this.unscheduleAllCallbacks();
     }
 
      public setBuildData(data: MapBuildData): void {

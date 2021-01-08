@@ -20,7 +20,6 @@ export default class ResCellLogic extends cc.Component {
     }
 
     protected onDestroy(): void {
-        this._data = null;
     }
 
     protected onEnable():void {
@@ -28,6 +27,7 @@ export default class ResCellLogic extends cc.Component {
     }
 
     protected onDisable():void {
+        this._data = null;
         cc.systemEvent.targetOff(this);
     }
 

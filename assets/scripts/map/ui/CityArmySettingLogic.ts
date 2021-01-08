@@ -208,10 +208,10 @@ export default class CityArmySettingLogic extends cc.Component {
         if (this._data) {
             let generals: GeneralData[] = ArmyCommand.getInstance().getArmyGenerals(this._data);
             let speed: number = ArmyCommand.getInstance().getArmySpeed(generals);
-            this.labelSpeed.string = speed + "";
+            this.labelSpeed.string = speed.toFixed(2);
 
             let destroy: number = ArmyCommand.getInstance().getArmyDestroy(generals);
-            this.labelAtkCity.string = destroy + "";
+            this.labelAtkCity.string = destroy.toFixed(2);
 
             let camp: number = ArmyCommand.getInstance().getArmyCamp(generals);
             if (camp > 0) {
