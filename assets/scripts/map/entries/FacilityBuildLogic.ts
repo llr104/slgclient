@@ -2,6 +2,7 @@ import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
 import { MapAreaData, MapResConfig, MapResData, MapResType } from "../MapProxy";
+import MapUtil from "../MapUtil";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,9 +21,10 @@ export default class FacilityBuildLogic extends cc.Component {
     buildAtlas: cc.SpriteAtlas = null;
 
     protected _data: MapBuildData = null;
+    protected _cmd: MapCommand = null;
 
     protected onLoad(): void {
-        
+        this._cmd =  MapCommand.getInstance();
     }
 
     protected onEnable():void {
@@ -88,12 +90,12 @@ export default class FacilityBuildLogic extends cc.Component {
             this.stopCountDownTime();
             console.log("qryNationMapScanBlock");
             //请求刷新
-            let qryData: MapAreaData = new MapAreaData();
-            qryData.startCellX = this._data.x;
-            qryData.startCellY = this._data.y;
-            qryData.len = 1;
-            MapCommand.getInstance().qryNationMapScanBlock(qryData);
+            let areaPoint: cc.Vec2 = MapUtil.getAreaPointByCellPoint(this._data.x, this._data.y);
+            let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
+            let areaData: MapAreaData = this._cmd.proxy.getMapAreaData(areaId);
+            this._cmd.qryNationMapScanBlock(areaData);
         }
+        
     }
 
     public stopCountDownTime() {

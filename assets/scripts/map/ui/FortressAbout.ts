@@ -89,12 +89,12 @@ export default class FortressAbout extends cc.Component {
         }
 
         for (let i: number = 0; i < removeIds.length; i++) {
-            let data = this._cmd.buildProxy.getBuild(addIds[i]);
-            this.onDeleteBuild(addIds[i], data.x, data.y);
+            let data = this._cmd.buildProxy.getBuild(removeIds[i]);
+            this.onDeleteBuild(removeIds[i], data.x, data.y);
         }
 
         for (let i: number = 0; i < updateIds.length; i++) {
-            let data = this._cmd.buildProxy.getBuild(addIds[i]);
+            let data = this._cmd.buildProxy.getBuild(updateIds[i]);
             if (data.x == this._data.x && data.y == this._data.y){
                 this.setData(data);
             }

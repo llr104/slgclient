@@ -206,6 +206,7 @@ export default class MapBuildProxy {
                 let areaIndex: number = MapUtil.getAreaIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
                 if (areaIndex != areaId) {
                     //代表服务端给过来的数据不在当前区域
+                    console.log("代表服务端给过来的数据不在当前区域");
                     continue;
                 }
                 let cellId: number = MapUtil.getIdByCellPoint(rBuilds[i].x, rBuilds[i].y);
@@ -218,6 +219,8 @@ export default class MapBuildProxy {
                             //代表数据不一样需要刷新
                             this._mapBuilds[cellId] = MapBuildData.createBuildData(rBuilds[i], cellId, this._mapBuilds[cellId]);
                             updateBuildCellIds.push(cellId);
+                        }else{
+                            console.log("equalsServerData true");
                         }
                         lastBuildCellIds.splice(index, 1);//移除重复数据
                         continue;
