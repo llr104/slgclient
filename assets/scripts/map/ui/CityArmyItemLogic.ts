@@ -39,6 +39,7 @@ export default class CityArmyItemLogic extends cc.Component {
     protected _cityId: number = 0;
     protected _data: ArmyData = null;
     protected _isOpened: boolean = true;
+    protected _isOut: boolean = true;
 
     protected onLoad(): void {
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
@@ -52,19 +53,26 @@ export default class CityArmyItemLogic extends cc.Component {
 
     protected onUpdateArmy(armyData: ArmyData): void {
         if (this._data && armyData.id == this._data.id) {
-            this.setArmyData(this._cityId, armyData);
+            this.setArmyData(this._cityId, armyData, this._isOut);
         }
     }
 
     protected onClickItem(): void {
         if (this.maskNode.active == false) {
+            if(this._isOut){
+                if(this._data){
+                    cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
+                }
+            }else{
                 cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
+            }
         } else {
 
         }
     }
 
     protected updateItem(): void {
+     
         if (this._data && this._data.generals[0] != 0) {
             //有数据 并且配置了第一个将
             this.tipNode.active = false;
@@ -104,9 +112,15 @@ export default class CityArmyItemLogic extends cc.Component {
                 this.labelVice2.string = "无";
             }
         } else {
-            this.tipNode.active = true;
-            this.infoNode.active = false;
-            this.labelTip.string = "点击编制队伍";
+            if(this._isOut){
+                this.tipNode.active = true;
+                this.infoNode.active = false;
+                this.labelTip.string = "暂无队伍";
+            }else{
+                this.tipNode.active = true;
+                this.infoNode.active = false;
+                this.labelTip.string = "点击编制队伍";
+            }
         }
     }
 
@@ -116,14 +130,19 @@ export default class CityArmyItemLogic extends cc.Component {
         this.maskNode.active = !this._isOpened;
         this.tipNode.active = !this._isOpened;
         if (this._isOpened == false) {
-            let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(13).name;
-            this.labelTip.string = desName + " 等级" + this.order + "开启";
+            if (this._isOut){
+                let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(13).name;
+                this.labelTip.string = desName + " 等级" + this.order + "开启";
+            }else{
+                this.labelTip.string = " 等级" + this.order + "开启";
+            }
         }
     }
 
-    public setArmyData(cityId: number, data: ArmyData): void {
+    public setArmyData(cityId: number, data: ArmyData, isOut: boolean): void {
         this._cityId = cityId;
         this._data = data;
+        this._isOut = isOut;
         this.updateItem();
     }
 }

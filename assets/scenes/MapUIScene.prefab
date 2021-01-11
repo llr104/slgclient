@@ -11148,6 +11148,9 @@
     "cityAboutPrefab": {
       "__uuid__": "cb8a794b-4b28-4a41-8d81-0d0ab47ccf3b"
     },
+    "fortressAboutPrefab": {
+      "__uuid__": "5ebcfef2-6d63-4b2b-ba6b-d7ff88ba918a"
+    },
     "warReportPrefab": {
       "__uuid__": "b4c977bf-bdfd-43b1-8169-44168828eb4a"
     },

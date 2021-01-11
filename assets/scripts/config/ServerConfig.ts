@@ -17,6 +17,7 @@ const ServerConfig = {
     nationMap_scanBlock: "nationMap.scanBlock",
     nationMap_giveUp: "nationMap.giveUp",
     nationMap_build: "nationMap.build",
+    nationMap_upBuild: "nationMap.upBuild",
 
     city_facilities: "city.facilities",
     city_upFacility: "city.upFacility",

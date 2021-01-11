@@ -170,4 +170,16 @@ export default class ArmyProxy {
         })
         return list;
     }
+
+    public getArmysByPos(x: number, y: number) {
+        let list:ArmyData[] = [];
+        this._armys.forEach((armys:ArmyData[]) => {
+            armys.forEach(army => {
+                if (army.fromX == x && army.fromY == y){
+                    list.push(army);
+                }
+            });
+        })
+        return list;
+    }
 }

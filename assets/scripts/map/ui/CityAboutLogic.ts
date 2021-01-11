@@ -53,7 +53,7 @@ export default class CityAboutLogic extends cc.Component {
             } else {
                 //已开启
                 this._armyComps[i].isOpenedArmy(true);
-                this._armyComps[i].setArmyData(this._cityData.cityId, armyList[i]);
+                this._armyComps[i].setArmyData(this._cityData.cityId, armyList[i], false);
             }
         }
     }

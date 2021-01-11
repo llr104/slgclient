@@ -87,7 +87,12 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickEnter(): void {
-        cc.systemEvent.emit("open_city_about", this._data);
+        if (this._data instanceof MapBuildData){
+            cc.systemEvent.emit("open_fortress_about", this._data);
+        }else if (this._data instanceof MapCityData){
+            cc.systemEvent.emit("open_city_about", this._data);
+        }
+       
         this.node.parent = null;
     }
 
@@ -158,6 +163,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnReclaim.node.active = true;
                 this.btnBuild.node.active = !this._data.isWarFree();
                 if (this._data.isResBuild() == false){
+                    this.btnEnter.node.active = true;
                     this.btnBuild.node.active = false;
                     this.btnTransfer.node.active = !this._data.isBuilding();
                 }else{

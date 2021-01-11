@@ -42,6 +42,7 @@ export default class MapCommand {
         cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
         cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
         cc.systemEvent.on(ServerConfig.nationMap_build, this.onNationMapBuild, this);
+        cc.systemEvent.on(ServerConfig.nationMap_upBuild, this.onNationMapUpBuild, this);
         cc.systemEvent.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
     }
 
@@ -123,6 +124,10 @@ export default class MapCommand {
 
     protected onNationMapBuild(data: any, otherData: any): void {
         console.log("onNationMapBuild", data, otherData);
+    }
+
+    protected onNationMapUpBuild(data: any, otherData: any): void {
+        console.log("onNationMapUpBuild", data, otherData);
     }
 
     protected onRoleCityPush(data: any): void {
@@ -332,6 +337,18 @@ export default class MapCommand {
         NetManager.getInstance().send(sendData);
     }
 
+    public upBuild(x: number, y: number): void {
+        let sendData: any = {
+            name: ServerConfig.nationMap_upBuild,
+            msg: {
+                x: x,
+                y: y,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    
     public upPosition(x: number, y: number): void {
         let sendData: any = {
             name: ServerConfig.role_upPosition,

@@ -40,6 +40,10 @@ export default class MapUILogic extends cc.Component {
     protected _cityAboutNode: cc.Node = null;
 
     @property(cc.Prefab)
+    fortressAboutPrefab: cc.Prefab = null;
+    protected _fortressAboutNode: cc.Node = null;
+
+    @property(cc.Prefab)
     warReportPrefab: cc.Prefab = null;
     protected _warReportNode: cc.Node = null;
     @property(cc.Prefab)
@@ -97,6 +101,8 @@ export default class MapUILogic extends cc.Component {
 
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
+        cc.systemEvent.on("open_fortress_about", this.openFortressAbout, this);
+        
         cc.systemEvent.on("open_facility", this.openFacility, this);
         cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
@@ -145,6 +151,7 @@ export default class MapUILogic extends cc.Component {
         this._facilityNode = null;
         this._generalNode = null;
         this._cityAboutNode = null;
+        this._fortressAboutNode = null;
         this._armySelectNode = null;
         this._armySettingNode = null;
         this._drawNode = null;
@@ -245,7 +252,19 @@ export default class MapUILogic extends cc.Component {
         }
         this._cityAboutNode.getComponent("CityAboutLogic").setData(data);
     }
+    
+    protected openFortressAbout(data: any): void {
+        if (this._fortressAboutNode == null) {
+            this._fortressAboutNode = cc.instantiate(this.fortressAboutPrefab);
+            this._fortressAboutNode.zIndex = 1;
+            this._fortressAboutNode.parent = this.node;
+        } else {
+            this._fortressAboutNode.active = true;
+        }
+        this._fortressAboutNode.getComponent("FortressAbout").setData(data);
+    }
 
+    
 
     /**
      * 战报
