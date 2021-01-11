@@ -53,7 +53,7 @@ export default class CityArmyItemLogic extends cc.Component {
 
     protected onUpdateArmy(armyData: ArmyData): void {
         if (this._data && armyData.id == this._data.id) {
-            this.setArmyData(this._cityId, armyData, this._isOut);
+            this.setArmyData(this._cityId, armyData);
         }
     }
 
@@ -124,25 +124,25 @@ export default class CityArmyItemLogic extends cc.Component {
         }
     }
 
-    public isOpenedArmy(bool: boolean): void {
+    public isOpenedArmy(bool: boolean, isOut: boolean): void {
         this._isOpened = bool;
         this.infoNode.active = this._isOpened;
         this.maskNode.active = !this._isOpened;
         this.tipNode.active = !this._isOpened;
+        this._isOut = isOut;
         if (this._isOpened == false) {
             if (this._isOut){
+                this.labelTip.string = " 等级" + this.order + "开启";
+            }else{
                 let desName: string = MapUICommand.getInstance().proxy.getFacilityCfgByType(13).name;
                 this.labelTip.string = desName + " 等级" + this.order + "开启";
-            }else{
-                this.labelTip.string = " 等级" + this.order + "开启";
             }
         }
     }
 
-    public setArmyData(cityId: number, data: ArmyData, isOut: boolean): void {
+    public setArmyData(cityId: number, data: ArmyData): void {
         this._cityId = cityId;
         this._data = data;
-        this._isOut = isOut;
         this.updateItem();
     }
 }

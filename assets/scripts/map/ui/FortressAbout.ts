@@ -40,16 +40,14 @@ export default class FortressAbout extends cc.Component {
     protected updateArmyList(): void {
         let armyList: ArmyData[] = ArmyCommand.getInstance().proxy.getArmysByPos(this._buildData.x, this._buildData.y);
         for (let i: number = 0; i < this._armyComps.length; i++) {
-            if (i+1 >= this._buildData.level){
-                this._armyComps[i].isOpenedArmy(true);
+            if (this._buildData.level > i){
+                this._armyComps[i].isOpenedArmy(true, true);
             }else{
-                this._armyComps[i].isOpenedArmy(false);
+                this._armyComps[i].isOpenedArmy(false, true);
             }
 
             if (armyList.length > i){
-                this._armyComps[i].setArmyData(armyList[i].cityId, armyList[i], true);
-            }else{
-                this._armyComps[i].setArmyData(0, null, true);
+                this._armyComps[i].setArmyData(armyList[i].cityId, armyList[i]);
             }
         }
     }

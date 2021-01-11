@@ -49,11 +49,11 @@ export default class CityAboutLogic extends cc.Component {
         for (let i: number = 0; i < this._armyComps.length; i++) {
             if (i >= additon.armyCnt) {
                 //未开启
-                this._armyComps[i].isOpenedArmy(false);
+                this._armyComps[i].isOpenedArmy(false, false);
             } else {
                 //已开启
-                this._armyComps[i].isOpenedArmy(true);
-                this._armyComps[i].setArmyData(this._cityData.cityId, armyList[i], false);
+                this._armyComps[i].isOpenedArmy(true, false);
+                this._armyComps[i].setArmyData(this._cityData.cityId, armyList[i]);
             }
         }
     }
