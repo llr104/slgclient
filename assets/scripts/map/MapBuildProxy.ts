@@ -12,6 +12,7 @@ export class MapBuildData {
     y: number = 0;
     type: number = 0;
     level: number = 0;
+    opLevel: number = 0;
     curDurable: number = 0;
     maxDurable: number = 0;
     defender: number = 0;
@@ -28,6 +29,7 @@ export class MapBuildData {
             && this.nickName == data.RNick
             && this.type == data.type
             && this.level == data.level
+            && this.opLevel == data.op_level
             && this.curDurable == data.cur_durable
             && this.maxDurable == data.maxDurable
             && this.defender == data.defender
@@ -55,6 +57,7 @@ export class MapBuildData {
         build.y = data.y;
         build.type = data.type;
         build.level = data.level;
+        build.opLevel = data.op_level;
         build.curDurable = data.cur_durable;
         build.maxDurable = data.max_durable;
         build.defender = data.defender;
@@ -94,7 +97,13 @@ export class MapBuildData {
     //正在升级中
     public isUping(): boolean {
         var diff = DateUtil.leftTime(this.endTime);
-        return diff > 0 && this.level > 0
+        return diff > 0 && this.level > 0 && this.opLevel > 0
+    }
+
+    //正在拆除中
+    public isDestroying(): boolean {
+        var diff = DateUtil.leftTime(this.endTime);
+        return diff > 0 && this.opLevel == 0
     }
 }
 

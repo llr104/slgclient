@@ -57,7 +57,7 @@ export default class FacilityBuildLogic extends cc.Component {
                     this.nameLab.string = resCfg.name;
                 }
 
-                if (this._data.isBuilding() || this._data.isUping()){
+                if (this._data.isBuilding() || this._data.isUping() || this._data.isDestroying()){
                     this.startCountDownTime();
                 }
                 else{
@@ -81,6 +81,8 @@ export default class FacilityBuildLogic extends cc.Component {
             this.tipsLab.string = "建设中..." + DateUtil.leftTimeStr(this._data.endTime);
         } else if(this._data.isUping()){
             this.tipsLab.string = "升级中..." + DateUtil.leftTimeStr(this._data.endTime);
+        } else if(this._data.isDestroying()){
+            this.tipsLab.string = "拆除中..." + DateUtil.leftTimeStr(this._data.endTime);
         } else{
             this.tipsLab.string = "";
             this.stopCountDownTime();

@@ -348,6 +348,17 @@ export default class MapCommand {
         NetManager.getInstance().send(sendData);
     }
 
+    public delBuild(x: number, y: number): void {
+        let sendData: any = {
+            name: ServerConfig.nationMap_delBuild,
+            msg: {
+                x: x,
+                y: y,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
     
     public upPosition(x: number, y: number): void {
         let sendData: any = {

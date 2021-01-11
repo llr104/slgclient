@@ -73,6 +73,10 @@ export default class CityArmyItemLogic extends cc.Component {
 
     protected updateItem(): void {
      
+        if(this._isOpened == false){
+            return
+        }
+        
         if (this._data && this._data.generals[0] != 0) {
             //有数据 并且配置了第一个将
             this.tipNode.active = false;
@@ -126,7 +130,7 @@ export default class CityArmyItemLogic extends cc.Component {
 
     public isOpenedArmy(bool: boolean, isOut: boolean): void {
         this._isOpened = bool;
-        this.infoNode.active = this._isOpened;
+        this.infoNode.active = false;
         this.maskNode.active = !this._isOpened;
         this.tipNode.active = !this._isOpened;
         this._isOut = isOut;
