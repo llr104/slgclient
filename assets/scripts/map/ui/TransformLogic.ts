@@ -34,6 +34,8 @@ export default class TransformLogic extends cc.Component {
     @property(cc.Label)
     trLabel:cc.Label = null;
 
+    @property(cc.Label)
+    rateLabel:cc.Label = null;
 
     
     @property(cc.Slider)
@@ -60,11 +62,16 @@ export default class TransformLogic extends cc.Component {
         // cc.systemEvent.on("upate_my_roleRes", this.updateView, this);
     }
 
+    private getRate() :number {
+        var cityId = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
+        var _addition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
+        var rate = MapUICommand.getInstance().proxy.bTransformRate + _addition.taxRate;
+        return rate
+    }
+
     protected initView():void{
         this.updateView();
         this.updateBtn();
-        
-        
         
     }
 
@@ -83,10 +90,13 @@ export default class TransformLogic extends cc.Component {
             i++;
         }
 
+        var rate = this.getRate()
+        this.rateLabel.string = "1 / " + (rate/100)
+
     }
 
     protected updateBtn():void{
-        this.trSlider.progress = 0.5;
+        this.trSlider.progress = 0.0;
         this.trNode.active = this._curFromIndex == this._curToIndex?false:true;
         this.updateLable();
     }
@@ -95,29 +105,17 @@ export default class TransformLogic extends cc.Component {
     protected updateLable():void{
         var from_index = this.getFromSelectIndex();
         var to_index = this.getToSelectIndex();
-        var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
-        var from_key = this._keyArr[from_index];
-        var to_key = this._keyArr[to_index];
-
-
-        this._fromChange = Math.round(roleRes[from_key] * this.trSlider.progress)
-        
-
-
-        // let children_from = this.fromLayout.node.children;
-        // children_from[from_index].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[from_key] + (roleRes[from_key] - this._fromChange);
-
-
-        var cityId = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
-        var _addition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
-        var rate = MapUICommand.getInstance().proxy.bTransformRate + _addition.taxRate;
-
-        this._toChange = Math.round(this._fromChange * rate / 100)
-
-        this.trLabel.string = this._fromChange  + "/" + this._toChange
-
-        // let children_to = this.toLayout.node.children;
-        // children_to[to_index].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[to_key] + (roleRes[to_key] + this._toChange);
+        if (from_index < 0 || to_index < 0){
+            this.trLabel.string = ""
+        }else{
+            var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
+            var from_key = this._keyArr[from_index];
+            this._fromChange = Math.round(roleRes[from_key] * this.trSlider.progress)
+            
+            var rate = this.getRate()
+            this._toChange = Math.round(this._fromChange * rate / 100)
+            this.trLabel.string = this._fromChange  + "/" + this._toChange
+        }
     }
 
     protected getFromSelectIndex():number{
@@ -158,7 +156,6 @@ export default class TransformLogic extends cc.Component {
 
 
     protected slideHandle():void{
-        // console.log("slideHandle:",this.trSlider.progress);
         this.updateLable();
     }
 
@@ -176,6 +173,10 @@ export default class TransformLogic extends cc.Component {
 
         var from_index = this.getFromSelectIndex();
         var to_index = this.getToSelectIndex();
+
+        if(from_index < 0 || to_index < 0){
+            return
+        }
 
         from[from_index] = this._fromChange;
         to[to_index] = this._toChange;
