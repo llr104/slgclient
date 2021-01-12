@@ -113,6 +113,8 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
         cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
+        cc.systemEvent.on("collection", this.onCollection, this);
+        
 
         this.updateRoleRes();
         this.updateRole();
@@ -123,6 +125,12 @@ export default class MapUILogic extends cc.Component {
     }
 
     protected robLoginUI(): void {
+        this.showTip("账号在其他地方登录",function () {
+            cc.systemEvent.emit("enter_login");
+        });
+    }
+
+    protected showTip(text:string, close:Function):void {
         if (this._dialogNode == null){
             this._dialogNode = cc.instantiate(this.dialog)
             this._dialogNode.zIndex = 10;
@@ -131,10 +139,8 @@ export default class MapUILogic extends cc.Component {
             this._dialogNode.active = true;
         }
 
-        this._dialogNode.getComponent(Dialog).text("账号在其他地方登录");
-        this._dialogNode.getComponent(Dialog).setClose(function () {
-            cc.systemEvent.emit("enter_login");
-        })
+        this._dialogNode.getComponent(Dialog).text(text);
+        this._dialogNode.getComponent(Dialog).setClose(close)
     }
 
 
@@ -361,6 +367,12 @@ export default class MapUILogic extends cc.Component {
         }
 
         this._transFormNode.getComponent("TransformLogic").initView();
+    }
+
+
+    //征收
+    protected onCollection(msg:any):void{
+        this.showTip("成功征收到 "+msg.gold+" 金币", null);
     }
 
     protected updateRole(): void {

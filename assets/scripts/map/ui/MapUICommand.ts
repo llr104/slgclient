@@ -137,6 +137,7 @@ export default class MapUICommand {
     protected onCollection(data:any):void {
         console.log("onCollection :", data);
         if (data.code == 0) {
+            cc.systemEvent.emit("collection", data.msg);
         }
     }
 
