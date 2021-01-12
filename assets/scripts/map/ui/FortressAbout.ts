@@ -29,16 +29,17 @@ export default class FortressAbout extends cc.Component {
 
     protected onLoad(): void {
 
-        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
-        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
-        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
-
         this._cmd = MapCommand.getInstance();
-
         this.initView();
     }
 
-    protected onDestroy(): void {
+    onEnable (): void{
+        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
+        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
+        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+    }
+
+    protected onDisable(): void {
         cc.systemEvent.targetOff(this);
     }
 
@@ -81,6 +82,8 @@ export default class FortressAbout extends cc.Component {
     }
 
     protected onUpdateBuilds(areaIndex: number, addIds: number[], removeIds: number[], updateIds: number[]): void {
+        console.log("onUpdateBuilds:", removeIds);
+        
         for (let i: number = 0; i < addIds.length; i++) {
             let data = this._cmd.buildProxy.getBuild(addIds[i]);
             if (data.x == this._data.x && data.y == this._data.y){
@@ -89,8 +92,10 @@ export default class FortressAbout extends cc.Component {
         }
 
         for (let i: number = 0; i < removeIds.length; i++) {
-            let data = this._cmd.buildProxy.getBuild(removeIds[i]);
-            this.onDeleteBuild(removeIds[i], data.x, data.y);
+            console.log("data:", this._data);
+            if(this._data.rid == 0){
+                this.node.parent = null;
+            }
         }
 
         for (let i: number = 0; i < updateIds.length; i++) {
