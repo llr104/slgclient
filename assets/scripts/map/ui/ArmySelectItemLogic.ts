@@ -62,7 +62,7 @@ export default class ArmySelectItemLogic extends cc.Component {
 
     protected updateItem(): void {
         if (this._data && this._data.generals[0] != 0) {
-            //console.log("updateItem", this._data);
+            console.log("updateItem", this._data);
             let commonCfg: GeneralCommonConfig = GeneralCommand.getInstance().proxy.getCommonCfg();
             let generals: GeneralData[] = ArmyCommand.getInstance().getArmyGenerals(this._data);
             let firstGeneralCfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(generals[0].cfgId);

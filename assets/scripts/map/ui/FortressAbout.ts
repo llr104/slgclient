@@ -63,11 +63,10 @@ export default class FortressAbout extends cc.Component {
             }else{
                 this._armyComps[i].isOpenedArmy(false, true);
             }
-
+            
+            this._armyComps[i].setArmyData(0, null);
             if (armyList.length > i){
                 this._armyComps[i].setArmyData(armyList[i].cityId, armyList[i]);
-            }else{
-                this._armyComps[i].setArmyData(0, null);
             }
         }
     }
@@ -83,7 +82,7 @@ export default class FortressAbout extends cc.Component {
 
     protected onUpdateBuilds(areaIndex: number, addIds: number[], removeIds: number[], updateIds: number[]): void {
         console.log("onUpdateBuilds:", removeIds);
-        
+
         for (let i: number = 0; i < addIds.length; i++) {
             let data = this._cmd.buildProxy.getBuild(addIds[i]);
             if (data.x == this._data.x && data.y == this._data.y){

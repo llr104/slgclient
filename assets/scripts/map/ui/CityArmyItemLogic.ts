@@ -61,10 +61,10 @@ export default class CityArmyItemLogic extends cc.Component {
         if (this.maskNode.active == false) {
             if(this._isOut){
                 if(this._data){
-                    cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
+                    cc.systemEvent.emit("open_army_setting", this._cityId, this._data.order);
                 }
             }else{
-                cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
+                cc.systemEvent.emit("open_army_setting", this._cityId, this._data.order);
             }
         } else {
 
@@ -76,7 +76,7 @@ export default class CityArmyItemLogic extends cc.Component {
         if(this._isOpened == false){
             return
         }
-        
+
         if (this._data && this._data.generals[0] != 0) {
             //有数据 并且配置了第一个将
             this.tipNode.active = false;

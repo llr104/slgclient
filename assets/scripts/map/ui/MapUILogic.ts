@@ -8,6 +8,8 @@ import MapUICommand from "./MapUICommand";
 import Dialog from "./Dialog";
 import UnionCommand from "../../union/UnionCommand";
 import MapCommand from "../MapCommand";
+import FortressAbout from "./FortressAbout";
+import CityAboutLogic from "./CityAboutLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -250,7 +252,7 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._cityAboutNode.active = true;
         }
-        this._cityAboutNode.getComponent("CityAboutLogic").setData(data);
+        this._cityAboutNode.getComponent(CityAboutLogic).setData(data);
     }
     
     protected openFortressAbout(data: any): void {
@@ -261,7 +263,7 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._fortressAboutNode.active = true;
         }
-        this._fortressAboutNode.getComponent("FortressAbout").setData(data);
+        this._fortressAboutNode.getComponent(FortressAbout).setData(data);
     }
 
     
