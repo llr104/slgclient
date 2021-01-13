@@ -22,6 +22,9 @@ export default class WarReportItemLogic extends cc.Component {
 
     private _curData:WarReport = null;
 
+    @property(cc.Node)
+    readBg:cc.Node = null;
+
     @property([cc.Node])
     ackNode:cc.Node[] = [];
 
@@ -58,7 +61,8 @@ export default class WarReportItemLogic extends cc.Component {
         this._curData = data;
 
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
-        this.node.opacity = isRead?120:255;
+        this.readBg.active = isRead;
+       
 
         this.setTeams(this.ackNode,this._curData.beg_attack_general);
         this.setTeams(this.defNode,this._curData.beg_defense_general);
