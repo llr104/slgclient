@@ -68,6 +68,10 @@ export default class MapUILogic extends cc.Component {
     chatPrefab: cc.Prefab = null;
     protected _chatNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    collectPrefab: cc.Prefab = null;
+    protected _collectNode: cc.Node = null;
+
 
     @property(cc.Prefab)
     transFormPrefab: cc.Prefab = null;
@@ -113,7 +117,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_army_select_ui", this.onOpenArmySelectUI, this);
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
         cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
-        cc.systemEvent.on("collection", this.onCollection, this);
+        cc.systemEvent.on("interior_collect", this.onCollection, this);
         
 
         this.updateRoleRes();
@@ -382,7 +386,12 @@ export default class MapUILogic extends cc.Component {
     }
 
     protected onClickCollection():void {
-        MapUICommand.getInstance().interiorCollection();
+        if(this._collectNode == null){
+            this._collectNode = cc.instantiate(this.collectPrefab);
+            this._collectNode.parent = this.node;
+        }
+        this._collectNode.active = true;
+
     }
 
 }

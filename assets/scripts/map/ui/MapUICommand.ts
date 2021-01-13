@@ -34,7 +34,9 @@ export default class MapUICommand {
         cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
         cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
         cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
-        cc.systemEvent.on(ServerConfig.interior_collection, this.onCollection, this);
+        cc.systemEvent.on(ServerConfig.interior_collect, this.onCollect, this);
+        cc.systemEvent.on(ServerConfig.interior_openCollect, this.onOpenCollect, this);
+
         cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
         
 
@@ -134,10 +136,17 @@ export default class MapUICommand {
         }
     }
 
-    protected onCollection(data:any):void {
-        console.log("onCollection :", data);
+    protected onCollect(data:any):void {
+        console.log("onCollect :", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("collection", data.msg);
+            cc.systemEvent.emit("interior_collect", data.msg);
+        }
+    }
+
+    protected onOpenCollect(data:any):void{
+        console.log("onOpenCollect :", data);
+        if (data.code == 0) {
+            cc.systemEvent.emit("interior_openCollect", data.msg);
         }
     }
 
@@ -233,15 +242,24 @@ export default class MapUICommand {
         NetManager.getInstance().send(sendData);
     }
 
-    public interiorCollection(): void {
+    public interiorCollect(): void {
         let sendData: any = {
-            name: ServerConfig.interior_collection,
+            name: ServerConfig.interior_collect,
             msg: {
             }
         };
         NetManager.getInstance().send(sendData);
     }
 
+    public interiorOpenCollect(): void {
+        let sendData: any = {
+            name: ServerConfig.interior_openCollect,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+    
     public interiorTransform(from:number[],to:number[]): void {
         let sendData: any = {
             name: ServerConfig.interior_transform,

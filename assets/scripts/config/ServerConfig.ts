@@ -54,7 +54,8 @@ const ServerConfig = {
     union_log:"union.log",
     union_apply_push: "unionApply.push",
     
-    interior_collection: "interior.collection",
+    interior_collect: "interior.collect",
+    interior_openCollect: "interior.openCollect",
     interior_transform: "interior.transform",
 
     war_reportPush:"warReport.push",
