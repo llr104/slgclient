@@ -5260,8 +5260,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 140,
-      "height": 31.5
+      "width": 182,
+      "height": 37.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5314,8 +5314,8 @@
     "_dstBlendFactor": 771,
     "_string": "请选择现有资源",
     "_N$string": "请选择现有资源",
-    "_fontSize": 20,
-    "_lineHeight": 25,
+    "_fontSize": 26,
+    "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -5368,8 +5368,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 140,
-      "height": 31.5
+      "width": 182,
+      "height": 37.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5422,8 +5422,8 @@
     "_dstBlendFactor": 771,
     "_string": "请选择目标资源",
     "_N$string": "请选择目标资源",
-    "_fontSize": 20,
-    "_lineHeight": 25,
+    "_fontSize": 26,
+    "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
