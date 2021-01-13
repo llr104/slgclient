@@ -5,38 +5,35 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ArmyData } from "../../general/ArmyProxy";
+
 import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
+import MapUICommand from "./MapUICommand";
+
 
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class GeneralLogic extends cc.Component {
+export default class GeneralListLogic extends cc.Component {
 
-    // @property(cc.Layout)
-    // srollLayout:cc.Layout = null;
 
     @property(cc.ScrollView)
     scrollView:cc.ScrollView = null;
 
-    // @property(cc.Prefab)
-    // generalItemPrefab: cc.Prefab = null;
-
-
+    @property(cc.Label)
+    cntLab:cc.Label = null;
 
     private _cunGeneral:number[] = [];
     private _type:number = 0;
     private _position:number = 0;
 
-    protected onLoad():void{
+    protected onEnable():void{
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
         cc.systemEvent.on("chosed_general", this.onClickClose, this); 
     }
 
 
-    protected onDestroy():void{
+    protected onDisable():void{
         cc.systemEvent.targetOff(this);
     }
 
@@ -44,9 +41,12 @@ export default class GeneralLogic extends cc.Component {
         this.node.active = false;
     }
 
-
-
     protected initGeneralCfg():void{
+
+        var basic = MapUICommand.getInstance().proxy.getBasicGeneral();
+        var cnt = GeneralCommand.getInstance().proxy.getMyActiveGeneralCnt();
+        this.cntLab.string = "(" + cnt + "/" + basic.limit + ")";
+
         let list:any[] = GeneralCommand.getInstance().proxy.getUseGenerals();
         let listTemp = list.concat();
 
@@ -63,7 +63,6 @@ export default class GeneralLogic extends cc.Component {
                 i--;
             }
         }
-
 
         var comp = this.scrollView.node.getComponent("ListLogic");
         comp.setData(listTemp);
@@ -83,18 +82,5 @@ export default class GeneralLogic extends cc.Component {
         this.initGeneralCfg();
         GeneralCommand.getInstance().qryMyGenerals();
     }
-
-
-
-
-    // protected drawGeneralOnce():void{
-    //     GeneralCommand.getInstance().drawGenerals();
-    // }
-
-    // protected drawGeneralTen():void{
-    //     GeneralCommand.getInstance().drawGenerals(10);
-    // }
-
-
 
 }

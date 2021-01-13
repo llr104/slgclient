@@ -10,6 +10,7 @@ import UnionCommand from "../../union/UnionCommand";
 import MapCommand from "../MapCommand";
 import FortressAbout from "./FortressAbout";
 import CityAboutLogic from "./CityAboutLogic";
+import GeneralListLogic from "./GeneralListLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -209,7 +210,7 @@ export default class MapUILogic extends cc.Component {
             this._generalNode.active = true;
         }
 
-        this._generalNode.getComponent("GeneralLogic").setData(data, type, position);
+        this._generalNode.getComponent(GeneralListLogic).setData(data, type, position);
         // this._generalNode.zIndex = zIndex;
     }
 

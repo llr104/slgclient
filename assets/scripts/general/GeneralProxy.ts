@@ -233,6 +233,18 @@ export default class GeneralProxy {
         return this._commonConfig;
     }
 
+
+    public getMyActiveGeneralCnt() {
+        var arr = this.getMyGenerals()
+        var cnt = 0
+        arr.forEach(g => {
+            if(g.parentId == 0){
+                cnt += 1
+            }
+        });
+        return cnt
+    }
+
     /**我的武将列表*/
     public getMyGenerals(): GeneralData[] {
         return Array.from(this._myGenerals.values());
@@ -265,13 +277,12 @@ export default class GeneralProxy {
             return 1;
         }
 
-
         return -1;
     }
+
     /**
      * 排序 已经使用的
      */
-
     public getUseGenerals(): GeneralData[] {
         var tempArr: GeneralData[] = this.getMyGenerals().concat();
         tempArr.sort(this.sortStar);

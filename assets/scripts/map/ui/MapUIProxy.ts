@@ -131,6 +131,12 @@ export class ConscriptBaseCost {
     cost_gold: number = 0;
 }
 
+
+export class BasicGeneral {
+    limit: number = 0;
+}
+
+
 export class WarReport {
     id: number = 0;
     attack_rid: number = 0;
@@ -175,6 +181,7 @@ export default class MapUIProxy {
     protected _facilityCfg: Map<number, FacilityConfig> = new Map<number, FacilityConfig>();//设施配置
     protected _facilityAdditionCfg: Map<number, FacilityAdditionCfg> = new Map<number, FacilityAdditionCfg>();//升级加成配置
     protected _armyBaseCost: ConscriptBaseCost = new ConscriptBaseCost();
+    protected _basicGeneral: BasicGeneral = new BasicGeneral();
     protected _warReport: Map<number, WarReport> = new Map<number, WarReport>();
     protected _additions: Map<number, CityAddition> = new Map<number, CityAddition>();
     protected _cityBaseCost: number = 0;
@@ -500,11 +507,17 @@ export default class MapUIProxy {
 
         this._cityBaseCost = data.json.city.cost;
         this._cityBaseDurable = data.json.city.durable;
+
+        this._basicGeneral.limit = data.json.general.limit;
     }
 
 
     public getConscriptBaseCost(): ConscriptBaseCost {
         return this._armyBaseCost;
+    }
+
+    public getBasicGeneral(): BasicGeneral {
+        return this._basicGeneral;
     }
 
 

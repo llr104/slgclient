@@ -42,8 +42,6 @@ export default class GeneralComposeLogic  extends cc.Component {
     
     }
 
-
-
     private selectItem(cfg:any,curData:any):void{
         var index = this._gIdsArr.indexOf(curData.id);
         if(index >= 0){
@@ -55,8 +53,6 @@ export default class GeneralComposeLogic  extends cc.Component {
         this.updataView();
 
     }
-
-
 
     public setData(cfgData:any,curData:any):void{
         this._currData = curData;

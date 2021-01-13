@@ -9,6 +9,7 @@ import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCommonConfig } from "../../general/GeneralProxy";
 import LoginCommand from "../../login/LoginCommand";
+import MapUICommand from "./MapUICommand";
 
 
 const { ccclass, property } = cc._decorator;
@@ -23,14 +24,18 @@ export default class DrawLogic extends cc.Component {
     @property(cc.Label)
     labelTen: cc.Label = null;
 
+    @property(cc.Label)
+    cntLab: cc.Label = null;
+    
 
-    protected onLoad():void{
+    protected onEnable():void{
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
+        cc.systemEvent.on("update_my_generals", this.updateRoleRes, this);
         this.updateRoleRes();
     }
 
 
-    protected onDestroy():void{
+    protected onDisable():void{
         cc.systemEvent.targetOff(this);
     }
 
@@ -44,6 +49,10 @@ export default class DrawLogic extends cc.Component {
         var roleResData = LoginCommand.getInstance().proxy.getRoleResData();
         this.labelOnce.string = "消耗:"+commonCfg.draw_general_cost +"/"+ roleResData.gold;
         this.labelTen.string = "消耗:"+commonCfg.draw_general_cost * 10 +"/"+ roleResData.gold;
+
+        var basic = MapUICommand.getInstance().proxy.getBasicGeneral();
+        var cnt = GeneralCommand.getInstance().proxy.getMyActiveGeneralCnt();
+        this.cntLab.string = "(" + cnt + "/" + basic.limit + ")";
     }
 
 
