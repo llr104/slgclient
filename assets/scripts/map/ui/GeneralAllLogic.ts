@@ -26,8 +26,6 @@ export default class GeneralAllLogic  extends cc.Component {
     @property(cc.Prefab)
     generalAddPrefab: cc.Prefab = null;
 
-    @property(cc.Label)
-    titleLabel: cc.Label = null;
 
     @property(cc.ToggleContainer)
     generalToggleContainer: cc.ToggleContainer = null;
@@ -80,7 +78,6 @@ export default class GeneralAllLogic  extends cc.Component {
     public setData(cfgData:any,curData:any):void{
         this._currData = curData;
         this._cfgData = cfgData;
-        this.titleLabel.string = cfgData.name;
         this.setIndex(this._curIndex);
     }
 

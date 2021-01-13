@@ -14,6 +14,8 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class GeneralComposeLogic  extends cc.Component {
 
+    @property(cc.Label)
+    nameLab: cc.Label = null;
 
     @property(cc.Prefab)
     generalItemPrefab: cc.Prefab = null;
@@ -63,6 +65,8 @@ export default class GeneralComposeLogic  extends cc.Component {
             com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
         }
 
+        this.nameLab.string = this._cfgData.name;
+        
         this.updateGeneral();
         this.updataView();
     }

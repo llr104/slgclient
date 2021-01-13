@@ -18,6 +18,9 @@ export default class GeneralDesLogic extends cc.Component {
     lvLabel: cc.Label = null;
 
     @property(cc.Label)
+    nameLab: cc.Label = null;
+
+    @property(cc.Label)
     costLabel: cc.Label = null;
 
     @property(cc.Layout)
@@ -49,11 +52,8 @@ export default class GeneralDesLogic extends cc.Component {
         };
 
 
-
-
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
-        
     }
 
 
@@ -66,7 +66,7 @@ export default class GeneralDesLogic extends cc.Component {
         var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();
         this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel + "   经验:"+curData.exp +"/" + levelExp;
         
-
+        this.nameLab.string = this._cfgData.name;
 
         this._addPrObj = {
             force:this._currData.force_added,

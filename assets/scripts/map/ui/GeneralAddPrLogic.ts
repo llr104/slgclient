@@ -14,6 +14,8 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class GeneralAddPrLogic  extends cc.Component {
 
+    @property(cc.Label)
+    nameLab: cc.Label = null;
 
     @property(cc.Prefab)
     generalItemPrefab: cc.Prefab = null;
@@ -68,6 +70,8 @@ export default class GeneralAddPrLogic  extends cc.Component {
         this._canUsePr =-1;
         this._currData = curData;
         this._cfgData = cfgData;
+        this.nameLab.string = this._cfgData.name;
+        
         var com = this._generalNode.getComponent("GeneralItemLogic");
         if(com){
             com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
