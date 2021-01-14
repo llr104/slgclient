@@ -97,13 +97,12 @@ export default class LoginCommand {
 
                  //进入游戏
                 if(isLoadMap == true){
+                    console.log("enterServerComplete");
                     MapCommand.getInstance().enterMap();
                     cc.systemEvent.emit("enterServerComplete");
                 }else{
                     cc.systemEvent.emit(NetEvent.ServerHandShake);
                 }
-
-
 
             }
         }

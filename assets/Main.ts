@@ -38,6 +38,7 @@ export default class Main extends cc.Component {
     protected _mapUIScene: cc.Node = null;
     protected _loadingNode: cc.Node = null;
     protected _waitNode: cc.Node = null;
+    private _retryTimes: number = 0;
 
     protected onLoad(): void {
         //初始化连接
@@ -56,6 +57,7 @@ export default class Main extends cc.Component {
         cc.systemEvent.on("enter_login", this.enterLogin, this);
         cc.systemEvent.on(NetEvent.ServerRequesting, this.showWaitNode,this);
         cc.systemEvent.on(NetEvent.ServerRequestSucess,this.onShowToast,this);
+
     }
 
     protected onDestroy(): void {
@@ -136,6 +138,8 @@ export default class Main extends cc.Component {
             this._waitNode.zIndex = 2;
         }
         this._waitNode.active = isShow;
+
+        console.log("showWaitNode");
     }
 
 
@@ -150,10 +154,19 @@ export default class Main extends cc.Component {
 
     private onShowToast(msg:any):void{
         if(msg.code == undefined || msg.code == 0 || msg.code == 9){
+            this._retryTimes = 0;
             return;
         }
 
-        this.onShowTopToast(Tools.getCodeStr(msg.code))
+        if(msg.code == -1 || msg.code == -2 || msg.code == -3 || msg.code == -4 ){
+            if (this._retryTimes < 3){
+                LoginCommand.getInstance().role_enterServer(LoginCommand.getInstance().proxy.getSession(), false);
+                this._retryTimes += 1;
+                return
+            }
+        }
+
+        this.onShowTopToast(Tools.getCodeStr(msg.code));
     }
 
     protected clearAllScene() {

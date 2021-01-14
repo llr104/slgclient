@@ -52,6 +52,7 @@ export default class LoginScene extends cc.Component {
 
 
     protected enterServer():void{
+        console.log("enterServer");
         cc.systemEvent.emit(NetEvent.ServerRequesting, true);
     }
 
