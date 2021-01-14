@@ -1656,7 +1656,7 @@
     "node": {
       "__id__": 6
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,
@@ -1666,7 +1666,7 @@
         "__id__": 43
       }
     ],
-    "_N$interactable": true,
+    "_N$interactable": false,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 0,
     "transition": 0,
@@ -3159,7 +3159,7 @@
     "node": {
       "__id__": 46
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,
@@ -4662,7 +4662,7 @@
     "node": {
       "__id__": 86
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,
@@ -6246,7 +6246,7 @@
     "node": {
       "__id__": 128
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,
@@ -7749,7 +7749,7 @@
     "node": {
       "__id__": 168
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,
@@ -9252,7 +9252,7 @@
     "node": {
       "__id__": 208
     },
-    "_enabled": true,
+    "_enabled": false,
     "_normalMaterial": null,
     "_grayMaterial": null,
     "duration": 0.1,

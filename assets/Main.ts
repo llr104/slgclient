@@ -9,6 +9,7 @@ import { HttpManager } from "./scripts/network/http/HttpManager";
 import { NetEvent } from "./scripts/network/socket/NetInterface";
 import { NetManager } from "./scripts/network/socket/NetManager";
 import { NetNodeType } from "./scripts/network/socket/NetNode";
+import Toast from "./scripts/utils/Toast";
 import { Tools } from "./scripts/utils/Tools";
 
 const { ccclass, property } = cc._decorator;
@@ -32,6 +33,9 @@ export default class Main extends cc.Component {
 
     @property(cc.Prefab)
     toastPrefab: cc.Prefab = null;
+
+    @property(cc.Node)
+    toastNode: cc.Node = null;
 
     protected _loginScene: cc.Node = null;
     protected _mapScene: cc.Node = null;
@@ -144,11 +148,14 @@ export default class Main extends cc.Component {
 
 
     protected onShowTopToast(text:string = ""):void{
-        let toast = cc.instantiate(this.toastPrefab);
-        toast.parent = this.node;
-        toast.zIndex = 10;
-        
-        toast.getComponent("Toast").setText(text);
+        if(this.toastNode == null){
+            let toast = cc.instantiate(this.toastPrefab);
+            toast.parent = this.node;
+            toast.zIndex = 10;
+            this.toastNode = toast;
+        }
+        this.toastNode.active = true;
+        this.toastNode.getComponent(Toast).setText(text);
     }
 
 

@@ -18,19 +18,14 @@ export default class Toast extends cc.Component {
     msgLabel: cc.Label = null;
 
 
-    protected onLoad():void{
-        this.schedule( this.onRemove, 2 );
-    }
-
-
     protected onRemove():void{
-        this.node.destroy();
+        this.node.active = false;
     }
 
 
-
-    protected setText(text:string):void{
+    public setText(text:string):void{
+        this.unschedule(this.onRemove);
+        this.schedule(this.onRemove, 2);
         this.msgLabel.string = text;
-        var height = this.node.height;
     }
 }
