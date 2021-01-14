@@ -160,7 +160,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnMove.node.active = true;
                 this.btnOccupy.node.active = false;
                 this.btnGiveUp.node.active = !this._data.isInGiveUp();
-                this.btnReclaim.node.active = true;
+                this.btnReclaim.node.active = this._data.isResBuild();
                 this.btnBuild.node.active = !this._data.isWarFree();
                 if (this._data.isResBuild() == false){
                     this.btnEnter.node.active = true;
