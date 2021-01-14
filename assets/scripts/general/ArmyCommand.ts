@@ -267,21 +267,19 @@ export default class ArmyCommand {
         let stateStr: string = "";
         if (armyData.state > 0) {
             if (armyData.cmd == ArmyCmd.Return) {
-                //撤退
                 stateStr = "[撤退]";
             } else {
                 stateStr = "[行军]";
             }
         } else {
             if (armyData.cmd == ArmyCmd.Idle) {
-                //撤退
                 stateStr = "[待命]";
             } else if (armyData.cmd == ArmyCmd.Reclaim) {
-                //屯田
                 stateStr = "[屯田]";
             } else if (armyData.cmd == ArmyCmd.Conscript) {
-                //征兵
                 stateStr = "[征兵]";
+            } else if (armyData.cmd == ArmyCmd.Garrison) {
+                stateStr = "[驻守]";
             }else {
                 stateStr = "[停留]";
             }
