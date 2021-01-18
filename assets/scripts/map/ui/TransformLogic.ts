@@ -59,7 +59,7 @@ export default class TransformLogic extends cc.Component {
 
         this._keyArr = ["wood","iron","stone","grain"]
 
-        // cc.systemEvent.on("upate_my_roleRes", this.updateView, this);
+        cc.systemEvent.on("upate_my_roleRes", this.initView, this);
     }
 
     private getRate() :number {
@@ -69,7 +69,7 @@ export default class TransformLogic extends cc.Component {
         return rate
     }
 
-    protected initView():void{
+    public initView():void{
         this.updateView();
         this.updateBtn();
         

@@ -28,6 +28,7 @@ const ServerConfig = {
     general_drawGeneral: "general.drawGeneral",
     general_composeGeneral: "general.composeGeneral",
     general_addPrGeneral: "general.addPrGeneral",
+    general_convert: "general.convert",
 
     army_myList: "army.myList",
     army_myOne: "army.myOne",

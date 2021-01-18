@@ -53,7 +53,7 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Node)
     selectNode:cc.Node = null;
 
-    private _curData:GeneralData = null;
+    private _curData:any = null;
     private _type:number = -1;
     private _position:number = 0;
     private _cityData:any = null;
@@ -66,29 +66,27 @@ export default class GeneralItemLogic extends cc.Component {
     }
 
 
-    protected setData(curData:GeneralData,type:number = 0,position:number = 0):void{
-        this._curData = curData;
-        this.updateView(this._curData);
-        this._type = type;
-        this._position = position;
+    public setData(curData:GeneralData,type:number = 0,position:number = 0):void{
+        this.updateItem(curData);
     }
 
 
 
     protected updateItem(curData:any):void{
-        this._curData = curData;
-        this.updateView(this._curData);
-        this._type = curData.type == undefined?-1:curData.type;
-        this._position = curData.position == undefined?0:curData.position;
+        this.updateView(curData);
+        this._type = this._curData.type == undefined?-1:this._curData.type;
+        this._position = this._curData.position == undefined?0:this._curData.position;
     }
 
 
     protected updateView(curData:any):void{
-        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(curData.cfgId);
+        this._curData = curData;
+
+        var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
         this.nameLabel.string = cfgData.name 
-        this.lvLabel.string = " Lv." +  curData.level ;
-        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(curData.cfgId);
-        this.showStar(cfgData.star,curData.star_lv);
+        this.lvLabel.string = " Lv." +  this._curData.level ;
+        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
+        this.showStar(cfgData.star,this._curData.star_lv);
         this.delNode.active = false;
 
         if(this.useNode){
@@ -102,16 +100,15 @@ export default class GeneralItemLogic extends cc.Component {
         if(this.costLabel){
             this.costLabel.string = cfgData.cost + "";
         }
-
-        this._isSelect = false;
-        this.select(this._isSelect);
+        this.select(false);
     }
 
 
-    private select(flag:boolean):void{
+    public select(flag:boolean):void{
         if(this.selectNode){
             this.selectNode.active = flag;
         }
+        this._isSelect = flag;
     }
 
 
@@ -144,23 +141,23 @@ export default class GeneralItemLogic extends cc.Component {
 
             //武将详情
              if(this._type == GeneralItemType.GeneralInfo){
-                 cc.systemEvent.emit("open_general_des",cfgData,this._curData);
+                 cc.systemEvent.emit("open_general_des",cfgData, this._curData);
              }
              
              //上阵
              else if(this._type == GeneralItemType.GeneralDispose){
-                 cc.systemEvent.emit("chosed_general",cfgData,this._curData,this._position);
+                 cc.systemEvent.emit("chosed_general", cfgData, this._curData, this._position);
              }
 
              //征兵
              else if(this._type == GeneralItemType.GeneralConScript){
-                 cc.systemEvent.emit("open_army_conscript", this._orderId,this._cityData);
+                 cc.systemEvent.emit("open_army_conscript", this._orderId, this._cityData);
              }
 
              else if(this._type == GeneralItemType.GeneralSelect){
                 this._isSelect = !this._isSelect;
                 this.select(this._isSelect);
-                cc.systemEvent.emit("open_general_select",cfgData,this._curData);
+                cc.systemEvent.emit("open_general_select", cfgData, this._curData, this.node);
              }
         }
 

@@ -11,6 +11,7 @@ import MapCommand from "../MapCommand";
 import FortressAbout from "./FortressAbout";
 import CityAboutLogic from "./CityAboutLogic";
 import GeneralListLogic from "./GeneralListLogic";
+import TransformLogic from "./TransformLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -78,6 +79,10 @@ export default class MapUILogic extends cc.Component {
     transFormPrefab: cc.Prefab = null;
     protected _transFormNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    generalConvertPrefab: cc.Prefab = null;
+    protected _generalConvertNode: cc.Node = null;
+
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
 
@@ -119,6 +124,8 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_draw_result", this.openDrawR, this);
         cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
         cc.systemEvent.on("interior_collect", this.onCollection, this);
+        cc.systemEvent.on("open_general_convert", this.onOpenGeneralConvert, this);
+        
         
 
         this.updateRoleRes();
@@ -371,7 +378,19 @@ export default class MapUILogic extends cc.Component {
             this._transFormNode.active = true;
         }
 
-        this._transFormNode.getComponent("TransformLogic").initView();
+        this._transFormNode.getComponent(TransformLogic).initView();
+    }
+
+    protected onOpenGeneralConvert(): void {
+        console.log("onOpenGeneralConvert");
+        if (this._generalConvertNode == null) {
+            this._generalConvertNode = cc.instantiate(this.generalConvertPrefab);
+            this._generalConvertNode.parent = this.node;
+            this._generalConvertNode.zIndex = 4;
+        } else {
+            this._generalConvertNode.active = true;
+        }
+
     }
 
 

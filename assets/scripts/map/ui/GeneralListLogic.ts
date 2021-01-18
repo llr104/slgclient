@@ -29,7 +29,6 @@ export default class GeneralListLogic extends cc.Component {
 
     protected onEnable():void{
         cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
-        cc.systemEvent.on("chosed_general", this.onClickClose, this); 
     }
 
 
@@ -38,6 +37,11 @@ export default class GeneralListLogic extends cc.Component {
     }
 
     protected onClickClose(): void {
+        this.node.active = false;
+    }
+
+    protected onClickConvert(): void {
+        cc.systemEvent.emit("open_general_convert");
         this.node.active = false;
     }
 

@@ -30,6 +30,8 @@ export default class GeneralCommand {
         cc.systemEvent.on(ServerConfig.general_drawGeneral, this.onDrawGenerals, this);
         cc.systemEvent.on(ServerConfig.general_composeGeneral, this.onComposeGeneral, this);
         cc.systemEvent.on(ServerConfig.general_addPrGeneral, this.onAddPrGeneral, this);
+        cc.systemEvent.on(ServerConfig.general_convert, this.onGeneralConvert , this);
+        
 
     }
 
@@ -90,6 +92,14 @@ export default class GeneralCommand {
             cc.systemEvent.emit("update_one_generals",data.msg.general);
         }
     }
+
+    protected onGeneralConvert(data:any):void{
+        console.log("onGeneralConvert ", data);
+        if (data.code == 0) {
+           
+        }
+    }
+    
     
 
     /**我的角色属性*/
@@ -141,8 +151,6 @@ export default class GeneralCommand {
     }
 
 
-
-
     public addPrGeneral(compId:number = 1,force_add:number,strategy_add:number,defense_add:number,speed_add:number,destroy_add:number): void {
         let sendData: any = {
             name: ServerConfig.general_addPrGeneral,
@@ -153,6 +161,16 @@ export default class GeneralCommand {
                 defenseAdd:defense_add,
                 speedAdd:speed_add,
                 destroyAdd:destroy_add
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public convert(gIds:number[]): void {
+        let sendData: any = {
+            name: ServerConfig.general_convert,
+            msg: {
+                gIds:gIds
             }
         };
         NetManager.getInstance().send(sendData);

@@ -105,6 +105,7 @@ export class Tools{
         codeObj[55] = "超过征收次数";
         codeObj[56] = "cd内不能操作";
         codeObj[57] = "武将超过上限了";
+        codeObj[58] = "没有集市";
 
         if (codeObj[code] == null){
             str = "错误:" + code;
