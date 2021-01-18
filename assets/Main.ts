@@ -59,8 +59,9 @@ export default class Main extends cc.Component {
         this.enterLogin();
         cc.systemEvent.on("enter_map", this.onEnterMap, this);
         cc.systemEvent.on("enter_login", this.enterLogin, this);
+        cc.systemEvent.on("show_toast", this.onShowToast, this);
         cc.systemEvent.on(NetEvent.ServerRequesting, this.showWaitNode,this);
-        cc.systemEvent.on(NetEvent.ServerRequestSucess,this.onShowToast,this);
+        cc.systemEvent.on(NetEvent.ServerRequestSucess,this.onServerRequest,this);
 
     }
 
@@ -143,11 +144,10 @@ export default class Main extends cc.Component {
         }
         this._waitNode.active = isShow;
 
-        console.log("showWaitNode");
     }
 
 
-    protected onShowTopToast(text:string = ""):void{
+    protected showTopToast(text:string = ""):void{
         if(this.toastNode == null){
             let toast = cc.instantiate(this.toastPrefab);
             toast.parent = this.node;
@@ -159,7 +159,7 @@ export default class Main extends cc.Component {
     }
 
 
-    private onShowToast(msg:any):void{
+    private onServerRequest(msg:any):void{
         if(msg.code == undefined || msg.code == 0 || msg.code == 9){
             this._retryTimes = 0;
             return;
@@ -173,7 +173,11 @@ export default class Main extends cc.Component {
             }
         }
 
-        this.onShowTopToast(Tools.getCodeStr(msg.code));
+        this.showTopToast(Tools.getCodeStr(msg.code));
+    }
+
+    private onShowToast(msg:string) {
+        this.showTopToast(msg);
     }
 
     protected clearAllScene() {

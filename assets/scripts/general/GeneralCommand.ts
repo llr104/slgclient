@@ -96,7 +96,7 @@ export default class GeneralCommand {
     protected onGeneralConvert(data:any):void{
         console.log("onGeneralConvert ", data);
         if (data.code == 0) {
-           
+            cc.systemEvent.emit("general_convert", data.msg);
         }
     }
     

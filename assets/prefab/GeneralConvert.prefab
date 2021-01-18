@@ -755,7 +755,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -100,
+        -130,
         0,
         0,
         0,
@@ -1057,7 +1057,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -300,
+        -320,
         0,
         0,
         0,
@@ -1172,9 +1172,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
     "_contentSize": {
@@ -1276,7 +1276,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "f0048c10-f03e-4c97-b9d3-3506e1d58952"
+      "__uuid__": "c87ea63c-4069-431e-88f3-e1d46726436e"
     },
     "_type": 1,
     "_sizeMode": 0,

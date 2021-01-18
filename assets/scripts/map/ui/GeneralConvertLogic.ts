@@ -33,6 +33,7 @@ export default class GeneralConvertLogic extends cc.Component {
     protected onEnable():void{
        this.initGeneralCfg();
        cc.systemEvent.on("open_general_select", this.onSelectGeneral, this);
+       cc.systemEvent.on("general_convert", this.onGeneralConvert)
     }
 
 
@@ -99,6 +100,9 @@ export default class GeneralConvertLogic extends cc.Component {
     }
 
    
+    protected onGeneralConvert(msg:any):void{
+        cc.systemEvent.emit("show_toast", "获得金币:"+msg.add_gold);
+    }
 
     protected onClickOK():void{
         var keys = this._upMap.keys();
