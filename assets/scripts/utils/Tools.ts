@@ -80,23 +80,12 @@ export class Tools{
         codeObj[42] = "已经申请过了";
         codeObj[43] = "不能驻守";
         codeObj[44] = "不能占领";
-        codeObj[45] = "没有军营";
+        codeObj[45] = "没有募兵所";
         codeObj[46] = "免战中";
         codeObj[47] = "征兵中";
         codeObj[48] = "领地已经在放弃了";
         codeObj[49] = "不能调兵";
         codeObj[40] = "不属于该联盟";
-
-        codeObj[41] = "用户已满";
-        codeObj[42] = "已经申请过了";
-        codeObj[43] = "不能驻守";
-        codeObj[44] = "不能占领";
-        codeObj[45] = "没有军营";
-        codeObj[46] = "免战中";
-        codeObj[47] = "征兵中";
-        codeObj[48] = "领地已经在放弃了";
-        codeObj[49] = "不能再新建建筑在领地上";
-        codeObj[50] = "不能调兵";
 
         codeObj[51] = "坑位已满";
         codeObj[52] = "队伍在城外";

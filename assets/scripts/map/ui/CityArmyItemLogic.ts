@@ -64,10 +64,8 @@ export default class CityArmyItemLogic extends cc.Component {
                     cc.systemEvent.emit("open_army_setting", this._cityId, this._data.order);
                 }
             }else{
-                cc.systemEvent.emit("open_army_setting", this._cityId, this._data.order);
+                cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
             }
-        } else {
-
         }
     }
 
