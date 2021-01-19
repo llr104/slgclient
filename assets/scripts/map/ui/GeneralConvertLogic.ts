@@ -43,6 +43,7 @@ export default class GeneralConvertLogic extends cc.Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        cc.systemEvent.emit("open_general");
     }
 
     protected initGeneralCfg():void{

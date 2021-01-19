@@ -125,6 +125,7 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
         cc.systemEvent.on("interior_collect", this.onCollection, this);
         cc.systemEvent.on("open_general_convert", this.onOpenGeneralConvert, this);
+        cc.systemEvent.on("open_general", this.openGeneral, this);
         
         
 
@@ -218,7 +219,6 @@ export default class MapUILogic extends cc.Component {
         }
 
         this._generalNode.getComponent(GeneralListLogic).setData(data, type, position);
-        // this._generalNode.zIndex = zIndex;
     }
 
 
