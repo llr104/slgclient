@@ -33,7 +33,7 @@ export default class GeneralConvertLogic extends cc.Component {
     protected onEnable():void{
        this.initGeneralCfg();
        cc.systemEvent.on("open_general_select", this.onSelectGeneral, this);
-       cc.systemEvent.on("general_convert", this.onGeneralConvert)
+       cc.systemEvent.on("general_convert", this.onGeneralConvert, this);
     }
 
 
@@ -47,7 +47,7 @@ export default class GeneralConvertLogic extends cc.Component {
 
     protected initGeneralCfg():void{
 
-        let list:any[] = GeneralCommand.getInstance().proxy.getUseGenerals();
+        let list:any[] = GeneralCommand.getInstance().proxy.getMyGeneralsNotUse();
         let listTemp = list.concat();
 
         listTemp.forEach(item => {
@@ -102,6 +102,14 @@ export default class GeneralConvertLogic extends cc.Component {
    
     protected onGeneralConvert(msg:any):void{
         cc.systemEvent.emit("show_toast", "获得金币:"+msg.add_gold);
+        this._upMap.forEach((g:cc.Node) => {
+            g.parent = null;
+        });
+
+        this._upMap.clear();
+        this._selectMap.clear();
+
+        this.initGeneralCfg();
     }
 
     protected onClickOK():void{

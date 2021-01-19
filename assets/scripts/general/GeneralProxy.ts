@@ -58,7 +58,7 @@ export class GeneralData {
     order: number = 0;
     star_lv: number = 0;
     parentId: number = 0;
-    compose_type: number = 0;
+    state: number = 0;
 
     hasPrPoint: number = 0;
     usePrPoint: number = 0;
@@ -84,7 +84,7 @@ export class GeneralData {
         data.physical_power = serverData.physical_power;
         data.star_lv = serverData.star_lv;
         data.parentId = serverData.parentId;
-        data.compose_type = serverData.compose_type;
+        data.state = serverData.state;
 
         data.hasPrPoint = serverData.hasPrPoint;
         data.usePrPoint = serverData.usePrPoint;
@@ -192,12 +192,21 @@ export default class GeneralProxy {
         }
     }
 
-    public updateGenerals(datas: any): number[] {
-        let ids: number[] = [];
-        let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id), this._generalConfigs.get(datas.cfgId));
-        this._myGenerals.set(data.id, data);
-        ids.push(data.id);
-        return ids;
+    public updateGenerals(datas: any) {
+        if(datas.state != 0){
+            this._myGenerals.delete(datas.id);
+        }else{
+            let ids: number[] = [];
+            let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id), this._generalConfigs.get(datas.cfgId));
+            this._myGenerals.set(data.id, data);
+            ids.push(data.id);
+        }  
+    }
+
+    public removeMyGenerals(ids: number[]) {
+        ids.forEach(id => {
+            this._myGenerals.delete(id);
+        });
     }
 
     /**武将配置*/
@@ -238,7 +247,7 @@ export default class GeneralProxy {
         var arr = this.getMyGenerals()
         var cnt = 0
         arr.forEach(g => {
-            if(g.parentId == 0){
+            if(g.state == 0){
                 cnt += 1
             }
         });
@@ -249,6 +258,19 @@ export default class GeneralProxy {
     public getMyGenerals(): GeneralData[] {
         return Array.from(this._myGenerals.values());
     }
+
+    public getMyGeneralsNotUse(): GeneralData[] {
+        var arr = Array.from(this._myGenerals.values());
+        let generals: GeneralData[] = [];
+        for (let i = 0; i < arr.length; i++) {
+            const obj = arr[i];
+            if (obj.order == 0 && obj.state == 0){
+                generals.push(obj);
+            }
+        }
+        return generals;
+    }
+
 
     /**我的武将*/
     public getMyGeneral(id: number): GeneralData {

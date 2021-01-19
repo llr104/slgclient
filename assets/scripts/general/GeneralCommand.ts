@@ -59,8 +59,8 @@ export default class GeneralCommand {
     protected onGeneralPush(data: any): void {
         console.log("onGeneralPush ", data);
         if (data.code == 0) {
-            let ids: number[] = this._proxy.updateGenerals(data.msg);
-            cc.systemEvent.emit("update_generals", ids);
+            this._proxy.updateGenerals(data.msg);
+            cc.systemEvent.emit("update_generals");
         }
     }
 
@@ -69,7 +69,7 @@ export default class GeneralCommand {
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
             cc.systemEvent.emit("update_my_generals");
-            cc.systemEvent.emit("open_draw_result",data.msg.generals);
+            cc.systemEvent.emit("open_draw_result", data.msg.generals);
         }
     }
 
@@ -78,8 +78,7 @@ export default class GeneralCommand {
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
             cc.systemEvent.emit("update_my_generals");
-
-            cc.systemEvent.emit("update_one_generals",data.msg.generals[data.msg.generals.length - 1]);
+            cc.systemEvent.emit("update_one_generals", data.msg.generals[data.msg.generals.length - 1]);
         }
     }
 
@@ -96,6 +95,7 @@ export default class GeneralCommand {
     protected onGeneralConvert(data:any):void{
         console.log("onGeneralConvert ", data);
         if (data.code == 0) {
+            this._proxy.removeMyGenerals(data.msg.gIds);
             cc.systemEvent.emit("general_convert", data.msg);
         }
     }

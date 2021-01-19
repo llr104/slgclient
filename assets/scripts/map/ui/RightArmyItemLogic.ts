@@ -64,7 +64,7 @@ export default class RightArmyItemLogic extends cc.Component {
         }
     }
 
-    protected onUpdateGenerals(ids: number[]): void {
+    protected onUpdateGenerals(): void {
 
     }
 

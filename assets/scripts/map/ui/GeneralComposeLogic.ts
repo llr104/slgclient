@@ -39,9 +39,15 @@ export default class GeneralComposeLogic  extends cc.Component {
     protected onLoad():void{
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
+    }
+
+    protected onEnable():void{
         cc.systemEvent.on("open_general_select", this.selectItem, this); 
         this.updataView();
-    
+    }
+
+    protected onDisable():void{
+        cc.systemEvent.removeAll(this);
     }
 
     private selectItem(cfg:any,curData:any):void{
