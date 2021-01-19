@@ -67,6 +67,7 @@ export default class FacilityBuildLogic extends cc.Component {
                 }
             }else{
                 this.spr.spriteFrame = null;
+                this.nameLab.string = "";
             }
         }
     }
