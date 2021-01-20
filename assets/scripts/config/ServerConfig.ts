@@ -12,6 +12,8 @@ const ServerConfig = {
     role_myRoleRes: "role.myRoleRes",
     role_myProperty: "role.myProperty",
     role_upPosition:"role.upPosition",
+    role_posTagList:"role.posTagList",
+    role_opPosTag:"role.opPosTag",
 
     nationMap_config: "nationMap.config",
     nationMap_scanBlock: "nationMap.scanBlock",

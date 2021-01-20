@@ -51,6 +51,11 @@ export default class MapClickUILogic extends cc.Component {
     @property(cc.Button)
     btnTransfer: cc.Button = null;
 
+    @property(cc.Button)
+    btnTagAdd: cc.Button = null;
+    @property(cc.Button)
+    btnTagRemove: cc.Button = null;
+
     protected _data: any = null;
     protected _pixelPos: cc.Vec2 = null;
     protected onLoad(): void {
@@ -126,6 +131,17 @@ export default class MapClickUILogic extends cc.Component {
         this.node.parent = null;
     }
 
+
+    protected onTagAdd(): void {
+        MapCommand.getInstance().opPosTag(1, this._data.x, this._data.y, this.labelName.string);
+        this.node.parent = null;
+    }
+
+    protected onTagRemove(): void {
+        MapCommand.getInstance().opPosTag(0, this._data.x, this._data.y);
+        this.node.parent = null;
+    }
+
     protected onClickOccupy(): void {
         if ((this._data instanceof MapCityData
             && MapCommand.getInstance().isCanOccupyCityCell(this._data.x, this._data.y))
@@ -145,6 +161,13 @@ export default class MapClickUILogic extends cc.Component {
         this.btnReclaim.node.active = false;
         this.btnEnter.node.active = false;
         this.bgSelect.setContentSize(200, 100);
+        var isTag = MapCommand.getInstance().proxy.isPosTag(this._data.x, this._data.y);
+
+        // console.log("isTag:", isTag);
+
+        this.btnTagAdd.node.active = !isTag;
+        this.btnTagRemove.node.active = isTag;
+
         if (this._data instanceof MapResData) {
             //点击的是野外
             this.btnMove.node.active = false;
@@ -214,6 +237,9 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnGiveUp.node.active = false;
                 this.btnBuild.node.active = false;
                 this.btnTransfer.node.active = false;
+                this.btnTagAdd.node.active = false;
+                this.btnTagRemove.node.active = false;
+
             } else if ((this._data as MapCityData).unionId > 0
                 && (this._data as MapCityData).unionId == MapCommand.getInstance().cityProxy.myUnionId) {
                 //盟友的城池

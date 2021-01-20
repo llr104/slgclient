@@ -31,6 +31,12 @@ export class MapResData {
     y: number = 0;
 }
 
+export class MapTagPos {
+    x: number = 0;
+    y: number = 0;
+    name: string = "";
+}
+
 /**地图区域数据*/
 export class MapAreaData {
     static MAX_TIME: number = 10000;
@@ -81,6 +87,8 @@ export default class MapProxy {
     protected _curCenterAreaId: number = -1;
     protected _mapAreaDatas: MapAreaData[] = [];
     protected _mapResDatas: MapResData[] = [];
+    protected _mapPosTags: MapTagPos[] = [];
+
     //地图请求列表
     public qryAreaIds: number[] = [];
     //地图基础配置数据
@@ -280,5 +288,64 @@ export default class MapProxy {
 
     public hasResConfig(): boolean {
         return this._mapResConfigs.size > 0;
+    }
+
+    public updateMapPosTags(posTag: any) {
+        this._mapPosTags = [];
+        posTag.forEach(data => {
+            var tag = new MapTagPos();
+            tag.x = data.x;
+            tag.y = data.y;
+            tag.name = data.name;
+
+            this._mapPosTags.push(tag);
+        });
+    }
+
+    public removeMapPosTag(x: number, y:number) {
+        var tags: MapTagPos[] = [];
+        this._mapPosTags.forEach(tag => {
+            if(tag.x != x || y != tag.y){
+                tags.push(tag);
+            }
+        });
+
+        this._mapPosTags = tags;
+    }
+
+    public addMapPosTag(x: number, y:number, name:string) {
+        var tag = new MapTagPos();
+        tag.x = x;
+        tag.y = y;
+        tag.name = name;
+
+        var ok = true;
+        this._mapPosTags.forEach(tag => {
+            if (tag.x == x && tag.y == y){
+                ok = false;
+            }
+        });
+
+        if (ok){
+            this._mapPosTags.push(tag);
+        }
+       
+    }
+
+    public isPosTag(x: number, y:number):boolean {
+        var ret = false;
+        for (let index = 0; index < this._mapPosTags.length; index++) {
+            const tag = this._mapPosTags[index];
+            if (tag.x == x && tag.y == y){
+                ret = true;
+                break;
+            }
+        }
+       
+        return ret;
+    }
+
+    public getPosTags() :MapTagPos[]{
+        return this._mapPosTags;
     }
 }

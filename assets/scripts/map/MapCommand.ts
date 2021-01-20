@@ -44,6 +44,8 @@ export default class MapCommand {
         cc.systemEvent.on(ServerConfig.nationMap_build, this.onNationMapBuild, this);
         cc.systemEvent.on(ServerConfig.nationMap_upBuild, this.onNationMapUpBuild, this);
         cc.systemEvent.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
+        cc.systemEvent.on(ServerConfig.role_posTagList, this.onPosTagList, this);
+        cc.systemEvent.on(ServerConfig.role_opPosTag, this.onOpPosTag, this);
     }
 
     public onDestory(): void {
@@ -90,6 +92,7 @@ export default class MapCommand {
             this._cityProxy.myParentId = this._cityProxy.getMyMainCity().parentId;
             this._buildProxy.myUnionId = this._cityProxy.getMyMainCity().unionId;
             this._buildProxy.myParentId = this._cityProxy.getMyMainCity().parentId;
+            MapCommand.getInstance().posTagList();
             
             this.enterMap();
         }
@@ -129,6 +132,29 @@ export default class MapCommand {
     protected onNationMapUpBuild(data: any, otherData: any): void {
         console.log("onNationMapUpBuild", data, otherData);
     }
+
+    protected onPosTagList(data: any, otherData: any): void {
+        console.log("onPosTagList", data, otherData);
+        if(data.code == 0){
+            this._proxy.updateMapPosTags(data.msg.pos_tags);
+        }
+    }
+
+    protected onOpPosTag(data: any, otherData: any): void {
+        console.log("onOpPosTag", data, otherData);
+        if(data.code == 0){
+            if(data.msg.type == 0){
+                this._proxy.removeMapPosTag(data.msg.x, data.msg.y);
+                cc.systemEvent.emit("show_toast", "移除成功");
+                cc.systemEvent.emit("update_tag");
+            }else if(data.msg.type == 1){
+                this._proxy.addMapPosTag(data.msg.x, data.msg.y, data.msg.name);
+                cc.systemEvent.emit("show_toast", "添加成功");
+                cc.systemEvent.emit("update_tag");
+            }
+        }
+    }
+    
 
     protected onRoleCityPush(data: any): void {
         console.log("onRoleCityPush:", data)
@@ -370,4 +396,28 @@ export default class MapCommand {
         };
         NetManager.getInstance().send(sendData);
     }
+
+    public posTagList(): void {
+        let sendData: any = {
+            name: ServerConfig.role_posTagList,
+            msg: {
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    //1添加、0移除
+    public opPosTag(type:number, x: number, y: number, name = ""): void {
+        let sendData: any = {
+            name: ServerConfig.role_opPosTag,
+            msg: {
+                type:type,
+                x:x,
+                y:y,
+                name:name,
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
 }

@@ -114,7 +114,6 @@ export default class MapUILogic extends cc.Component {
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
         cc.systemEvent.on("open_fortress_about", this.openFortressAbout, this);
-        
         cc.systemEvent.on("open_facility", this.openFacility, this);
         cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
@@ -308,7 +307,7 @@ export default class MapUILogic extends cc.Component {
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
 
         var i = 0;
-        children[i].getChildByName("New Label").getComponent(cc.Label).string = "令牌" + Tools.numberToShow(roleRes["decree"]);
+        children[i].getChildByName("New Label").getComponent(cc.Label).string = "令牌:" + Tools.numberToShow(roleRes["decree"]);
         i+=1;
         
 

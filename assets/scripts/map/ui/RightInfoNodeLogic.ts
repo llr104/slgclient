@@ -4,6 +4,7 @@ import MapCommand from "../MapCommand";
 import RightArmyItemLogic from "./RightArmyItemLogic";
 import { MapCityData } from "../MapCityProxy";
 import RightCityItemLogic from "./RightCityItemLogic";
+import RightTagItemLogic from "./RightTagItemLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -15,21 +16,31 @@ export default class RightInfoNodeLogic extends cc.Component {
     armyScrollView: cc.ScrollView = null;
     @property(cc.ScrollView)
     cityScrollView: cc.ScrollView = null;
+    @property(cc.ScrollView)
+    tagsScrollView: cc.ScrollView = null;
+
     @property(cc.Prefab)
     armyItemPrefabs: cc.Prefab = null;
     @property(cc.Prefab)
     cityItemPrefabs: cc.Prefab = null;
 
+    @property(cc.Prefab)
+    tagItemPrefabs: cc.Prefab = null;
+
     protected _armys: cc.Node[] = [];
-    protected _citys: cc.Node[] = [];
+
 
     protected onLoad(): void {
         cc.systemEvent.on("update_army_list", this.onUpdateArmyList, this);
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
+        cc.systemEvent.on("update_tag", this.onUpdateTag, this);
+
         this.armyScrollView.node.active = true;
         this.cityScrollView.node.active = false;
+        this.tagsScrollView.node.active = false;
         this.initArmys();
         this.initCitys();
+        this.initTags();
     }
 
     protected onDestroy(): void {
@@ -59,13 +70,24 @@ export default class RightInfoNodeLogic extends cc.Component {
         let citys: MapCityData[] = MapCommand.getInstance().cityProxy.getMyCitys();
         this.cityScrollView.content.removeAllChildren(true);
         if (citys && citys.length > 0) {
-            this._citys.length = 0;
             for (let i: number = 0; i < citys.length; i++) {
                 let item: cc.Node = cc.instantiate(this.cityItemPrefabs);
                 item.parent = this.cityScrollView.content;
-                this._armys.push(item);
                 item.getComponent(RightCityItemLogic).setArmyData(citys[i]);
             }
+        }
+    }
+
+    protected initTags(): void {
+        let tags = MapCommand.getInstance().proxy.getPosTags();
+        this.tagsScrollView.content.removeAllChildren(true);
+        for (let i: number = 0; i < tags.length; i++) {
+            var tag = tags[i];
+
+            
+            let item: cc.Node = cc.instantiate(this.tagItemPrefabs);
+            item.parent = this.tagsScrollView.content;
+            item.getComponent(RightTagItemLogic).setData(tag);
         }
     }
 
@@ -79,14 +101,24 @@ export default class RightInfoNodeLogic extends cc.Component {
         }
     }
 
+    protected onUpdateTag():void {
+        this.initTags();
+    }
+
     onClockToggle(toggle: cc.Toggle): void {
         let index: number = this.toggles.indexOf(toggle);
         if (index == 1) {
             this.armyScrollView.node.active = false;
             this.cityScrollView.node.active = true;
-        } else {
+            this.tagsScrollView.node.active = false;
+        } else if(index == 0){
             this.armyScrollView.node.active = true;
             this.cityScrollView.node.active = false;
+            this.tagsScrollView.node.active = false;
+        }else{
+            this.armyScrollView.node.active = false;
+            this.cityScrollView.node.active = false;
+            this.tagsScrollView.node.active = true;
         }
     }
 }
