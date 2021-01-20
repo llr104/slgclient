@@ -46,7 +46,7 @@ export default class WarReportLogic extends cc.Component {
         comp.setData(report);
     }
 
-    protected updateView():void{
+    public updateView():void{
         this.initView();
         MapUICommand.getInstance().qryWarReport();
     }

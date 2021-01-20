@@ -12,6 +12,9 @@ import FortressAbout from "./FortressAbout";
 import CityAboutLogic from "./CityAboutLogic";
 import GeneralListLogic from "./GeneralListLogic";
 import TransformLogic from "./TransformLogic";
+import { Tools } from "../../utils/Tools";
+import GeneralAllLogic from "./GeneralAllLogic";
+import WarReportLogic from "./WarReportLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -92,24 +95,21 @@ export default class MapUILogic extends cc.Component {
     @property(cc.Label)
     ridLabel: cc.Label = null;
 
-    protected _nameObj: any = {};
+    protected _resArray: any = [];
+    protected _yieldArray: any = [];
 
     protected onLoad(): void {
 
-        this._nameObj = {
-            decree: "令牌x",
-            grain: "谷物x",
-            wood: "木材x",
-            iron: "金属x",
-            stone: "石材x",
-            gold: "金钱x",
-            wood_yield: "木材+",
-            iron_yield: "金属+",
-            stone_yield: "石材+",
-            grain_yield: "谷物+",
-            gold_yield: "金钱+",
-            depot_capacity: "仓库+"
-        };
+        this._resArray.push({key:"grain", name:"谷:"});
+        this._resArray.push({key:"wood", name:"木:"});
+        this._resArray.push({key:"iron", name:"铁:"});
+        this._resArray.push({key:"stone", name:"石:"});
+        this._resArray.push({key:"gold", name:"钱:"});
+
+        this._yieldArray.push({key:"wood_yield", name:"木+"});
+        this._yieldArray.push({key:"iron_yield", name:"铁+"});
+        this._yieldArray.push({key:"stone_yield", name:"石+"});
+        this._yieldArray.push({key:"grain_yield", name:"谷+"});
 
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
@@ -255,7 +255,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDesNode.active = true;
         }
         // this._generalDesNode.zIndex = 1;
-        this._generalDesNode.getComponent("GeneralAllLogic").setData(cfgData, curData);
+        this._generalDesNode.getComponent(GeneralAllLogic).setData(cfgData, curData);
     }
 
 
@@ -297,7 +297,7 @@ export default class MapUILogic extends cc.Component {
             this._warReportNode.active = true;
         }
 
-        this._warReportNode.getComponent("WarReportLogic").updateView();
+        this._warReportNode.getComponent(WarReportLogic).updateView();
     }
 
     /**
@@ -306,12 +306,32 @@ export default class MapUILogic extends cc.Component {
     protected updateRoleRes(): void {
         var children = this.srollLayout.node.children;
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
+
         var i = 0;
-        for (var key in roleRes) {
-   
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
-            i++;
+        children[i].getChildByName("New Label").getComponent(cc.Label).string = "令牌" + Tools.numberToShow(roleRes["decree"]);
+        i+=1;
+        
+
+        for (let index = 0; index < this._resArray.length; index++) {
+            const obj = this._resArray[index];
+            var label = children[i].getChildByName("New Label").getComponent(cc.Label)
+
+            if(obj.key == "gold"){
+                label.string = obj.name + Tools.numberToShow(roleRes[obj.key]);
+            }else{
+                label.string = obj.name + Tools.numberToShow(roleRes[obj.key]) + "/" + Tools.numberToShow(roleRes["depot_capacity"]);
+            }
+            
+            i+=1;
         }
+
+        for (let index = 0; index < this._yieldArray.length; index++) {
+            const obj = this._yieldArray[index];
+            var label = children[i].getChildByName("New Label").getComponent(cc.Label)
+            label.string = obj.name + Tools.numberToShow(roleRes[obj.key]);
+            i+=1;
+        }
+
     }
 
 

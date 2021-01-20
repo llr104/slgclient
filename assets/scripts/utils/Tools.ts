@@ -104,4 +104,15 @@ export class Tools{
         return str;
     }
 
+    public static numberToShow(num:number = 0):string{
+        if (num >= 100000000){
+            return Math.floor(num/100000000) + "亿"
+        }
+        else if (num >= 10000){
+            return Math.floor(num/10000) + "万"
+        }else{
+            return num + ""
+        }
+    }
+
 }

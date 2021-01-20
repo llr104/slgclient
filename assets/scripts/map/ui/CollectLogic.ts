@@ -5,7 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import LoginCommand from "../../login/LoginCommand";
 import DateUtil from "../../utils/DateUtil";
+import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
 
 const {ccclass, property} = cc._decorator;
@@ -19,6 +21,9 @@ export default class NewClass extends cc.Component {
     @property(cc.Label)
     timesLab: cc.Label = null;
 
+    @property(cc.Label)
+    goldLab: cc.Label = null;
+
     @property(cc.Button)
     collectBtn: cc.Button = null;
 
@@ -28,6 +33,10 @@ export default class NewClass extends cc.Component {
         console.log("add interior_openCollect");
         cc.systemEvent.on("interior_openCollect", this.onOpenCollect, this);
         cc.systemEvent.on("interior_collect", this.onCollect, this);
+
+        var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
+        this.goldLab.string = Tools.numberToShow(roleRes.gold_yield);
+
         MapUICommand.getInstance().interiorOpenCollect();
     }
 
