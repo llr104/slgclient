@@ -113,7 +113,7 @@ export default class MapScene extends cc.Component {
                     }
 
                     //标记
-                    if (this._cmd.proxy.getResData(cellId).type >= MapResType.Fortress) {
+                    if (this._cmd.proxy.getResData(cellId).type >= MapResType.FORTRESS) {
                         tagLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 

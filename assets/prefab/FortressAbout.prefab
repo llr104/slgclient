@@ -2165,6 +2165,12 @@
     "timeLab": {
       "__id__": 46
     },
+    "upBtn": {
+      "__id__": 23
+    },
+    "destroyBtn": {
+      "__id__": 33
+    },
     "armyItem": {
       "__uuid__": "4b28d971-51df-429a-ac52-8cf16ef02d58"
     },

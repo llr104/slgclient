@@ -274,6 +274,9 @@ export default class MapClickUILogic extends cc.Component {
         if (this.leftInfoNode.active) {
             let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
             let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);
+
+            console.log("aaaa:", resData, resCfg);
+
             
             this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
             this.labelSoldierCnt.string = "守备兵力 " + (resData.level * 100) + "x1";

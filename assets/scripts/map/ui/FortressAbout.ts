@@ -3,7 +3,7 @@ import { ArmyData } from "../../general/ArmyProxy";
 import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
-import { MapAreaData } from "../MapProxy";
+import { MapAreaData, MapResType } from "../MapProxy";
 import CityArmyItemLogic from "./CityArmyItemLogic";
 
 const { ccclass, property } = cc._decorator;
@@ -19,6 +19,13 @@ export default class FortressAbout extends cc.Component {
     @property(cc.Label)
     timeLab: cc.Label = null;
 
+
+    @property(cc.Button)
+    upBtn: cc.Button = null;
+
+    @property(cc.Button)
+    destroyBtn: cc.Button = null;
+
     @property(cc.Prefab)
     armyItem: cc.Prefab = null;
 
@@ -30,13 +37,15 @@ export default class FortressAbout extends cc.Component {
     protected onLoad(): void {
 
         this._cmd = MapCommand.getInstance();
-        this.initView();
+        
     }
 
     onEnable (): void{
         cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
         cc.systemEvent.on("update_build", this.onUpdateBuild, this);
         cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+
+        this.initView();
     }
 
     protected onDisable(): void {
@@ -51,6 +60,7 @@ export default class FortressAbout extends cc.Component {
             comp.order = i + 1;
             this._armyComps.push(comp);
         }
+
     }
 
 
@@ -76,8 +86,15 @@ export default class FortressAbout extends cc.Component {
         this.nameLab.string = data.name;
         this.lvLab.string = "lv:" + data.level;
         this.startCountDownTime();
-
         this.updateArmyList();
+
+        if (this._data.type == MapResType.SYS_FORTRESS){
+            this.upBtn.node.active = false;
+            this.destroyBtn.node.active = false;
+        }else if(this._data.type == MapResType.FORTRESS){
+            this.upBtn.node.active = true;
+            this.destroyBtn.node.active = true;
+        }
     }
 
     protected onUpdateBuilds(areaIndex: number, addIds: number[], removeIds: number[], updateIds: number[]): void {

@@ -1,5 +1,6 @@
 import DateUtil from "../utils/DateUtil";
 import MapCommand from "./MapCommand";
+import { MapResData, MapResType } from "./MapProxy";
 import MapUtil from "./MapUtil";
 
 /**地图建筑和占领数据*/
@@ -80,7 +81,7 @@ export class MapBuildData {
     }
 
     public isResBuild(): boolean{
-        return this.type>=52
+        return this.type>=MapResType.WOOD && this.type < MapResType.SYS_FORTRESS
     }
 
     public isInGiveUp(): boolean {

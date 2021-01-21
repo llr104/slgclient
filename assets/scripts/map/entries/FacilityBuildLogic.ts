@@ -47,7 +47,7 @@ export default class FacilityBuildLogic extends cc.Component {
     public updateUI(): void {
      
         if (this._data) {
-            if (this._data.type == MapResType.Fortress){
+            if (this._data.type == MapResType.FORTRESS){
                 this.spr.spriteFrame = this.buildAtlas.getSpriteFrame("component_119");
 
                 let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);

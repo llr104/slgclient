@@ -535,6 +535,28 @@
       "borderRight": 0,
       "spriteType": "normal",
       "subMetas": {}
+    },
+    "sys_fortress.png": {
+      "ver": "1.0.4",
+      "uuid": "48b64067-b9af-4559-bd17-0f1ebf5133f6",
+      "rawTextureUuid": "565d083b-762e-4d78-a300-1f16322986fd",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 800,
+      "trimY": 440,
+      "width": 200,
+      "height": 110,
+      "rawWidth": 200,
+      "rawHeight": 110,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "spriteType": "normal",
+      "subMetas": {}
     }
   }
 }

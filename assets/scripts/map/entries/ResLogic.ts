@@ -33,6 +33,9 @@ export default class ResLogic extends cc.Component {
         } else if (data.type == MapResType.GRAIN) {
             //田
             this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_1_" + data.level);
+        } else if (data.type == MapResType.SYS_FORTRESS) {
+            //系统要塞
+            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("sys_fortress");
         }
     }
 }
