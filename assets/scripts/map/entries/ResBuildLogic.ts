@@ -8,7 +8,13 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class ResBuildLogic extends cc.Component {
     @property(cc.Sprite)
-    spr: cc.Sprite = null;
+    upSpr: cc.Sprite = null;
+
+    @property(cc.Sprite)
+    downSpr: cc.Sprite = null;
+
+    @property(cc.SpriteAtlas)
+    resourceAtlas: cc.SpriteAtlas = null;
 
     protected _data: MapBuildData = null;
 
@@ -46,15 +52,20 @@ export default class ResBuildLogic extends cc.Component {
      
         if (this._data) {
             if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
-                this.spr.node.color = cc.Color.GREEN;
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_1_3");
             } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.spr.node.color = cc.Color.BLUE
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_1_3");
             }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
-                this.spr.node.color = cc.Color.MAGENTA;
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_1_3");
             } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.spr.node.color = cc.Color.YELLOW;
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_1_3");
             }else {
-                this.spr.node.color = cc.Color.RED;
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_1_3");
             }
         }
     }

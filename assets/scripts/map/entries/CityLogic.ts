@@ -12,8 +12,15 @@ export default class CityLogic extends cc.Component {
     spr: cc.Sprite = null;
     @property(cc.SpriteAtlas)
     buildAtlas: cc.SpriteAtlas = null;
-    @property(cc.Node)
-    tipNode: cc.Node = null;
+
+    @property(cc.Sprite)
+    upSpr: cc.Sprite = null;
+
+    @property(cc.Sprite)
+    downSpr: cc.Sprite = null;
+
+    @property(cc.SpriteAtlas)
+    resourceAtlas: cc.SpriteAtlas = null;
 
     @property(cc.Node)
     mianNode: cc.Node = null;
@@ -56,16 +63,22 @@ export default class CityLogic extends cc.Component {
     public updateUI(): void {
         if (this._data) {
             this.labelName.string = this._data.name;
-            if (this._data.rid == MapCommand.getInstance().cityProxy.myId) {
-                this.tipNode.color = cc.Color.GREEN;
-            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().cityProxy.myUnionId) {
-                this.tipNode.color = cc.Color.BLUE;
-            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().cityProxy.myParentId) {
-                this.tipNode.color = cc.Color.MAGENTA;
-            }else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().cityProxy.myUnionId) {
-                this.tipNode.color = cc.Color.YELLOW;
+
+            if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_1_3");
+            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_1_3");
+            }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_1_3");
+            } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_1_3");
             }else {
-                this.tipNode.color = cc.Color.RED;
+                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_2_3");
+                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_1_3");
             }
 
             var diff = DateUtil.getServerTime() - this._data.occupyTime;

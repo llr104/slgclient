@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>blue_1_1.png</key>
+            <key>blue_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -19,7 +19,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>blue_2_1.png</key>
+            <key>blue_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -34,7 +34,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>dark_red_1_1.png</key>
+            <key>dark_red_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -49,7 +49,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>dark_red_2_1.png</key>
+            <key>dark_red_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -64,7 +64,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>dark_red_2_gray_1.png</key>
+            <key>dark_red_2_gray_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -79,7 +79,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>expansion_of_tips_1_1.png</key>
+            <key>expansion_of_tips_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -94,7 +94,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>expansion_of_tips_2_1.png</key>
+            <key>expansion_of_tips_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -109,7 +109,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>expansion_of_tips_3_1.png</key>
+            <key>expansion_of_tips_3_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -124,7 +124,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>green_1_1.png</key>
+            <key>green_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -139,7 +139,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>green_2_1.png</key>
+            <key>green_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -154,7 +154,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>green_2_gray_1.png</key>
+            <key>green_2_gray_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -169,7 +169,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>orange_1_1.png</key>
+            <key>orange_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -184,7 +184,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>orange_2_1.png</key>
+            <key>orange_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -199,7 +199,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>orange_2_gray_1.png</key>
+            <key>orange_2_gray_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -214,7 +214,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>purple_1_1.png</key>
+            <key>purple_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -229,7 +229,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>purple_2_1.png</key>
+            <key>purple_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -244,7 +244,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>red_1_1.png</key>
+            <key>red_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -259,7 +259,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>red_2_1.png</key>
+            <key>red_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -274,7 +274,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>yellow_1_1.png</key>
+            <key>yellow_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -289,7 +289,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>yellow_2_1.png</key>
+            <key>yellow_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -304,7 +304,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>zise_1_1.png</key>
+            <key>zise_1_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -319,7 +319,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>zise_2_1.png</key>
+            <key>zise_2_3.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -344,13 +344,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>map_tip.png</string>
+            <string>map_frame_color.png</string>
             <key>size</key>
             <string>{1000,500}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:63dd077a0abd85297861a84b26b4c608:7cb6e5501bb82fd1531cdbc959086ec8:6aa143548896dee59ddbb5183d1bd7df$</string>
+            <string>$TexturePacker:SmartUpdate:f2090360fff3b93d69a63f5743fdc7fa:7cb6e5501bb82fd1531cdbc959086ec8:bd76ba5db41108d9272b514fbae4aa21$</string>
             <key>textureFileName</key>
-            <string>map_tip.png</string>
+            <string>map_frame_color.png</string>
         </dict>
     </dict>
 </plist>
