@@ -19,8 +19,9 @@ export default class BuildTipsLogic extends cc.Component {
     @property(cc.Label)
     giveUpLabTime: cc.Label = null;
 
+ 
     protected onLoad(): void {
-       
+
     }
 
     protected onEnable(): void {
@@ -31,6 +32,7 @@ export default class BuildTipsLogic extends cc.Component {
     protected onDisable(): void {
         this._data = null;
         this.unscheduleAllCallbacks();
+        cc.systemEvent.targetOff(this);
     }
 
      public setBuildData(data: MapBuildData): void {
@@ -50,9 +52,11 @@ export default class BuildTipsLogic extends cc.Component {
                 this.countDownWarFree();
             }
 
+
             this.startGiveUp();
         }
     }
+
 
     public countDownWarFree() {
         var diff = DateUtil.getServerTime() - this._data.occupyTime;

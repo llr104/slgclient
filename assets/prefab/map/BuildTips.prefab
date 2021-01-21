@@ -346,7 +346,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        9.13,
         0,
         0,
         0,
@@ -645,6 +645,7 @@
     "giveUpLabTime": {
       "__id__": 10
     },
+    "tagIconNode": null,
     "_id": ""
   },
   {

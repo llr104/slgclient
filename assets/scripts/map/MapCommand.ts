@@ -145,11 +145,11 @@ export default class MapCommand {
         if(data.code == 0){
             if(data.msg.type == 0){
                 this._proxy.removeMapPosTag(data.msg.x, data.msg.y);
-                cc.systemEvent.emit("show_toast", "移除成功");
+                // cc.systemEvent.emit("show_toast", "移除成功");
                 cc.systemEvent.emit("update_tag");
             }else if(data.msg.type == 1){
                 this._proxy.addMapPosTag(data.msg.x, data.msg.y, data.msg.name);
-                cc.systemEvent.emit("show_toast", "添加成功");
+                // cc.systemEvent.emit("show_toast", "添加成功");
                 cc.systemEvent.emit("update_tag");
             }
         }

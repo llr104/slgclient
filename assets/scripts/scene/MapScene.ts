@@ -8,6 +8,7 @@ import { MapAreaData, MapResType } from "../map/MapProxy";
 import MapResLogic from "../map/MapResLogic";
 import MapUtil from "../map/MapUtil";
 import MapFacilityBuildLogic from "../map/MapFacilityBuildLogic";
+import MapBuildTagLogic from "../map/MapBuildTagLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -79,6 +80,7 @@ export default class MapScene extends cc.Component {
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
         let buildFacilityLogic: MapFacilityBuildLogic = this.node.getComponent(MapFacilityBuildLogic);
+        let tagLogic: MapBuildTagLogic = this.node.getComponent(MapBuildTagLogic);
         let buildTipsLogic: MapBuildTipsLogic = this.node.getComponent(MapBuildTipsLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);
 
@@ -86,6 +88,7 @@ export default class MapScene extends cc.Component {
         resLogic.udpateShowAreas(addIds, removeIds);
         buildResLogic.udpateShowAreas(addIds, removeIds);
         buildFacilityLogic.udpateShowAreas(addIds, removeIds);
+        tagLogic.udpateShowAreas(addIds, removeIds);
         buildTipsLogic.udpateShowAreas(addIds, removeIds);
         cityLogic.udpateShowAreas(addIds, removeIds);
 
@@ -107,6 +110,11 @@ export default class MapScene extends cc.Component {
 
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
                         buildFacilityLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
+                    }
+
+                    //标记
+                    if (this._cmd.proxy.getResData(cellId).type >= MapResType.Fortress) {
+                        tagLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
