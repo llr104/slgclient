@@ -84,7 +84,7 @@ export default class Main extends cc.Component {
 
     protected onEnterMap(): void {
         let dataList: LoadData[] = [];
-        dataList.push(new LoadData("./world/worldMap", LoadDataType.FILE, cc.TiledMapAsset));
+        dataList.push(new LoadData("./world/map", LoadDataType.FILE, cc.TiledMapAsset));
         dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
