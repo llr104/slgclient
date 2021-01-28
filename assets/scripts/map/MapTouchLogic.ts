@@ -55,13 +55,10 @@ export default class MapTouchLogic extends cc.Component {
         let resData: MapResData = this._cmd.proxy.getResData(cellId);
         if (resData.type > 0) {
             if(resData.type == MapResType.SYS_CITY){
-                var cp = MapCommand.getInstance().proxy.getSysCityCenter(resData.x, resData.y);
-                console.log("cp:", cp);
-                resData.x = cp.x;
-                resData.y = cp.y;
+                var sysCityData = MapCommand.getInstance().proxy.getSysCityCenter(resData.x, resData.y);
                 console.log("点击野外城池", resData);
-                clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(resData.x, resData.y));
-                this.showClickUINode(resData, clickPixelPoint);
+                clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(sysCityData.x, sysCityData.y));
+                this.showClickUINode(sysCityData, clickPixelPoint);
             }else{
                 this.showClickUINode(resData, clickPixelPoint);
                 console.log("点击野外区域", resData);

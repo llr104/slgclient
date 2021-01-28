@@ -33,9 +33,11 @@ export class MapResData {
     y: number = 0;
 }
 
-export class MapCityPos {
+export class MapSysCityData {
     x: number = 0;
     y: number = 0;
+    type: number = 51;
+    level: number = 1;
 }
 
 export class MapTagPos {
@@ -95,7 +97,7 @@ export default class MapProxy {
     protected _mapAreaDatas: MapAreaData[] = [];
     protected _mapResDatas: MapResData[] = [];
     protected _mapPosTags: MapTagPos[] = [];
-    protected _mapCityPos: MapCityPos[] = [];
+    protected _mapCityPos: MapSysCityData[] = [];
 
     //地图请求列表
     public qryAreaIds: number[] = [];
@@ -161,7 +163,7 @@ export default class MapProxy {
 
         this._mapCityPos = [];
         for (let i: number = 0; i < jsonData.length; i++) {
-            let data: MapCityPos = new MapCityPos();
+            let data: MapSysCityData = new MapSysCityData();
             let jd = jsonData[i];
             data.x = jd.x;
             data.y = jd.y;
@@ -171,7 +173,7 @@ export default class MapProxy {
         console.log("this._mapCityPos:", this._mapCityPos);
     }
 
-    public getSysCityCenter(x, y) :MapCityPos{
+    public getSysCityCenter(x, y) :MapSysCityData{
         for (let i = x-5; i < x+5; i++) {
             for (let j = y-5; j < y+5; j++) {
                 for (let index = 0; index < this._mapCityPos.length; index++) {
