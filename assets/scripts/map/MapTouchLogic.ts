@@ -2,7 +2,7 @@ import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapClickUILogic from "./MapClickUILogic";
 import MapCommand from "./MapCommand";
-import { MapResData } from "./MapProxy";
+import { MapResData, MapResType } from "./MapProxy";
 import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
@@ -54,8 +54,19 @@ export default class MapTouchLogic extends cc.Component {
 
         let resData: MapResData = this._cmd.proxy.getResData(cellId);
         if (resData.type > 0) {
-            this.showClickUINode(resData, clickPixelPoint);
-            console.log("点击野外区域", resData);
+            if(resData.type == MapResType.SYS_CITY){
+                var cp = MapCommand.getInstance().proxy.getSysCityCenter(resData.x, resData.y);
+                console.log("cp:", cp);
+                resData.x = cp.x;
+                resData.y = cp.y;
+                console.log("点击野外城池", resData);
+                clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(resData.x, resData.y));
+                this.showClickUINode(resData, clickPixelPoint);
+            }else{
+                this.showClickUINode(resData, clickPixelPoint);
+                console.log("点击野外区域", resData);
+            }
+           
         } else {
             console.log("点击山脉河流区域");
         }

@@ -3,7 +3,7 @@ import DateUtil from "../utils/DateUtil";
 import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
-import { MapResConfig, MapResData } from "./MapProxy";
+import { MapResConfig, MapResData, MapResType } from "./MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -176,6 +176,11 @@ export default class MapClickUILogic extends cc.Component {
             this.btnBuild.node.active = false;
             this.btnTransfer.node.active = false;
             this.durableNode.active = false;
+
+            if(this._data.type == MapResType.SYS_CITY){
+                this.bgSelect.setContentSize(960, 480);
+            }
+
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
             if ((this._data as MapBuildData).rid == MapCommand.getInstance().buildProxy.myId) {

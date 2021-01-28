@@ -16,6 +16,7 @@ export class MapResConfig {
 /**地图资源类型*/
 export class MapResType {
     static FORTRESS: number = 50; //要塞
+    static SYS_CITY: number = 51;
     static WOOD: number = 52;
     static IRON: number = 53;
     static STONE: number = 54;
@@ -28,6 +29,11 @@ export class MapResData {
     id: number = 0;
     type: number = 0;
     level: number = 0;
+    x: number = 0;
+    y: number = 0;
+}
+
+export class MapCityPos {
     x: number = 0;
     y: number = 0;
 }
@@ -89,6 +95,7 @@ export default class MapProxy {
     protected _mapAreaDatas: MapAreaData[] = [];
     protected _mapResDatas: MapResData[] = [];
     protected _mapPosTags: MapTagPos[] = [];
+    protected _mapCityPos: MapCityPos[] = [];
 
     //地图请求列表
     public qryAreaIds: number[] = [];
@@ -146,6 +153,34 @@ export default class MapProxy {
             data.x = i % w;
             data.y = Math.floor(i / w);
             this._mapResDatas.push(data);
+        }
+    }
+
+    public initMapCityPosition(jsonData: any): void {
+        console.log("initMapCityPosition:", jsonData);
+
+        this._mapCityPos = [];
+        for (let i: number = 0; i < jsonData.length; i++) {
+            let data: MapCityPos = new MapCityPos();
+            let jd = jsonData[i];
+            data.x = jd.x;
+            data.y = jd.y;
+            this._mapCityPos.push(data);
+        }
+
+        console.log("this._mapCityPos:", this._mapCityPos);
+    }
+
+    public getSysCityCenter(x, y) :MapCityPos{
+        for (let i = x-5; i < x+5; i++) {
+            for (let j = y-5; j < y+5; j++) {
+                for (let index = 0; index < this._mapCityPos.length; index++) {
+                    var cp = this._mapCityPos[index];
+                    if(cp.x == i && cp.y == j){
+                        return cp
+                    }                
+                }
+            }
         }
     }
 

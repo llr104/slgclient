@@ -85,7 +85,7 @@ export default class Helloworld extends cc.Component {
         for (let i: number = 0; i < city_position.length; i++) {
             if (city_position[i] > 0) {
                 var obj = {x:0, y:0};
-                obj.y = Math.ceil(i/data.w);
+                obj.y = Math.floor(i/data.w);
                 obj.x = i%data.w;
                 cp_list.push(obj);
             }
