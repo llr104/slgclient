@@ -9,6 +9,7 @@ import MapResLogic from "../map/MapResLogic";
 import MapUtil from "../map/MapUtil";
 import MapFacilityBuildLogic from "../map/MapFacilityBuildLogic";
 import MapBuildTagLogic from "../map/MapBuildTagLogic";
+import MapSysCityLogic from "../map/MapSysCityLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,12 +17,6 @@ const { ccclass, property } = cc._decorator;
 export default class MapScene extends cc.Component {
     @property(cc.Node)
     mapLayer: cc.Node = null;
-    @property(cc.Node)
-    resLayer: cc.Node = null;
-    @property(cc.Node)
-    buildLayer: cc.Node = null;
-    @property(cc.Node)
-    armyLayer: cc.Node = null;
 
     protected _cmd: MapCommand = null;
     protected _centerX: number = 0;
@@ -83,6 +78,7 @@ export default class MapScene extends cc.Component {
         let tagLogic: MapBuildTagLogic = this.node.getComponent(MapBuildTagLogic);
         let buildTipsLogic: MapBuildTipsLogic = this.node.getComponent(MapBuildTipsLogic);
         let cityLogic: MapCityLogic = this.node.getComponent(MapCityLogic);
+        let sysCityLogic: MapSysCityLogic = this.node.getComponent(MapSysCityLogic);
 
         //更新展示区域
         resLogic.udpateShowAreas(addIds, removeIds);
@@ -91,6 +87,7 @@ export default class MapScene extends cc.Component {
         tagLogic.udpateShowAreas(addIds, removeIds);
         buildTipsLogic.udpateShowAreas(addIds, removeIds);
         cityLogic.udpateShowAreas(addIds, removeIds);
+        sysCityLogic.udpateShowAreas(addIds, removeIds);
 
         //更新区域内的具体节点
         for (let i: number = 0; i < addIds.length; i++) {
@@ -103,6 +100,12 @@ export default class MapScene extends cc.Component {
                     if (this._cmd.proxy.getResData(cellId).type >= MapResType.WOOD) {
                         resLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
+
+                    //系统城池
+                    if (this._cmd.proxy.getResData(cellId).type == MapResType.SYS_CITY) {
+                        sysCityLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
+                    }
+
                     //建筑
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
                         buildResLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
@@ -125,6 +128,7 @@ export default class MapScene extends cc.Component {
                     if (this._cmd.cityProxy.getCity(cellId) != null) {
                         cityLogic.addItem(addIds[i], this._cmd.cityProxy.getCity(cellId));
                     }
+
                 }
             }
         }

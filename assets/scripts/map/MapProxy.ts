@@ -1,3 +1,4 @@
+import SysCityLogic from "./entries/SysCityLogic";
 import MapUtil from "./MapUtil";
 
 /**地图基础资源配置*/
@@ -33,12 +34,7 @@ export class MapResData {
     y: number = 0;
 }
 
-export class MapSysCityData {
-    x: number = 0;
-    y: number = 0;
-    type: number = 51;
-    level: number = 1;
-}
+
 
 export class MapTagPos {
     x: number = 0;
@@ -96,8 +92,8 @@ export default class MapProxy {
     protected _curCenterAreaId: number = -1;
     protected _mapAreaDatas: MapAreaData[] = [];
     protected _mapResDatas: MapResData[] = [];
+    protected _mapSysCityResDatas: MapResData[] = [];
     protected _mapPosTags: MapTagPos[] = [];
-    protected _mapCityPos: MapSysCityData[] = [];
 
     //地图请求列表
     public qryAreaIds: number[] = [];
@@ -144,9 +140,9 @@ export default class MapProxy {
 
     public initMapResConfig(jsonData: any): void {
         let w: number = jsonData.w;
-        let h: number = jsonData.h;
         let list: Array<Array<number>> = jsonData.list;
-        this._mapResDatas.length = 0;
+        this._mapResDatas = [];
+        this._mapSysCityResDatas = [];
         for (let i: number = 0; i < jsonData.list.length; i++) {
             let data: MapResData = new MapResData();
             data.id = i;
@@ -155,36 +151,37 @@ export default class MapProxy {
             data.x = i % w;
             data.y = Math.floor(i / w);
             this._mapResDatas.push(data);
-        }
-    }
 
-    public initMapCityPosition(jsonData: any): void {
-        console.log("initMapCityPosition:", jsonData);
-
-        this._mapCityPos = [];
-        for (let i: number = 0; i < jsonData.length; i++) {
-            let data: MapSysCityData = new MapSysCityData();
-            let jd = jsonData[i];
-            data.x = jd.x;
-            data.y = jd.y;
-            this._mapCityPos.push(data);
-        }
-
-        console.log("this._mapCityPos:", this._mapCityPos);
-    }
-
-    public getSysCityCenter(x, y) :MapSysCityData{
-        for (let i = x-5; i < x+5; i++) {
-            for (let j = y-5; j < y+5; j++) {
-                for (let index = 0; index < this._mapCityPos.length; index++) {
-                    var cp = this._mapCityPos[index];
-                    if(cp.x == i && cp.y == j){
-                        return cp
-                    }                
-                }
+            if(data.type == MapResType.SYS_CITY){
+                this._mapSysCityResDatas.push(data)
             }
         }
     }
+
+
+    public getSysCityResData(x, y): MapResData{
+        for (let index = 0; index < this._mapSysCityResDatas.length; index++) {
+            
+            var resData = this._mapSysCityResDatas[index];
+            var level = resData.level;
+            var dis = 0;
+            if(level >= 10){
+                dis = 3;
+            }else if(level >= 6){
+                dis = 2;
+            }else if(level >= 4){
+                dis = 1;
+            }else{
+                dis = 0;
+            }
+
+            if(resData.x >= x-dis && resData.x <= x+dis && resData.y >= y-dis && resData.y <= y+dis){
+                return resData;
+            }
+        }
+        return null;
+    }
+
 
     /**设置地图当前中心点的信息*/
     public setCurCenterPoint(point: cc.Vec2, pixelPoint: cc.Vec2): boolean {

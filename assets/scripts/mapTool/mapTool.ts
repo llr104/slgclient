@@ -41,14 +41,15 @@ export default class Helloworld extends cc.Component {
     protected onClickMake(): void {
         this._mapSize = this.tiledMap.getMapSize();
         this._mapGroundIds = this.tiledMap.getLayer("obstruct").getTiles();
-        var city_obstructIds = this.tiledMap.getLayer("city_obstruct").getTiles();
+        var city_positionIds = this.tiledMap.getLayer("city_position").getTiles();
 
 
         let data: { w: number, h: number, list: any[] } = { w: 0, h: 0, list: null };
         this._resList = [];
         for (let i: number = 0; i < this._mapGroundIds.length; i++) {
-            if (city_obstructIds[i] > 0) {
-                this._resList.push([51, 1]);
+            if (city_positionIds[i] > 0) {
+                var num = Math.floor((Math.random()*10)+1);
+                this._resList.push([51, num]);
             } else if(this._mapGroundIds[i] > 0) {
                 this._resList.push([0, 0]);
             }
@@ -79,19 +80,6 @@ export default class Helloworld extends cc.Component {
         data.list = this._resList;
         jsb.fileUtils.writeStringToFile(JSON.stringify(data), path + "/mapRes_0.json");
        
-
-        var city_position = this.tiledMap.getLayer("city_position").getTiles();
-        var cp_list = [];
-        for (let i: number = 0; i < city_position.length; i++) {
-            if (city_position[i] > 0) {
-                var obj = {x:0, y:0};
-                obj.y = Math.floor(i/data.w);
-                obj.x = i%data.w;
-                cp_list.push(obj);
-            }
-        }
-
-        jsb.fileUtils.writeStringToFile(JSON.stringify(cp_list), path + "/city_postion.json");
 
         this.tipsLab.string = "生成成功";
     }

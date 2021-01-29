@@ -3,7 +3,8 @@ import DateUtil from "../utils/DateUtil";
 import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
-import { MapSysCityData, MapResConfig, MapResData, MapResType } from "./MapProxy";
+import { MapResConfig, MapResData, MapResType } from "./MapProxy";
+
 
 const { ccclass, property } = cc._decorator;
 
@@ -167,18 +168,8 @@ export default class MapClickUILogic extends cc.Component {
 
         this.btnTagAdd.node.active = !isTag;
         this.btnTagRemove.node.active = isTag;
-
-        if (this._data instanceof MapSysCityData){
-            //点击的是系统城池
-            this.btnMove.node.active = false;
-            this.btnOccupy.node.active = true;
-            this.btnGiveUp.node.active = false;
-            this.btnBuild.node.active = false;
-            this.btnTransfer.node.active = false;
-            this.durableNode.active = false;
-            this.bgSelect.setContentSize(960, 480);
-
-        }else if (this._data instanceof MapResData) {
+        
+        if (this._data instanceof MapResData) {
             //点击的是野外
             this.btnMove.node.active = false;
             this.btnOccupy.node.active = true;
@@ -186,6 +177,10 @@ export default class MapClickUILogic extends cc.Component {
             this.btnBuild.node.active = false;
             this.btnTransfer.node.active = false;
             this.durableNode.active = false;
+
+            if(this._data.type == MapResType.SYS_CITY){
+                this.bgSelect.setContentSize(960, 480);
+            }
 
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
@@ -282,7 +277,7 @@ export default class MapClickUILogic extends cc.Component {
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         }
 
-        if (this.leftInfoNode.active && !(this._data instanceof MapSysCityData)) {
+        if (this.leftInfoNode.active ) {
 
             let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
             let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);

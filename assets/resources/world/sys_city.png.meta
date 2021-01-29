@@ -7,11 +7,11 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
-  "width": 812,
-  "height": 406,
+  "width": 800,
+  "height": 400,
   "platformSettings": {},
   "subMetas": {
-    "town_big": {
+    "sys_city": {
       "ver": "1.0.4",
       "uuid": "819dac4f-1ab6-41cc-abd7-8f7489d6239c",
       "rawTextureUuid": "364b74de-e71f-4123-aa8b-d14bf938d540",

@@ -90,7 +90,6 @@ export default class Main extends cc.Component {
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
         dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
-        dataList.push(new LoadData("./config/city_postion", LoadDataType.FILE, cc.JsonAsset));
 
         this.addLoadingNode();
         console.log("onEnterMap");
@@ -103,7 +102,6 @@ export default class Main extends cc.Component {
                 console.log("loadComplete", paths, datas);
                 MapCommand.getInstance().proxy.tiledMapAsset = datas[0] as cc.TiledMapAsset;
                 MapCommand.getInstance().proxy.initMapResConfig((datas[1] as cc.JsonAsset).json);
-                MapCommand.getInstance().proxy.initMapCityPosition((datas[6] as cc.JsonAsset).json)
 
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
                 GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as cc.JsonAsset).json);
