@@ -22,20 +22,13 @@ export default class SysCityLogic extends cc.Component {
     }
 
     public updateUI(): void {
-        this._data.level = 8;
-
-        if(this._data.level >= 10){
-                this.node.scale = 1.0;
-        }else if(this._data.level >= 8){
-                this.node.scale = 0.9;
-        }else if(this._data.level >= 7){
-            this.node.scale = 0.8;
+    
+        if(this._data.level >= 8){
+            this.node.scale = 1.5;
         }else if(this._data.level >= 5){
-            this.node.scale = 0.6;
-        }else if(this._data.level >= 3){
-            this.node.scale = 0.5;
+            this.node.scale = 1;
         }else {
-            this.node.scale = 0.4;
+            this.node.scale = 0.5;
         }
     }
 }

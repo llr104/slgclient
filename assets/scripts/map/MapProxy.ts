@@ -165,14 +165,12 @@ export default class MapProxy {
             var resData = this._mapSysCityResDatas[index];
             var level = resData.level;
             var dis = 0;
-            if(level >= 10){
+            if(level >= 8){
                 dis = 3;
-            }else if(level >= 6){
+            }else if(level >= 5){
                 dis = 2;
-            }else if(level >= 4){
+            }else {
                 dis = 1;
-            }else{
-                dis = 0;
             }
 
             if(resData.x >= x-dis && resData.x <= x+dis && resData.y >= y-dis && resData.y <= y+dis){

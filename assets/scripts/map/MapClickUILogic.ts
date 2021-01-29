@@ -179,7 +179,14 @@ export default class MapClickUILogic extends cc.Component {
             this.durableNode.active = false;
 
             if(this._data.type == MapResType.SYS_CITY){
-                this.bgSelect.setContentSize(960, 480);
+
+                if(this._data.level >= 8){
+                    this.bgSelect.setContentSize(960*1.5, 480*1.5);
+                }else if(this._data.level >= 5){
+                    this.bgSelect.setContentSize(960, 480);
+                }else {
+                    this.bgSelect.setContentSize(960*0.5, 480*0.5);
+                }
             }
 
         } else if (this._data instanceof MapBuildData) {
