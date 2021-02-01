@@ -309,7 +309,7 @@ export default class MapClickUILogic extends cc.Component {
 
         //归属属性
         if (this._data.rid == null || this._data.rid == 0){
-            this.labelUnion.string = "空地";
+            this.labelUnion.string = "未占领";
         }else{
             if (this._data.unionId > 0){
                 this.labelUnion.string = this._data.unionName;
