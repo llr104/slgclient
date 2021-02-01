@@ -253,7 +253,7 @@ export default class MapCommand {
                 return false;
             }
 
-            console.log("buildData 11111:", buildData);
+            // console.log("buildData 11111:", buildData);
             radius = buildData.getCellRadius();
         }
 
@@ -278,7 +278,7 @@ export default class MapCommand {
                 if (buildData) {
                     var absX = Math.abs(x-tx);
                     var absY = Math.abs(y-ty);
-                    console.log("MapBuildData:", absX, absY, radius+buildData.getCellRadius()+1, buildData);
+                    // console.log("MapBuildData:", absX, absY, radius+buildData.getCellRadius()+1, buildData);
                     if (absX <= radius+buildData.getCellRadius()+1 && absY <= radius+buildData.getCellRadius()+1){
                         var ok = this.isBuildSub(id)
                         if(ok){
