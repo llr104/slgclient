@@ -160,12 +160,15 @@ export default class FacilityDesLogic extends cc.Component {
     }
 
     public updateNeedTime(): void {
-        
-        var level = this._cfg.upLevels[this._data.level];
-        if (this._data.isUping() == false){
-            this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
+        if(this._isLevelMax == false){
+            var level = this._cfg.upLevels[this._data.level];
+            if (this._data.isUping() == false){
+                this.labelNeedTime.string =  DateUtil.converSecondStr(level.time*1000);
+            }else{
+                this.labelNeedTime.string = DateUtil.converSecondStr(this._data.upLastTime());
+            }
         }else{
-            this.labelNeedTime.string = DateUtil.converSecondStr(this._data.upLastTime());
+            this.labelNeedTime.string = "等级已满";
         }
     }
 
