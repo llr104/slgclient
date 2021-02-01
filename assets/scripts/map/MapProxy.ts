@@ -181,6 +181,7 @@ export default class MapProxy {
     }
 
 
+
     /**设置地图当前中心点的信息*/
     public setCurCenterPoint(point: cc.Vec2, pixelPoint: cc.Vec2): boolean {
         if (this._curCenterPoint == null

@@ -236,9 +236,8 @@ export default class MapCommand {
         return false
     }
 
-    public isCanOccupyCell(x: number, y: number): boolean {
-        let id: number = MapUtil.getIdByCellPoint(x, y);
-        
+
+    protected __isCanOccupyCell__(id:number):boolean{
         if (this.isBuildSub(id)){
             return false
         }
@@ -263,7 +262,33 @@ export default class MapCommand {
         return false;
     }
 
-    public isCanOccupyCityCell(x: number, y: number): boolean {
+    public isCanOccupyCell(x: number, y: number): boolean {
+        
+        let id: number = MapUtil.getIdByCellPoint(x, y);
+        return this.__isCanOccupyCell__(id);
+    }
+
+    public isCanOccupySysCityCell(x: number, y: number): boolean {
+        var sysCityResData = this._proxy.getSysCityResData(x, y);
+        if(sysCityResData == null){
+            return false;
+        }
+        var ids = MapUtil.getSideIdsForSysCity(sysCityResData.x, sysCityResData.y, sysCityResData.level);
+
+        for (let index = 0; index < ids.length; index++) {
+            let id = ids[index];
+            MapUtil.getIdByCellPoint
+            var b = this.__isCanOccupyCell__(id);
+            if(b){
+                return true;
+            }
+        }
+
+        return false;
+    }
+   
+
+    public isCanOccupyRoleCityCell(x: number, y: number): boolean {
         let id: number = MapUtil.getIdByCellPoint(x, y);
         if (this.isCitySub(id)){
             return false
@@ -273,7 +298,7 @@ export default class MapCommand {
             return false
         }
 
-        let ids: number[] = MapUtil.getSideIdsForCity(id);
+        let ids: number[] = MapUtil.getSideIdsForRoleCity(id);
         for (let i: number = 0; i < ids[i]; i++) {
             if (ids[i] != id) {
                 if (this.isBuildSub(ids[i])){

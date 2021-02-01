@@ -89,7 +89,7 @@ export default class MapUtil {
         ];
     }
 
-    public static getSideIdsForCity(id:number):number[] {
+    public static getSideIdsForRoleCity(id:number):number[] {
         return [
             id + this._mapSize.width * 2 - 2, id + this._mapSize.width * 2 - 1, id + this._mapSize.width * 2, id + this._mapSize.width * 2 + 1, id + this._mapSize.width * 2 + 2,
             id + this._mapSize.width - 2, id + this._mapSize.width + 2,
@@ -97,6 +97,50 @@ export default class MapUtil {
             id - this._mapSize.width - 2, id - this._mapSize.width + 2,
             id - this._mapSize.width * 2 - 2, id - this._mapSize.width * 2 - 1, id - this._mapSize.width - 1, id - this._mapSize.width * 2 + 1, id - this._mapSize.width * 2 + 2
         ];
+    }
+
+
+    public static getSideIdsForSysCity(x, y, level): number[] {
+        let ids: number[] = [];
+        var dis = 0;
+        if(level >= 8){
+            dis = 3;
+        }else if(level >= 5){
+            dis = 2;
+        }else {
+            dis = 1;
+        }
+
+        //上
+        for (let tx = x-dis; tx <= x+dis; tx++) {
+            var ty:number = y + dis;
+            var id = MapUtil.getIdByCellPoint(tx, ty);
+            ids.push(id);
+        }
+
+        //下
+        for (let tx = x-dis; tx <= x+dis; tx++) {
+            var ty:number = y - dis;
+            var id = MapUtil.getIdByCellPoint(tx, ty);
+            ids.push(id);
+        }
+
+
+        //左
+        for (let ty = y-dis; ty <= y+dis; ty++) {
+            var tx:number = x - dis;
+            var id = MapUtil.getIdByCellPoint(tx, ty);
+            ids.push(id);
+        }
+
+        //右
+        for (let ty = y-dis; ty <= y+dis; ty++) {
+            var tx:number = x + dis;
+            var id = MapUtil.getIdByCellPoint(tx, ty);
+            ids.push(id);
+        }
+
+        return ids;
     }
 
     /**获取区域为中点的九宫格id列表*/

@@ -145,12 +145,15 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onClickOccupy(): void {
         if ((this._data instanceof MapCityData
-            && MapCommand.getInstance().isCanOccupyCityCell(this._data.x, this._data.y))
-            || MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
+            && MapCommand.getInstance().isCanOccupyRoleCityCell(this._data.x, this._data.y))
+            || MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)
+            || MapCommand.getInstance().isCanOccupySysCityCell(this._data.x, this._data.y)
+            ) {
             cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
         } else {
             console.log("只能占领自己相邻的地");
         }
+
         this.node.parent = null;
     }
 
