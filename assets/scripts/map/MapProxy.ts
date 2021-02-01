@@ -173,7 +173,7 @@ export default class MapProxy {
                 dis = 1;
             }
 
-            if(resData.x >= x-dis && resData.x <= x+dis && resData.y >= y-dis && resData.y <= y+dis){
+            if( dis >= Math.abs(x-resData.x) && dis >= Math.abs(y-resData.y)){
                 return resData;
             }
         }

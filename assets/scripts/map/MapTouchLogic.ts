@@ -46,10 +46,13 @@ export default class MapTouchLogic extends cc.Component {
 
         let buildData: MapBuildData = this._cmd.buildProxy.getBuild(cellId);
         if (buildData != null) {
-            //代表点击被占领的区域
-            console.log("点击被占领的区域", buildData);
-            this.showClickUINode(buildData, clickPixelPoint);
-            return;
+            if(buildData.isSysCity() == false){
+                //代表点击被占领的区域
+                console.log("点击被占领的区域", buildData);
+                this.showClickUINode(buildData, clickPixelPoint);
+                return;
+            }
+           
         }
 
         let resData: MapResData = this._cmd.proxy.getResData(cellId);
@@ -58,7 +61,7 @@ export default class MapTouchLogic extends cc.Component {
             if (temp){
                 clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(temp.x, temp.y));
                 this.showClickUINode(temp, clickPixelPoint);
-                console.log("点击野外城池", resData);
+                console.log("点击野外城池", temp);
             }else{
                 this.showClickUINode(resData, clickPixelPoint);
                 console.log("点击野外区域", resData);

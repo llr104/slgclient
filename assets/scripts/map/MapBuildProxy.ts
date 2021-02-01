@@ -72,7 +72,7 @@ export class MapBuildData {
     }
 
     public getCellRadius() :number {
-        if (this.type == MapResType.SYS_CITY) {
+        if (this.isSysCity()) {
             if (this.level >= 8){
                 return 3
             }else if (this.level >= 5){
@@ -83,6 +83,10 @@ export class MapBuildData {
         }else {
             return 0
         }
+    }
+
+    public isSysCity():boolean{
+        return this.type == MapResType.SYS_CITY;
     }
 
     public isWarFree(): boolean {
