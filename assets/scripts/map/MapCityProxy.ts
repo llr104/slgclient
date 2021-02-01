@@ -57,6 +57,10 @@ export class MapCityData {
         city.occupyTime = data.occupy_time;
         return city;
     }
+
+    public getCellRadius() :number {
+        return 2;
+    }
 }
 
 export default class MapCityProxy {

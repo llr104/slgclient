@@ -236,77 +236,55 @@ export default class MapCommand {
         return false
     }
 
-
-    protected __isCanOccupyCell__(id:number):boolean{
-        if (this.isBuildSub(id)){
-            return false
-        }
-
-        if(this.isBuildWarFree(id)){
-            return false
-        }
-
-        
-        let ids: number[] = MapUtil.get9GridCellIds(id);
-        for (let i: number = 0; i < ids[i]; i++) {
-            if (ids[i] != id) {
-                if (this.isBuildSub(ids[i])){
-                    return true
-                }
-                
-                if (this.isCitySub(ids[i])){
-                    return true
-                }
-            }
-        }
-        return false;
-    }
-
     public isCanOccupyCell(x: number, y: number): boolean {
-        
+        var radius = 0;
         let id: number = MapUtil.getIdByCellPoint(x, y);
-        return this.__isCanOccupyCell__(id);
-    }
-
-    public isCanOccupySysCityCell(x: number, y: number): boolean {
-        var sysCityResData = this._proxy.getSysCityResData(x, y);
-        if(sysCityResData == null){
-            return false;
-        }
-        var ids = MapUtil.getSideIdsForSysCity(sysCityResData.x, sysCityResData.y, sysCityResData.level);
-
-        for (let index = 0; index < ids.length; index++) {
-            let id = ids[index];
-            MapUtil.getIdByCellPoint
-            var b = this.__isCanOccupyCell__(id);
-            if(b){
-                return true;
+        let cityData: MapCityData = this.cityProxy.getCity(id);
+        if (cityData) {
+            if(this.isCityWarFree(id)){
+                return false;
             }
+            radius = cityData.getCellRadius();
         }
 
-        return false;
-    }
-   
+        let buildData: MapBuildData = this.buildProxy.getBuild(id);
+        if (buildData) {
+            if(this.isBuildWarFree(id)){
+                return false;
+            }
 
-    public isCanOccupyRoleCityCell(x: number, y: number): boolean {
-        let id: number = MapUtil.getIdByCellPoint(x, y);
-        if (this.isCitySub(id)){
-            return false
+            console.log("buildData 11111:", buildData);
+            radius = buildData.getCellRadius();
         }
 
-        if(this.isCityWarFree(id)){
-            return false
-        }
+        //查找半径10
+        for (let tx = x-10; tx <= x+10; tx++) {
+            for (let ty = y-10; ty <= y+10; ty++) {
 
-        let ids: number[] = MapUtil.getSideIdsForRoleCity(id);
-        for (let i: number = 0; i < ids[i]; i++) {
-            if (ids[i] != id) {
-                if (this.isBuildSub(ids[i])){
-                    return true
+                let id: number = MapUtil.getIdByCellPoint(tx, ty);
+                let cityData: MapCityData = this.cityProxy.getCity(id);
+                if (cityData) {
+                    var absX = Math.abs(x-tx);
+                    var absY = Math.abs(y-ty);
+                    if (absX <= radius+cityData.getCellRadius()+1 && absY <= radius+cityData.getCellRadius()+1){
+                        var ok = this.isCitySub(id)
+                        if(ok){
+                            return true;
+                        }
+                    }
                 }
-                
-                if (this.isCitySub(ids[i])){
-                    return true
+        
+                let buildData: MapBuildData = this.buildProxy.getBuild(id);
+                if (buildData) {
+                    var absX = Math.abs(x-tx);
+                    var absY = Math.abs(y-ty);
+                    console.log("MapBuildData:", absX, absY, radius+buildData.getCellRadius()+1, buildData);
+                    if (absX <= radius+buildData.getCellRadius()+1 && absY <= radius+buildData.getCellRadius()+1){
+                        var ok = this.isBuildSub(id)
+                        if(ok){
+                            return true;
+                        }
+                    }
                 }
             }
         }

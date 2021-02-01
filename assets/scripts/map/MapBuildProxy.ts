@@ -71,6 +71,19 @@ export class MapBuildData {
         return build;
     }
 
+    public getCellRadius() :number {
+        if (this.type == MapResType.SYS_CITY) {
+            if (this.level >= 8){
+                return 3
+            }else if (this.level >= 5){
+                return 2
+            }else {
+                return 1
+            }
+        }else {
+            return 0
+        }
+    }
 
     public isWarFree(): boolean {
         var diff = DateUtil.getServerTime() - this.occupyTime;

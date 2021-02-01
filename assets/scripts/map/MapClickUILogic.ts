@@ -144,11 +144,7 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickOccupy(): void {
-        if ((this._data instanceof MapCityData
-            && MapCommand.getInstance().isCanOccupyRoleCityCell(this._data.x, this._data.y))
-            || MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)
-            || MapCommand.getInstance().isCanOccupySysCityCell(this._data.x, this._data.y)
-            ) {
+        if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
             cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
         } else {
             console.log("只能占领自己相邻的地");
@@ -291,9 +287,6 @@ export default class MapClickUILogic extends cc.Component {
 
             let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
             let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);
-
-            console.log("aaaa:", resData, resCfg);
-
             
             this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
             this.labelSoldierCnt.string = "守备兵力 " + (resData.level * 100) + "x1";
