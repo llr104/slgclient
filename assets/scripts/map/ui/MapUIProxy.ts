@@ -77,7 +77,7 @@ export class Facility {
     public upLastTime(): number{
         if(this.upTime > 0){
             let cfg:FacilityConfig = MapUICommand.getInstance().proxy.getFacilityCfgByType(this.type);
-            var costTime = cfg.upLevels[this.level+1].time;
+            var costTime = cfg.upLevels[this.level].time;
             return DateUtil.leftTime((this.upTime+costTime)*1000);
         }else{
             return 0;
