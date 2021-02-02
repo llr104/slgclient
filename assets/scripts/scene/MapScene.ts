@@ -101,14 +101,15 @@ export default class MapScene extends cc.Component {
                         resLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 
-                    //系统城池
-                    if (this._cmd.proxy.getResData(cellId).type == MapResType.SYS_CITY) {
-                        sysCityLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
-                    }
-
                     //建筑
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
-                        buildResLogic.addItem(addIds[i], this._cmd.buildProxy.getBuild(cellId));
+                        var build = this._cmd.buildProxy.getBuild(cellId);
+                        if(build.type == MapResType.SYS_CITY){
+                            //系统城池
+                            sysCityLogic.addItem(addIds[i], build);
+                        }else{
+                            buildResLogic.addItem(addIds[i], build);
+                        }
                     }
 
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {

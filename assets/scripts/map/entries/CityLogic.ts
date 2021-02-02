@@ -8,10 +8,6 @@ const { ccclass, property } = cc._decorator;
 export default class CityLogic extends cc.Component {
     @property(cc.Label)
     labelName: cc.Label = null;
-    @property(cc.Sprite)
-    spr: cc.Sprite = null;
-    @property(cc.SpriteAtlas)
-    buildAtlas: cc.SpriteAtlas = null;
 
     @property(cc.Sprite)
     upSpr: cc.Sprite = null;
