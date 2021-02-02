@@ -294,7 +294,7 @@ export default class MapClickUILogic extends cc.Component {
             this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
             this.labelSoldierCnt.string = "守备兵力 " + soldiers*3;
             
-            if (this._data.nickName != null){
+            if (this._data.nickName){
                 this.labelName.string = this._data.nickName + ":" + this._data.name;
             }else{
                 this.labelName.string = resCfg.name;
