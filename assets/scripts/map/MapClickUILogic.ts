@@ -4,6 +4,7 @@ import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
 import { MapResConfig, MapResData, MapResType } from "./MapProxy";
+import MapUICommand from "./ui/MapUICommand";
 
 
 const { ccclass, property } = cc._decorator;
@@ -287,9 +288,10 @@ export default class MapClickUILogic extends cc.Component {
 
             let resData: MapResData = MapCommand.getInstance().proxy.getResData(this._data.id);
             let resCfg: MapResConfig = MapCommand.getInstance().proxy.getResConfig(resData.type, resData.level);
-            
+        
+            let soldiers = MapUICommand.getInstance().proxy.getDefenseSoldiers(resData.level);
             this.labelYield.string = MapCommand.getInstance().proxy.getResYieldDesList(resCfg).join("\n");
-            this.labelSoldierCnt.string = "守备兵力 " + (resData.level * 100) + "x1";
+            this.labelSoldierCnt.string = "守备兵力 " + soldiers*3;
             
             if (this._data.nickName != null){
                 this.labelName.string = this._data.nickName + ":" + this._data.name;

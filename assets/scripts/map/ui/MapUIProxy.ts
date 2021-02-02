@@ -1,3 +1,4 @@
+import { Basic, Conscript, General } from "../../config/Basci";
 import LoginCommand from "../../login/LoginCommand";
 import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
@@ -122,16 +123,6 @@ export class FacilityUpLevel {
     time:number = 0;
 }
 
-/**征兵基础消耗*/
-export class ConscriptBaseCost {
-    cost_wood: number = 0;
-    cost_iron: number = 0;
-    cost_stone: number = 0;
-    cost_grain: number = 0;
-    cost_gold: number = 0;
-}
-
-
 export class BasicGeneral {
     limit: number = 0;
 }
@@ -176,19 +167,15 @@ export class WarReportRound {
     turn: number = 0;
 }
 
+
+
 export default class MapUIProxy {
     protected _myFacility: Map<number, Map<number, Facility>> = new Map<number, Map<number, Facility>>();//城市设施
     protected _facilityCfg: Map<number, FacilityConfig> = new Map<number, FacilityConfig>();//设施配置
     protected _facilityAdditionCfg: Map<number, FacilityAdditionCfg> = new Map<number, FacilityAdditionCfg>();//升级加成配置
-    protected _armyBaseCost: ConscriptBaseCost = new ConscriptBaseCost();
-    protected _basicGeneral: BasicGeneral = new BasicGeneral();
     protected _warReport: Map<number, WarReport> = new Map<number, WarReport>();
     protected _additions: Map<number, CityAddition> = new Map<number, CityAddition>();
-    protected _cityBaseCost: number = 0;
-    protected _cityBaseDurable: number = 0;
-    
-    public bTransformRate:number = 0;
-
+    protected _basic: Basic
 
     public clearData(): void {
         this._warReport.clear();
@@ -365,15 +352,15 @@ export default class MapUIProxy {
 
     public getMyCityCost(cityId: number):number{
         let addition = this.getMyCityAddition(cityId);
-        console.log("getMyCityCost:", cityId, addition, this._cityBaseCost);
-        return addition.cost + this._cityBaseCost;
+        console.log("getMyCityCost:", cityId, addition, this._basic.city.cost);
+        return addition.cost + this._basic.city.cost;
     }
 
     //最大耐久
     public getMyCityMaxDurable(cityId: number):number{
         let addition = this.getMyCityAddition(cityId);
-        console.log("getMyCityMaxDurable:", cityId, addition, this._cityBaseDurable);
-        return addition.durable + this._cityBaseDurable;
+        console.log("getMyCityMaxDurable:", cityId, addition, this._basic.city.durable);
+        return addition.durable + this._basic.city.durable;
     }
 
     /**
@@ -498,26 +485,21 @@ export default class MapUIProxy {
     }
 
     public setBasic(data: any): void {
-        this._armyBaseCost.cost_gold = data.json.conscript.cost_gold;
-        this._armyBaseCost.cost_iron = data.json.conscript.cost_iron;
-        this._armyBaseCost.cost_wood = data.json.conscript.cost_wood;
-        this._armyBaseCost.cost_grain = data.json.conscript.cost_grain;
-        this._armyBaseCost.cost_stone = data.json.conscript.cost_stone;
-        this.bTransformRate = data.json.city.transform_rate;
-
-        this._cityBaseCost = data.json.city.cost;
-        this._cityBaseDurable = data.json.city.durable;
-
-        this._basicGeneral.limit = data.json.general.limit;
+        this._basic = data.json;
+        console.log("setBasic:", this._basic);
     }
 
 
-    public getConscriptBaseCost(): ConscriptBaseCost {
-        return this._armyBaseCost;
+    public getConscriptBaseCost(): Conscript {
+        return this._basic.conscript;
     }
 
-    public getBasicGeneral(): BasicGeneral {
-        return this._basicGeneral;
+    public getDefenseSoldiers(level:number): number {
+        return this._basic.npc.levels[level-1].soilders
+    }
+
+    public getBasicGeneral(): General {
+        return this._basic.general;
     }
 
 

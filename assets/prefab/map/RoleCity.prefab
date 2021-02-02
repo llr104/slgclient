@@ -171,7 +171,7 @@
     "_spriteFrame": {
       "__uuid__": "8c7b4bfe-9615-49fa-9533-8c75dcdf666f"
     },
-    "_type": 0,
+    "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
@@ -280,7 +280,7 @@
     "_spriteFrame": {
       "__uuid__": "c829565c-2bb4-42a9-9c48-b0dc468d707f"
     },
-    "_type": 0,
+    "_type": 1,
     "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {

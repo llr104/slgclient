@@ -5,7 +5,7 @@ import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/Gener
 import MapUICommand from "./MapUICommand";
 import MapCommand from "../MapCommand";
 import { MapCityData } from "../MapCityProxy";
-import { CityAddition, CityAdditionType, ConscriptBaseCost, Facility } from "./MapUIProxy";
+import { CityAddition, CityAdditionType, Conscript, Facility } from "./MapUIProxy";
 import CityGeneralItemLogic from "./CityGeneralItemLogic";
 import LoginCommand from "../../login/LoginCommand";
 
@@ -260,7 +260,7 @@ export default class CityArmySettingLogic extends cc.Component {
         let totalCnt: number = this.getTotalConscriptCnt();
         if (totalCnt > 0) {
             var myRoleRes = LoginCommand.getInstance().proxy.getRoleResData();
-            var baseCost: ConscriptBaseCost = MapUICommand.getInstance().proxy.getConscriptBaseCost();
+            var baseCost: Conscript = MapUICommand.getInstance().proxy.getConscriptBaseCost();
             let str: string = "消耗:  " + "金币:" + totalCnt * baseCost.cost_gold + "/" + myRoleRes.gold;
             str += " 木材:" + totalCnt * baseCost.cost_wood + "/" + myRoleRes.wood;
             str += " 金属:" + totalCnt * baseCost.cost_iron + "/" + myRoleRes.iron;
