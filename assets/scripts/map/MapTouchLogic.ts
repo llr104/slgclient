@@ -52,7 +52,7 @@ export default class MapTouchLogic extends cc.Component {
                 this.showClickUINode(buildData, clickPixelPoint);
                 return;
             }
-           
+
         }
 
         let resData: MapResData = this._cmd.proxy.getResData(cellId);
@@ -60,7 +60,13 @@ export default class MapTouchLogic extends cc.Component {
             var temp = MapCommand.getInstance().proxy.getSysCityResData(resData.x, resData.y);
             if (temp){
                 clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(temp.x, temp.y));
-                this.showClickUINode(temp, clickPixelPoint);
+                let cellId: number = MapUtil.getIdByCellPoint(temp.x, temp.y);
+                let buildData: MapBuildData = this._cmd.buildProxy.getBuild(cellId);
+                if(buildData){
+                    this.showClickUINode(buildData, clickPixelPoint);
+                }else{
+                    this.showClickUINode(temp, clickPixelPoint);
+                }
                 console.log("点击野外城池", temp);
             }else{
                 this.showClickUINode(resData, clickPixelPoint);

@@ -754,12 +754,6 @@
     "labelName": {
       "__id__": 12
     },
-    "spr": {
-      "__id__": 9
-    },
-    "buildAtlas": {
-      "__uuid__": "1ecf2021-4458-495e-aec1-458624434baf"
-    },
     "upSpr": {
       "__id__": 3
     },

@@ -178,17 +178,6 @@ export default class MapClickUILogic extends cc.Component {
             this.btnTransfer.node.active = false;
             this.durableNode.active = false;
 
-            if(this._data.type == MapResType.SYS_CITY){
-
-                if(this._data.level >= 8){
-                    this.bgSelect.setContentSize(960*1.5, 480*1.5);
-                }else if(this._data.level >= 5){
-                    this.bgSelect.setContentSize(960, 480);
-                }else {
-                    this.bgSelect.setContentSize(960*0.5, 480*0.5);
-                }
-            }
-
         } else if (this._data instanceof MapBuildData) {
             //点击的是占领地
             if ((this._data as MapBuildData).rid == MapCommand.getInstance().buildProxy.myId) {
@@ -198,7 +187,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnGiveUp.node.active = !this._data.isInGiveUp();
                 this.btnReclaim.node.active = this._data.isResBuild();
                 this.btnBuild.node.active = !this._data.isWarFree();
-                if (this._data.isResBuild() == false){
+                if (this._data.isResBuild() == false && this._data.isSysCity() == false){
                     this.btnEnter.node.active = true;
                     this.btnBuild.node.active = false;
                     this.btnTransfer.node.active = !this._data.isBuilding();
@@ -283,6 +272,18 @@ export default class MapClickUILogic extends cc.Component {
             this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         }
+
+        if(this._data.type == MapResType.SYS_CITY){
+
+            if(this._data.level >= 8){
+                this.bgSelect.setContentSize(960*1.5, 480*1.5);
+            }else if(this._data.level >= 5){
+                this.bgSelect.setContentSize(960, 480);
+            }else {
+                this.bgSelect.setContentSize(960*0.5, 480*0.5);
+            }
+        }
+
 
         if (this.leftInfoNode.active ) {
 

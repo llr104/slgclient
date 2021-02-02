@@ -495,6 +495,7 @@ export default class MapUIProxy {
     }
 
     public getDefenseSoldiers(level:number): number {
+        console.log("getDefenseSoldiers:", level);
         return this._basic.npc.levels[level-1].soilders
     }
 

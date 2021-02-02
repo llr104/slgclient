@@ -101,6 +101,10 @@ export default class MapScene extends cc.Component {
                         resLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 
+                    if (this._cmd.proxy.getResData(cellId).type == MapResType.SYS_CITY) {
+                        sysCityLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
+                    }
+
                     //建筑
                     if (this._cmd.buildProxy.getBuild(cellId) != null) {
                         var build = this._cmd.buildProxy.getBuild(cellId);

@@ -22,7 +22,7 @@ export default class SysCityLogic extends cc.Component {
     mianNode: cc.Node = null;
 
     protected _limitTime: number = 0;
-    protected _data: MapBuildData = null;
+    protected _data: any = null;
 
 
     protected onLoad(): void {
@@ -39,7 +39,7 @@ export default class SysCityLogic extends cc.Component {
         cc.systemEvent.targetOff(this);
     }
 
-    public setCityData(data: MapBuildData): void {
+    public setCityData(data: any): void {
         this._data = data;
         this.updateUI();
     }
