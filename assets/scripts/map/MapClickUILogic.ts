@@ -187,12 +187,16 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnGiveUp.node.active = !this._data.isInGiveUp();
                 this.btnReclaim.node.active = this._data.isResBuild();
                 this.btnBuild.node.active = !this._data.isWarFree();
-                if (this._data.isResBuild() == false && this._data.isSysCity() == false){
-                    this.btnEnter.node.active = true;
-                    this.btnBuild.node.active = false;
-                    this.btnTransfer.node.active = !this._data.isBuilding();
-                }else{
+
+                //是资源地
+                if(this._data.isResBuild()){
                     this.btnTransfer.node.active = false;
+                    this.btnEnter.node.active = false;
+                    this.btnBuild.node.active = !this._data.isBuilding();
+                }else if(this._data.isSysCity()){
+                    this.btnTransfer.node.active = false;
+                    this.btnEnter.node.active = false;
+                    this.btnBuild.node.active = false;
                 }
 
                 if (this._data.isInGiveUp()){

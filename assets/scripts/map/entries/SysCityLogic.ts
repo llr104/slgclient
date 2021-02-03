@@ -2,6 +2,7 @@
 import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
+import { MapResType } from "../MapProxy";
 
 const { ccclass, property } = cc._decorator;
 
@@ -40,6 +41,7 @@ export default class SysCityLogic extends cc.Component {
     }
 
     public setCityData(data: any): void {
+        console.log("setCityData:", data);
         this._data = data;
         this.updateUI();
     }
@@ -54,42 +56,46 @@ export default class SysCityLogic extends cc.Component {
 
 
     public updateUI(): void {
-        if (this._data) {
+        if(this._data.type != MapResType.SYS_CITY){
+            this.node.active = false;
+            return
+        }else{
+            this.node.active = true;
+        }
 
-            if(this._data.level >= 8){
-                this.node.scale = 1.5;
-            }else if(this._data.level >= 5){
-                this.node.scale = 1;
-            }else {
-                this.node.scale = 0.5;
-            }
+        if(this._data.level >= 8){
+            this.node.scale = 1.5;
+        }else if(this._data.level >= 5){
+            this.node.scale = 1;
+        }else {
+            this.node.scale = 0.5;
+        }
 
-            if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
-                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_2_3");
-                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_1_3");
-            } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_2_3");
-                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_1_3");
-            }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
-                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_2_3");
-                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_1_3");
-            } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
-                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_2_3");
-                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_1_3");
-            }else {
-                this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_2_3");
-                this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_1_3");
-            }
+        if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
+            this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_2_3");
+            this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_1_3");
+        } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {
+            this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_2_3");
+            this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("green_1_3");
+        }else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myParentId) {
+            this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_2_3");
+            this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("purple_1_3");
+        } else if (this._data.parentId > 0 && this._data.parentId == MapCommand.getInstance().buildProxy.myUnionId) {
+            this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_2_3");
+            this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("yellow_1_3");
+        }else {
+            this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_2_3");
+            this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("red_1_3");
+        }
 
-            var diff = DateUtil.getServerTime() - this._data.occupyTime;
-            console.log("diff", diff, this._limitTime);
-            if (this._data.parentId > 0 && diff<this._limitTime){
-                this.mianNode.active = true;
-                this.stopCountDown();
-                this.schedule(this.countDown, 1.0);
-            }else{
-                this.mianNode.active = false;
-            }
+        var diff = DateUtil.getServerTime() - this._data.occupyTime;
+        console.log("diff", diff, this._limitTime);
+        if (this._data.parentId > 0 && diff<this._limitTime){
+            this.mianNode.active = true;
+            this.stopCountDown();
+            this.schedule(this.countDown, 1.0);
+        }else{
+            this.mianNode.active = false;
         }
     }
 

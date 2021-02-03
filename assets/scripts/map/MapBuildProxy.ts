@@ -167,8 +167,11 @@ export default class MapBuildProxy {
     public updateBuild(build: any): void {
         if (build.rid == 0) {
             //代表是放弃领地
-            this.removeBuild(build.x, build.y);
-            return;
+            if(build.type != MapResType.SYS_CITY){
+                this.removeBuild(build.x, build.y);
+                return;
+            }
+            
         }
         let id: number = MapUtil.getIdByCellPoint(build.x, build.y);
         let buildData: MapBuildData = null;
