@@ -24,15 +24,18 @@ export default class Helloworld extends cc.Component {
         let randomType: number = Math.floor(Math.random() * 4) + 52;
         let randomValue: number = Math.floor(Math.random() * 100);
         let randomLevel: number = 1;
-        if (randomValue < 80) {
+        if (randomValue < 50) {
             randomLevel = 1;
-        } else if (randomValue >= 80 && randomValue < 88) {
+        } else if (randomValue >= 50 && randomValue < 70) {
             randomLevel = 2;
-        } else if (randomValue >= 88 && randomValue < 94) {
+        } else if (randomValue >= 70 && randomValue < 85) {
             randomLevel = 3;
-        } else if (randomValue >= 94 && randomValue < 97) {
+        } else if (randomValue >= 85 && randomValue < 92) {
             randomLevel = 4;
-        } else {
+        } else if (randomValue >= 92 && randomValue < 98) {
+            randomLevel = 5;
+        }else {
+            randomType = 56;
             randomLevel = 5;
         }
         return [randomType, randomLevel];
