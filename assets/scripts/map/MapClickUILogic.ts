@@ -235,7 +235,7 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnTransfer.node.active = false;
             }
             this.durableNode.active = true;
-            this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
+            this.labelDurable.string = Math.ceil(this._data.curDurable/100) + "/" +  Math.ceil(this._data.maxDurable/100);
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
         } else if (this._data instanceof MapCityData) {
             //点击其他城市
@@ -274,12 +274,14 @@ export default class MapClickUILogic extends cc.Component {
                 this.btnTransfer.node.active = false;
             }
             this.bgSelect.setContentSize(600, 300);
-
-            this.durableNode.active = true;
             this.leftInfoNode.active = false;
-            this.labelDurable.string = this._data.curDurable + "/" + this._data.maxDurable;
+            this.durableNode.active = true;
+            this.labelDurable.string = Math.ceil(this._data.curDurable/100) + "/" +  Math.ceil(this._data.maxDurable/100);
             this.progressBarDurable.progress = this._data.curDurable / this._data.maxDurable;
+      
         }
+
+       
 
         if(this._data.type == MapResType.SYS_CITY){
 
