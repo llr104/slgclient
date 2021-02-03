@@ -114,7 +114,7 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onClickBuild(): void {
-        MapCommand.getInstance().build(this._data.x, this._data.y, 50);
+        MapCommand.getInstance().build(this._data.x, this._data.y, MapResType.FORTRESS);
         this.node.parent = null;
     }
 
