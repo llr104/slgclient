@@ -197,6 +197,10 @@ export default class MapClickUILogic extends cc.Component {
                     this.btnTransfer.node.active = false;
                     this.btnEnter.node.active = false;
                     this.btnBuild.node.active = false;
+                }else if(this._data.isSysFortress){
+                    this.btnTransfer.node.active = true;
+                    this.btnEnter.node.active = true;
+                    this.btnBuild.node.active = false;
                 }
 
                 if (this._data.isInGiveUp()){

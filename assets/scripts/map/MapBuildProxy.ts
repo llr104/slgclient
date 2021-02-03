@@ -89,6 +89,10 @@ export class MapBuildData {
         return this.type == MapResType.SYS_CITY;
     }
 
+    public isSysFortress():boolean{
+        return this.type == MapResType.SYS_FORTRESS;
+    }
+
     public isWarFree(): boolean {
         var diff = DateUtil.getServerTime() - this.occupyTime;
         if(diff < MapCommand.getInstance().proxy.getWarFree()){
