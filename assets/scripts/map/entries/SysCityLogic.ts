@@ -71,7 +71,10 @@ export default class SysCityLogic extends cc.Component {
             this.node.scale = 0.5;
         }
 
-        if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
+        if(!this._data.rid){
+            this.upSpr.spriteFrame = null;
+            this.downSpr.spriteFrame = null;
+        }else if (this._data.rid == MapCommand.getInstance().buildProxy.myId) {
             this.upSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_2_3");
             this.downSpr.spriteFrame = this.resourceAtlas.getSpriteFrame("blue_1_3");
         } else if (this._data.unionId > 0 && this._data.unionId == MapCommand.getInstance().buildProxy.myUnionId) {

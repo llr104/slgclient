@@ -98,7 +98,7 @@ export class MapBuildData {
     }
 
     public isResBuild(): boolean{
-        return this.type>=MapResType.WOOD && this.type < MapResType.SYS_FORTRESS
+        return this.type>=MapResType.WOOD && this.type < MapResType.FORTRESS
     }
 
     public isInGiveUp(): boolean {
@@ -167,7 +167,7 @@ export default class MapBuildProxy {
     public updateBuild(build: any): void {
         if (build.rid == 0) {
             //代表是放弃领地
-            if(build.type != MapResType.SYS_CITY){
+            if(build.type > MapResType.SYS_CITY){
                 this.removeBuild(build.x, build.y);
                 return;
             }

@@ -35,7 +35,7 @@ export default class Helloworld extends cc.Component {
         } else if (randomValue >= 92 && randomValue < 98) {
             randomLevel = 5;
         }else {
-            randomType = 56;
+            randomType = 50;
             randomLevel = 5;
         }
         return [randomType, randomLevel];

@@ -16,13 +16,14 @@ export class MapResConfig {
 
 /**地图资源类型*/
 export class MapResType {
-    static FORTRESS: number = 50; //要塞
+    static SYS_FORTRESS: number = 50;   //系统要塞
     static SYS_CITY: number = 51;
     static WOOD: number = 52;
     static IRON: number = 53;
     static STONE: number = 54;
     static GRAIN: number = 55;
-    static SYS_FORTRESS: number = 56;   //系统要塞
+    static FORTRESS: number = 56; //要塞
+    
 }
 
 /**地图资源数据*/

@@ -97,7 +97,7 @@ export default class MapScene extends cc.Component {
                 for (let y: number = areaData.startCellY; y < areaData.endCellY; y++) {
                     let cellId: number = MapUtil.getIdByCellPoint(x, y);
                     //资源
-                    if (this._cmd.proxy.getResData(cellId).type >= MapResType.WOOD) {
+                    if (this._cmd.proxy.getResData(cellId)) {
                         resLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 
@@ -111,7 +111,10 @@ export default class MapScene extends cc.Component {
                         if(build.type == MapResType.SYS_CITY){
                             //系统城池
                             sysCityLogic.addItem(addIds[i], build);
-                        }else{
+                        }else if(build.type == MapResType.SYS_FORTRESS){
+                            console.log("MapResType.SYS_FORTRESS");
+                            resLogic.addItem(addIds[i], build);
+                        } else{
                             buildResLogic.addItem(addIds[i], build);
                         }
                     }
