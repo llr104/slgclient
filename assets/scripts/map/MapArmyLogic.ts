@@ -115,16 +115,17 @@ export default class MapArmyLogic extends cc.Component {
     protected checkVisible(): void {
 
         this._armyLogics.forEach((logic:ArmyLogic) => {
-            let pos = logic.update();
             let city = MapCommand.getInstance().cityProxy.getMyCityById(logic.data.cityId);
             if(!city || city.rid != MapCommand.getInstance().buildProxy.myId){
-                var visible = MapUtil.armyIsInView(pos.x, pos.y);
-                console.log("checkVisible:", pos.x, pos.y);
-                if(visible == false){
-                    console.log("checkVisible removeArmyById", logic.data.id);
+            
+                var visible1 = MapUtil.armyIsInView(logic.data.x, logic.data.y);
+                var visible2 = MapUtil.armyIsInView(logic.data.toX, logic.data.toY);
+                var visible3 = MapUtil.armyIsInView(logic.data.fromX, logic.data.fromY);
+                if(!visible1 && !visible2 && !visible3){
                     this.removeArmyById(logic.data.id);
                 }
             }
+            
         });
     }
 }
