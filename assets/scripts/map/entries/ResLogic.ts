@@ -7,7 +7,10 @@ export default class ResLogic extends cc.Component {
     @property(cc.Sprite)
     spr: cc.Sprite = null;
     @property(cc.SpriteAtlas)
-    resourceAtlas: cc.SpriteAtlas = null;
+    resourceAtlas1: cc.SpriteAtlas = null;
+
+    @property(cc.SpriteAtlas)
+    resourceAtlas2: cc.SpriteAtlas = null;
 
     protected _data: MapResData = null;
 
@@ -21,21 +24,52 @@ export default class ResLogic extends cc.Component {
 
     public setResourceData(data: MapResData): void {
         this._data = data;
+        
+        
         if (data.type == MapResType.WOOD) {
             //木头
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_2_" + data.level);
+            if(data.level == 1){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_1_1");
+            }else if(data.level == 2){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_2_1");
+            }else{
+                this.spr.spriteFrame = this.resourceAtlas2.getSpriteFrame("land_2_" + (data.level-2));
+            }
+           
         } else if (data.type == MapResType.IRON) {
             //铁
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_4_" + data.level);
+            if(data.level == 1){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_1_1");
+            }else if(data.level == 2){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_2_1");
+            }else{
+                this.spr.spriteFrame = this.resourceAtlas2.getSpriteFrame("land_4_" + (data.level-2));
+            }
+            
         } else if (data.type == MapResType.STONE) {
             //石头
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_3_" + data.level);
+            if(data.level == 1){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_1_1");
+            }else if(data.level == 2){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_2_1");
+            }else{
+                this.spr.spriteFrame = this.resourceAtlas2.getSpriteFrame("land_2_" + (data.level-2));
+            }
         } else if (data.type == MapResType.GRAIN) {
             //田
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("land_1_" + data.level);
+            if(data.level == 1){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_1_1");
+            }else if(data.level == 2){
+                this.spr.spriteFrame = this.resourceAtlas1.getSpriteFrame("land_ground_2_1");
+            }else{
+                this.spr.spriteFrame = this.resourceAtlas2.getSpriteFrame("land_1_" + (data.level-2));
+            }
         } else if (data.type == MapResType.SYS_FORTRESS) {
             //系统要塞
-            this.spr.spriteFrame = this.resourceAtlas.getSpriteFrame("sys_fortress");
+            this.spr.spriteFrame = this.resourceAtlas2.getSpriteFrame("sys_fortress");
+        }else {
+            this.spr.spriteFrame = null;
         }
+       
     }
 }

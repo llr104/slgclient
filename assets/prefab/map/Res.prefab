@@ -197,7 +197,10 @@
     "spr": {
       "__id__": 3
     },
-    "resourceAtlas": {
+    "resourceAtlas1": {
+      "__uuid__": "8263f1ee-4128-4ca5-acb5-74ea1c800c44"
+    },
+    "resourceAtlas2": {
       "__uuid__": "21e5fb5c-7af7-469a-bed3-48455c2692bd"
     },
     "_id": ""

@@ -1,3 +1,5 @@
+import { MapResType } from "../map/MapProxy";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -24,18 +26,24 @@ export default class Helloworld extends cc.Component {
         let randomType: number = Math.floor(Math.random() * 4) + 52;
         let randomValue: number = Math.floor(Math.random() * 100);
         let randomLevel: number = 1;
-        if (randomValue < 50) {
+        if (randomValue < 20) {
             randomLevel = 1;
-        } else if (randomValue >= 50 && randomValue < 70) {
+        } else if (randomValue >= 20 && randomValue < 40) {
             randomLevel = 2;
-        } else if (randomValue >= 70 && randomValue < 85) {
+        } else if (randomValue >= 40 && randomValue < 55) {
             randomLevel = 3;
-        } else if (randomValue >= 85 && randomValue < 92) {
+        } else if (randomValue >= 55 && randomValue < 65) {
             randomLevel = 4;
-        } else if (randomValue >= 92 && randomValue < 98) {
+        } else if (randomValue >= 65 && randomValue < 75) {
             randomLevel = 5;
+        }else if (randomValue >= 75 && randomValue < 85) {
+            randomLevel = 6;
+        }else if (randomValue >= 85 && randomValue < 94) {
+            randomLevel = 7;
+        }else if (randomValue >= 94 && randomValue < 99) {
+            randomLevel = 8;
         }else {
-            randomType = 50;
+            randomType = MapResType.SYS_FORTRESS;
             randomLevel = 5;
         }
         return [randomType, randomLevel];
