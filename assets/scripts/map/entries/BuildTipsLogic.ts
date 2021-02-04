@@ -51,9 +51,9 @@ export default class BuildTipsLogic extends cc.Component {
                 this.schedule(this.countDownWarFree, 1.0);
                 this.countDownWarFree();
             }
-
-
-            this.startGiveUp();
+            if(this._data.rid == MapCommand.getInstance().cityProxy.myId){
+                this.startGiveUp();
+            }
         }
     }
 

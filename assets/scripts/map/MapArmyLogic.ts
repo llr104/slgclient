@@ -1,6 +1,8 @@
 import ArmyCommand from "../general/ArmyCommand";
 import { ArmyCmd, ArmyData } from "../general/ArmyProxy";
 import ArmyLogic from "./entries/ArmyLogic";
+import MapCommand from "./MapCommand";
+import MapUtil from "./MapUtil";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,6 +23,8 @@ export default class MapArmyLogic extends cc.Component {
         cc.systemEvent.on("update_army_list", this.onUpdateArmyList, this);
         cc.systemEvent.on("update_army", this.onUpdateArmy, this);
         this.initArmys();
+
+        this.schedule(this.checkVisible, 0.5);
     }
 
     protected onDestroy(): void {
@@ -105,5 +109,22 @@ export default class MapArmyLogic extends cc.Component {
             this._armyLogics.delete(id);
             console.log("removeArmyById", id);
         }
+    }
+
+
+    protected checkVisible(): void {
+
+        this._armyLogics.forEach((logic:ArmyLogic) => {
+            let pos = logic.update();
+            let city = MapCommand.getInstance().cityProxy.getMyCityById(logic.data.cityId);
+            if(!city || city.rid != MapCommand.getInstance().buildProxy.myId){
+                var visible = MapUtil.armyIsInView(pos.x, pos.y);
+                console.log("checkVisible:", pos.x, pos.y);
+                if(visible == false){
+                    console.log("checkVisible removeArmyById", logic.data.id);
+                    this.removeArmyById(logic.data.id);
+                }
+            }
+        });
     }
 }

@@ -1,3 +1,4 @@
+import MapCommand from "./MapCommand";
 
 
 export default class MapUtil {
@@ -247,5 +248,40 @@ export default class MapUtil {
     public static mapPixelToCellPoint(point: cc.Vec2): cc.Vec2 {
         let worldPoint: cc.Vec2 = point.add(this._mapOffsetPoint);
         return this.worldPixelToMapCellPoint(worldPoint);
+    }
+
+    public static armyIsInView(x:number, y:number): boolean {
+        let buildProxy = MapCommand.getInstance().buildProxy;
+        let cityProxy = MapCommand.getInstance().cityProxy;
+        
+        let myId = cityProxy.getMyPlayerId();
+        let myUnionId = cityProxy.myUnionId;
+        // let parentId = cityProxy.myParentId;
+
+        //可视觉区域以当前为原点，半径为5
+        for (let i = Math.max(0, x-5); i<= Math.min(x+5, this._mapSize.width); i++) {
+            for (let j = Math.max(0, y-5); j<= Math.min(y+5, this._mapSize.height); j++) {
+                let id: number = MapUtil.getIdByCellPoint(i, j);
+                var b = buildProxy.getBuild(id);
+                if (!b){
+                    continue
+                }
+
+                if(b.rid == myId || (myUnionId != 0 && (b.unionId == myUnionId || b.parentId == myUnionId))){
+                    return true;
+                }
+
+                var c = cityProxy.getCity(id)
+                if (!c){
+                    continue
+                }
+
+                if(c.rid == myId || (myUnionId != 0 && (b.unionId == myUnionId || b.parentId == myUnionId))){
+                    return true;
+                }
+            }
+        }
+
+        return false
     }
 }
