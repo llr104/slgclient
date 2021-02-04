@@ -86,8 +86,6 @@ export class Facility {
     }
 }
 
-
-
 /**设施(配置)*/
 export class FacilityConfig {
     name: string = "";

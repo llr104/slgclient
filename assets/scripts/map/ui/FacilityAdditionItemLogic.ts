@@ -1,5 +1,6 @@
 import MapUICommand from "./MapUICommand";
-import { Facility, FacilityAdditionCfg, FacilityConfig } from "./MapUIProxy";
+import { Facility, FacilityAdditionCfg, FacilityConfig, CityAdditionType } from "./MapUIProxy";
+
 
 const { ccclass, property } = cc._decorator;
 
@@ -34,7 +35,12 @@ export default class FacilityAdditionItemLogic extends cc.Component {
             //达到最大等级
             this.upNode.active = false;
             this.maxNode.active = true;
-            this.labeMax.string = additionCfg.value.replace("%n%", cfg.upLevels[data.level - 1].values[index] + "");
+
+            var v = cfg.upLevels[data.level - 1].values[index];
+            if(additionType == CityAdditionType.Durable){
+                v = v/100
+            }
+            this.labeMax.string = additionCfg.value.replace("%n%",  v+ "");
         } else {
             this.upNode.active = true;
             this.maxNode.active = false;
@@ -42,9 +48,21 @@ export default class FacilityAdditionItemLogic extends cc.Component {
                 //代表未升级过
                 this.labelOld.string = "---";
             } else {
-                this.labelOld.string = additionCfg.value.replace("%n%", cfg.upLevels[data.level - 1].values[index] + "");
+
+                var v = cfg.upLevels[data.level - 1].values[index];
+                if(additionType == CityAdditionType.Durable){
+                    v = v/100
+                }
+
+                this.labelOld.string = additionCfg.value.replace("%n%", v + "");
             }
-            this.labelNew.string = additionCfg.value.replace("%n%", cfg.upLevels[data.level].values[index] + "");
+
+            var v = cfg.upLevels[data.level].values[index];
+            if(additionType == CityAdditionType.Durable){
+                v = v/100
+            }
+
+            this.labelNew.string = additionCfg.value.replace("%n%", v + "");
         }
     }
 }

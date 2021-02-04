@@ -5,9 +5,10 @@ import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/Gener
 import MapUICommand from "./MapUICommand";
 import MapCommand from "../MapCommand";
 import { MapCityData } from "../MapCityProxy";
-import { CityAddition, CityAdditionType, Conscript, Facility } from "./MapUIProxy";
+import { CityAddition, CityAdditionType, Facility } from "./MapUIProxy";
 import CityGeneralItemLogic from "./CityGeneralItemLogic";
 import LoginCommand from "../../login/LoginCommand";
+import { Conscript } from "../../config/Basci";
 
 const { ccclass, property } = cc._decorator;
 
