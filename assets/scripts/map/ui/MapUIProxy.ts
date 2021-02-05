@@ -596,21 +596,20 @@ export default class MapUIProxy {
             obj.id = data[0];
             obj.cfgId = data[1];
             obj.physical_power = data[2];
-            obj.cost = data[3];
-            obj.order = data[4];
-            obj.level = data[5];
-            obj.exp = data[6];
-            obj.cityId = data[7];
-            obj.curArms = data[8];
-            obj.hasPrPoint = data[9];
-            obj.attack_distance = data[10];
-            obj.force_added = data[11];
-            obj.strategy_added = data[12];
-            obj.defense_added = data[13];
-            obj.speed_added = data[14];
-            obj.destroy_added = data[15];
-            obj.star_lv = data[16];
-            obj.star = data[17];
+            obj.order = data[3];
+            obj.level = data[4];
+            obj.exp = data[5];
+            obj.cityId = data[6];
+            obj.curArms = data[7];
+            obj.hasPrPoint = data[8];
+            obj.attack_distance = data[9];
+            obj.force_added = data[10];
+            obj.strategy_added = data[11];
+            obj.defense_added = data[12];
+            obj.speed_added = data[13];
+            obj.destroy_added = data[14];
+            obj.star_lv = data[15];
+            obj.star = data[16];
 
 
             temp.push(obj);

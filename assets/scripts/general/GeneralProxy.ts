@@ -51,7 +51,6 @@ export class GeneralCommonConfig {
 export class GeneralData {
     id: number = 0;
     cfgId: number = 0;
-    cost: number = 0;
     exp: number = 0;
     level: number = 0;
     physical_power: number = 0;
@@ -77,7 +76,6 @@ export class GeneralData {
         }
         data.id = serverData.id;
         data.cfgId = serverData.cfgId;
-        data.cost = serverData.cost;
         data.exp = serverData.exp;
         data.level = serverData.level;
         data.order = serverData.order;
@@ -295,11 +293,14 @@ export default class GeneralProxy {
 
 
     protected sortStar(a: GeneralData, b: GeneralData): number {
-        if(a.cfgId < b.cfgId){
-            return 1;
-        }
 
-        return -1;
+        if(a.config.star < b.config.star){
+            return 1;
+        }else if(a.config.star == b.config.star){
+            return a.cfgId - b.cfgId;
+        }else{
+            return -1;
+        }
     }
 
     /**
@@ -309,8 +310,7 @@ export default class GeneralProxy {
         var tempArr: GeneralData[] = this.getMyGenerals().concat();
         tempArr.sort(this.sortStar);
         var temp: GeneralData[] = [];
-        
-
+    
         for (var i = 0; i < tempArr.length; i++) {
             if (tempArr[i].order > 0) {
                 console.log("tempArr[i].order:",tempArr[i].order,tempArr[i].config.name)
@@ -320,14 +320,12 @@ export default class GeneralProxy {
             }
         }
 
-
         for (var i = 0; i < tempArr.length; i++) {
             if (tempArr[i].parentId > 0) {
                 tempArr.splice(i, 1);
                 i--;
             }
         }
-
 
         temp = temp.concat(tempArr);
 
