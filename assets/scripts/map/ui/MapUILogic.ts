@@ -13,7 +13,7 @@ import CityAboutLogic from "./CityAboutLogic";
 import GeneralListLogic from "./GeneralListLogic";
 import TransformLogic from "./TransformLogic";
 import { Tools } from "../../utils/Tools";
-import GeneralAllLogic from "./GeneralAllLogic";
+import GeneralInfoLogic from "./GeneralInfoLogic";
 import WarReportLogic from "./WarReportLogic";
 
 
@@ -254,7 +254,7 @@ export default class MapUILogic extends cc.Component {
             this._generalDesNode.active = true;
         }
         // this._generalDesNode.zIndex = 1;
-        this._generalDesNode.getComponent(GeneralAllLogic).setData(cfgData, curData);
+        this._generalDesNode.getComponent(GeneralInfoLogic).setData(cfgData, curData);
     }
 
 

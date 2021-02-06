@@ -13,7 +13,7 @@ import { GeneralItemType } from "./GeneralItemLogic";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class GeneralAllLogic  extends cc.Component {
+export default class GeneralInfoLogic  extends cc.Component {
 
 
     @property(cc.Prefab)
