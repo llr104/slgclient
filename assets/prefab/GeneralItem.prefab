@@ -357,8 +357,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -147.792,
-        134.38,
+        -130,
+        135,
         0,
         0,
         0,
@@ -880,7 +880,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 190,
-      "height": 40
+      "height": 34
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -919,7 +919,7 @@
   {
     "__type__": "cc.Node",
     "_name": "img_star",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 22
     },
@@ -955,7 +955,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        17,
+        173,
         0,
         0,
         0,
@@ -1026,7 +1026,7 @@
   {
     "__type__": "cc.Node",
     "_name": "img_star",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 22
     },
@@ -1062,7 +1062,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        56,
+        134,
         0,
         0,
         0,
@@ -1133,7 +1133,7 @@
   {
     "__type__": "cc.Node",
     "_name": "img_star",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 22
     },
@@ -1240,7 +1240,7 @@
   {
     "__type__": "cc.Node",
     "_name": "img_star",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 22
     },
@@ -1276,7 +1276,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        134,
+        56,
         0,
         0,
         0,
@@ -1347,7 +1347,7 @@
   {
     "__type__": "cc.Node",
     "_name": "img_star",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 22
     },
@@ -1383,7 +1383,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        173,
+        17,
         0,
         0,
         0,
@@ -1462,9 +1462,9 @@
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 190,
-      "height": 40
+      "height": 34
     },
-    "_resize": 1,
+    "_resize": 0,
     "_N$layoutType": 1,
     "_N$cellSize": {
       "__type__": "cc.Size",
@@ -1479,7 +1479,7 @@
     "_N$spacingX": 5,
     "_N$spacingY": 0,
     "_N$verticalDirection": 1,
-    "_N$horizontalDirection": 0,
+    "_N$horizontalDirection": 1,
     "_N$affectedByScale": false,
     "_id": ""
   },
