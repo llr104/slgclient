@@ -215,6 +215,10 @@ export default class GeneralProxy {
         return null;
     }
 
+    public getGeneralAllCfg(): Map<number, GeneralConfig>{
+        return this._generalConfigs
+    }
+
     /**武将等级配置*/
     public getGeneralLevelCfg(level: number): GenaralLevelConfig {
         if (level > 0 && level <= this._levelConfigs.length) {

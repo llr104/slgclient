@@ -47,6 +47,11 @@ export default class GeneralListLogic extends cc.Component {
         this.node.active = false;
     }
 
+    protected onTuJianConvert(): void {
+        cc.systemEvent.emit("open_general_roster");
+        this.node.active = false;
+    }
+
     protected initGeneralCfg():void{
 
         var basic = MapUICommand.getInstance().proxy.getBasicGeneral();

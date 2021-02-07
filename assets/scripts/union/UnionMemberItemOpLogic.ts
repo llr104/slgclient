@@ -47,7 +47,7 @@ export default class UnionMemberItemOpLogic extends cc.Component {
         this.node.active = false;
     }
     
-    protected setData(data):void{
+    public setData(data):void{
         this._menberData = data;
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);

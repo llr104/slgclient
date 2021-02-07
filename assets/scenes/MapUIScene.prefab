@@ -11852,6 +11852,9 @@
     "generalConvertPrefab": {
       "__uuid__": "65571b75-0767-47bf-9258-6c4a46346649"
     },
+    "generalRosterPrefab": {
+      "__uuid__": "cac2ae01-2405-40a0-a0bc-48583fd78b9c"
+    },
     "srollLayout": {
       "__id__": 157
     },

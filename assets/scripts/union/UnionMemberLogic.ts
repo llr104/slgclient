@@ -9,6 +9,7 @@ import UnionCommand from "./UnionCommand";
 import { Member, Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
+import UnionMemberItemOpLogic from "./UnionMemberItemOpLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -58,7 +59,7 @@ export default class UnionMemberLogic extends cc.Component {
             this._op = node;
         }
         this._op.active = true;
-        this._op.getComponent("UnionMemberItemOpLogic").setData(menberData);
+        this._op.getComponent(UnionMemberItemOpLogic).setData(menberData);
     }
 
     protected updateMember(data:any[]){

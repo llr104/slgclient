@@ -15,6 +15,7 @@ import TransformLogic from "./TransformLogic";
 import { Tools } from "../../utils/Tools";
 import GeneralInfoLogic from "./GeneralInfoLogic";
 import WarReportLogic from "./WarReportLogic";
+import DrawRLogic from "./DrawRLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -86,6 +87,11 @@ export default class MapUILogic extends cc.Component {
     generalConvertPrefab: cc.Prefab = null;
     protected _generalConvertNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    generalRosterPrefab: cc.Prefab = null;
+    protected _generalRosterNode: cc.Node = null;
+
+
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
 
@@ -124,6 +130,8 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("robLoginUI", this.robLoginUI, this);
         cc.systemEvent.on("interior_collect", this.onCollection, this);
         cc.systemEvent.on("open_general_convert", this.onOpenGeneralConvert, this);
+        cc.systemEvent.on("open_general_roster", this.onOpenGeneralRoster, this);
+        
         cc.systemEvent.on("open_general", this.openGeneral, this);
         
         
@@ -362,7 +370,7 @@ export default class MapUILogic extends cc.Component {
             this._drawResultNode.active = true;
         }
         this._drawResultNode.zIndex = 2;
-        this._drawResultNode.getComponent("DrawRLogic").setData(data);
+        this._drawResultNode.getComponent(DrawRLogic).setData(data);
     }
 
 
@@ -412,6 +420,18 @@ export default class MapUILogic extends cc.Component {
 
     }
 
+    protected onOpenGeneralRoster(): void {
+        console.log("onOpenGeneralRoster");
+        if (this._generalRosterNode == null) {
+            this._generalRosterNode = cc.instantiate(this.generalRosterPrefab);
+            this._generalRosterNode.parent = this.node;
+            this._generalRosterNode.zIndex = 4;
+        } else {
+            this._generalRosterNode.active = true;
+        }
+
+    }
+    
 
     //征收
     protected onCollection(msg:any):void{
