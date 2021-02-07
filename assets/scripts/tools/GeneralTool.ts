@@ -31,6 +31,9 @@ export default class GeneralTool extends cc.Component {
     nameEditBox: cc.EditBox = null;
 
     @property(cc.EditBox)
+    xjEditBox: cc.EditBox = null;
+
+    @property(cc.EditBox)
     wlEditBox: cc.EditBox = null;
 
     @property(cc.EditBox)
@@ -132,6 +135,8 @@ export default class GeneralTool extends cc.Component {
             this._generalNode.getComponent(GeneralRosterLogic).setData(cfg);
 
             this.nameEditBox.string = cfg.name;
+            this.xjEditBox.string = cfg.star + "";
+
             this.wlEditBox.string = (cfg.force / 100) + "";
             this.fyEditBox.string = (cfg.defense / 100) + "";
             this.mlEditBox.string = (cfg.strategy / 100) + "";
@@ -152,6 +157,12 @@ export default class GeneralTool extends cc.Component {
     protected refresh(): void {
         //刷新
         this._cfgs[this._curIndex].name = this.nameEditBox.string;
+
+        var xj = parseInt(this.xjEditBox.string);
+        if(0 < xj && xj <= 5){
+            this._cfgs[this._curIndex].star = xj;
+        } 
+
         this._cfgs[this._curIndex].force = parseInt(this.wlEditBox.string)*100;
         this._cfgs[this._curIndex].strategy = parseInt(this.mlEditBox.string)*100;
         this._cfgs[this._curIndex].defense = parseInt(this.fyEditBox.string)*100;
