@@ -18,7 +18,7 @@ export class GeneralItemType {
 
 
 import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -41,8 +41,16 @@ export default class GeneralRosterLogic extends cc.Component {
     @property(cc.Layout)
     starLayout:cc.Layout = null;
 
+    
+    @property(cc.Label)
+    campLabel: cc.Label = null;
+    
+
     _cfg:GeneralConfig = null;
 
+    public setData(cfg:GeneralConfig): void{
+        this.updateItem(cfg);
+    }
 
     protected updateItem(cfg:GeneralConfig):void{
         // console.log("updateItem");
@@ -54,6 +62,19 @@ export default class GeneralRosterLogic extends cc.Component {
         if(this.costLabel){
             this.costLabel.string = this._cfg.cost + "";
         }
+
+        if(this._cfg.camp == GeneralCampType.Han){
+            this.campLabel.string = "汉";
+        }else if(this._cfg.camp == GeneralCampType.Qun){
+            this.campLabel.string = "群";
+        }else if(this._cfg.camp == GeneralCampType.Wei){
+            this.campLabel.string = "魏";
+        }else if(this._cfg.camp == GeneralCampType.Shu){
+            this.campLabel.string = "蜀";
+        }else if(this._cfg.camp == GeneralCampType.Wu){
+            this.campLabel.string = "吴";
+        }
+        
     }
 
 

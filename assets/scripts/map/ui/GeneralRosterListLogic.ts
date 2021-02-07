@@ -8,8 +8,6 @@
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig } from "../../general/GeneralProxy";
-import MapUICommand from "./MapUICommand";
-
 
 
 const { ccclass, property } = cc._decorator;

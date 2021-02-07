@@ -18,7 +18,7 @@ export class GeneralItemType {
 
 
 import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
+import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -39,6 +39,8 @@ export default class GeneralItemLogic extends cc.Component {
     @property(cc.Label)
     costLabel: cc.Label = null;
 
+    @property(cc.Label)
+    campLabel: cc.Label = null;
     
     @property(cc.Layout)
     starLayout:cc.Layout = null;
@@ -88,6 +90,19 @@ export default class GeneralItemLogic extends cc.Component {
         this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
         this.showStar(cfgData.star,this._curData.star_lv);
         this.delNode.active = false;
+
+        if(cfgData.camp == GeneralCampType.Han){
+            this.campLabel.string = "汉";
+        }else if(cfgData.camp == GeneralCampType.Qun){
+            this.campLabel.string = "群";
+        }else if(cfgData.camp == GeneralCampType.Wei){
+            this.campLabel.string = "魏";
+        }else if(cfgData.camp == GeneralCampType.Shu){
+            this.campLabel.string = "蜀";
+        }else if(cfgData.camp == GeneralCampType.Wu){
+            this.campLabel.string = "吴";
+        }
+        
 
         if(this.useNode){
             if(this._type == GeneralItemType.GeneralInfo && this._curData.order > 0){
