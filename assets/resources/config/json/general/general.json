@@ -1774,7 +1774,7 @@
     },
     {
       "name": "董承",
-      "cfgId": 1000100,
+      "cfgId": 100100,
       "force": 3700,
       "strategy": 6900,
       "defense": 5000,
@@ -5920,7 +5920,7 @@
 
     {
       "name": "木鹿大王",
-      "cfgId": 100451,
+      "cfgId": 100452,
       "force": 9000,
       "strategy": 7500,
       "defense": 8900,
