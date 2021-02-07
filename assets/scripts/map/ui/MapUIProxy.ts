@@ -361,6 +361,10 @@ export default class MapUIProxy {
         return addition.durable + this._basic.city.durable;
     }
 
+    public getTransformRate():number {
+        return this._basic.city.transform_rate
+    }
+
     /**
      * 全部设施配置
      * @param jsonAsset 

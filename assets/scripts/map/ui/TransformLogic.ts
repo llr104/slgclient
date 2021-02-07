@@ -65,7 +65,7 @@ export default class TransformLogic extends cc.Component {
     private getRate() :number {
         var cityId = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
         var _addition = MapUICommand.getInstance().proxy.getMyCityAddition(cityId);
-        var rate = MapUICommand.getInstance().proxy.bTransformRate + _addition.taxRate;
+        var rate = MapUICommand.getInstance().proxy.getTransformRate() + _addition.taxRate;
         return rate
     }
 
