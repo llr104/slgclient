@@ -25,7 +25,11 @@ export default class GeneralTool extends cc.Component {
     generalRoster: cc.Prefab = null;
 
     @property(cc.ToggleContainer)
-    toggleGroup: cc.ToggleContainer = null;
+    toggleCampGroup: cc.ToggleContainer = null;
+
+    @property(cc.ToggleContainer)
+    toggleArmGroup: cc.ToggleContainer = null;
+
 
     @property(cc.EditBox)
     nameEditBox: cc.EditBox = null;
@@ -150,11 +154,23 @@ export default class GeneralTool extends cc.Component {
             this.gcAddEditBox.string = (cfg.defense_grow / 100) + "";
 
             this.costEditBox.string = cfg.cost + "";
-            this.toggleGroup.toggleItems[cfg.camp-1].isChecked = true;
+            this.toggleCampGroup.toggleItems[cfg.camp-1].isChecked = true;
+
+            console.log("cfg.arms:", cfg);
+            if(cfg.arms[0] == 1){
+                this.toggleArmGroup.toggleItems[0].isChecked = true;
+            }else if(cfg.arms[0] == 2){
+                this.toggleArmGroup.toggleItems[1].isChecked = true;
+            }else {
+                this.toggleArmGroup.toggleItems[2].isChecked = true;
+            }
+            
         }
     }
 
     protected refresh(): void {
+        console.log("refresh");
+
         //刷新
         this._cfgs[this._curIndex].name = this.nameEditBox.string;
 
@@ -169,19 +185,33 @@ export default class GeneralTool extends cc.Component {
         this._cfgs[this._curIndex].speed = parseInt(this.sdEditBox.string)*100;
         this._cfgs[this._curIndex].destroy = parseInt(this.gcEditBox.string)*100;
 
-        this._cfgs[this._curIndex].force_grow = parseInt(this.wlAddEditBox.string)*100;
-        this._cfgs[this._curIndex].strategy_grow = parseInt(this.mlAddEditBox.string)*100;
-        this._cfgs[this._curIndex].defense_grow = parseInt(this.fyAddEditBox.string)*100;
-        this._cfgs[this._curIndex].speed_grow = parseInt(this.sdAddEditBox.string)*100;
-        this._cfgs[this._curIndex].destroy_grow = parseInt(this.gcAddEditBox.string)*100;
+        this._cfgs[this._curIndex].force_grow = Number(this.wlAddEditBox.string)*100;
+        this._cfgs[this._curIndex].strategy_grow = Number(this.mlAddEditBox.string)*100;
+        this._cfgs[this._curIndex].defense_grow = Number(this.fyAddEditBox.string)*100;
+        this._cfgs[this._curIndex].speed_grow = Number(this.sdAddEditBox.string)*100;
+        this._cfgs[this._curIndex].destroy_grow = Number(this.gcAddEditBox.string)*100;
 
         this._cfgs[this._curIndex].cost = parseInt(this.costEditBox.string);
 
-        var items = this.toggleGroup.toggleItems;
+        var items = this.toggleCampGroup.toggleItems;
         for (let index = 0; index < items.length; index++) {
-            const item = items[index];
+            let item = items[index];
             if(item.isChecked){
                 this._cfgs[this._curIndex].camp = index+1;
+            }
+        }
+
+        var items2 = this.toggleArmGroup.toggleItems;
+        for (let index = 0; index < items2.length; index++) {
+            let item = items2[index];
+            if(item.isChecked){
+                if(index == 0){
+                    this._cfgs[this._curIndex].arms = [1,4,7];
+                }else if(index == 1){
+                    this._cfgs[this._curIndex].arms = [2,5,8];
+                }else{
+                    this._cfgs[this._curIndex].arms = [3,6,9];
+                }
             }
         }
     }
@@ -191,6 +221,8 @@ export default class GeneralTool extends cc.Component {
         if(this._isLoading){
             return
         }
+
+        this.refresh();
 
         if (this.outDirEditBox.string == ""){
             this.tipsLab.string = "请输入生成输出目录";
@@ -224,7 +256,10 @@ export default class GeneralTool extends cc.Component {
             return
         }
 
-        this.show(this._curIndex-=1)
+        this.refresh();
+
+        this._curIndex-=1;
+        this.show(this._curIndex);
     }
 
     protected onClickNext(): void {
@@ -232,7 +267,9 @@ export default class GeneralTool extends cc.Component {
             return
         }
 
-        this.show(this._curIndex+=1)
+        this.refresh();
+        this._curIndex+=1;
+        this.show(this._curIndex);
     }
 
 
