@@ -54,7 +54,7 @@ export default class GeneralAddPrLogic  extends cc.Component {
         this._generalNode.parent = this.generalItemParent;
 
         this._nameObj = {
-            force:"力量",
+            force:"武力",
             strategy:"战略",
             defense:"防御",
             speed:"速度",

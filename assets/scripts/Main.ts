@@ -1,16 +1,16 @@
-import { GameConfig } from "./scripts/config/GameConfig";
-import LoaderManager, { LoadData, LoadDataType } from "./scripts/core/LoaderManager";
-import ArmyCommand from "./scripts/general/ArmyCommand";
-import GeneralCommand from "./scripts/general/GeneralCommand";
-import LoginCommand from "./scripts/login/LoginCommand";
-import MapCommand from "./scripts/map/MapCommand";
-import MapUICommand from "./scripts/map/ui/MapUICommand";
-import { HttpManager } from "./scripts/network/http/HttpManager";
-import { NetEvent } from "./scripts/network/socket/NetInterface";
-import { NetManager } from "./scripts/network/socket/NetManager";
-import { NetNodeType } from "./scripts/network/socket/NetNode";
-import Toast from "./scripts/utils/Toast";
-import { Tools } from "./scripts/utils/Tools";
+import { GameConfig } from "./config/GameConfig";
+import LoaderManager, { LoadData, LoadDataType } from "./core/LoaderManager";
+import ArmyCommand from "./general/ArmyCommand";
+import GeneralCommand from "./general/GeneralCommand";
+import LoginCommand from "./login/LoginCommand";
+import MapCommand from "./map/MapCommand";
+import MapUICommand from "./map/ui/MapUICommand";
+import { HttpManager } from "./network/http/HttpManager";
+import { NetEvent } from "./network/socket/NetInterface";
+import { NetManager } from "./network/socket/NetManager";
+import { NetNodeType } from "./network/socket/NetNode";
+import Toast from "./utils/Toast";
+import { Tools } from "./utils/Tools";
 
 const { ccclass, property } = cc._decorator;
 

@@ -44,7 +44,7 @@ export default class GeneralDesLogic extends cc.Component {
 
     protected onLoad():void{
         this._nameObj = {
-            force:"力量",
+            force:"武力",
             strategy:"战略",
             defense:"防御",
             speed:"速度",

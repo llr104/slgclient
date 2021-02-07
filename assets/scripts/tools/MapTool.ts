@@ -3,7 +3,7 @@ import { MapResType } from "../map/MapProxy";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Helloworld extends cc.Component {
+export default class MapTool extends cc.Component {
 
     @property(cc.TiledMap)
     tiledMap: cc.TiledMap = null;
