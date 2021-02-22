@@ -157,6 +157,7 @@ export class WarReport {
 
 
 export class WarReportRound {
+    isAttack: boolean = false;
     attack: any = {};
     defense: any = {};
     attackLoss: number = 0;
@@ -536,8 +537,7 @@ export default class MapUIProxy {
             obj.end_defense_army = JSON.parse(data.e_d_army);
             obj.beg_defense_general = this.arrayToObject(JSON.parse(data.b_d_general));
             obj.end_defense_general = this.arrayToObject(JSON.parse(data.e_d_general));
-            var temp: any[] = obj.beg_attack_general.concat(obj.beg_defense_general);
-            obj.rounds = this.createRoundsData(data.rounds, temp)//JSON.parse(data.rounds); //this.createRoundsData(data.rounds)//
+            obj.rounds = this.createRoundsData(data.rounds, obj.beg_attack_general, obj.beg_defense_general)
         } catch (error) {
             
         }
@@ -558,7 +558,9 @@ export default class MapUIProxy {
     }
 
 
-    private createRoundsData(data: string, generals: any[]): any[] {
+    private createRoundsData(data: string, attack_generals: any[], defense_generals: any[]): any[] {
+        var generals: any[] = attack_generals.concat(defense_generals);
+
         var _list: any[] = [];
         var rounds: any[] = JSON.parse(data);
         for (var i = 0; i < rounds.length; i++) {
@@ -577,6 +579,7 @@ export default class MapUIProxy {
                 var obj = new WarReportRound();
                 obj.attack = this.getMatchGeneral(generals, attack_id);
                 obj.defense = this.getMatchGeneral(generals, defense_id);
+                obj.isAttack = this.getMatchGeneral(attack_generals, attack_id) != null;
                 obj.attackLoss = attack_loss;
                 obj.defenseLoss = defense_loss;
                 obj.round = i + 1;

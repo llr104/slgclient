@@ -5,13 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+
 import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
-import LoginCommand from "../../login/LoginCommand";
-import { Role } from "../../login/LoginProxy";
-import DateUtil from "../../utils/DateUtil";
-import MapUICommand from "./MapUICommand";
-import { WarReport, WarReportRound } from "./MapUIProxy";
+import { WarReportRound } from "./MapUIProxy";
 
 
 const { ccclass, property } = cc._decorator;
@@ -22,18 +18,12 @@ export default class WarReportDesItemLogic extends cc.Component {
 
     private _curData:WarReportRound = null;
 
-    @property(cc.Node)
-    ackNode:cc.Node = null;
 
+    @property(cc.RichText)
+    warLab1:cc.RichText = null;
 
-    @property(cc.Node)
-    defNode:cc.Node = null;
-
-    @property(cc.Label)
-    ackLossLabel:cc.Label = null;
-
-    @property(cc.Label)
-    defLossLabel:cc.Label = null;
+    @property(cc.RichText)
+    warLab2:cc.RichText = null;
 
 
     @property(cc.Label)
@@ -41,35 +31,38 @@ export default class WarReportDesItemLogic extends cc.Component {
 
 
     protected onLoad():void{
+
     }
 
 
-    protected updateItem(data:any):void{
+    protected updateItem(data:WarReportRound):void{
+        console.log("updateItem:", data);
+      
         this._curData = data;
+        this.roundsLabel.string = "第" + this._curData.round + "轮/" + this._curData.turn+"回合";
 
-        this.setTeams(this.ackNode,this._curData.attack)
-        this.setTeams(this.defNode,this._curData.defense)
+        var att_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.attack.cfgId);
+        var def_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.defense.cfgId);
 
-        this.ackLossLabel.string = "损失:" + this._curData.attackLoss +"兵"
-        this.defLossLabel.string = "损失:" + this._curData.defenseLoss +"兵"
-
-        this.roundsLabel.string = "第" + this._curData.round + "轮/" + this._curData.turn+"回合"
-    }
-
-
-
-    protected setTeams(node:cc.Node,generals:any){
-        let item:cc.Node = node;
-        let com = item.getComponent("GeneralItemLogic");
-        var general = generals;
-        if(general){
-            item.active = true;
-            if(com){
-                com.setWarReportData(general);
-            }
-
+        var title1 = ""
+        var title2 = ""
+        if(data.isAttack){
+            title1 = "攻";
+            title2 = "防";
         }else{
-            item.active = false;
+            title2 = "攻";
+            title1 = "防";
         }
+        this.warLab1.string =  "<color=#ff0000>" + title1 + att_cfg.name + "</color>"   + " 对 " 
+        + "<color=#00ff00>" + title2 + def_cfg.name +  "</color>" + " 发起攻击，" 
+        + "<color=#00ff00>" + title2 + def_cfg.name + "</color>" + " 损失 " + 
+        "<color=#F2C420>" + this._curData.defenseLoss + "</color>"  + " 士兵";
+
+        this.warLab2.string =  "<color=#ff0000>" + title2 + def_cfg.name + "</color>"   + " 对 " 
+        + "<color=#00ff00>" + title1 + att_cfg.name +  "</color>" + " 发起攻击，" 
+        + "<color=#00ff00>" + title1 + att_cfg.name + "</color>" + " 损失 " + 
+        "<color=#F2C420>" + this._curData.attackLoss + "</color>"  + " 士兵";
+
     }
+
 }

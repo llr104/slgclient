@@ -26,15 +26,13 @@ export default class WarReportDesLogic extends cc.Component {
     @property(cc.ScrollView)
     scrollView:cc.ScrollView = null;
 
-
+   
     protected onLoad():void{
     }
 
 
     protected setData(data:any):void{
         this._curData = data;
-        // console.log("WarReportDesLogic :",this._curData.rounds)
-
         var comp = this.scrollView.node.getComponent("ListLogic");
         comp.setData(this._curData.rounds);
 

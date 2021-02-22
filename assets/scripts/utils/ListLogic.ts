@@ -200,7 +200,7 @@ export default class ListLogic extends cc.Component {
                 var children = this.scrollView.content.children.slice();
                 this.scrollView.content.removeAllChildren(false);
                 for (var i = 0; i < children.length; i++) {
-                    var item = children[i];
+                    let item = children[i];
                     if (cc.isValid(item)) {
                         item.off(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
                         this._itemPool.put(item);//加入对象池
@@ -208,7 +208,7 @@ export default class ListLogic extends cc.Component {
                 }
                 this._items.length = 0;
                 for (var i = 0; i < this._itemCount; i++) {
-                    var item = this.createItem();
+                    let item = this.createItem();
                     item.active = false;
                     item.itemIdx = i;//在item上纪录当前下标
                     item.on(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
@@ -306,18 +306,28 @@ export default class ListLogic extends cc.Component {
 
         //刷新所有item数据
     protected updateItems():void {
-        try {
-            for (var i = 0; i < this._items.length; i++) {
-                var item = this._items[i];
-                item.active = item.itemIdx < this._datas.length;
-                if (item.active) {
-                    this.updateItem(item, item.itemIdx);
-                    this.selectItem(item, item.itemIdx == this._curIndex);
-                }
-                    //console.log("update item i: " + item.itemIdx + ", active: " + item.active);
+        // try {
+        //     for (var i = 0; i < this._items.length; i++) {
+        //         var item = this._items[i];
+        //         item.active = item.itemIdx < this._datas.length;
+        //         if (item.active) {
+        //             this.updateItem(item, item.itemIdx);
+        //             this.selectItem(item, item.itemIdx == this._curIndex);
+        //         }
+        //             //console.log("update item i: " + item.itemIdx + ", active: " + item.active);
+        //     }
+        // } catch (e) {
+        //     console.log("List update item error:", e);
+        // }
+
+        for (var i = 0; i < this._items.length; i++) {
+            var item = this._items[i];
+            item.active = item.itemIdx < this._datas.length;
+            if (item.active) {
+                this.updateItem(item, item.itemIdx);
+                this.selectItem(item, item.itemIdx == this._curIndex);
             }
-        } catch (e) {
-            console.log("List update item error:", e);
+                //console.log("update item i: " + item.itemIdx + ", active: " + item.active);
         }
     }
 
