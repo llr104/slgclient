@@ -16,6 +16,7 @@ export class GeneralConfig {
     destroy_grow: number = 0;
     physical_power_limit: number = 0;
     cost_physical_power: number = 0;
+    probability: number = 0;
 
     star: number = 0;
     arms: number[] = [];

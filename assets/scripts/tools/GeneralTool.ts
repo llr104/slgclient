@@ -117,6 +117,25 @@ export default class GeneralTool extends cc.Component {
         this._cfgs = Array.from(cfgs.values());
         this._cfgs.sort(this.sortStar);
 
+        
+        var probability: number = 100;
+        for (let index = 0; index < this._cfgs.length; index++) {
+            var e = this._cfgs[index];
+            if (e.star == 5){
+                probability = Math.floor(Math.random() * 20) + 5;
+            }else if(e.star == 4){
+                probability = Math.floor(Math.random() * 30) + 20;
+            }else if(e.star == 3){
+                probability = Math.floor(Math.random() * 200) + 300;
+            }else if(e.star == 2){
+                probability = Math.floor(Math.random() * 200) + 400;
+            }else if(e.star == 1){
+                probability = Math.floor(Math.random() * 200) + 500;
+            }
+            e.probability = probability;
+        }
+        
+
         this.show(this._curIndex);
     }
 
