@@ -89,7 +89,7 @@ export default class Main extends cc.Component {
         dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
-        dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
+        dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, cc.SpriteFrame));
         dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/skill/", LoadDataType.DIR, cc.JsonAsset));
 

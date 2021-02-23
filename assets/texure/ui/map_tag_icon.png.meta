@@ -7,8 +7,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
-  "width": 100,
-  "height": 100,
+  "width": 512,
+  "height": 512,
   "platformSettings": {},
   "subMetas": {
     "map_tag_icon": {

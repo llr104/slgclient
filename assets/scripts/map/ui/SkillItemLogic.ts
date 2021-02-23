@@ -26,12 +26,20 @@ export default class SkillItemLogic extends cc.Component {
     @property([cc.SpriteFrame])
     sps:cc.SpriteFrame[] = [];
 
+    _conf: SkillConf = null;
+
     protected onEnable():void{
         
     }
 
-    protected updateItem(confs:SkillConf):void{
-        console.log("updateItem");
+    protected updateItem(conf:SkillConf):void{
+        console.log("updateItem:", conf);
+        
+        this._conf = conf;
+        this.nameLab.string = conf.name;
+        if(conf.trigger < this.sps.length){
+            this.icon.spriteFrame = this.sps[conf.trigger-1];
+        }
     }
 
 }

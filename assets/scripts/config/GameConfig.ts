@@ -1,7 +1,7 @@
 /**连接配置*/
 const GameConfig = {
-    serverUrl: "ws://192.168.0.20:8004",
-    webUrl: "http://192.168.0.20:8088",
+    serverUrl: "ws://127.0.0.1:8004",
+    webUrl: "http://127.0.0.1:8088",
 }
 
 export { GameConfig };
