@@ -13,7 +13,7 @@ import MapUICommand from "./MapUICommand";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class CollectLogic extends cc.Component {
 
     @property(cc.Label)
     cdLab: cc.Label = null;

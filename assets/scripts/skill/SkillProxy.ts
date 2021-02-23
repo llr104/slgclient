@@ -19,4 +19,8 @@ export default class SkillProxy {
         }
     }
 
+    public get skills(): SkillConf[] {
+        return this.skillConfs;
+    } 
+
 }

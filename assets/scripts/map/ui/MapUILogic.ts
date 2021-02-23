@@ -91,6 +91,11 @@ export default class MapUILogic extends cc.Component {
     generalRosterPrefab: cc.Prefab = null;
     protected _generalRosterNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    skillPrefab: cc.Prefab = null;
+    protected _skillNode: cc.Node = null;
+
+    
 
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
@@ -432,6 +437,19 @@ export default class MapUILogic extends cc.Component {
 
     }
     
+
+    protected onOpenSkill(): void {
+        console.log("onOpenSkill");
+        if (this._skillNode == null) {
+            this._skillNode = cc.instantiate(this.skillPrefab);
+            this._skillNode.parent = this.node;
+        } else {
+            this._skillNode.active = true;
+        }
+
+    }
+    
+
 
     //征收
     protected onCollection(msg:any):void{
