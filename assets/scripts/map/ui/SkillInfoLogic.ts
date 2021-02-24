@@ -64,7 +64,7 @@ export default class SkillInfoLogic extends cc.Component {
 
         var des1 = data.des
         for (let index = 0; index < data.levels[0].effect_value.length; index++) {
-            var str = data.include_effect[index] + "";
+            var str = data.levels[0].effect_value[index] + "";
             des1 = des1.replace("%n%", str);
         }
 
@@ -72,7 +72,7 @@ export default class SkillInfoLogic extends cc.Component {
 
         var des2 = data.des
         for (let index = 0; index < data.levels[1].effect_value.length; index++) {
-            var str = data.include_effect[index] + "";
+            var str = data.levels[1].effect_value[index] + "";
             des2 = des2.replace("%n%", str);
         }
 
