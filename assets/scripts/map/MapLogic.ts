@@ -26,9 +26,14 @@ export default class MapLogic extends cc.Component {
         this._cmd = MapCommand.getInstance();
         this._mapCamera = cc.Canvas.instance.node.getChildByName("Map Camera").getComponent(cc.Camera);
 
+        cc.systemEvent.on("open_city_about", this.openCityAbout, this);
+        cc.systemEvent.on("close_city_about", this.closeCityAbout, this);
+
     }
 
     protected onDestroy(): void {
+        cc.systemEvent.targetOff(this);
+
         this._cmd = null;
     }
 
@@ -45,6 +50,14 @@ export default class MapLogic extends cc.Component {
 
 
         this._tiledMap.getProperty("aaa");
+    }
+
+    protected openCityAbout(data: any): void {
+        this._mapCamera.zoomRatio = this._maxZoomRatio;
+    }
+
+    protected closeCityAbout(): void {
+        this._mapCamera.zoomRatio = this._minZoomRatio;
     }
 
     protected onMouseWheel(event: cc.Event.EventMouse): void {

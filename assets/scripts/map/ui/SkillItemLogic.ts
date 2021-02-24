@@ -37,7 +37,7 @@ export default class SkillItemLogic extends cc.Component {
         
         this._conf = conf;
         this.nameLab.string = conf.name;
-        if(conf.trigger < this.sps.length){
+        if(conf.trigger <= this.sps.length){
             this.icon.spriteFrame = this.sps[conf.trigger-1];
         }
     }

@@ -18,12 +18,12 @@ export default class CityAboutLogic extends cc.Component {
     protected _cityData: MapCityData = null;
     protected _armyComps: CityArmyItemLogic[] = [];
 
-    protected onLoad(): void {
+    protected onEnable(): void {
         this.initView();
         cc.systemEvent.on("update_city_addition", this.onUpdateCityAdditon, this);
     }
 
-    protected onDestroy(): void {
+    protected onDisable(): void {
         cc.systemEvent.targetOff(this);
     }
 
@@ -70,27 +70,11 @@ export default class CityAboutLogic extends cc.Component {
         cc.systemEvent.emit("open_facility", this._cityData);
     }
 
-    protected onClickVisit(): void {
-        //寻访
-    }
-
-    protected onClickAppoint(): void {
-        //委任
-    }
-
-    protected onClickForge(): void {
-        //锻造
-    }
-
-    protected onClickTrainHorse(): void {
-        //训马
-    }
-
-    protected onClickTrain(): void {
-        //练兵
-    }
 
     protected onClickClose(): void {
         this.node.active = false;
+
+        cc.systemEvent.emit("close_city_about", this._cityData);
+        
     }
 }

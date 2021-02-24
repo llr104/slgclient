@@ -50,7 +50,7 @@ export default class SkillInfoLogic extends cc.Component {
     }
 
     public setData(data: SkillConf) {
-        if(data.trigger < this.sps.length){
+        if(data.trigger <= this.sps.length){
             this.icon.spriteFrame = this.sps[data.trigger-1];
         }
 

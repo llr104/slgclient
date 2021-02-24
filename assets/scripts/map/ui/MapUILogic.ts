@@ -95,7 +95,8 @@ export default class MapUILogic extends cc.Component {
     skillPrefab: cc.Prefab = null;
     protected _skillNode: cc.Node = null;
 
-    
+    @property(cc.Node)
+    widgetNode: cc.Node = null;
 
     @property(cc.Layout)
     srollLayout: cc.Layout = null;
@@ -124,8 +125,12 @@ export default class MapUILogic extends cc.Component {
 
 
         cc.systemEvent.on("open_city_about", this.openCityAbout, this);
+        cc.systemEvent.on("close_city_about", this.closeCityAbout, this);
+
         cc.systemEvent.on("open_fortress_about", this.openFortressAbout, this);
         cc.systemEvent.on("open_facility", this.openFacility, this);
+
+
         cc.systemEvent.on("open_army_setting", this.openArmySetting, this);
         cc.systemEvent.on("upate_my_roleRes", this.updateRoleRes, this);
         cc.systemEvent.on("open_general_des", this.openGeneralDes, this);
@@ -282,7 +287,15 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._cityAboutNode.active = true;
         }
+
+
+        this.widgetNode.active = false;
+        cc.systemEvent.emit("scroll_to_map", data.x, data.y);
         this._cityAboutNode.getComponent(CityAboutLogic).setData(data);
+    }
+
+    protected closeCityAbout(): void {
+        this.widgetNode.active = true;
     }
     
     protected openFortressAbout(data: any): void {
