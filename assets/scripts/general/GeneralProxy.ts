@@ -240,6 +240,10 @@ export default class GeneralProxy {
         return null;
     }
 
+    public setGeneralTex(cfgId: number, frame: cc.SpriteFrame) {
+        this._generalTexs.set(cfgId, frame);
+    }
+
     /**武将相关公有配置*/
     public getCommonCfg(): GeneralCommonConfig {
         return this._commonConfig;

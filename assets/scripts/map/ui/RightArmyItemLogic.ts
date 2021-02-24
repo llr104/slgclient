@@ -5,6 +5,7 @@ import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import DateUtil from "../../utils/DateUtil";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -92,7 +93,7 @@ export default class RightArmyItemLogic extends cc.Component {
         if (this._firstGeneral) {
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._firstGeneral.cfgId);
             teamName = cfg.name;
-            this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._firstGeneral.cfgId);
+            this.headIcon.getComponent(GeneralHeadLogic).setHeadId(this._firstGeneral.cfgId);
             this.labelStrength.string = "体力 " + this._firstGeneral.physical_power + "/" + cfg.physical_power_limit;
         }
         this.labelInfo.string = stateStr + " " + teamName + "队";

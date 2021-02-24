@@ -2,6 +2,8 @@ import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralCommonConfig, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import GeneralInfoLogic from "./GeneralInfoLogic";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -94,7 +96,7 @@ export default class ArmySelectItemLogic extends cc.Component {
                 this.tipNode.active = false;
             }
 
-            this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generals[0].cfgId);
+            this.headIcon.getComponent(GeneralHeadLogic).setHeadId(generals[0].cfgId);
             this.labelLv.string = generals[0].level + "";
             this.labelName.string = firstGeneralCfg.name;
             this.labelState.string = ArmyCommand.getInstance().getArmyStateDes(this._data);

@@ -3,6 +3,7 @@ import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 const { ccclass, property } = cc._decorator;
 
@@ -94,7 +95,7 @@ export default class CityArmyItemLogic extends cc.Component {
                 this.labelState.string = "";
             }
             this.labelId.string = this.order + "";
-            this.headIcon.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(generals[0].cfgId);
+            this.headIcon.getComponent(GeneralHeadLogic).setHeadId(generals[0].cfgId);
             this.labelLv.string = generals[0].level + "";
             this.labelName.string = firstGeneralCfg.name;
             this.labelSoldierCnt.string = curSoldierCnt + "/" + totalSoldierCnt;

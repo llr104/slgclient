@@ -19,6 +19,7 @@ export class GeneralItemType {
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -56,7 +57,7 @@ export default class GeneralRosterLogic extends cc.Component {
         // console.log("updateItem");
         this._cfg = cfg;
         this.nameLabel.string = this._cfg.name 
-        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._cfg.cfgId);
+        this.spritePic.getComponent(GeneralHeadLogic).setHeadId(this._cfg.cfgId);
         this.showStar(this._cfg.star, 0);
         
         if(this.costLabel){

@@ -89,7 +89,12 @@ export default class Main extends cc.Component {
         dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
-        dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, cc.SpriteFrame));
+        if(cc.sys.isBrowser){
+            dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, cc.SpriteFrame));
+        }else{
+            dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
+        }
+       
         dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
         dataList.push(new LoadData("./config/json/skill/", LoadDataType.DIR, cc.JsonAsset));
 
@@ -109,7 +114,7 @@ export default class Main extends cc.Component {
                 GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as cc.JsonAsset).json);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
                 MapUICommand.getInstance().proxy.setBasic(datas[5]);
-                SkillCommand.getInstance().proxy.initSkillConfig(datas[6])
+                SkillCommand.getInstance().proxy.initSkillConfig(datas[6]);
 
                 var d = (datas[5] as cc.JsonAsset).json
                 MapCommand.getInstance().proxy.setWarFree(d.build.war_free);

@@ -19,6 +19,7 @@ export class GeneralItemType {
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -87,7 +88,7 @@ export default class GeneralItemLogic extends cc.Component {
         var cfgData = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.cfgId);
         this.nameLabel.string = cfgData.name 
         this.lvLabel.string = " Lv." +  this._curData.level ;
-        this.spritePic.spriteFrame = GeneralCommand.getInstance().proxy.getGeneralTex(this._curData.cfgId);
+        this.spritePic.getComponent(GeneralHeadLogic).setHeadId(this._curData.cfgId);
         this.showStar(cfgData.star,this._curData.star_lv);
         this.delNode.active = false;
 
