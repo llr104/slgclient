@@ -32,6 +32,9 @@ const ServerConfig = {
     general_addPrGeneral: "general.addPrGeneral",
     general_convert: "general.convert",
 
+    general_upSkill: "general.upSkill",
+    general_downSkill: "general.downSkill",
+
     army_myList: "army.myList",
     army_myOne: "army.myOne",
     army_dispose: "army.dispose",

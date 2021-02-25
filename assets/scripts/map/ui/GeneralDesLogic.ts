@@ -8,6 +8,7 @@
 import GeneralCommand from "../../general/GeneralCommand";
 import { GenaralLevelConfig, GeneralData } from "../../general/GeneralProxy";
 import { GeneralItemType } from "./GeneralItemLogic";
+import SkillIconLogic from "./SkillIconLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -120,6 +121,23 @@ export default class GeneralDesLogic extends cc.Component {
     private getAttrStr(key: string) :string{
         var str = GeneralData.getPrStr(this._cfgData[key], this._addPrObj[key], this._currData.level, this._cfgData[key + "_grow"])
         return this._nameObj[key] + ":" + str;
+    }
+
+    protected onClickSkill(event: cc.Event.EventTouch, pos){
+        console.log("event", event);
+        var node: cc.Node = event.target;
+        var isEmpty = node.getComponent(SkillIconLogic).isEmpty();
+        // if(isEmpty){
+        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, pos);
+        // }else{
+        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, pos);
+        // }
+
+        if (pos == 0) {
+            GeneralCommand.getInstance().upSkill(this._currData.id, 201, 0);
+        }else{
+            GeneralCommand.getInstance().downSkill(this._currData.id, 201, 0);
+        }
     }
 
 

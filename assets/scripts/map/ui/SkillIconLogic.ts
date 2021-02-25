@@ -16,22 +16,32 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class SkillIconLogic extends cc.Component {
 
-
-
     @property([cc.SpriteFrame])
     sps:cc.SpriteFrame[] = [];
 
     _conf: SkillConf = null;
 
     protected onEnable():void{
-        
+        this.getComponent(cc.Sprite).spriteFrame = null;
     }
 
     public setData(conf:SkillConf):void{
+
         this._conf = conf;
-        if(conf.trigger <= this.sps.length){
-            this.getComponent(cc.Sprite).spriteFrame = this.sps[conf.trigger-1];
+        if(this._conf == null){
+            this.getComponent(cc.Sprite).spriteFrame = null;
+        }else{
+            if(conf.trigger <= this.sps.length){
+                this.getComponent(cc.Sprite).spriteFrame = this.sps[conf.trigger-1];
+            }else{
+                this.getComponent(cc.Sprite).spriteFrame = null;
+            }
         }
+    
+    }
+
+    public isEmpty():boolean {
+        return this._conf == null;
     }
 
 }

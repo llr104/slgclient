@@ -172,7 +172,13 @@ export default class GeneralAddPrLogic  extends cc.Component {
 
 
     protected onClickAddPr():void{
-        GeneralCommand.getInstance().addPrGeneral(this._currData.id,this._addPrObj.force,this._addPrObj.strategy,this._addPrObj.defense,this._addPrObj.speed,this._addPrObj.destroy)
+        GeneralCommand.getInstance().addPrGeneral(
+            this._currData.id, 
+            this._addPrObj.force, 
+            this._addPrObj.strategy, 
+            this._addPrObj.defense, 
+            this._addPrObj.speed, 
+            this._addPrObj.destroy);
     }
 
 }

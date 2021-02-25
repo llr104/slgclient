@@ -31,7 +31,8 @@ export default class GeneralCommand {
         cc.systemEvent.on(ServerConfig.general_composeGeneral, this.onComposeGeneral, this);
         cc.systemEvent.on(ServerConfig.general_addPrGeneral, this.onAddPrGeneral, this);
         cc.systemEvent.on(ServerConfig.general_convert, this.onGeneralConvert , this);
-        
+        cc.systemEvent.on(ServerConfig.general_upSkill, this.onUpSkill, this);
+        cc.systemEvent.on(ServerConfig.general_downSkill, this.onDownSkill, this);
 
     }
 
@@ -99,7 +100,17 @@ export default class GeneralCommand {
             cc.systemEvent.emit("general_convert", data.msg);
         }
     }
+
+    protected onUpSkill(data:any):void{
+        console.log("onUpSkill ", data);
+        
+    }
+
     
+    protected onDownSkill(data:any):void{
+        console.log("onDownSkill ", data);
+        
+    }
     
 
     /**我的角色属性*/
@@ -171,6 +182,30 @@ export default class GeneralCommand {
             name: ServerConfig.general_convert,
             msg: {
                 gIds:gIds
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public upSkill(gId:number, cfgId:number, pos:number): void {
+        let sendData: any = {
+            name: ServerConfig.general_upSkill,
+            msg: {
+                gId:gId,
+                cfgId:cfgId,
+                pos:pos
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+    public downSkill(gId:number, cfgId:number, pos:number): void {
+        let sendData: any = {
+            name: ServerConfig.general_downSkill,
+            msg: {
+                gId:gId,
+                cfgId:cfgId,
+                pos:pos
             }
         };
         NetManager.getInstance().send(sendData);
