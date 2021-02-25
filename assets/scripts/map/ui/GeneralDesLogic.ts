@@ -114,8 +114,8 @@ export default class GeneralDesLogic extends cc.Component {
             com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
         }
 
-        this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
-        this.costLabel.string = "cost："+cfgData.cost;
+        this.powerLabel.string = "体力:" + curData.physical_power + "/" + cfgData.physical_power_limit;
+        this.costLabel.string = "cost:"+cfgData.cost;
     }
 
     private getAttrStr(key: string) :string{
