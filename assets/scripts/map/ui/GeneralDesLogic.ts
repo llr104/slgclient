@@ -14,20 +14,41 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GeneralDesLogic extends cc.Component {
-    @property(cc.Label)
-    lvLabel: cc.Label = null;
+  
 
     @property(cc.Label)
     nameLab: cc.Label = null;
-
-    @property(cc.Label)
-    costLabel: cc.Label = null;
 
     @property(cc.Layout)
     srollLayout:cc.Layout = null;
 
     @property(cc.Label)
+    lvLabel: cc.Label = null;
+    
+    @property(cc.Label)
+    foreLabel: cc.Label = null;
+
+    @property(cc.Label)
+    defenseLabel: cc.Label = null;
+
+    @property(cc.Label)
+    speedLabel: cc.Label = null;
+
+    @property(cc.Label)
+    strategyLabel: cc.Label = null;
+
+    @property(cc.Label)
+    destroyLabel: cc.Label = null;
+
+    @property(cc.Label)
+    expLabel: cc.Label = null;
+
+    @property(cc.Label)
     powerLabel: cc.Label = null;
+
+    @property(cc.Label)
+    costLabel: cc.Label = null;
+
 
     @property(cc.Prefab)
     generalItemPrefab: cc.Prefab = null;
@@ -38,11 +59,15 @@ export default class GeneralDesLogic extends cc.Component {
     private _currData:any = null;
     private _cfgData:any = null;
 
+
     private _nameObj:any = {};
     private _addPrObj:any = {};
     private _generalNode:cc.Node = null;
 
+    
+
     protected onLoad():void{
+
         this._nameObj = {
             force:"武力",
             strategy:"战略",
@@ -50,8 +75,7 @@ export default class GeneralDesLogic extends cc.Component {
             speed:"速度",
             destroy:"破坏",
         };
-
-
+       
         this._generalNode = cc.instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
     }
@@ -64,7 +88,8 @@ export default class GeneralDesLogic extends cc.Component {
         var nextCfg = GeneralCommand.getInstance().proxy.getGeneralLevelCfg(this._currData.level + 1);
         var levelExp = nextCfg?nextCfg.exp:"MAX";
         var maxLevel: number = GeneralCommand.getInstance().proxy.getMaxLevel();
-        this.lvLabel.string = '等级:' +this._currData.level + "/" + maxLevel + "   经验:"+curData.exp +"/" + levelExp;
+        this.lvLabel.string = '等级:' + this._currData.level + "/" + maxLevel;
+        this.expLabel.string = "经验:" + curData.exp +"/" + levelExp;
         
         this.nameLab.string = this._cfgData.name;
 
@@ -76,15 +101,13 @@ export default class GeneralDesLogic extends cc.Component {
             destroy:this._currData.destroy_added,
         };
 
-        var children = this.srollLayout.node.children;
-        var i = 0;
-        for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + 
-            GeneralData.getPrStr(cfgData[key],this._addPrObj[key],this._currData.level,cfgData[key+"_grow"]);
-            i++;
-
-        }
-
+       
+        this.foreLabel.string = this.getAttrStr("force");
+        this.strategyLabel.string = this.getAttrStr("strategy");
+        this.defenseLabel.string = this.getAttrStr("defense");
+        this.speedLabel.string = this.getAttrStr("speed");
+        this.destroyLabel.string = this.getAttrStr("destroy");
+     
         var com = this._generalNode.getComponent("GeneralItemLogic");
         if(com){
             com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
@@ -92,6 +115,11 @@ export default class GeneralDesLogic extends cc.Component {
 
         this.powerLabel.string = "体力: " + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "cost："+cfgData.cost;
+    }
+
+    private getAttrStr(key: string) :string{
+        var str = GeneralData.getPrStr(this._cfgData[key], this._addPrObj[key], this._currData.level, this._cfgData[key + "_grow"])
+        return this._nameObj[key] + ":" + str;
     }
 
 

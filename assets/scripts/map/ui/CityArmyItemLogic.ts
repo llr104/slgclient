@@ -72,6 +72,8 @@ export default class CityArmyItemLogic extends cc.Component {
 
     protected updateItem(): void {
      
+        console.log("cityarmyitem:", this._data);
+        
         if(this._isOpened == false){
             return
         }

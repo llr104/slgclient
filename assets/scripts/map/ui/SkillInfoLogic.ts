@@ -7,6 +7,7 @@
 
 import { SkillConf, SkillOutline } from "../../config/skill/Skill";
 import SkillCommand from "../../skill/SkillCommand";
+import SkillIconLogic from "./SkillIconLogic";
 
 const {ccclass, property} = cc._decorator;
 
@@ -16,12 +17,10 @@ export default class SkillInfoLogic extends cc.Component {
     @property(cc.Label)
     nameLab: cc.Label = null;
 
-    @property(cc.Sprite)
-    icon:cc.Sprite = null;
+    @property(cc.Node)
+    icon:cc.Node = null;
 
-    @property([cc.SpriteFrame])
-    sps:cc.SpriteFrame[] = [];
-
+ 
     @property(cc.Label)
     limitLab: cc.Label = null;
 
@@ -50,9 +49,7 @@ export default class SkillInfoLogic extends cc.Component {
     }
 
     public setData(data: SkillConf) {
-        if(data.trigger <= this.sps.length){
-            this.icon.spriteFrame = this.sps[data.trigger-1];
-        }
+        this.icon.getComponent(SkillIconLogic).setData(data);
 
         var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
         this.nameLab.string = data.name;

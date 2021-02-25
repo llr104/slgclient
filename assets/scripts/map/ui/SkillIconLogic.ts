@@ -10,19 +10,13 @@ import LoginCommand from "../../login/LoginCommand";
 import DateUtil from "../../utils/DateUtil";
 import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
-import SkillIconLogic from "./SkillIconLogic";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class SkillItemLogic extends cc.Component {
+export default class SkillIconLogic extends cc.Component {
 
-   
-    @property(cc.Label)
-    nameLab: cc.Label = null;
 
-    @property(cc.Node)
-    icon:cc.Node = null;
 
     @property([cc.SpriteFrame])
     sps:cc.SpriteFrame[] = [];
@@ -33,12 +27,11 @@ export default class SkillItemLogic extends cc.Component {
         
     }
 
-    protected updateItem(conf:SkillConf):void{
-        console.log("updateItem:", conf);
-        
+    public setData(conf:SkillConf):void{
         this._conf = conf;
-        this.nameLab.string = conf.name;
-        this.icon.getComponent(SkillIconLogic).setData(conf);
+        if(conf.trigger <= this.sps.length){
+            this.getComponent(cc.Sprite).spriteFrame = this.sps[conf.trigger-1];
+        }
     }
 
 }
