@@ -65,7 +65,7 @@ export default class GeneralDesLogic extends cc.Component {
     @property([cc.Label])
     skillNameLab: cc.Label[] = [];
 
-    private _currData:any = null;
+    private _currData:GeneralData = null;
     private _cfgData:any = null;
 
 
@@ -73,7 +73,13 @@ export default class GeneralDesLogic extends cc.Component {
     private _addPrObj:any = {};
     private _generalNode:cc.Node = null;
 
-    
+    protected onEnable(){
+        cc.systemEvent.on("update_general", this.updateGeneral, this)
+    }
+
+    protected onDisable(){
+        cc.systemEvent.targetOff(this);
+    }
 
     protected onLoad():void{
 
@@ -89,6 +95,12 @@ export default class GeneralDesLogic extends cc.Component {
         this._generalNode.parent = this.generalItemParent;
     }
 
+    protected updateGeneral(){
+        var data = GeneralCommand.getInstance().proxy.getMyGeneral(this._currData.id);
+        if(data){
+            this.setData(this._cfgData, data);
+        }
+    }
 
     public setData(cfgData:any, curData:GeneralData):void{
         this._currData = curData;
@@ -152,21 +164,15 @@ export default class GeneralDesLogic extends cc.Component {
     }
 
     protected onClickSkill(event: cc.Event.EventTouch, pos){
-        console.log("event", event);
+        console.log("event", event, pos);
         var node: cc.Node = event.target;
         var isEmpty = node.getComponent(SkillIconLogic).isEmpty();
         if(isEmpty){
             cc.systemEvent.emit("open_skill", 1, this._currData, pos);
         }else{
-            
+            let cfg = node.getComponent(SkillIconLogic).getCnf();
+            cc.systemEvent.emit("open_skillInfo", cfg, 2, this._currData, pos);
         }
-
-        // if (pos == 0) {
-        //     GeneralCommand.getInstance().upSkill(this._currData.id, 201, 0);
-        // }else{
-        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, 0);
-        // }
     }
-
 
 }

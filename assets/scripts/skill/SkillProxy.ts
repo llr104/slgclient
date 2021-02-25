@@ -8,7 +8,9 @@ export default class SkillProxy {
     protected _skillOutLine: SkillOutline;
 
     public initSkillConfig(cfgs: any[]): void {
-       
+        this._skillConfs = [];
+        this._skillCfgMap.clear();
+        
         for (let i: number = 0; i < cfgs.length; i++) {
         
             if (cfgs[i]._name == "skill_outline") {

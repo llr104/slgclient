@@ -36,7 +36,7 @@ export default class RightArmyItemLogic extends cc.Component {
     protected _qryReturnTime: number = 0;
 
     protected onLoad(): void {
-        cc.systemEvent.on("update_generals", this.onUpdateGenerals, this);
+        cc.systemEvent.on("update_general", this.onUpdateGeneral, this);
         this.bottomNode.active = false;
     }
 
@@ -65,7 +65,7 @@ export default class RightArmyItemLogic extends cc.Component {
         }
     }
 
-    protected onUpdateGenerals(): void {
+    protected onUpdateGeneral(): void {
 
     }
 

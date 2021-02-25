@@ -2404,9 +2404,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 83,
-      "g": 72,
-      "b": 72,
+      "r": 73,
+      "g": 62,
+      "b": 62,
       "a": 255
     },
     "_contentSize": {
@@ -3608,7 +3608,7 @@
     "component": "",
     "_componentId": "4986fQ2cPVDc5gTYaRI81t3",
     "handler": "onClickSkill",
-    "customEventData": "0"
+    "customEventData": "1"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -4270,7 +4270,7 @@
     "component": "",
     "_componentId": "4986fQ2cPVDc5gTYaRI81t3",
     "handler": "onClickSkill",
-    "customEventData": "0"
+    "customEventData": "2"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -4473,7 +4473,7 @@
     "node": {
       "__id__": 64
     },
-    "_enabled": false,
+    "_enabled": true,
     "_materials": [
       {
         "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"

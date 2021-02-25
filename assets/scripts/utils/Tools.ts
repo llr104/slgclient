@@ -95,6 +95,11 @@ export class Tools{
         codeObj[56] = "cd内不能操作";
         codeObj[57] = "武将超过上限了";
         codeObj[58] = "没有集市";
+        codeObj[59] = "超过了收藏上限";
+
+        codeObj[60] = "超过了技能上限";
+        codeObj[61] = "装备技能失败";
+        codeObj[62] = "取下技能失败";
 
         if (codeObj[code] == null){
             str = "错误:" + code;

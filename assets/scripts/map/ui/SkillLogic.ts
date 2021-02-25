@@ -21,18 +21,15 @@ export default class SkillLogic extends cc.Component {
     @property(cc.ScrollView)
     scrollView: cc.ScrollView = null;
 
-    @property(cc.Node)
-    skillInfoNode: cc.Node = null;
-
     _general: GeneralData = null;
     _type: number = 0;
     _skillPos : number = -1;
+
+
    
     protected onEnable():void{
        
-        this.skillInfoNode.active = false;
         var comp = this.scrollView.node.getComponent("ListLogic");
-
         var skills = SkillCommand.getInstance().proxy.skills;
         comp.setData(skills);
     }
@@ -42,12 +39,11 @@ export default class SkillLogic extends cc.Component {
     }
 
     protected onClickItem(data: SkillConf, target): void {
-        this.skillInfoNode.active = true;
-        this.skillInfoNode.getComponent(SkillInfoLogic).setData(data, this._type, this._general, this._skillPos);
+        cc.systemEvent.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
     }
 
 
-    /** type:0普通展示、type:1 学习 **/
+    /** type:0普通展示、type:1 学习、2:武将查看 **/
     public setData(type:number, general:GeneralData, skillPos: number) {
         this._type = type;
         this._general = general;

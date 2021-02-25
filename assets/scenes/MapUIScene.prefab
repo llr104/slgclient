@@ -12361,6 +12361,9 @@
     "skillPrefab": {
       "__uuid__": "fc371bc9-5d60-4fd6-8990-b69c9020498c"
     },
+    "skillInfoPrefab": {
+      "__uuid__": "d1861182-3e2c-4c8e-ba82-6bd63952b7ba"
+    },
     "widgetNode": {
       "__id__": 85
     },

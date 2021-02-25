@@ -18,6 +18,8 @@ import WarReportLogic from "./WarReportLogic";
 import DrawRLogic from "./DrawRLogic";
 import { GeneralData } from "../../general/GeneralProxy";
 import SkillLogic from "./SkillLogic";
+import { SkillConf } from "../../config/skill/Skill";
+import SkillInfoLogic from "./SkillInfoLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -97,6 +99,10 @@ export default class MapUILogic extends cc.Component {
     skillPrefab: cc.Prefab = null;
     protected _skillNode: cc.Node = null;
 
+    @property(cc.Prefab)
+    skillInfoPrefab: cc.Prefab = null;
+    protected _skillInfoNode: cc.Node = null;
+
     @property(cc.Node)
     widgetNode: cc.Node = null;
 
@@ -145,6 +151,8 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("open_general_roster", this.onOpenGeneralRoster, this);
         cc.systemEvent.on("open_general", this.openGeneral, this);
         cc.systemEvent.on("open_skill", this.onOpenSkill, this);
+        cc.systemEvent.on("close_skill", this.onCloseSkill, this);
+        cc.systemEvent.on("open_skillInfo", this.onOpenSkillInfo, this);
         
         
 
@@ -457,7 +465,7 @@ export default class MapUILogic extends cc.Component {
     }
 
     protected onOpenSkill(type:number=0, general:GeneralData = null, skillPos:number=-1): void {
-        console.log("onOpenSkill");
+        console.log("onOpenSkill", type, general, skillPos);
         if (this._skillNode == null) {
             this._skillNode = cc.instantiate(this.skillPrefab);
             this._skillNode.parent = this.node;
@@ -467,7 +475,24 @@ export default class MapUILogic extends cc.Component {
         this._skillNode.zIndex = 5;
         this._skillNode.getComponent(SkillLogic).setData(type, general, skillPos);
     }
+
+    protected onCloseSkill(){
+        if (this._skillNode) {
+           this._skillNode.active = false;
+        } 
+    }
     
+    protected onOpenSkillInfo(cfg:SkillConf, type:number=0, general:GeneralData = null, skillPos:number=-1){
+        console.log("onOpenSkillInfo", cfg, type, general, skillPos);
+        if (this._skillInfoNode == null) {
+            this._skillInfoNode = cc.instantiate(this.skillInfoPrefab);
+            this._skillInfoNode.parent = this.node;
+        } else {
+            this._skillInfoNode.active = true;
+        }
+        this._skillInfoNode.zIndex = 6;
+        this._skillInfoNode.getComponent(SkillInfoLogic).setData(cfg, type, general, skillPos);
+    }
 
 
     //征收

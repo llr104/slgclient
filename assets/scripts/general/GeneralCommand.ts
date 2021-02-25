@@ -60,8 +60,8 @@ export default class GeneralCommand {
     protected onGeneralPush(data: any): void {
         console.log("onGeneralPush ", data);
         if (data.code == 0) {
-            this._proxy.updateGenerals(data.msg);
-            cc.systemEvent.emit("update_generals");
+            this._proxy.updateGeneral(data.msg);
+            cc.systemEvent.emit("update_general");
         }
     }
 
@@ -193,9 +193,11 @@ export default class GeneralCommand {
             msg: {
                 gId:gId,
                 cfgId:cfgId,
-                pos:pos
+                pos:Number(pos)
             }
         };
+
+        console.log("send upSkill:", sendData);
         NetManager.getInstance().send(sendData);
     }
 
@@ -205,7 +207,7 @@ export default class GeneralCommand {
             msg: {
                 gId:gId,
                 cfgId:cfgId,
-                pos:pos
+                pos:Number(pos)
             }
         };
         NetManager.getInstance().send(sendData);

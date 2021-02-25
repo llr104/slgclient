@@ -47,6 +47,9 @@ export default class SkillInfoLogic extends cc.Component {
     @property(cc.Button)
     learnBtn: cc.Button = null;
 
+    @property(cc.Button)
+    giveUpBtn: cc.Button = null;
+
     _cfg: SkillConf = null;
 
     _general: GeneralData = null;
@@ -68,6 +71,7 @@ export default class SkillInfoLogic extends cc.Component {
         this._skillPos = skillPos;
 
         this.learnBtn.node.active = type == 1;
+        this.giveUpBtn.node.active = type == 2;
 
         this.icon.getComponent(SkillIconLogic).setData(data);
 
@@ -112,13 +116,17 @@ export default class SkillInfoLogic extends cc.Component {
     
     protected onClickLearn():void {
         if(this._general){
-            GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, 0);
+            GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, this._skillPos);
+            this.node.active = false;
+            cc.systemEvent.emit("close_skill");
         }
     }
 
     protected onClickForget():void {
         if(this._general){
-            GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, 0);
+            GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, this._skillPos);
+            this.node.active = false;
+            cc.systemEvent.emit("close_skill");
         }
     }
 }

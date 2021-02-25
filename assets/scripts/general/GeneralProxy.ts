@@ -201,14 +201,14 @@ export default class GeneralProxy {
         }
     }
 
-    public updateGenerals(datas: any) {
-        if(datas.state != 0){
-            this._myGenerals.delete(datas.id);
+    public updateGeneral(data: any) {
+        if(data.state != 0){
+            this._myGenerals.delete(data.id);
         }else{
             let ids: number[] = [];
-            let data: GeneralData = GeneralData.createFromServer(datas, this._myGenerals.get(datas.id), this._generalConfigs.get(datas.cfgId));
-            this._myGenerals.set(data.id, data);
-            ids.push(data.id);
+            let general: GeneralData = GeneralData.createFromServer(data, this._myGenerals.get(data.id), this._generalConfigs.get(data.cfgId));
+            this._myGenerals.set(general.id, general);
+            ids.push(general.id);
         }  
     }
 

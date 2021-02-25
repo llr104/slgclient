@@ -21,11 +21,9 @@ export default class SkillIconLogic extends cc.Component {
 
     _conf: SkillConf = null;
 
-    protected onEnable():void{
-        this.getComponent(cc.Sprite).spriteFrame = null;
-    }
-
     public setData(conf:SkillConf):void{
+
+        console.log("setData SkillConf:", conf);
 
         this._conf = conf;
         if(this._conf == null){
@@ -42,6 +40,10 @@ export default class SkillIconLogic extends cc.Component {
 
     public isEmpty():boolean {
         return this._conf == null;
+    }
+
+    public getCnf():SkillConf {
+        return this._conf;
     }
 
 }
