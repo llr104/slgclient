@@ -48,6 +48,12 @@ export class GeneralCommonConfig {
     draw_general_cost: number = 0;
 }
 
+export class gSkill {
+    id: number = 0;
+	lv: number = 0;
+	cfgId: number = 0;
+}
+
 /**武将数据*/
 export class GeneralData {
     id: number = 0;
@@ -68,6 +74,7 @@ export class GeneralData {
     speed_added: number = 0;
     destroy_added: number = 0;
     config: GeneralConfig = new GeneralConfig();
+    skills: gSkill[] = [];
 
 
     public static createFromServer(serverData: any, generalData: GeneralData = null, generalCfg: GeneralConfig): GeneralData {
@@ -92,7 +99,10 @@ export class GeneralData {
         data.defense_added = serverData.defense_added;
         data.speed_added = serverData.speed_added;
         data.destroy_added = serverData.destroy_added;
-        data.config = generalCfg
+        data.config = generalCfg;
+        data.skills = serverData.skills;
+
+        console.log("createFromServer:", data);
 
         return data;
     }

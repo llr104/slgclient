@@ -6701,7 +6701,7 @@
     },
     "component": "",
     "_componentId": "db03dDBJ39EiL9LfLKyZ+VK",
-    "handler": "onOpenSkill",
+    "handler": "onClickSkillBtn",
     "customEventData": ""
   },
   {

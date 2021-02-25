@@ -6,6 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { SkillConf, SkillOutline } from "../../config/skill/Skill";
+import GeneralCommand from "../../general/GeneralCommand";
+import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
 import SkillIconLogic from "./SkillIconLogic";
 
@@ -42,13 +44,31 @@ export default class SkillInfoLogic extends cc.Component {
     @property(cc.Label)
     nextDesLab: cc.Label = null;
 
+    @property(cc.Button)
+    learnBtn: cc.Button = null;
 
+    _cfg: SkillConf = null;
+
+    _general: GeneralData = null;
+    _type: number = 0;
+    _skillPos : number = -1;
+
+    protected onEnable() {
+        this.learnBtn.node.active = false;
+    }
 
     protected onClickClose(): void {
         this.node.active = false;
     }
 
-    public setData(data: SkillConf) {
+    public setData(data: SkillConf, type:number, general:GeneralData, skillPos: number) {
+        this._cfg = data;
+        this._type = type;
+        this._general = general;
+        this._skillPos = skillPos;
+
+        this.learnBtn.node.active = type == 1;
+
         this.icon.getComponent(SkillIconLogic).setData(data);
 
         var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
@@ -89,5 +109,16 @@ export default class SkillInfoLogic extends cc.Component {
         return str;
     }
 
+    
+    protected onClickLearn():void {
+        if(this._general){
+            GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, 0);
+        }
+    }
 
+    protected onClickForget():void {
+        if(this._general){
+            GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, 0);
+        }
+    }
 }

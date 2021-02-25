@@ -3,8 +3,9 @@ import { SkillConf, SkillOutline } from "../config/skill/Skill";
 
 export default class SkillProxy {
 
-    protected skillConfs: SkillConf[] = [];
-    protected skillOutLine: SkillOutline;
+    private _skillCfgMap:Map<number, SkillConf> = new Map<number, SkillConf>();
+    protected _skillConfs: SkillConf[] = [];
+    protected _skillOutLine: SkillOutline;
 
     public initSkillConfig(cfgs: any[]): void {
        
@@ -12,19 +13,28 @@ export default class SkillProxy {
         
             if (cfgs[i]._name == "skill_outline") {
                 console.log("skill_outline");
-                this.skillOutLine = cfgs[i].json;
+                this._skillOutLine = cfgs[i].json;
             } else {
-                this.skillConfs.push(cfgs[i].json);
+                this._skillConfs.push(cfgs[i].json);
+                this._skillCfgMap.set(cfgs[i].json.cfgId, cfgs[i].json);
             }
         }
     }
 
     public get skills(): SkillConf[] {
-        return this.skillConfs;
+        return this._skillConfs;
     }
 
     public get outLine(): SkillOutline {
-        return this.skillOutLine;
-    } 
+        return this._skillOutLine;
+    }
+
+    public getSkillCfg(cfgId:number): SkillConf{
+        if(this._skillCfgMap.has(cfgId)){
+            return this._skillCfgMap.get(cfgId);
+        }else{
+            return null;
+        }
+    }
 
 }

@@ -16,6 +16,8 @@ import { Tools } from "../../utils/Tools";
 import GeneralInfoLogic from "./GeneralInfoLogic";
 import WarReportLogic from "./WarReportLogic";
 import DrawRLogic from "./DrawRLogic";
+import { GeneralData } from "../../general/GeneralProxy";
+import SkillLogic from "./SkillLogic";
 
 
 const { ccclass, property } = cc._decorator;
@@ -141,8 +143,8 @@ export default class MapUILogic extends cc.Component {
         cc.systemEvent.on("interior_collect", this.onCollection, this);
         cc.systemEvent.on("open_general_convert", this.onOpenGeneralConvert, this);
         cc.systemEvent.on("open_general_roster", this.onOpenGeneralRoster, this);
-        
         cc.systemEvent.on("open_general", this.openGeneral, this);
+        cc.systemEvent.on("open_skill", this.onOpenSkill, this);
         
         
 
@@ -450,8 +452,11 @@ export default class MapUILogic extends cc.Component {
 
     }
     
+    onClickSkillBtn(): void{
+        this.onOpenSkill(0);
+    }
 
-    protected onOpenSkill(): void {
+    protected onOpenSkill(type:number=0, general:GeneralData = null, skillPos:number=-1): void {
         console.log("onOpenSkill");
         if (this._skillNode == null) {
             this._skillNode = cc.instantiate(this.skillPrefab);
@@ -459,7 +464,8 @@ export default class MapUILogic extends cc.Component {
         } else {
             this._skillNode.active = true;
         }
-
+        this._skillNode.zIndex = 5;
+        this._skillNode.getComponent(SkillLogic).setData(type, general, skillPos);
     }
     
 

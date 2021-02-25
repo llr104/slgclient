@@ -5,8 +5,10 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { SkillConf } from "../../config/skill/Skill";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GenaralLevelConfig, GeneralData } from "../../general/GeneralProxy";
+import SkillCommand from "../../skill/SkillCommand";
 import { GeneralItemType } from "./GeneralItemLogic";
 import SkillIconLogic from "./SkillIconLogic";
 
@@ -57,6 +59,12 @@ export default class GeneralDesLogic extends cc.Component {
     @property(cc.Node)
     generalItemParent: cc.Node = null;
 
+    @property([cc.Node])
+    skillIcons: cc.Node[] = [];
+
+    @property([cc.Label])
+    skillNameLab: cc.Label[] = [];
+
     private _currData:any = null;
     private _cfgData:any = null;
 
@@ -82,7 +90,7 @@ export default class GeneralDesLogic extends cc.Component {
     }
 
 
-    public setData(cfgData:any,curData:any):void{
+    public setData(cfgData:any, curData:GeneralData):void{
         this._currData = curData;
         this._cfgData = cfgData;
     
@@ -111,11 +119,31 @@ export default class GeneralDesLogic extends cc.Component {
      
         var com = this._generalNode.getComponent("GeneralItemLogic");
         if(com){
-            com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
+            com.updateItem(this._currData, GeneralItemType.GeneralNoThing);
         }
 
         this.powerLabel.string = "体力:" + curData.physical_power + "/" + cfgData.physical_power_limit;
         this.costLabel.string = "cost:"+cfgData.cost;
+
+        for (let index = 0; index < curData.skills.length; index++) {
+            let skill = curData.skills[index];
+            let icon = this.skillIcons[index];
+            let iconNameLab = this.skillNameLab[index];
+
+            if(skill == null){
+                icon.getComponent(SkillIconLogic).setData(null);
+                iconNameLab.string = "";
+            }else{
+                let skillCfg = SkillCommand.getInstance().proxy.getSkillCfg(skill.cfgId);
+                if(skillCfg){
+                    icon.getComponent(SkillIconLogic).setData(skillCfg);
+                    iconNameLab.string = skillCfg.name;
+                }else{
+                    icon.getComponent(SkillIconLogic).setData(null);
+                    iconNameLab.string = "";
+                }
+            }
+        }
     }
 
     private getAttrStr(key: string) :string{
@@ -127,17 +155,17 @@ export default class GeneralDesLogic extends cc.Component {
         console.log("event", event);
         var node: cc.Node = event.target;
         var isEmpty = node.getComponent(SkillIconLogic).isEmpty();
-        // if(isEmpty){
-        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, pos);
-        // }else{
-        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, pos);
-        // }
-
-        if (pos == 0) {
-            GeneralCommand.getInstance().upSkill(this._currData.id, 201, 0);
+        if(isEmpty){
+            cc.systemEvent.emit("open_skill", 1, this._currData, pos);
         }else{
-            GeneralCommand.getInstance().downSkill(this._currData.id, 201, 0);
+            
         }
+
+        // if (pos == 0) {
+        //     GeneralCommand.getInstance().upSkill(this._currData.id, 201, 0);
+        // }else{
+        //     GeneralCommand.getInstance().downSkill(this._currData.id, 201, 0);
+        // }
     }
 
 
