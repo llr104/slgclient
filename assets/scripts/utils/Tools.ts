@@ -100,6 +100,7 @@ export class Tools{
         codeObj[60] = "超过了技能上限";
         codeObj[61] = "装备技能失败";
         codeObj[62] = "取下技能失败";
+        codeObj[63] = "兵种不符";
 
         if (codeObj[code] == null){
             str = "错误:" + code;

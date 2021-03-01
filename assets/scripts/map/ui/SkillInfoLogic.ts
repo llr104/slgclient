@@ -102,12 +102,18 @@ export default class SkillInfoLogic extends cc.Component {
     }
 
     protected armstr(arms:number []): string{
+        console.log("armstr:", arms);
+
         var str = ""
-        if(arms.indexOf(1) || arms.indexOf(4) || arms.indexOf(7)){
+        if(arms.indexOf(1)>=0 || arms.indexOf(4)>=0 || arms.indexOf(7)>=0){
             str += "步"
-        }else if(arms.indexOf(2) || arms.indexOf(5) || arms.indexOf(8)){
+        }
+        
+        if(arms.indexOf(2)>=0 || arms.indexOf(5)>=0 || arms.indexOf(8)>=0){
             str += "弓"
-        }else if(arms.indexOf(3) || arms.indexOf(6) || arms.indexOf(9)){
+        }
+        
+        if(arms.indexOf(3)>=0 || arms.indexOf(6)>=0 || arms.indexOf(9)>=0){
             str += "骑"
         }
         return str;
