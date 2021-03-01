@@ -72,6 +72,7 @@ const ServerConfig = {
     facility_push:"facility.push",
     roleRes_push:"roleRes.push",
 
+    skill_list:"skill.list",
 
     chat_login:"chat.login",
     chat_chat:"chat.chat",

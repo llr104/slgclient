@@ -9,6 +9,7 @@ import { SkillConf, SkillOutline } from "../../config/skill/Skill";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
+import { Skill } from "../../skill/SkillProxy";
 import SkillIconLogic from "./SkillIconLogic";
 
 const {ccclass, property} = cc._decorator;
@@ -50,6 +51,7 @@ export default class SkillInfoLogic extends cc.Component {
     @property(cc.Button)
     giveUpBtn: cc.Button = null;
 
+    _data: Skill = null;
     _cfg: SkillConf = null;
 
     _general: GeneralData = null;
@@ -64,8 +66,12 @@ export default class SkillInfoLogic extends cc.Component {
         this.node.active = false;
     }
 
-    public setData(data: SkillConf, type:number, general:GeneralData, skillPos: number) {
-        this._cfg = data;
+    public setData(data: Skill, type:number, general:GeneralData, skillPos: number) {
+
+        var conf = SkillCommand.getInstance().proxy.getSkillCfg(data.cfgId);
+
+        this._cfg = conf;
+        this._data = data;
         this._type = type;
         this._general = general;
         this._skillPos = skillPos;
@@ -73,27 +79,27 @@ export default class SkillInfoLogic extends cc.Component {
         this.learnBtn.node.active = type == 1;
         this.giveUpBtn.node.active = type == 2;
 
-        this.icon.getComponent(SkillIconLogic).setData(data);
+        this.icon.getComponent(SkillIconLogic).setData(conf);
 
         var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
-        this.nameLab.string = data.name;
-        this.limitLab.string = "0/" + data.limit;
-        this.triggerLab.string =  outLine.trigger_type.list[data.trigger-1].des;
-        this.rateLab.string = data.levels[0].probability + "%";
-        this.targetLab.string = outLine.target_type.list[data.target-1].des;
-        this.armLab.string = this.armstr(data.arms);
+        this.nameLab.string = conf.name;
+        this.limitLab.string = this._data.generals.length + "/" + conf.limit;
+        this.triggerLab.string =  outLine.trigger_type.list[conf.trigger-1].des;
+        this.rateLab.string = conf.levels[0].probability + "%";
+        this.targetLab.string = outLine.target_type.list[conf.target-1].des;
+        this.armLab.string = this.armstr(conf.arms);
 
-        var des1 = data.des
-        for (let index = 0; index < data.levels[0].effect_value.length; index++) {
-            var str = data.levels[0].effect_value[index] + "";
+        var des1 = conf.des
+        for (let index = 0; index < conf.levels[0].effect_value.length; index++) {
+            var str = conf.levels[0].effect_value[index] + "";
             des1 = des1.replace("%n%", str);
         }
 
         this.curDesLab.string = des1;
 
-        var des2 = data.des
-        for (let index = 0; index < data.levels[1].effect_value.length; index++) {
-            var str = data.levels[1].effect_value[index] + "";
+        var des2 = conf.des
+        for (let index = 0; index < conf.levels[1].effect_value.length; index++) {
+            var str = conf.levels[1].effect_value[index] + "";
             des2 = des2.replace("%n%", str);
         }
 
@@ -108,7 +114,7 @@ export default class SkillInfoLogic extends cc.Component {
         if(arms.indexOf(1)>=0 || arms.indexOf(4)>=0 || arms.indexOf(7)>=0){
             str += "步"
         }
-        
+
         if(arms.indexOf(2)>=0 || arms.indexOf(5)>=0 || arms.indexOf(8)>=0){
             str += "弓"
         }

@@ -1,11 +1,21 @@
 import { SkillConf, SkillOutline } from "../config/skill/Skill";
 
 
+
+export class Skill {
+    id:number = 0;
+    cfgId: number = 0;
+    generals: number[] = [];
+
+}
+
+
 export default class SkillProxy {
 
     private _skillCfgMap:Map<number, SkillConf> = new Map<number, SkillConf>();
     protected _skillConfs: SkillConf[] = [];
     protected _skillOutLine: SkillOutline;
+    protected _skills: Map<number, Skill> = new Map<number, Skill>();
 
     public initSkillConfig(cfgs: any[]): void {
         this._skillConfs = [];
@@ -23,7 +33,7 @@ export default class SkillProxy {
         }
     }
 
-    public get skills(): SkillConf[] {
+    public get skillConfs(): SkillConf[] {
         return this._skillConfs;
     }
 
@@ -37,6 +47,18 @@ export default class SkillProxy {
         }else{
             return null;
         }
+    }
+
+    public updateSkills(skills: Skill[]) {
+
+        skills.forEach(skill => {
+            this._skills.set(skill.cfgId, skill);
+        });
+        
+    }
+
+    public get skills():Skill[] {
+        return Array.from(this._skills.values())
     }
 
 }

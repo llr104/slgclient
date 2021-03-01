@@ -1,3 +1,5 @@
+import { ServerConfig } from "../config/ServerConfig";
+import { NetManager } from "../network/socket/NetManager";
 import SkillProxy from "./SkillProxy";
 
 export default class SkillCommand {
@@ -20,7 +22,7 @@ export default class SkillCommand {
     }
 
     constructor() {
-       
+       cc.systemEvent.on(ServerConfig.skill_list, this.onSkillList, this)
     }
 
     protected _proxy: SkillProxy = new SkillProxy();
@@ -31,5 +33,23 @@ export default class SkillCommand {
 
     public get proxy(): SkillProxy {
         return this._proxy;
+    }
+
+
+    public qrySkillList(): void {
+        let sendData: any = {
+            name: ServerConfig.skill_list,
+            msg: {}
+        };
+        NetManager.getInstance().send(sendData);
+    }
+    
+
+    protected onSkillList(data: any): void {
+        console.log("onSkillList", data);
+        if (data.code == 0) {
+            this._proxy.updateSkills(data.msg.list);
+            cc.systemEvent.emit("skill_list_info");
+        }
     }
 }

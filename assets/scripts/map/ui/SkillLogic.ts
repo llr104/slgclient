@@ -10,6 +10,7 @@ import { SkillConf } from "../../config/skill/Skill";
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
+import { Skill } from "../../skill/SkillProxy";
 import SkillInfoLogic from "./SkillInfoLogic";
 
 
@@ -29,16 +30,51 @@ export default class SkillLogic extends cc.Component {
    
     protected onEnable():void{
        
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        cc.systemEvent.on("skill_list_info", this.onSkillList, this);
+        
+
+        SkillCommand.getInstance().qrySkillList();
+    }
+
+    protected onDisable():void {
+        cc.systemEvent.targetOff(this)
+    }
+
+    protected onSkillList(){
         var skills = SkillCommand.getInstance().proxy.skills;
-        comp.setData(skills);
+        var skillConfs = SkillCommand.getInstance().proxy.skillConfs;
+
+        var arr = [];
+        for (let i = 0; i < skillConfs.length; i++) {
+            var found = false;
+            let cfg = skillConfs[i];
+
+            let dSkill = new Skill();
+            dSkill.cfgId = cfg.cfgId;
+            dSkill.generals = [];
+
+            for (let j = 0; j < skills.length; j++) {
+                var skill = skills[j];
+                if (skill.cfgId == cfg.cfgId){
+                    found = true;
+                    arr.push(skill);
+                    break
+                }
+            }
+            if(found == false){
+                arr.push(dSkill);
+            }
+        }
+
+        var comp = this.scrollView.node.getComponent("ListLogic");
+        comp.setData(arr);
     }
 
     protected onClickClose(): void {
         this.node.active = false;
     }
 
-    protected onClickItem(data: SkillConf, target): void {
+    protected onClickItem(data: Skill, target): void {
         cc.systemEvent.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
     }
 

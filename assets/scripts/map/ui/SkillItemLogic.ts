@@ -7,6 +7,8 @@
 
 import { SkillConf } from "../../config/skill/Skill";
 import LoginCommand from "../../login/LoginCommand";
+import SkillCommand from "../../skill/SkillCommand";
+import { Skill } from "../../skill/SkillProxy";
 import DateUtil from "../../utils/DateUtil";
 import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
@@ -21,24 +23,31 @@ export default class SkillItemLogic extends cc.Component {
     @property(cc.Label)
     nameLab: cc.Label = null;
 
+       
+    @property(cc.Label)
+    limitLab: cc.Label = null;
+
     @property(cc.Node)
     icon:cc.Node = null;
 
     @property([cc.SpriteFrame])
     sps:cc.SpriteFrame[] = [];
 
-    _conf: SkillConf = null;
+    _skill: Skill = null;
 
     protected onEnable():void{
         
     }
 
-    protected updateItem(conf:SkillConf):void{
-        console.log("updateItem:", conf);
-        
-        this._conf = conf;
+    protected updateItem(skill:Skill):void{
+   
+        var conf = SkillCommand.getInstance().proxy.getSkillCfg(skill.cfgId);
+        this._skill = skill;
         this.nameLab.string = conf.name;
+
         this.icon.getComponent(SkillIconLogic).setData(conf);
+
+        this.limitLab.string = this._skill.generals.length + "/" + conf.limit;
     }
 
 }
