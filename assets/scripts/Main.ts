@@ -123,6 +123,7 @@ export default class Main extends cc.Component {
                 GeneralCommand.getInstance().qryMyGenerals();
                 ArmyCommand.getInstance().qryArmyList(cityId);
                 MapUICommand.getInstance().qryWarReport();
+                SkillCommand.getInstance().qrySkillList();
 
                 this.clearAllScene();
                 this._mapScene = cc.instantiate(this.mapScenePrefab);

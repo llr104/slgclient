@@ -101,6 +101,8 @@ export class Tools{
         codeObj[61] = "装备技能失败";
         codeObj[62] = "取下技能失败";
         codeObj[63] = "兵种不符";
+        codeObj[64] = "该位置没有技能";
+        codeObj[65] = "技能等级已满";
 
         if (codeObj[code] == null){
             str = "错误:" + code;

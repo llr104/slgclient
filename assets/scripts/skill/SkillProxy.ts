@@ -49,6 +49,14 @@ export default class SkillProxy {
         }
     }
 
+    public getSkill(cfgId:number): Skill{
+        if(this._skills.has(cfgId)){
+            return this._skills.get(cfgId);
+        }else{
+            return null;
+        }
+    }
+
     public updateSkills(skills: Skill[]) {
 
         skills.forEach(skill => {

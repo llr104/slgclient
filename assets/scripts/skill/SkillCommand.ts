@@ -22,7 +22,8 @@ export default class SkillCommand {
     }
 
     constructor() {
-       cc.systemEvent.on(ServerConfig.skill_list, this.onSkillList, this)
+       cc.systemEvent.on(ServerConfig.skill_list, this.onSkillList, this);
+       cc.systemEvent.on(ServerConfig.skill_push, this.onSkillPush, this);
     }
 
     protected _proxy: SkillProxy = new SkillProxy();
@@ -51,5 +52,10 @@ export default class SkillCommand {
             this._proxy.updateSkills(data.msg.list);
             cc.systemEvent.emit("skill_list_info");
         }
+    }
+
+    protected onSkillPush(data: any): void {
+        console.log("onSkillPush", data);
+        this._proxy.updateSkills([data.msg]);
     }
 }

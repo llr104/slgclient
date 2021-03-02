@@ -23,7 +23,7 @@ export default class SkillIconLogic extends cc.Component {
 
     public setData(conf:SkillConf):void{
 
-        console.log("setData SkillConf:", conf);
+        // console.log("setData SkillConf:", conf);
 
         this._conf = conf;
         if(this._conf == null){

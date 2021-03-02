@@ -33,6 +33,8 @@ export default class GeneralCommand {
         cc.systemEvent.on(ServerConfig.general_convert, this.onGeneralConvert , this);
         cc.systemEvent.on(ServerConfig.general_upSkill, this.onUpSkill, this);
         cc.systemEvent.on(ServerConfig.general_downSkill, this.onDownSkill, this);
+        cc.systemEvent.on(ServerConfig.general_lvSkill, this.onLvSkill, this);
+        
 
     }
 
@@ -88,7 +90,7 @@ export default class GeneralCommand {
     protected onAddPrGeneral(data:any):void{
         console.log("onAddPrGeneral ", data);
         if (data.code == 0) {
-            this._proxy.updateGenerals(data.msg.general);
+            this._proxy.updateGeneral(data.msg.general);
             cc.systemEvent.emit("update_one_generals",data.msg.general);
         }
     }
@@ -109,7 +111,11 @@ export default class GeneralCommand {
     
     protected onDownSkill(data:any):void{
         console.log("onDownSkill ", data);
-        
+       
+    }
+
+    protected onLvSkill(data:any):void{
+        console.log("onLvSkill ", data);
     }
     
 
@@ -207,6 +213,18 @@ export default class GeneralCommand {
             msg: {
                 gId:gId,
                 cfgId:cfgId,
+                pos:Number(pos)
+            }
+        };
+        NetManager.getInstance().send(sendData);
+    }
+
+ 
+    public lvSkill(gId:number, pos:number) {
+        let sendData: any = {
+            name: ServerConfig.general_lvSkill,
+            msg: {
+                gId:gId,
                 pos:Number(pos)
             }
         };

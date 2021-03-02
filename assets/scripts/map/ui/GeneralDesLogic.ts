@@ -171,7 +171,9 @@ export default class GeneralDesLogic extends cc.Component {
             cc.systemEvent.emit("open_skill", 1, this._currData, pos);
         }else{
             let cfg = node.getComponent(SkillIconLogic).getCnf();
-            cc.systemEvent.emit("open_skillInfo", cfg, 2, this._currData, pos);
+
+            var skill = SkillCommand.getInstance().proxy.getSkill(cfg.cfgId);
+            cc.systemEvent.emit("open_skillInfo", skill, 2, this._currData, pos);
         }
     }
 

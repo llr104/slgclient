@@ -25,7 +25,7 @@ export default class SkillInfoLogic extends cc.Component {
 
  
     @property(cc.Label)
-    limitLab: cc.Label = null;
+    lvLab: cc.Label = null;
 
     @property(cc.Label)
     triggerLab: cc.Label = null;
@@ -49,6 +49,9 @@ export default class SkillInfoLogic extends cc.Component {
     learnBtn: cc.Button = null;
 
     @property(cc.Button)
+    lvBtn: cc.Button = null;
+
+    @property(cc.Button)
     giveUpBtn: cc.Button = null;
 
     _data: Skill = null;
@@ -68,7 +71,11 @@ export default class SkillInfoLogic extends cc.Component {
 
     public setData(data: Skill, type:number, general:GeneralData, skillPos: number) {
 
+        console.log("setData Skill:", data, general);
+
         var conf = SkillCommand.getInstance().proxy.getSkillCfg(data.cfgId);
+        this.icon.getComponent(SkillIconLogic).setData(conf);
+        var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
 
         this._cfg = conf;
         this._data = data;
@@ -79,11 +86,28 @@ export default class SkillInfoLogic extends cc.Component {
         this.learnBtn.node.active = type == 1;
         this.giveUpBtn.node.active = type == 2;
 
-        this.icon.getComponent(SkillIconLogic).setData(conf);
-
-        var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
         this.nameLab.string = conf.name;
-        this.limitLab.string = this._data.generals.length + "/" + conf.limit;
+
+        let isShowLv = false;
+        let lv = 0;
+        if(type == 2){
+            for (let index = 0; index < general.skills.length; index++) {
+                const gskill =  general.skills[index];
+                if (gskill && gskill.cfgId == data.cfgId && gskill.lv <= conf.levels.length){
+                    isShowLv = true;
+                    lv = gskill.lv;
+                    break
+                }
+            }
+        }
+
+        this.lvBtn.node.active = isShowLv;
+        if(isShowLv){
+            this.lvLab.string = "lv" + lv;
+        }else{
+            this.lvLab.string = "";
+        }
+    
         this.triggerLab.string =  outLine.trigger_type.list[conf.trigger-1].des;
         this.rateLab.string = conf.levels[0].probability + "%";
         this.targetLab.string = outLine.target_type.list[conf.target-1].des;
@@ -129,6 +153,14 @@ export default class SkillInfoLogic extends cc.Component {
     protected onClickLearn():void {
         if(this._general){
             GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, this._skillPos);
+            this.node.active = false;
+            cc.systemEvent.emit("close_skill");
+        }
+    }
+
+    protected onClickLv():void {
+        if(this._general){
+            GeneralCommand.getInstance().lvSkill(this._general.id, this._skillPos);
             this.node.active = false;
             cc.systemEvent.emit("close_skill");
         }

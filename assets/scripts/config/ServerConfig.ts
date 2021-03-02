@@ -34,6 +34,7 @@ const ServerConfig = {
 
     general_upSkill: "general.upSkill",
     general_downSkill: "general.downSkill",
+    general_lvSkill: "general.lvSkill",
 
     army_myList: "army.myList",
     army_myOne: "army.myOne",
@@ -73,6 +74,7 @@ const ServerConfig = {
     roleRes_push:"roleRes.push",
 
     skill_list:"skill.list",
+    skill_push:"skill.push",
 
     chat_login:"chat.login",
     chat_chat:"chat.chat",
