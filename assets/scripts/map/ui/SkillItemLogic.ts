@@ -45,7 +45,7 @@ export default class SkillItemLogic extends cc.Component {
         this._skill = skill;
         this.nameLab.string = conf.name;
 
-        this.icon.getComponent(SkillIconLogic).setData(conf);
+        this.icon.getComponent(SkillIconLogic).setData(skill, null);
 
         this.limitLab.string = this._skill.generals.length + "/" + conf.limit;
     }

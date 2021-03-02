@@ -1,3 +1,5 @@
+import { Skill } from "../skill/SkillProxy";
+
 /**武将(配置)*/
 export class GeneralConfig {
     name: string = "";

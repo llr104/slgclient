@@ -138,20 +138,22 @@ export default class GeneralDesLogic extends cc.Component {
         this.costLabel.string = "cost:"+cfgData.cost;
 
         for (let index = 0; index < curData.skills.length; index++) {
-            let skill = curData.skills[index];
+            let gSkill = curData.skills[index];
             let icon = this.skillIcons[index];
             let iconNameLab = this.skillNameLab[index];
 
-            if(skill == null){
-                icon.getComponent(SkillIconLogic).setData(null);
+            if(gSkill == null){
+                icon.getComponent(SkillIconLogic).setData(null, null);
                 iconNameLab.string = "";
             }else{
-                let skillCfg = SkillCommand.getInstance().proxy.getSkillCfg(skill.cfgId);
-                if(skillCfg){
-                    icon.getComponent(SkillIconLogic).setData(skillCfg);
-                    iconNameLab.string = skillCfg.name;
+                
+                let skillConf = SkillCommand.getInstance().proxy.getSkillCfg(gSkill.cfgId);
+                let skill = SkillCommand.getInstance().proxy.getSkill(gSkill.cfgId);
+                if(skillConf && skill){
+                    icon.getComponent(SkillIconLogic).setData(skill, gSkill);
+                    iconNameLab.string = skillConf.name;
                 }else{
-                    icon.getComponent(SkillIconLogic).setData(null);
+                    icon.getComponent(SkillIconLogic).setData(null, null);
                     iconNameLab.string = "";
                 }
             }
@@ -170,9 +172,7 @@ export default class GeneralDesLogic extends cc.Component {
         if(isEmpty){
             cc.systemEvent.emit("open_skill", 1, this._currData, pos);
         }else{
-            let cfg = node.getComponent(SkillIconLogic).getCnf();
-
-            var skill = SkillCommand.getInstance().proxy.getSkill(cfg.cfgId);
+            let skill = node.getComponent(SkillIconLogic).getSkill();
             cc.systemEvent.emit("open_skillInfo", skill, 2, this._currData, pos);
         }
     }

@@ -74,7 +74,7 @@ export default class SkillInfoLogic extends cc.Component {
         console.log("setData Skill:", data, general);
 
         var conf = SkillCommand.getInstance().proxy.getSkillCfg(data.cfgId);
-        this.icon.getComponent(SkillIconLogic).setData(conf);
+        this.icon.getComponent(SkillIconLogic).setData(data, null);
         var outLine: SkillOutline = SkillCommand.getInstance().proxy.outLine;
 
         this._cfg = conf;
@@ -103,7 +103,7 @@ export default class SkillInfoLogic extends cc.Component {
 
         this.lvBtn.node.active = isShowLv;
         if(isShowLv){
-            this.lvLab.string = "lv" + lv;
+            this.lvLab.string = "lv:" + lv;
         }else{
             this.lvLab.string = "";
         }
