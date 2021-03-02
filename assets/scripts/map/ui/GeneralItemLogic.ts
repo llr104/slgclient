@@ -42,6 +42,9 @@ export default class GeneralItemLogic extends cc.Component {
 
     @property(cc.Label)
     campLabel: cc.Label = null;
+
+    @property(cc.Label)
+    armLabel: cc.Label = null;
     
     @property(cc.Layout)
     starLayout:cc.Layout = null;
@@ -104,6 +107,7 @@ export default class GeneralItemLogic extends cc.Component {
             this.campLabel.string = "吴";
         }
         
+        this.armLabel.string = this.armstr(cfgData.arms);
 
         if(this.useNode){
             if(this._type == GeneralItemType.GeneralInfo && this._curData.order > 0){
@@ -117,6 +121,20 @@ export default class GeneralItemLogic extends cc.Component {
             this.costLabel.string = cfgData.cost + "";
         }
         this.select(false);
+    }
+
+    protected armstr(arms:number []): string{
+        console.log("armstr:", arms);
+
+        var str = ""
+        if(arms.indexOf(1)>=0 || arms.indexOf(4)>=0 || arms.indexOf(7)>=0){
+            str += "步"
+        }else if(arms.indexOf(2)>=0 || arms.indexOf(5)>=0 || arms.indexOf(8)>=0){
+            str += "弓"
+        }else if(arms.indexOf(3)>=0 || arms.indexOf(6)>=0 || arms.indexOf(9)>=0){
+            str += "骑"
+        }
+        return str;
     }
 
 
