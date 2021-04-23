@@ -1947,7 +1947,7 @@
     "columnCount": 1,
     "autoColumnCount": false,
     "spaceColumn": 1,
-    "spaceRow": 1,
+    "spaceRow": 2,
     "updateInterval": 0.1,
     "scale": 1,
     "itemClickEvents": [],
