@@ -1,4 +1,5 @@
 # slg游戏客户端demo 使用CocosCreator2.4.3 开发
+## 素材来源于网络，仅供学习使用，请勿用于商业用途
 ## 服务端demo：https://github.com/llr104/slgserver
 <br/>
 
@@ -46,4 +47,3 @@
 ![聊天](https://s1.imagehub.cc/images/2021/04/23/5c5785ceab3b9d4707bcb75548c570a0.png)
 
 
-# 素材来源于网络，仅供学习使用，请勿用于商业用途
