@@ -1,34 +1,36 @@
+import { _decorator, Component, Node, Prefab, NodePool, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import ArmyCommand from "../general/ArmyCommand";
 import { ArmyCmd, ArmyData } from "../general/ArmyProxy";
 import ArmyLogic from "./entries/ArmyLogic";
 import MapCommand from "./MapCommand";
 import MapUtil from "./MapUtil";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class MapArmyLogic extends cc.Component {
-    @property(cc.Node)
-    parentLayer: cc.Node = null;
-    @property(cc.Prefab)
-    armyPrefab: cc.Prefab = null;
-    @property(cc.Prefab)
-    arrowPrefab: cc.Prefab = null;
+@ccclass('MapArmyLogic')
+export default class MapArmyLogic extends Component {
+    @property(Node)
+    parentLayer: Node = null;
+    @property(Prefab)
+    armyPrefab: Prefab = null;
+    @property(Prefab)
+    arrowPrefab: Prefab = null;
 
     protected _armyLogics: Map<number, ArmyLogic> = new Map<number, ArmyLogic>();
-    protected _armyPool: cc.NodePool = new cc.NodePool();
-    protected _arrowPool: cc.NodePool = new cc.NodePool();
+    protected _armyPool: NodePool = new NodePool();
+    protected _arrowPool: NodePool = new NodePool();
 
     protected onLoad(): void {
-        cc.systemEvent.on("update_army_list", this.onUpdateArmyList, this);
-        cc.systemEvent.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on("update_army_list", this.onUpdateArmyList, this);
+        EventMgr.on("update_army", this.onUpdateArmy, this);
         this.initArmys();
 
         this.schedule(this.checkVisible, 0.5);
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._armyPool.clear();
         this._arrowPool.clear();
         this._armyLogics.forEach((logic:ArmyLogic) => {
@@ -59,8 +61,8 @@ export default class MapArmyLogic extends cc.Component {
 
     protected onUpdateArmy(data: ArmyData): void {
         console.log("update_army", data);
-        let aniNode: cc.Node = null;
-        let arrowNode: cc.Node = null;
+        let aniNode: Node = null;
+        let arrowNode: Node = null;
         if (data.cmd == ArmyCmd.Idle || data.cmd == ArmyCmd.Conscript) {
             //代表不在地图上
             this.removeArmyById(data.id);
@@ -84,19 +86,19 @@ export default class MapArmyLogic extends cc.Component {
         logic.setArmyData(data, aniNode, arrowNode);
     }
 
-    protected createArmy(): cc.Node {
+    protected createArmy(): Node {
         if (this._armyPool.size() > 0) {
             return this._armyPool.get();
         } else {
-            return cc.instantiate(this.armyPrefab);
+            return instantiate(this.armyPrefab);
         }
     }
 
-    protected createArrow():cc.Node {
+    protected createArrow():Node {
         if (this._arrowPool.size() > 0) {
             return this._arrowPool.get();
         } else {
-            return cc.instantiate(this.arrowPrefab);
+            return instantiate(this.arrowPrefab);
         }
     }
 

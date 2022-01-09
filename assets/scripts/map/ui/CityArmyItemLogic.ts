@@ -1,40 +1,42 @@
+import { _decorator, Component, Node, Label, Sprite } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
 import GeneralHeadLogic from "./GeneralHeadLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class CityArmyItemLogic extends cc.Component {
-    @property(cc.Node)
-    infoNode: cc.Node = null;
-    @property(cc.Node)
-    maskNode: cc.Node = null;
-    @property(cc.Node)
-    tipNode: cc.Node = null;
-    @property(cc.Label)
-    labelTip: cc.Label = null;
-    @property(cc.Sprite)
-    headIcon: cc.Sprite = null;
-    @property(cc.Label)
-    labelId: cc.Label = null;
-    @property(cc.Label)
-    labelState: cc.Label = null;
-    @property(cc.Label)
-    labelLv: cc.Label = null;
-    @property(cc.Label)
-    labelName: cc.Label = null;
-    @property(cc.Label)
-    labelArms: cc.Label = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Label)
-    labelVice1: cc.Label = null;
-    @property(cc.Label)
-    labelVice2: cc.Label = null;
+@ccclass('CityArmyItemLogic')
+export default class CityArmyItemLogic extends Component {
+    @property(Node)
+    infoNode: Node = null;
+    @property(Node)
+    maskNode: Node = null;
+    @property(Node)
+    tipNode: Node = null;
+    @property(Label)
+    labelTip: Label = null;
+    @property(Sprite)
+    headIcon: Sprite = null;
+    @property(Label)
+    labelId: Label = null;
+    @property(Label)
+    labelState: Label = null;
+    @property(Label)
+    labelLv: Label = null;
+    @property(Label)
+    labelName: Label = null;
+    @property(Label)
+    labelArms: Label = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Label)
+    labelVice1: Label = null;
+    @property(Label)
+    labelVice2: Label = null;
 
     public order: number = 0;
     protected _cityId: number = 0;
@@ -43,12 +45,12 @@ export default class CityArmyItemLogic extends cc.Component {
     protected _isOut: boolean = true;
 
     protected onLoad(): void {
-        cc.systemEvent.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on("update_army", this.onUpdateArmy, this);
         this.tipNode.active = false;
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._data = null;
     }
 
@@ -62,10 +64,10 @@ export default class CityArmyItemLogic extends cc.Component {
         if (this.maskNode.active == false) {
             if(this._isOut){
                 if(this._data){
-                    cc.systemEvent.emit("open_army_setting", this._cityId, this._data.order);
+                    EventMgr.emit("open_army_setting", this._cityId, this._data.order);
                 }
             }else{
-                cc.systemEvent.emit("open_army_setting", this._cityId, this.order);
+                EventMgr.emit("open_army_setting", this._cityId, this.order);
             }
         }
     }

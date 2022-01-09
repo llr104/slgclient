@@ -1,44 +1,39 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+
+import { _decorator, Component, Label, Prefab, Node, Layout, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
-import { GeneralItemType } from "./GeneralItemLogic";
+import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 
-const { ccclass, property } = cc._decorator;
+@ccclass('GeneralAddPrLogic')
+export default class GeneralAddPrLogic  extends Component {
 
-@ccclass
-export default class GeneralAddPrLogic  extends cc.Component {
+    @property(Label)
+    nameLab: Label = null;
 
-    @property(cc.Label)
-    nameLab: cc.Label = null;
+    @property(Prefab)
+    generalItemPrefab: Prefab = null;
 
-    @property(cc.Prefab)
-    generalItemPrefab: cc.Prefab = null;
+    @property(Node)
+    generalItemParent: Node = null;
 
-    @property(cc.Node)
-    generalItemParent: cc.Node = null;
+    @property(Layout)
+    srollLayout:Layout = null;
 
-    @property(cc.Layout)
-    srollLayout:cc.Layout = null;
-
-    @property(cc.Label)
-    prLabel: cc.Label = null;
+    @property(Label)
+    prLabel: Label = null;
 
 
-    @property(cc.Node)
-    addPr: cc.Node = null;
+    @property(Node)
+    addPr: Node = null;
 
 
 
     private _currData:GeneralData = null;
     private _cfgData:GeneralConfig = null;
 
-    private _generalNode:cc.Node = null;
+    private _generalNode:Node = null;
     private _nameObj:any = {};
     private _addPrObj:any = {};
     private _addPrArr:string[] = [];
@@ -46,11 +41,11 @@ export default class GeneralAddPrLogic  extends cc.Component {
     private _step:number = 100;
     protected _curAll:number = 0;
 
-    @property([cc.Node])
-    prItems: cc.Node[] = [];
+    @property([Node])
+    prItems: Node[] = [];
 
     protected onLoad():void{
-        this._generalNode = cc.instantiate(this.generalItemPrefab);
+        this._generalNode = instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
 
         this._nameObj = {
@@ -72,9 +67,9 @@ export default class GeneralAddPrLogic  extends cc.Component {
         this._cfgData = cfgData;
         this.nameLab.string = this._cfgData.name;
         
-        var com = this._generalNode.getComponent("GeneralItemLogic");
+        var com = this._generalNode.getComponent(GeneralItemLogic);
         if(com){
-            com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
+            com.updateItem(this._currData, GeneralItemType.GeneralNoThing);
         }
 
         this._addPrObj = {
@@ -97,10 +92,10 @@ export default class GeneralAddPrLogic  extends cc.Component {
         var children = this.srollLayout.node.children;
         var i = 0;
         for(var key in this._nameObj){
-            children[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] +":" + 
+            children[i].getChildByName("New Label").getComponent(Label).string = this._nameObj[key] +":" + 
             GeneralData.getPrStr(this._cfgData[key],this._addPrObj[key],this._currData.level,this._cfgData[key+"_grow"]);
 
-            var node:cc.Label = children[i].getChildByName("New Sprite").getChildByName("change Label").getComponent(cc.Label);
+            var node:Label = children[i].getChildByName("New Sprite").getChildByName("change Label").getComponent(Label);
             node.string = this._addPrObj[key]/this._step +''
             i++;
         }

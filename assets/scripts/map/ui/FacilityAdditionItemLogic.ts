@@ -1,31 +1,23 @@
+import { _decorator, Component, Label, Node } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapUICommand from "./MapUICommand";
 import { Facility, FacilityAdditionCfg, FacilityConfig, CityAdditionType } from "./MapUIProxy";
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class FacilityAdditionItemLogic extends cc.Component {
-    @property(cc.Label)
-    labelName: cc.Label = null;
-    @property(cc.Node)
-    upNode: cc.Node = null;
-    @property(cc.Node)
-    maxNode: cc.Node = null;
-    @property(cc.Label)
-    labelOld: cc.Label = null;
-    @property(cc.Label)
-    labelNew: cc.Label = null;
-    @property(cc.Label)
-    labeMax: cc.Label = null;
-
-    protected onLoad(): void {
-        
-    }
-
-    protected onDestroy(): void {
-        
-    }
+@ccclass('FacilityAdditionItemLogic')
+export default class FacilityAdditionItemLogic extends Component {
+    @property(Label)
+    labelName: Label = null;
+    @property(Node)
+    upNode: Node = null;
+    @property(Node)
+    maxNode: Node = null;
+    @property(Label)
+    labelOld: Label = null;
+    @property(Label)
+    labelNew: Label = null;
+    @property(Label)
+    labeMax: Label = null;
 
     public setData(data:Facility, cfg:FacilityConfig, index:number): void {
         let additionType:number = cfg.additions[index];

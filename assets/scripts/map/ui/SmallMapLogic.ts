@@ -1,30 +1,32 @@
+import { _decorator, Component, EditBox, Node, Vec2 } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapCommand from "../MapCommand";
 import MapUtil from "../MapUtil";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('SmallMapLogic')
+export default class SmallMapLogic extends Component {
+    @property(EditBox)
+    editBoxX: EditBox = null;
+    @property(EditBox)
+    editBoxY: EditBox = null;
 
-@ccclass
-export default class SmallMapLogic extends cc.Component {
-    @property(cc.EditBox)
-    editBoxX: cc.EditBox = null;
-    @property(cc.EditBox)
-    editBoxY: cc.EditBox = null;
-
-    protected _armys: cc.Node[] = [];
-    protected _citys: cc.Node[] = [];
+    protected _armys: Node[] = [];
+    protected _citys: Node[] = [];
 
     protected onLoad(): void {
-        cc.systemEvent.on("map_center_change", this.onMapCenterChange, this);
-        cc.systemEvent.on("scroll_to_map", this.onScrollToMap, this);
+        EventMgr.on("map_center_change", this.onMapCenterChange, this);
+        EventMgr.on("scroll_to_map", this.onScrollToMap, this);
         this.updateView();
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected updateView() {
-        let centerPoint:cc.Vec2 = MapCommand.getInstance().proxy.getCurCenterPoint();
+        let centerPoint:Vec2 = MapCommand.getInstance().proxy.getCurCenterPoint();
         if (centerPoint) {
             this.editBoxX.string = centerPoint.x.toString();
             this.editBoxY.string = centerPoint.y.toString();
@@ -46,7 +48,7 @@ export default class SmallMapLogic extends cc.Component {
             && y >= 0 
             && x < MapUtil.mapSize.width 
             && y < MapUtil.mapSize.height) {
-                cc.systemEvent.emit("scroll_to_map", x, y);
+                EventMgr.emit("scroll_to_map", x, y);
         } else {
             console.log("跳转无效位置", x, y);
         }

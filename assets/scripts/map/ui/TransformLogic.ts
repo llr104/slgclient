@@ -1,45 +1,36 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ArmyData } from "../../general/ArmyProxy";
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralCommonConfig } from "../../general/GeneralProxy";
+import { _decorator, Component, Layout, Node, Label, Slider, Toggle } from 'cc';
+const { ccclass, property } = _decorator;
 import LoginCommand from "../../login/LoginCommand";
 import MapCommand from "../MapCommand";
 import MapUICommand from "./MapUICommand";
+import { EventMgr } from '../../utils/EventMgr';
+
+@ccclass('TransformLogic')
+export default class TransformLogic extends Component {
 
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class TransformLogic extends cc.Component {
+    @property(Layout)
+    fromLayout:Layout = null;
 
 
-    @property(cc.Layout)
-    fromLayout:cc.Layout = null;
+    @property(Layout)
+    toLayout:Layout = null;
 
 
-    @property(cc.Layout)
-    toLayout:cc.Layout = null;
+    @property(Node)
+    trNode:Node = null;
 
 
-    @property(cc.Node)
-    trNode:cc.Node = null;
+    @property(Label)
+    trLabel:Label = null;
 
-
-    @property(cc.Label)
-    trLabel:cc.Label = null;
-
-    @property(cc.Label)
-    rateLabel:cc.Label = null;
+    @property(Label)
+    rateLabel:Label = null;
 
     
-    @property(cc.Slider)
-    trSlider:cc.Slider = null;
+    @property(Slider)
+    trSlider:Slider = null;
 
     protected _nameObj: any = {};
     protected _keyArr:string[] = []
@@ -59,7 +50,7 @@ export default class TransformLogic extends cc.Component {
 
         this._keyArr = ["wood","iron","stone","grain"]
 
-        cc.systemEvent.on("upate_my_roleRes", this.initView, this);
+        EventMgr.on("upate_my_roleRes", this.initView, this);
     }
 
     private getRate() :number {
@@ -80,13 +71,13 @@ export default class TransformLogic extends cc.Component {
         var i = 0;
         let children_from = this.fromLayout.node.children;
         for (var key in this._nameObj) {
-            children_from[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
+            children_from[i].getChildByName("New Label").getComponent(Label).string = this._nameObj[key] + roleRes[key];
             i++;
         }
         i = 0;
         let children_to = this.toLayout.node.children;
         for (var key in this._nameObj) {
-            children_to[i].getChildByName("New Label").getComponent(cc.Label).string = this._nameObj[key] + roleRes[key];
+            children_to[i].getChildByName("New Label").getComponent(Label).string = this._nameObj[key] + roleRes[key];
             i++;
         }
 
@@ -121,7 +112,7 @@ export default class TransformLogic extends cc.Component {
     protected getFromSelectIndex():number{
         let children_from = this.fromLayout.node.children;
         for(var i = 0;i < children_from.length;i++){
-            if(children_from[i].getComponent(cc.Toggle).isChecked){
+            if(children_from[i].getComponent(Toggle).isChecked){
                 return i;
             }
         }
@@ -133,7 +124,7 @@ export default class TransformLogic extends cc.Component {
     protected getToSelectIndex():number{
         let children_to = this.toLayout.node.children;
         for(var i = 0;i < children_to.length;i++){
-            if(children_to[i].getComponent(cc.Toggle).isChecked){
+            if(children_to[i].getComponent(Toggle).isChecked){
                 return i;
             }
         }
@@ -160,7 +151,7 @@ export default class TransformLogic extends cc.Component {
     }
 
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {

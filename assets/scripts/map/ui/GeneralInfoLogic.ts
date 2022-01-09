@@ -1,56 +1,47 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import GeneralCommand from "../../general/GeneralCommand";
-import { GenaralLevelConfig } from "../../general/GeneralProxy";
-import { GeneralItemType } from "./GeneralItemLogic";
+import { _decorator, Component, Prefab, ToggleContainer, Node, instantiate } from 'cc';
+import { EventMgr } from '../../utils/EventMgr';
+const { ccclass, property } = _decorator;
+
+@ccclass('GeneralInfoLogic')
+export default class GeneralInfoLogic  extends Component {
 
 
-const { ccclass, property } = cc._decorator;
+    @property(Prefab)
+    generalDesPrefab: Prefab = null;
 
-@ccclass
-export default class GeneralInfoLogic  extends cc.Component {
-
-
-    @property(cc.Prefab)
-    generalDesPrefab: cc.Prefab = null;
-
-    @property(cc.Prefab)
-    generalComposePrefab: cc.Prefab = null;
+    @property(Prefab)
+    generalComposePrefab: Prefab = null;
 
 
-    @property(cc.Prefab)
-    generalAddPrefab: cc.Prefab = null;
+    @property(Prefab)
+    generalAddPrefab: Prefab = null;
 
 
-    @property(cc.ToggleContainer)
-    generalToggleContainer: cc.ToggleContainer = null;
+    @property(ToggleContainer)
+    generalToggleContainer: ToggleContainer = null;
 
     
     private _currData:any = null;
     private _cfgData:any = null;
 
     private _curIndex:number = 0;
-    private _nodeList:cc.Node[] = [];
+    private _nodeList:Node[] = [];
 
     protected onLoad():void{
-        cc.systemEvent.on("update_one_generals", this.updateOnce, this); 
+        EventMgr.on("update_one_generals", this.updateOnce, this); 
 
-        var des = cc.instantiate(this.generalDesPrefab);
+        var des = instantiate(this.generalDesPrefab);
         des.parent = this.node;
         des.active = false;
 
 
-        var comp = cc.instantiate(this.generalComposePrefab);
+        var comp = instantiate(this.generalComposePrefab);
         comp.parent = this.node;
         comp.active = false;
 
 
-        var addd = cc.instantiate(this.generalAddPrefab);
+        var addd = instantiate(this.generalAddPrefab);
         addd.parent = this.node;
         addd.active = false;
 
@@ -66,7 +57,7 @@ export default class GeneralInfoLogic  extends cc.Component {
 
     protected onDestroy():void{
         this._nodeList = []
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {
@@ -90,7 +81,7 @@ export default class GeneralInfoLogic  extends cc.Component {
         let logicNameArr:string[] = ["GeneralDesLogic","GeneralComposeLogic","GeneralAddPrLogic"]
         let com = this._nodeList[index].getComponent(logicNameArr[index]);
         if(com){
-            com.setData(this._cfgData,this._currData);
+            com.setData(this._cfgData, this._currData);
         }
     }
 

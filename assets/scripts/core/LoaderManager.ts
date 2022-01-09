@@ -1,3 +1,6 @@
+import { _decorator, Asset, resources } from 'cc';
+import { EventMgr } from '../utils/EventMgr';
+
 export enum LoadDataType {
     DIR,
     FILE
@@ -6,9 +9,9 @@ export enum LoadDataType {
 export class LoadData {
     path: string = "";
     loadType: LoadDataType = LoadDataType.FILE;
-    fileType: typeof cc.Asset = cc.Asset; 
+    fileType: typeof Asset = Asset; 
 
-    constructor(path: string = "", loadType: LoadDataType = LoadDataType.FILE, fileType: typeof cc.Asset = cc.Asset) {
+    constructor(path: string = "", loadType: LoadDataType = LoadDataType.FILE, fileType: typeof Asset = Asset) {
         this.path = path;
         this.loadType = loadType;
         this.fileType = fileType;
@@ -64,7 +67,7 @@ export default class LoaderManager {
         let data: LoadData = this._loadDataList[this._curIndex];
         if (data.loadType == LoadDataType.DIR) {
             //加载目录
-            cc.resources.loadDir(data.path, data.fileType, 
+            resources.loadDir(data.path, data.fileType, 
                 (finish: number, total: number) => {
                     this.onProgress(finish, total);
                 },
@@ -80,7 +83,7 @@ export default class LoaderManager {
                 });
         } else {
             //加载文件
-            cc.resources.load(data.path, data.fileType, 
+            resources.load(data.path, data.fileType, 
                 (finish: number, total: number) => {
                     this.onProgress(finish, total);
                 },
@@ -104,14 +107,14 @@ export default class LoaderManager {
         if (this._target && this._progressCallback) {
             this._progressCallback.call(this._target, totalPercent);
         }
-        cc.systemEvent.emit("load_progress", totalPercent);
+        EventMgr.emit("load_progress", totalPercent);
     }
 
     protected onComplete(error: Error = null): void {
         if (this._target && this._completeCallback) {
             this._completeCallback.call(this._target, error, this._completePaths, this._completeAssets);
         }
-        cc.systemEvent.emit("load_complete");
+        EventMgr.emit("load_complete");
         this.clearData();
     }
 

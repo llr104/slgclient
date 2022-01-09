@@ -1,5 +1,3 @@
-
-
 export class Role{
     rid:number = 0;
     uid:number = 0;

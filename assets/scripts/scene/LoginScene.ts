@@ -1,40 +1,41 @@
+import { _decorator, Component, Prefab, Node, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import LoginCommand from "../login/LoginCommand";
-import MapCommand from "../map/MapCommand";
 import { NetEvent } from "../network/socket/NetInterface";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('LoginScene')
+export default class LoginScene extends Component {
+    @property(Prefab)
+    loginPrefab: Prefab = null;
+    @property(Prefab)
+    createPrefab: Prefab = null;
+    @property(Prefab)
+    serverListPrefab: Prefab = null;
 
-@ccclass
-export default class LoginScene extends cc.Component {
-    @property(cc.Prefab)
-    loginPrefab: cc.Prefab = null;
-    @property(cc.Prefab)
-    createPrefab: cc.Prefab = null;
-    @property(cc.Prefab)
-    serverListPrefab: cc.Prefab = null;
+    protected _loginNode: Node = null;
+    protected _createNode: Node = null;
+    protected _serverListNode: Node = null;
 
-    protected _loginNode: cc.Node = null;
-    protected _createNode: cc.Node = null;
-    protected _serverListNode: cc.Node = null;
-
-    protected _enterNode: cc.Node = null;
+    protected _enterNode: Node = null;
 
     protected onLoad(): void {
         this.openLogin();
-        cc.systemEvent.on("CreateRole", this.onCreate, this);
-        cc.systemEvent.on("enterServerComplete", this.enterServer, this);
+        EventMgr.on("CreateRole", this.onCreate, this);
+        EventMgr.on("enterServerComplete", this.enterServer, this);
         
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._loginNode = null;
         this._serverListNode = null;
     }
 
     protected openLogin(): void {
         if (this._loginNode == null) {
-            this._loginNode = cc.instantiate(this.loginPrefab);
+            this._loginNode = instantiate(this.loginPrefab);
             this._loginNode.parent = this.node;
         } else {
             this._loginNode.active = true;
@@ -43,7 +44,7 @@ export default class LoginScene extends cc.Component {
 
     protected onCreate(): void {
         if (this._createNode == null) {
-            this._createNode = cc.instantiate(this.createPrefab);
+            this._createNode = instantiate(this.createPrefab);
             this._createNode.parent = this.node;
         } else {
             this._createNode.active = true;
@@ -53,7 +54,7 @@ export default class LoginScene extends cc.Component {
 
     protected enterServer():void{
         console.log("enterServer");
-        cc.systemEvent.emit(NetEvent.ServerRequesting, true);
+        EventMgr.emit(NetEvent.ServerRequesting, true);
     }
 
     protected onClickEnter(): void {

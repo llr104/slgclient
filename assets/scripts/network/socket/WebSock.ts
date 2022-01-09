@@ -1,16 +1,8 @@
 import { ISocket } from "./NetInterface";
-import CryptoJS = require("../../libs/crypto/crypto-js.min");
-import convert = require("../../libs/convert")
-import gzip = require('../..//libs/gzip/gzip')
+import * as crypto  from "../../libs/crypto/crypto"
+import * as gzip from "../../libs/gzip/gzip";
+import { convert } from "../../libs/convert";
 
-
-/*
-*   WebSocket封装
-*   1. 连接/断开相关接口
-*   2. 网络异常回调
-*   3. 数据发送与接收
-*   
-*/
 
 
 export class WebSock implements ISocket {
@@ -19,7 +11,7 @@ export class WebSock implements ISocket {
 
 
     onConnected(event):void{
-        // console.log("websocket onConnected:",event);
+        console.log("websocket onConnected:",event);
     }
 
 
@@ -34,21 +26,20 @@ export class WebSock implements ISocket {
 
 
     onMessage(msg):void{
-        //console.log("websocket onMessage0:",msg)
+    
+        // console.log("websocket onMessage0:",msg)
         var ab = msg
-        // deserialize
-        var zipLen = ab.byteLength
-        var buf = [];
-        var view = new Uint8Array(ab);
+        var view = new Uint8Array(ab)
         var undata = gzip.unzip(view)
-        msg = convert.byteToString(undata)
+        var c = new convert()
+        msg = c.byteToString(undata)
         // console.log("websocket onMessage1:",msg)
 
         //第一次
         if(this._key == ""){
             try {
                 var hand_data = JSON.parse(msg);
-                // console.log("hand_data:",hand_data)
+                console.log("hand_data:",hand_data)
                 if(hand_data.name == "handshake"){
                     this._key = hand_data.msg.key;
                     this.onGetKey();                    
@@ -57,9 +48,6 @@ export class WebSock implements ISocket {
             } catch (error) {
                 console.log("handshake parse error:",error)
             }
-
-
-
         }
 
         // console.log("websocket onMessage2:",msg)
@@ -137,25 +125,6 @@ export class WebSock implements ISocket {
     }
 
 
-    // /**
-    //  * 测试发送
-    //  */
-    // test_send(){
-    //     var send_data = {name:"123",msg:{key:90.66,time:false,uu:0.999999999,arr:[{oj:88,k:[]},2,3,5]},seq:1};
-    //     console.log("send_data:",send_data)
-
-    //     this.packAndSend(send_data);
-    // }
-
-
-
-    // heartBet(){
-    //     var send_data = {name:"heartbeat",msg:{ctime:new Date().getTime()},seq:1};
-    //     console.log("send_data:",send_data)
-
-    //     this.packAndSend(send_data);
-    // }
-
     /**
      * json 加密打包
      * @param send_data 
@@ -163,9 +132,14 @@ export class WebSock implements ISocket {
     public packAndSend(send_data:any){
         //console.log("WebSocke packAndSend:",send_data)
         var encrypt = this._key == ""?send_data:this.encrypt(send_data);
-        // console.log("encrypt:",encrypt);
+        //console.log("encrypt:",encrypt);
 
-        var data = gzip.zip(encrypt)
+        var data = gzip.zip(encrypt, {level:9});
+        var c = new convert()
+        var undata = gzip.unzip(data)
+        //var msg = c.byteToString(undata)
+        //console.log("unzip:", msg);
+        
         var buffer = new ArrayBuffer(data.length);
 		var i8arr = new Int8Array(buffer);
 		for(var i = 0; i < i8arr.length; i++){
@@ -190,14 +164,14 @@ export class WebSock implements ISocket {
 
 
      encrypt(data:any) {
-        var key = CryptoJS.enc.Utf8.parse(this._key);
-        var iv  = CryptoJS.enc.Utf8.parse(this._key);
+        var key = crypto.enc.Utf8.parse(this._key);
+        var iv  = crypto.enc.Utf8.parse(this._key);
 
         if(typeof(data)=='object'){
             data = JSON.stringify(data);
         }
-        let srcs = CryptoJS.enc.Utf8.parse(data);
-        let encrypted = CryptoJS.AES.encrypt(srcs, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding });
+        let srcs = crypto.enc.Utf8.parse(data);
+        let encrypted = crypto.AES.encrypt(srcs, key, { iv: iv, mode: crypto.mode.CBC, padding: crypto.pad.ZeroPadding });
     
     
         return encrypted.ciphertext.toString()
@@ -205,15 +179,20 @@ export class WebSock implements ISocket {
 
 
     decrypt(message:string) {
-        var key = CryptoJS.enc.Utf8.parse(this._key);
-        var iv  = CryptoJS.enc.Utf8.parse(this._key);
+        var key = crypto.enc.Utf8.parse(this._key);
+        var iv  = crypto.enc.Utf8.parse(this._key);
 
-        let encryptedHexStr = CryptoJS.enc.Hex.parse(message);
-        let srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
-        let decrypt = CryptoJS.AES.decrypt(srcs, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding });
-        
-        let decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
-        return decryptedStr.toString();
+        let encryptedHexStr = crypto.enc.Hex.parse(message);
+        let srcs = crypto.Base64.stringify(encryptedHexStr);
+        let decrypt = crypto.AES.decrypt(srcs, key, { iv: iv, mode: crypto.mode.CBC, padding: crypto.pad.ZeroPadding });
+        // console.log("decrypt:", decrypt);
+
+        let decryptedStr = decrypt.toString(crypto.enc.Utf8);
+        // console.log("decryptedStr 1111:", typeof(decryptedStr), decryptedStr, decryptedStr.length);
+        var str = decryptedStr.replaceAll("\u0000", "")
+
+        // console.log("decryptedStr 2222:", typeof(str), str, str.length);
+        return str;
     }
 
 }

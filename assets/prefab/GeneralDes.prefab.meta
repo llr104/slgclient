@@ -1,8 +1,13 @@
 {
-  "ver": "1.2.9",
+  "ver": "1.1.35",
+  "importer": "prefab",
+  "imported": true,
   "uuid": "1ea22124-451b-409f-9475-50a918631607",
-  "optimizationPolicy": "AUTO",
-  "asyncLoadAssets": false,
-  "readonly": false,
-  "subMetas": {}
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "GeneralDes"
+  }
 }

@@ -1,3 +1,6 @@
+import { _decorator, Component, Label, Node, Sprite } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
@@ -6,29 +9,28 @@ import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import DateUtil from "../../utils/DateUtil";
 import GeneralHeadLogic from "./GeneralHeadLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class RightArmyItemLogic extends cc.Component {
-    @property(cc.Label)
-    labelInfo: cc.Label = null;
-    @property(cc.Label)
-    labelPos: cc.Label = null;
-    @property(cc.Node)
-    bottomNode: cc.Node = null;
-    @property(cc.Sprite)
-    headIcon: cc.Sprite = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Label)
-    labelStrength: cc.Label = null;
-    @property(cc.Label)
-    labelMorale: cc.Label = null;
-    @property(cc.Node)
-    btnBack: cc.Node = null;
-    @property(cc.Node)
-    btnSetting: cc.Node = null;
+@ccclass('RightArmyItemLogic')
+export default class RightArmyItemLogic extends Component {
+    @property(Label)
+    labelInfo: Label = null;
+    @property(Label)
+    labelPos: Label = null;
+    @property(Node)
+    bottomNode: Node = null;
+    @property(Sprite)
+    headIcon: Sprite = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Label)
+    labelStrength: Label = null;
+    @property(Label)
+    labelMorale: Label = null;
+    @property(Node)
+    btnBack: Node = null;
+    @property(Node)
+    btnSetting: Node = null;
 
     public order: number = 0;
     protected _data: ArmyData = null;
@@ -36,12 +38,12 @@ export default class RightArmyItemLogic extends cc.Component {
     protected _qryReturnTime: number = 0;
 
     protected onLoad(): void {
-        cc.systemEvent.on("update_general", this.onUpdateGeneral, this);
+        EventMgr.on("update_general", this.onUpdateGeneral, this);
         this.bottomNode.active = false;
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._data = null;
     }
 
@@ -83,7 +85,7 @@ export default class RightArmyItemLogic extends cc.Component {
     protected onClickSetting(): void {
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
-            cc.systemEvent.emit("open_army_setting", this._data.cityId, this.order);
+            EventMgr.emit("open_army_setting", this._data.cityId, this.order);
         }
     }
 

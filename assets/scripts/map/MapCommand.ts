@@ -1,3 +1,4 @@
+import { _decorator } from 'cc';
 import { ServerConfig } from "../config/ServerConfig";
 import ArmyCommand from "../general/ArmyCommand";
 import GeneralCommand from "../general/GeneralCommand";
@@ -8,7 +9,7 @@ import MapCityProxy, { MapCityData } from "./MapCityProxy";
 import MapProxy, { MapAreaData } from "./MapProxy";
 import MapUtil from "./MapUtil";
 import MapUICommand from "./ui/MapUICommand";
-
+import { EventMgr } from '../utils/EventMgr';
 
 export default class MapCommand {
     //单例
@@ -36,20 +37,20 @@ export default class MapCommand {
     protected _isQryMyProperty: boolean = false;
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
-        cc.systemEvent.on(ServerConfig.roleBuild_push, this.onRoleBuildStatePush, this);
-        cc.systemEvent.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
-        cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
-        cc.systemEvent.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
-        cc.systemEvent.on(ServerConfig.nationMap_build, this.onNationMapBuild, this);
-        cc.systemEvent.on(ServerConfig.nationMap_upBuild, this.onNationMapUpBuild, this);
-        cc.systemEvent.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
-        cc.systemEvent.on(ServerConfig.role_posTagList, this.onPosTagList, this);
-        cc.systemEvent.on(ServerConfig.role_opPosTag, this.onOpPosTag, this);
+        EventMgr.on(ServerConfig.role_myProperty, this.onRoleMyProperty, this);
+        EventMgr.on(ServerConfig.roleBuild_push, this.onRoleBuildStatePush, this);
+        EventMgr.on(ServerConfig.nationMap_config, this.onNationMapConfig, this);
+        EventMgr.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
+        EventMgr.on(ServerConfig.nationMap_giveUp, this.onNationMapGiveUp, this);
+        EventMgr.on(ServerConfig.nationMap_build, this.onNationMapBuild, this);
+        EventMgr.on(ServerConfig.nationMap_upBuild, this.onNationMapUpBuild, this);
+        EventMgr.on(ServerConfig.roleCity_push, this.onRoleCityPush, this);
+        EventMgr.on(ServerConfig.role_posTagList, this.onPosTagList, this);
+        EventMgr.on(ServerConfig.role_opPosTag, this.onOpPosTag, this);
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public initData(): void {
@@ -145,12 +146,12 @@ export default class MapCommand {
         if(data.code == 0){
             if(data.msg.type == 0){
                 this._proxy.removeMapPosTag(data.msg.x, data.msg.y);
-                // cc.systemEvent.emit("show_toast", "移除成功");
-                cc.systemEvent.emit("update_tag");
+                // EventMgr.emit("show_toast", "移除成功");
+                EventMgr.emit("update_tag");
             }else if(data.msg.type == 1){
                 this._proxy.addMapPosTag(data.msg.x, data.msg.y, data.msg.name);
-                // cc.systemEvent.emit("show_toast", "添加成功");
-                cc.systemEvent.emit("update_tag");
+                // EventMgr.emit("show_toast", "添加成功");
+                EventMgr.emit("update_tag");
             }
         }
     }
@@ -160,7 +161,7 @@ export default class MapCommand {
         console.log("onRoleCityPush:", data)
         this._buildProxy.updateSub(data.msg.rid, data.msg.union_id, data.msg.parent_id);
         this._cityProxy.updateCity(data.msg);
-        cc.systemEvent.emit("unionChange", data.msg.rid, data.msg.union_id, data.msg.parent_id);
+        EventMgr.emit("unionChange", data.msg.rid, data.msg.union_id, data.msg.parent_id);
        
     }
 
@@ -300,7 +301,7 @@ export default class MapCommand {
             this.qryRoleMyProperty();
             return;
         }
-        cc.systemEvent.emit("enter_map");
+        EventMgr.emit("enter_map");
     }
 
     /**请求角色全量信息*/

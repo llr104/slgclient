@@ -1,8 +1,13 @@
 {
-  "ver": "1.2.9",
+  "ver": "1.1.35",
+  "importer": "prefab",
+  "imported": true,
   "uuid": "4b28d971-51df-429a-ac52-8cf16ef02d58",
-  "optimizationPolicy": "AUTO",
-  "asyncLoadAssets": false,
-  "readonly": false,
-  "subMetas": {}
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "CityArmyItem"
+  }
 }

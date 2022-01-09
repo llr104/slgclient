@@ -1,31 +1,24 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, ScrollView, Prefab, Node, NodePool } from 'cc';
+const {ccclass, property} = _decorator;
+
+@ccclass('ListLogic')
+export default class ListLogic extends Component {
+
+    @property(ScrollView)
+    scrollView: ScrollView = null;
+
+    @property(Prefab)
+    itemPrefab: Prefab = null;
 
 
-const {ccclass, property} = cc._decorator;
+    @property(Node)
+    itemNode: Node = null;
 
-@ccclass
-export default class ListLogic extends cc.Component {
-
-    @property(cc.ScrollView)
-    scrollView: cc.ScrollView = null;
-
-    @property(cc.Prefab)
-    itemPrefab: cc.Prefab = null;
-
-
-    @property(cc.Node)
-    itemNode: cc.Node = null;
-
-    @property(cc.String)
+    @property(String)
     itemLogicScriptName:string  = "";
 
 
-    @property(cc.Boolean)
+    @property(Boolean)
     isHorizontal:boolean  = false;
 
 
@@ -33,7 +26,7 @@ export default class ListLogic extends cc.Component {
     columnCount = 1;
 
 
-    @property(cc.Boolean)
+    @property(Boolean)
     autoColumnCount:boolean  = false;
 
 
@@ -50,17 +43,13 @@ export default class ListLogic extends cc.Component {
     @property
     scale = 1;
 
-    @property([cc.Component.EventHandler])
-    itemClickEvents:cc.Component.EventHandler[]  = [];
+    @property([Component.EventHandler])
+    itemClickEvents:Component.EventHandler[]  = [];
 
 
     
-    @property(cc.Boolean)
+    @property(Boolean)
     isVirtual:boolean  = false;
-
-
-
-
 
     private _curOffset:number = 0;
     private _maxOffset:number = 0;
@@ -74,7 +63,7 @@ export default class ListLogic extends cc.Component {
     private _itemWidth:number = 0;
     private _itemHeight:number = 0;
     private _isUpdateList:boolean = false;
-    private _itemPool:cc.NodePool = null;
+    private _itemPool:NodePool = null;
     private _items:any = [];
     private _datas:any = null;
 
@@ -95,7 +84,7 @@ export default class ListLogic extends cc.Component {
         }
 
         this._isUpdateList = false;//是否正在更新列表
-        this._itemPool = new cc.NodePool();//item缓存对象池
+        this._itemPool = new NodePool();//item缓存对象池
         this._items = [];//item列表
         this.updateList();
 
@@ -201,8 +190,8 @@ export default class ListLogic extends cc.Component {
                 this.scrollView.content.removeAllChildren(false);
                 for (var i = 0; i < children.length; i++) {
                     let item = children[i];
-                    if (cc.isValid(item)) {
-                        item.off(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
+                    if (isValid(item)) {
+                        item.off(Node.EventType.TOUCH_END, this.onItemClick, this);
                         this._itemPool.put(item);//加入对象池
                     }
                 }
@@ -211,7 +200,7 @@ export default class ListLogic extends cc.Component {
                     let item = this.createItem();
                     item.active = false;
                     item.itemIdx = i;//在item上纪录当前下标
-                    item.on(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
+                    item.on(Node.EventType.TOUCH_END, this.onItemClick, this);
                     this.scrollView.content.addChild(item);
                     this._items.push(item);
                 }
@@ -387,15 +376,15 @@ export default class ListLogic extends cc.Component {
         var item = null;
         if (this._itemPool.size() > 0) { // 通过 size 接口判断对象池中是否有空闲的对象
             item = this._itemPool.get();
-        } else if (this.itemPrefab) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 cc.instantiate 重新创建
-            item = cc.instantiate(this.itemPrefab);
+        } else if (this.itemPrefab) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 instantiate 重新创建
+            item = instantiate(this.itemPrefab);
             item.scale = this.scale;
-        } else if (this.itemNode) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 cc.instantiate 重新创建
-            item = cc.instantiate(this.itemNode);
+        } else if (this.itemNode) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 instantiate 重新创建
+            item = instantiate(this.itemNode);
             item.acitve = true;
             item.scale = this.scale;
         }
-        item.on(cc.Node.EventType.TOUCH_END, this.onItemClick, this);
+        item.on(Node.EventType.TOUCH_END, this.onItemClick, this);
         return item;
     }
 

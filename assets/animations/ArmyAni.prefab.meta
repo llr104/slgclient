@@ -1,8 +1,13 @@
 {
-  "ver": "1.2.9",
+  "ver": "1.1.35",
+  "importer": "prefab",
+  "imported": true,
   "uuid": "4339d53f-207a-401a-a1d5-70d5c9c6cc65",
-  "optimizationPolicy": "AUTO",
-  "asyncLoadAssets": false,
-  "readonly": false,
-  "subMetas": {}
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "ArmyAni"
+  }
 }

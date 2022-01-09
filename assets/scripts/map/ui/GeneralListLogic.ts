@@ -1,41 +1,33 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { _decorator, Component, ScrollView, Label } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import MapUICommand from "./MapUICommand";
+import { EventMgr } from '../../utils/EventMgr';
 
+@ccclass('GeneralListLogic')
+export default class GeneralListLogic extends Component {
 
+    @property(ScrollView)
+    scrollView:ScrollView = null;
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class GeneralListLogic extends cc.Component {
-
-
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
-
-    @property(cc.Label)
-    cntLab:cc.Label = null;
+    @property(Label)
+    cntLab:Label = null;
 
     private _cunGeneral:number[] = [];
     private _type:number = 0;
     private _position:number = 0;
 
     protected onEnable():void{
-        cc.systemEvent.on("update_my_generals", this.initGeneralCfg, this);
-        cc.systemEvent.on("general_convert", this.initGeneralCfg, this);
-        cc.systemEvent.on("chosed_general", this.onClickClose, this);
+        EventMgr.on("update_my_generals", this.initGeneralCfg, this);
+        EventMgr.on("general_convert", this.initGeneralCfg, this);
+        EventMgr.on("chosed_general", this.onClickClose, this);
     }
 
 
     protected onDisable():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {
@@ -43,12 +35,12 @@ export default class GeneralListLogic extends cc.Component {
     }
 
     protected onClickConvert(): void {
-        cc.systemEvent.emit("open_general_convert");
+        EventMgr.emit("open_general_convert");
         this.node.active = false;
     }
 
     protected onTuJianConvert(): void {
-        cc.systemEvent.emit("open_general_roster");
+        EventMgr.emit("open_general_roster");
         this.node.active = false;
     }
 

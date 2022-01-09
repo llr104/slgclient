@@ -1,36 +1,37 @@
+import { _decorator, Component, Node, Label, Sprite, ProgressBar } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralCommonConfig, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
-import GeneralInfoLogic from "./GeneralInfoLogic";
 import GeneralHeadLogic from "./GeneralHeadLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class ArmySelectItemLogic extends cc.Component {
-    @property(cc.Node)
-    tipNode: cc.Node = null;
-    @property(cc.Label)
-    labelTip: cc.Label = null;
-    @property(cc.Sprite)
-    headIcon: cc.Sprite = null;
-    @property(cc.Label)
-    labelLv: cc.Label = null;
-    @property(cc.Label)
-    labelName: cc.Label = null;
-    @property(cc.Label)
-    labelState: cc.Label = null;
-    @property(cc.Label)
-    labelMorale: cc.Label = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Label)
-    labelVice1: cc.Label = null;
-    @property(cc.Label)
-    labelVice2: cc.Label = null;
-    @property(cc.ProgressBar)
-    progressSoldier: cc.ProgressBar = null;
+@ccclass('ArmySelectItemLogic')
+export default class ArmySelectItemLogic extends Component {
+    @property(Node)
+    tipNode: Node = null;
+    @property(Label)
+    labelTip: Label = null;
+    @property(Sprite)
+    headIcon: Sprite = null;
+    @property(Label)
+    labelLv: Label = null;
+    @property(Label)
+    labelName: Label = null;
+    @property(Label)
+    labelState: Label = null;
+    @property(Label)
+    labelMorale: Label = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Label)
+    labelVice1: Label = null;
+    @property(Label)
+    labelVice2: Label = null;
+    @property(ProgressBar)
+    progressSoldier: ProgressBar = null;
 
     protected _data: ArmyData = null;
     protected _cmd: number = 0;
@@ -38,12 +39,12 @@ export default class ArmySelectItemLogic extends cc.Component {
     protected _toY: number = 0;
 
     protected onLoad(): void {
-        cc.systemEvent.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on("update_army", this.onUpdateArmy, this);
         this.tipNode.active = false;
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._data = null;
     }
 
@@ -56,7 +57,7 @@ export default class ArmySelectItemLogic extends cc.Component {
     protected onClickItem(): void {
         if (this.tipNode.active == false) {
             ArmyCommand.getInstance().generalAssignArmy(this._data.id, this._cmd, this._toX, this._toY);
-            cc.systemEvent.emit("close_army_select_ui");
+            EventMgr.emit("close_army_select_ui");
         } else {
             console.log("军队忙");
         }

@@ -1,21 +1,24 @@
+import { _decorator, Node, Vec2, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import CityLogic from "./entries/CityLogic";
 import MapUtil from "./MapUtil";
 import { MapCityData } from "./MapCityProxy";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('MapCityLogic')
 
-@ccclass
 export default class MapCityLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
-        cc.systemEvent.on("update_citys", this.onUpdateCitys, this);
-        cc.systemEvent.on("update_city", this.onUpdateCity, this);
+        EventMgr.on("update_citys", this.onUpdateCitys, this);
+        EventMgr.on("update_city", this.onUpdateCity, this);
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         super.onDestroy();
     }
 
@@ -41,10 +44,10 @@ export default class MapCityLogic extends MapBaseLayerLogic {
         }
     }
 
-    public setItemData(item: cc.Node, data: any): void {
+    public setItemData(item: Node, data: any): void {
         let cityData: MapCityData = data as MapCityData;
-        let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(cityData.x, cityData.y));
-        item.setPosition(position);
+        let position: Vec2 = MapUtil.mapCellToPixelPoint(new Vec2(cityData.x, cityData.y));
+        item.setPosition(new Vec3(position.x, position.y, 0));
         item.getComponent(CityLogic).setCityData(cityData);
     }
 

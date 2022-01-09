@@ -1,48 +1,33 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, ScrollView } from 'cc';
+const { ccclass, property } = _decorator;
 
-import { MapCityData } from "../map/MapCityProxy";
-import MapCommand from "../map/MapCommand";
 import UnionCommand from "./UnionCommand";
 import { Union } from "./UnionProxy";
+import { EventMgr } from '../utils/EventMgr';
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class UnionLobbyLogic extends cc.Component {
-
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
-
+@ccclass('UnionLobbyLogic')
+export default class UnionLobbyLogic extends Component {
+    @property(ScrollView)
+    scrollView:ScrollView | null = null;
     private _isFrist:boolean = false;
-
     protected onLoad():void{
-        cc.systemEvent.on("update_union_list",this.updateUnion,this);
+        EventMgr.on("update_union_list",this.updateUnion,this);
     }
-
     
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
-
-
     protected updateUnion(data:any[]){
         var comp = this.scrollView.node.getComponent("ListLogic");
         var list:Union[] = UnionCommand.getInstance().proxy.getUnionList();
-        comp.setData(list);   
+        comp.setData(list);
     }
-
     protected onEnable():void{
         this._isFrist = true;
         UnionCommand.getInstance().unionList();
     }
-
     protected onDisable():void{
         this._isFrist = false;
     }
 }
+

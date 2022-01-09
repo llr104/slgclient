@@ -1,8 +1,13 @@
 {
-  "ver": "1.2.9",
+  "ver": "1.1.35",
+  "importer": "prefab",
+  "imported": true,
   "uuid": "b4c977bf-bdfd-43b1-8169-44168828eb4a",
-  "optimizationPolicy": "AUTO",
-  "asyncLoadAssets": false,
-  "readonly": false,
-  "subMetas": {}
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "WarReport"
+  }
 }

@@ -1,13 +1,11 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Label, Sprite, Layout, color } from 'cc';
+const { ccclass, property } = _decorator;
+
+import { GeneralCampType, GeneralConfig } from "../../general/GeneralProxy";
+import GeneralHeadLogic from "./GeneralHeadLogic";
 
 
-
-/**军队命令*/
+// /**军队命令*/
 export class GeneralItemType {
     static GeneralInfo: number = 0;//武将详情
     static GeneralDispose: number = 1;//武将上阵
@@ -17,37 +15,30 @@ export class GeneralItemType {
 }
 
 
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
-import GeneralHeadLogic from "./GeneralHeadLogic";
+@ccclass('GeneralRosterLogic')
+export default class GeneralRosterLogic extends Component {
 
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class GeneralRosterLogic extends cc.Component {
+    @property(Label)
+    nameLabel: Label = null;
 
 
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
+    @property(Sprite)
+    spritePic:Sprite = null;
 
-
-    @property(cc.Sprite)
-    spritePic:cc.Sprite = null;
-
-    @property(cc.Label)
-    costLabel: cc.Label = null;
+    @property(Label)
+    costLabel: Label = null;
 
     
-    @property(cc.Layout)
-    starLayout:cc.Layout = null;
+    @property(Layout)
+    starLayout:Layout = null;
 
     
-    @property(cc.Label)
-    campLabel: cc.Label = null;
+    @property(Label)
+    campLabel: Label = null;
 
-    @property(cc.Label)
-    armLabel: cc.Label = null;
+    @property(Label)
+    armLabel: Label = null;
 
     _cfg:GeneralConfig = null;
 
@@ -89,9 +80,9 @@ export default class GeneralRosterLogic extends cc.Component {
             if(i < star){
                 childen[i].active = true;
                 if(i < star_lv){
-                    childen[i].color = cc.color(255,0,0);
+                    childen[i].getComponent(Sprite).color = color(255,0,0);
                 }else{
-                    childen[i].color = cc.color(255,255,255);
+                    childen[i].getComponent(Sprite).color = color(255,255,255);
                 }
             }else{
                 childen[i].active = false; 

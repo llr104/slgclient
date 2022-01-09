@@ -1,7 +1,9 @@
+import { _decorator } from 'cc';
 import DateUtil from "../utils/DateUtil";
 import MapCommand from "./MapCommand";
-import { MapResData, MapResType } from "./MapProxy";
+import {MapResType } from "./MapProxy";
 import MapUtil from "./MapUtil";
+import { EventMgr } from '../utils/EventMgr';
 
 /**地图建筑和占领数据*/
 export class MapBuildData {
@@ -187,17 +189,17 @@ export default class MapBuildProxy {
         } else {
             buildData = MapBuildData.createBuildData(build, id, this._mapBuilds[id]);
         }
-        cc.systemEvent.emit("update_build", buildData);
+        EventMgr.emit("update_build", buildData);
         if (buildData.rid == this.myId) {
             //代表是自己的领地
-            cc.systemEvent.emit("my_build_change");
+            EventMgr.emit("my_build_change");
         }
     }
 
     public removeBuild(x: number, y: number): void {
         let id: number = MapUtil.getIdByCellPoint(x, y);
         this._mapBuilds[id] = null;
-        cc.systemEvent.emit("delete_build", id, x, y);
+        EventMgr.emit("delete_build", id, x, y);
         this.removeMyBuild(x, y);
     }
 
@@ -212,7 +214,7 @@ export default class MapBuildProxy {
         }
         if (index != -1) {
             this._myBuilds.splice(index, 1);
-            cc.systemEvent.emit("my_build_change");
+            EventMgr.emit("my_build_change");
         }
     }
 
@@ -266,7 +268,7 @@ export default class MapBuildProxy {
             this._lastBuildCellIds.set(areaId, buildCellIds);
             if (addBuildCellIds.length > 0 || removeBuildCellIds.length > 0 || updateBuildCellIds.length > 0) {
                 console.log("update_builds", areaId, addBuildCellIds, removeBuildCellIds, updateBuildCellIds);
-                cc.systemEvent.emit("update_builds", areaId, addBuildCellIds, removeBuildCellIds, updateBuildCellIds);
+                EventMgr.emit("update_builds", areaId, addBuildCellIds, removeBuildCellIds, updateBuildCellIds);
             }
         }
     }

@@ -1,14 +1,16 @@
+import { _decorator, Component, ScrollView, Node, Label } from 'cc';
+const { ccclass, property } = _decorator;
+
 import FacilityDesLogic from "./FacilityDesLogic";
 import FacilityItemLogic from "./FacilityItemLogic";
 import MapUICommand from "./MapUICommand";
 import { Facility, FacilityConfig } from "./MapUIProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class FacilityListLogic extends cc.Component {
-    @property(cc.ScrollView)
-    scrollView: cc.ScrollView = null;
+@ccclass('FacilityListLogic')
+export default class FacilityListLogic extends Component {
+    @property(ScrollView)
+    scrollView: ScrollView = null;
 
     protected _curCityId: number = 0;
     protected _curSelectType: number = -1;
@@ -16,30 +18,30 @@ export default class FacilityListLogic extends cc.Component {
 
     protected onLoad(): void {
         this.initView();
-        cc.systemEvent.on("update_my_facilities", this.updateView, this);
-        cc.systemEvent.on("update_my_facility", this.updateFacility, this);
-        cc.systemEvent.on("select_facility_item", this.onSelectItem, this);
-        cc.systemEvent.on("upate_my_roleRes", this.onUpdateMyRoleRes, this);
+        EventMgr.on("update_my_facilities", this.updateView, this);
+        EventMgr.on("update_my_facility", this.updateFacility, this);
+        EventMgr.on("select_facility_item", this.onSelectItem, this);
+        EventMgr.on("upate_my_roleRes", this.onUpdateMyRoleRes, this);
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._itemLogics.clear();
         this._itemLogics = null;
     }
 
     protected initView(): void {
-        let children: cc.Node[] = this.scrollView.content.children;
+        let children: Node[] = this.scrollView.content.children;
         for (let i: number = 0; i < children.length; i++) {
-            let subChildren: cc.Node[] = children[i].children;
+            let subChildren: Node[] = children[i].children;
             for (let j: number = 0; j < subChildren.length; j++) {
-                let item: cc.Node = subChildren[j];
+                let item: Node = subChildren[j];
                 if (item.name.indexOf("CityFacilityItem") == 0) {
                     let type: number = parseInt(item.name.substring(16));
                     let comp: FacilityItemLogic = item.addComponent(FacilityItemLogic);
-                    comp.labelRate = item.getChildByName("labelRate").getComponent(cc.Label);
-                    comp.labelName = item.getChildByName("labelName").getComponent(cc.Label);
-                    comp.labelTime = item.getChildByName("labelTime").getComponent(cc.Label);
+                    comp.labelRate = item.getChildByName("labelRate").getComponent(Label);
+                    comp.labelName = item.getChildByName("labelName").getComponent(Label);
+                    comp.labelTime = item.getChildByName("labelTime").getComponent(Label);
                     comp.lockNode = item.getChildByName("lockNode");
                     comp.labelTime.string = "";
                     comp.type = type;

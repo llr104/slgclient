@@ -1,24 +1,25 @@
+import { _decorator, Node, Vec2, Vec3 } from 'cc';
+const { ccclass } = _decorator;
+
 import FacilityBuildLogic from "./entries/FacilityBuildLogic";
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
-import MapUICommand from "./ui/MapUICommand";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
+@ccclass('MapFacilityBuildLogic')
 export default class MapFacilityBuildLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
-        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
-        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
-        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+        EventMgr.on("update_builds", this.onUpdateBuilds, this);
+        EventMgr.on("update_build", this.onUpdateBuild, this);
+        EventMgr.on("delete_build", this.onDeleteBuild, this);
 
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         super.onDestroy();
     }
 
@@ -48,10 +49,10 @@ export default class MapFacilityBuildLogic extends MapBaseLayerLogic {
         this.removeItem(areaIndex, id);
     }
 
-    public setItemData(item: cc.Node, data: any): void {
+    public setItemData(item: Node, data: any): void {
         let buildData: MapBuildData = data as MapBuildData;
-        let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(buildData.x, buildData.y));
-        item.setPosition(position);
+        let position: Vec2 = MapUtil.mapCellToPixelPoint(new Vec2(buildData.x, buildData.y));
+        item.setPosition(new Vec3(position.x, position.y, 0));
         item.getComponent(FacilityBuildLogic).setBuildData(buildData);
     }
 }

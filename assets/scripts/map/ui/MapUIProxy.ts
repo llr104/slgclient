@@ -1,9 +1,9 @@
+import { _decorator } from 'cc';
 import { Basic, Conscript, General } from "../../config/Basci";
 import LoginCommand from "../../login/LoginCommand";
 import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 
-/**城池加成数据(默认值为无加成时 只列举了客户端需要的数据)*/
 export class CityAddition {
     cost: number = 0;
     armyCnt: number = 0;//军队数量

@@ -1,21 +1,22 @@
+import { _decorator, Component, Label, Node } from 'cc';
+const { ccclass, property } = _decorator;
+
 import DateUtil from "../../utils/DateUtil";
-import MapUICommand from "./MapUICommand";
 import { Facility, FacilityConfig } from "./MapUIProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('FacilityItemLogic')
+export default class FacilityItemLogic extends Component {
+    @property(Label)
+    labelRate: Label = null;
+    @property(Label)
+    labelName: Label = null;
 
-@ccclass
-export default class FacilityItemLogic extends cc.Component {
-    @property(cc.Label)
-    labelRate: cc.Label = null;
-    @property(cc.Label)
-    labelName: cc.Label = null;
+    @property(Label)
+    labelTime: Label = null;
 
-    @property(cc.Label)
-    labelTime: cc.Label = null;
-
-    @property(cc.Node)
-    lockNode: cc.Node = null;
+    @property(Node)
+    lockNode: Node = null;
 
     public type: number = 0;
     public isUnlock: boolean = false;
@@ -24,12 +25,12 @@ export default class FacilityItemLogic extends cc.Component {
     public cfg: FacilityConfig = null;
 
     protected onLoad(): void {
-        this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchItem, this);
+        this.node.on(Node.EventType.TOUCH_END, this.onTouchItem, this);
     }
 
     protected onDestroy(): void {
-        this.node.off(cc.Node.EventType.TOUCH_END, this.onTouchItem, this);
-        cc.systemEvent.targetOff(this);
+        this.node.off(Node.EventType.TOUCH_END, this.onTouchItem, this);
+        EventMgr.targetOff(this);
     }
 
     protected updateItem(): void {
@@ -39,7 +40,7 @@ export default class FacilityItemLogic extends cc.Component {
     }
 
     protected onTouchItem() {
-        cc.systemEvent.emit("select_facility_item", this.cityId, this.data.type);
+        EventMgr.emit("select_facility_item", this.cityId, this.data.type);
     }
 
     public setData(cityId: number, data: Facility, cfg:FacilityConfig, isUnlock:boolean): void {

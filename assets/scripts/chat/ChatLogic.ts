@@ -1,34 +1,29 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+
+
+import { _decorator, Component, EditBox, ScrollView } from 'cc';
+const { ccclass, property } = _decorator;
 
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
-import { Union } from "../union/UnionProxy";
 import ChatCommand from "./ChatCommand";
 import { ChatMsg } from "./ChatProxy";
+import ListLogic from '../utils/ListLogic';
+import { EventMgr } from '../utils/EventMgr';
 
+@ccclass('ChatLogic')
+export default class ChatLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(EditBox)
+    editConent: EditBox = null;
 
-@ccclass
-export default class ChatLogic extends cc.Component {
-
-
-    @property(cc.EditBox)
-    editConent: cc.EditBox = null;
-
-    @property(cc.ScrollView)
-    chatView:cc.ScrollView = null;
+    @property(ScrollView)
+    chatView:ScrollView = null;
 
     _type:number = 0;
 
     protected onLoad():void{
-        cc.systemEvent.on("update_chat_history", this.updateChat, this);
-        cc.systemEvent.on("unionChange", this.updateChat, this);
+        EventMgr.on("update_chat_history", this.updateChat, this);
+        EventMgr.on("unionChange", this.updateChat, this);
     }
 
     protected onEnable():void{
@@ -49,11 +44,11 @@ export default class ChatLogic extends cc.Component {
 
     protected updateChat(data:any[]){
         if(this._type == 0){
-            var comp = this.chatView.node.getComponent("ListLogic");
+            var comp = this.chatView.node.getComponent(ListLogic);
             var list:ChatMsg[] = ChatCommand.getInstance().proxy.getWorldChatList();
             comp.setData(list);
         }else if (this._type == 1){
-            var comp = this.chatView.node.getComponent("ListLogic");
+            var comp = this.chatView.node.getComponent(ListLogic);
             var list:ChatMsg[] = ChatCommand.getInstance().proxy.getUnionChatList();
             console.log("list:", list)
             comp.setData(list);

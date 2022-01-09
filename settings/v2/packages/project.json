@@ -1,0 +1,16 @@
+{
+  "layer": [
+    {
+      "name": "default",
+      "value": 1
+    },
+    {
+      "name": "ui",
+      "value": 2
+    },
+    {
+      "name": "map",
+      "value": 4
+    }
+  ]
+}

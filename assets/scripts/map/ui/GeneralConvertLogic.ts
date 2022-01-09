@@ -1,49 +1,44 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+
+import { _decorator, Component, ScrollView, Node, Prefab, instantiate, UITransform, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
+@ccclass('GeneralConvertLogic')
+export default class GeneralConvertLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(ScrollView)
+    scrollView:ScrollView = null;
 
-@ccclass
-export default class GeneralConvertLogic extends cc.Component {
+    @property(Node)
+    contentNode:Node = null;
 
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
-
-    @property(cc.Node)
-    contentNode:cc.Node = null;
-
-    @property(cc.Prefab)
+    @property(Prefab)
     generalPrefab = null;
 
     private _cunGeneral:number[] = [];
 
-    private _upMap:Map<number, cc.Node> = new Map<number, cc.Node>();
+    private _upMap:Map<number, Node> = new Map<number, Node>();
 
-    private _selectMap:Map<number, cc.Node> = new Map<number, cc.Node>();
+    private _selectMap:Map<number, Node> = new Map<number, Node>();
 
     protected onEnable():void{
        this.initGeneralCfg();
-       cc.systemEvent.on("open_general_select", this.onSelectGeneral, this);
-       cc.systemEvent.on("general_convert", this.onGeneralConvert, this);
+       EventMgr.on("open_general_select", this.onSelectGeneral, this);
+       EventMgr.on("general_convert", this.onGeneralConvert, this);
     }
 
 
     protected onDisable():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {
         this.node.active = false;
-        cc.systemEvent.emit("open_general");
+        EventMgr.emit("open_general");
     }
 
     protected initGeneralCfg():void{
@@ -67,7 +62,7 @@ export default class GeneralConvertLogic extends cc.Component {
         comp.setData(listTemp);
     }
 
-    protected onSelectGeneral(cfgData: any, curData: any, node:cc.Node): void {
+    protected onSelectGeneral(cfgData: any, curData: any, node:Node): void {
         //console.log("curData:", curData, this._upMap.size);
 
         var has = this._upMap.has(curData.id);
@@ -88,12 +83,12 @@ export default class GeneralConvertLogic extends cc.Component {
                 return
             }
 
-            var g:cc.Node = cc.instantiate(this.generalPrefab);
+            var g:Node = instantiate(this.generalPrefab);
             g.getComponent(GeneralItemLogic).setData(curData,  GeneralItemType.GeneralSelect);
             g.getComponent(GeneralItemLogic).select(true);
-            g.width*=0.5;
-            g.height*=0.5;
-            g.scale = 0.5;
+            g.getComponent(UITransform).width *=0.5;
+            g.getComponent(UITransform).height*=0.5;
+            g.scale = new Vec3(0.5, 0.5, 0.5);
             g.parent = this.contentNode;
             this._upMap.set(curData.id, g);
             this._selectMap.set(curData.id, node);
@@ -102,8 +97,8 @@ export default class GeneralConvertLogic extends cc.Component {
 
    
     protected onGeneralConvert(msg:any):void{
-        cc.systemEvent.emit("show_toast", "获得金币:"+msg.add_gold);
-        this._upMap.forEach((g:cc.Node) => {
+        EventMgr.emit("show_toast", "获得金币:"+msg.add_gold);
+        this._upMap.forEach((g:Node) => {
             g.parent = null;
         });
 

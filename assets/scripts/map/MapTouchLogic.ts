@@ -1,33 +1,35 @@
+import { _decorator, Component, Prefab, Node, Vec2, instantiate, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { MapBuildData } from "./MapBuildProxy";
 import { MapCityData } from "./MapCityProxy";
 import MapClickUILogic from "./MapClickUILogic";
 import MapCommand from "./MapCommand";
-import { MapResData, MapResType } from "./MapProxy";
+import { MapResData } from "./MapProxy";
 import MapUtil from "./MapUtil";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class MapTouchLogic extends cc.Component {
-    @property(cc.Prefab)
-    clickUIPrefab: cc.Prefab = null;
+@ccclass('MapTouchLogic')
+export default class MapTouchLogic extends Component {
+    @property(Prefab)
+    clickUIPrefab: Prefab = null;
 
     protected _cmd: MapCommand;
-    protected _clickUINode: cc.Node = null;
+    protected _clickUINode: Node = null;
 
     protected onLoad(): void {
         this._cmd = MapCommand.getInstance();
-        cc.systemEvent.on("touch_map", this.onTouchMap, this);
-        cc.systemEvent.on("move_map", this.onMoveMap, this);
+        EventMgr.on("touch_map", this.onTouchMap, this);
+        EventMgr.on("move_map", this.onMoveMap, this);
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._cmd = null;
         this._clickUINode = null;
     }
 
-    protected onTouchMap(mapPoint: cc.Vec2, clickPixelPoint: cc.Vec2): void {
+    protected onTouchMap(mapPoint: Vec2, clickPixelPoint: Vec2): void {
         console.log("点击区域 (" + mapPoint.x + "," + mapPoint.y + ")");
         this.removeClickUINode();
         if (MapUtil.isVaildCellPoint(mapPoint) == false) {
@@ -39,7 +41,7 @@ export default class MapTouchLogic extends cc.Component {
         let cityData: MapCityData = this._cmd.cityProxy.getCity(cellId);;
         if (cityData != null) {
             //代表点击的是城市
-            clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(cityData.x, cityData.y));
+            clickPixelPoint = MapUtil.mapCellToPixelPoint(new Vec2(cityData.x, cityData.y));
             this.showClickUINode(cityData, clickPixelPoint);
             return;
         }
@@ -59,7 +61,7 @@ export default class MapTouchLogic extends cc.Component {
         if (resData.type > 0) {
             var temp = MapCommand.getInstance().proxy.getSysCityResData(resData.x, resData.y);
             if (temp){
-                clickPixelPoint = MapUtil.mapCellToPixelPoint(cc.v2(temp.x, temp.y));
+                clickPixelPoint = MapUtil.mapCellToPixelPoint(new Vec2(temp.x, temp.y));
                 let cellId: number = MapUtil.getIdByCellPoint(temp.x, temp.y);
                 let buildData: MapBuildData = this._cmd.buildProxy.getBuild(cellId);
                 if(buildData){
@@ -82,13 +84,13 @@ export default class MapTouchLogic extends cc.Component {
         this.removeClickUINode();
     }
 
-    public showClickUINode(data: any, pos: cc.Vec2): void {
+    public showClickUINode(data: any, pos: Vec2): void {
         if (this._clickUINode == null) {
-            this._clickUINode = cc.instantiate(this.clickUIPrefab);
+            this._clickUINode = instantiate(this.clickUIPrefab);
 
         }
         this._clickUINode.parent = this.node;
-        this._clickUINode.setPosition(pos);
+        this._clickUINode.setPosition(new Vec3(pos.x, pos.y, 0));
         this._clickUINode.getComponent(MapClickUILogic).setCellData(data, pos);
     }
 

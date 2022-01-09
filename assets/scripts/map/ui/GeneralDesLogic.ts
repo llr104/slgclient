@@ -1,69 +1,61 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Label, Layout, Prefab, Node, EventTouch, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
 
-import { SkillConf } from "../../config/skill/Skill";
 import GeneralCommand from "../../general/GeneralCommand";
-import { GenaralLevelConfig, GeneralData } from "../../general/GeneralProxy";
+import {GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
-import { GeneralItemType } from "./GeneralItemLogic";
+import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import SkillIconLogic from "./SkillIconLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class GeneralDesLogic extends cc.Component {
+@ccclass('GeneralDesLogic')
+export default class GeneralDesLogic extends Component {
   
+    @property(Label)
+    nameLab: Label = null;
 
-    @property(cc.Label)
-    nameLab: cc.Label = null;
+    @property(Layout)
+    srollLayout:Layout = null;
 
-    @property(cc.Layout)
-    srollLayout:cc.Layout = null;
-
-    @property(cc.Label)
-    lvLabel: cc.Label = null;
+    @property(Label)
+    lvLabel: Label = null;
     
-    @property(cc.Label)
-    foreLabel: cc.Label = null;
+    @property(Label)
+    foreLabel: Label = null;
 
-    @property(cc.Label)
-    defenseLabel: cc.Label = null;
+    @property(Label)
+    defenseLabel: Label = null;
 
-    @property(cc.Label)
-    speedLabel: cc.Label = null;
+    @property(Label)
+    speedLabel: Label = null;
 
-    @property(cc.Label)
-    strategyLabel: cc.Label = null;
+    @property(Label)
+    strategyLabel: Label = null;
 
-    @property(cc.Label)
-    destroyLabel: cc.Label = null;
+    @property(Label)
+    destroyLabel: Label = null;
 
-    @property(cc.Label)
-    expLabel: cc.Label = null;
+    @property(Label)
+    expLabel: Label = null;
 
-    @property(cc.Label)
-    powerLabel: cc.Label = null;
+    @property(Label)
+    powerLabel: Label = null;
 
-    @property(cc.Label)
-    costLabel: cc.Label = null;
+    @property(Label)
+    costLabel: Label = null;
 
 
-    @property(cc.Prefab)
-    generalItemPrefab: cc.Prefab = null;
+    @property(Prefab)
+    generalItemPrefab: Prefab = null;
 
-    @property(cc.Node)
-    generalItemParent: cc.Node = null;
+    @property(Node)
+    generalItemParent: Node = null;
 
-    @property([cc.Node])
-    skillIcons: cc.Node[] = [];
+    @property([Node])
+    skillIcons: Node[] = [];
 
-    @property([cc.Label])
-    skillNameLab: cc.Label[] = [];
+    @property([Label])
+    skillNameLab: Label[] = [];
 
     private _currData:GeneralData = null;
     private _cfgData:any = null;
@@ -71,14 +63,14 @@ export default class GeneralDesLogic extends cc.Component {
 
     private _nameObj:any = {};
     private _addPrObj:any = {};
-    private _generalNode:cc.Node = null;
+    private _generalNode:Node = null;
 
     protected onEnable(){
-        cc.systemEvent.on("update_general", this.updateGeneral, this)
+        EventMgr.on("update_general", this.updateGeneral, this)
     }
 
     protected onDisable(){
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onLoad():void{
@@ -91,7 +83,7 @@ export default class GeneralDesLogic extends cc.Component {
             destroy:"破坏",
         };
        
-        this._generalNode = cc.instantiate(this.generalItemPrefab);
+        this._generalNode = instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
     }
 
@@ -129,7 +121,7 @@ export default class GeneralDesLogic extends cc.Component {
         this.speedLabel.string = this.getAttrStr("speed");
         this.destroyLabel.string = this.getAttrStr("destroy");
      
-        var com = this._generalNode.getComponent("GeneralItemLogic");
+        var com = this._generalNode.getComponent(GeneralItemLogic);
         if(com){
             com.updateItem(this._currData, GeneralItemType.GeneralNoThing);
         }
@@ -165,15 +157,15 @@ export default class GeneralDesLogic extends cc.Component {
         return this._nameObj[key] + ":" + str;
     }
 
-    protected onClickSkill(event: cc.Event.EventTouch, pos){
+    protected onClickSkill(event: EventTouch, pos){
         console.log("event", event, pos);
-        var node: cc.Node = event.target;
+        var node: Node = event.target;
         var isEmpty = node.getComponent(SkillIconLogic).isEmpty();
         if(isEmpty){
-            cc.systemEvent.emit("open_skill", 1, this._currData, pos);
+            EventMgr.emit("open_skill", 1, this._currData, pos);
         }else{
             let skill = node.getComponent(SkillIconLogic).getSkill();
-            cc.systemEvent.emit("open_skillInfo", skill, 2, this._currData, pos);
+            EventMgr.emit("open_skillInfo", skill, 2, this._currData, pos);
         }
     }
 

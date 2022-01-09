@@ -1,8 +1,10 @@
+import { _decorator } from 'cc';
 import { NetManager } from "../network/socket/NetManager";
 import UnionProxy, { Union } from "./UnionProxy";
 import { ServerConfig } from "../config/ServerConfig";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
+import { EventMgr } from '../utils/EventMgr';
 
 export default class UnionCommand {
     //单例
@@ -30,25 +32,25 @@ export default class UnionCommand {
     //数据model
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.union_create, this.onUnionCreate, this);
-        cc.systemEvent.on(ServerConfig.union_join, this.onUnionJoin, this);
-        cc.systemEvent.on(ServerConfig.union_list, this.onUnionList, this);
-        cc.systemEvent.on(ServerConfig.union_member, this.onUnionMember, this);
-        cc.systemEvent.on(ServerConfig.union_dismiss, this.onUnionDisMiss, this);
-        cc.systemEvent.on(ServerConfig.union_applyList, this.onUnionApply, this);
-        cc.systemEvent.on(ServerConfig.union_verify, this.onUnionVerify, this);
-        cc.systemEvent.on(ServerConfig.union_exit, this.onUnionDisMiss, this);
-        cc.systemEvent.on(ServerConfig.union_kick, this.onUnionKick, this);
-        cc.systemEvent.on(ServerConfig.union_appoint, this.onUnionAppoint, this);
-        cc.systemEvent.on(ServerConfig.union_abdicate, this.onUnionAbdicate, this);
-        cc.systemEvent.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
-        cc.systemEvent.on(ServerConfig.union_info, this.onUnionInfo, this);
-        cc.systemEvent.on(ServerConfig.union_log, this.onUnionLog, this);
-        cc.systemEvent.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
+        EventMgr.on(ServerConfig.union_create, this.onUnionCreate, this);
+        EventMgr.on(ServerConfig.union_join, this.onUnionJoin, this);
+        EventMgr.on(ServerConfig.union_list, this.onUnionList, this);
+        EventMgr.on(ServerConfig.union_member, this.onUnionMember, this);
+        EventMgr.on(ServerConfig.union_dismiss, this.onUnionDisMiss, this);
+        EventMgr.on(ServerConfig.union_applyList, this.onUnionApply, this);
+        EventMgr.on(ServerConfig.union_verify, this.onUnionVerify, this);
+        EventMgr.on(ServerConfig.union_exit, this.onUnionDisMiss, this);
+        EventMgr.on(ServerConfig.union_kick, this.onUnionKick, this);
+        EventMgr.on(ServerConfig.union_appoint, this.onUnionAppoint, this);
+        EventMgr.on(ServerConfig.union_abdicate, this.onUnionAbdicate, this);
+        EventMgr.on(ServerConfig.union_modNotice, this.onUnionNotice, this)
+        EventMgr.on(ServerConfig.union_info, this.onUnionInfo, this);
+        EventMgr.on(ServerConfig.union_log, this.onUnionLog, this);
+        EventMgr.on(ServerConfig.union_apply_push, this.onUnionApplyPush, this);
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public clearData(): void {
@@ -63,7 +65,7 @@ export default class UnionCommand {
     protected onUnionCreate(data: any, otherData: any): void {
         console.log("onUnionCreate", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("create_union_success");
+            EventMgr.emit("create_union_success");
             this.unionList();
         }
     }
@@ -80,7 +82,7 @@ export default class UnionCommand {
         console.log("onUnionList", data);
         if (data.code == 0) {
             this._proxy.updateUnionList(data.msg.list);
-            cc.systemEvent.emit("update_union_list",data.msg.list);
+            EventMgr.emit("update_union_list",data.msg.list);
         }
 
     }
@@ -90,7 +92,7 @@ export default class UnionCommand {
         console.log("onUnionMember", data);
         if (data.code == 0) {
             this._proxy.updateMemberList(data.msg.id,data.msg.Members);
-            cc.systemEvent.emit("update_union_member",data.msg.Members);
+            EventMgr.emit("update_union_member",data.msg.Members);
         }
         
     }
@@ -100,7 +102,7 @@ export default class UnionCommand {
         console.log("onUnionDisMiss", data);
         if (data.code == 0) {
             this.unionList();
-            cc.systemEvent.emit("dismiss_union_success");
+            EventMgr.emit("dismiss_union_success");
         }
     }
 
@@ -109,7 +111,7 @@ export default class UnionCommand {
         console.log("onUnionApply", data);
         if (data.code == 0) {
             this._proxy.updateApplyList(data.msg.id, data.msg.applys);
-            cc.systemEvent.emit("update_union_apply", data.msg.applys);
+            EventMgr.emit("update_union_apply", data.msg.applys);
         }
     }
 
@@ -117,8 +119,8 @@ export default class UnionCommand {
     protected onUnionVerify(data: any, otherData: any): void {
         console.log("onUnionVerify", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("kick_union_success");
-            cc.systemEvent.emit("verify_union_success");
+            EventMgr.emit("kick_union_success");
+            EventMgr.emit("verify_union_success");
         }
     }
 
@@ -126,21 +128,21 @@ export default class UnionCommand {
     protected onUnionKick(data: any, otherData: any): void {
         console.log("onUnionKick", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("kick_union_success");
+            EventMgr.emit("kick_union_success");
         }
     }
 
     protected onUnionAppoint(data: any, otherData: any): void {
         console.log("onUnionAppoint", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("union_appoint", data.msg);
+            EventMgr.emit("union_appoint", data.msg);
         }
     }
 
     protected onUnionAbdicate(data: any, otherData: any): void {
         console.log("onUnionAbdicate", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("union_abdicate", data.msg);
+            EventMgr.emit("union_abdicate", data.msg);
         }
     }
 
@@ -149,7 +151,7 @@ export default class UnionCommand {
         console.log("onUnionNotice", data);
         if(data.code == 0){
             this._proxy.updateNotice(data.msg.id, data.msg.text)
-            cc.systemEvent.emit("union_notice", data.msg);
+            EventMgr.emit("union_notice", data.msg);
         }
         
     }
@@ -161,14 +163,14 @@ export default class UnionCommand {
             l.push(data.msg.info)
             this._proxy.updateUnionList(l);
 
-            cc.systemEvent.emit("union_info", data.msg);
+            EventMgr.emit("union_info", data.msg);
         }
     }
 
     protected onUnionLog(data: any, otherData: any): void {
         console.log("onUnionLog", data);
         if(data.code == 0){
-            cc.systemEvent.emit("union_log", data.msg.logs);
+            EventMgr.emit("union_log", data.msg.logs);
         }
     }
     
@@ -178,7 +180,7 @@ export default class UnionCommand {
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         if (unionData && unionData.isMajor(city.rid)){
             this._proxy.updateApply(city.unionId, data.msg);
-            cc.systemEvent.emit("update_union_apply", data.msg);
+            EventMgr.emit("update_union_apply", data.msg);
         }
     }
 

@@ -1,29 +1,20 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, SpriteFrame, Label, Sprite } from 'cc';
+const {ccclass, property} = _decorator;
 
-import { SkillConf } from "../../config/skill/Skill";
+
 import { gSkill } from "../../general/GeneralProxy";
-import LoginCommand from "../../login/LoginCommand";
 import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
-import DateUtil from "../../utils/DateUtil";
-import { Tools } from "../../utils/Tools";
-import MapUICommand from "./MapUICommand";
 
-const {ccclass, property} = cc._decorator;
 
-@ccclass
-export default class SkillIconLogic extends cc.Component {
+@ccclass('SkillIconLogic')
+export default class SkillIconLogic extends Component {
 
-    @property([cc.SpriteFrame])
-    sps:cc.SpriteFrame[] = [];
+    @property([SpriteFrame])
+    sps:SpriteFrame[] = [];
 
-    @property(cc.Label)
-    lvLab:cc.Label = null;
+    @property(Label)
+    lvLab:Label = null;
 
     _data: Skill = null;
 
@@ -31,13 +22,13 @@ export default class SkillIconLogic extends cc.Component {
 
         this._data = data;
         if(this._data == null){
-            this.getComponent(cc.Sprite).spriteFrame = null;
+            this.getComponent(Sprite).spriteFrame = null;
         }else{
             var conf = SkillCommand.getInstance().proxy.getSkillCfg(data.cfgId);
             if(conf.trigger <= this.sps.length){
-                this.getComponent(cc.Sprite).spriteFrame = this.sps[conf.trigger-1];
+                this.getComponent(Sprite).spriteFrame = this.sps[conf.trigger-1];
             }else{
-                this.getComponent(cc.Sprite).spriteFrame = null;
+                this.getComponent(Sprite).spriteFrame = null;
             }
         }
 

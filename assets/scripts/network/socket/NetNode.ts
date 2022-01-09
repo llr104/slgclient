@@ -1,17 +1,8 @@
-import DateUtil from "../../utils/DateUtil";
+
 import { RequestObject, NetEvent } from "./NetInterface";
 import { NetTimer } from "./NetTimer";
 import { WebSock } from "./WebSock";
-
-
-/*
-*   CocosCreator网络节点基类，以及网络相关接口定义
-*   1. 网络连接、断开、请求发送、数据接收等基础功能
-*   2. 心跳机制
-*   3. 断线重连 + 请求重发
-*   4. 调用网络屏蔽层
-*/
-
+import { EventMgr } from "../../utils/EventMgr";
 
 
 export enum NetTipsType {
@@ -51,8 +42,6 @@ export class NetNode {
     protected _socket: WebSock = null;                                      // Socket对象（可能是原生socket、websocket、wx.socket...)
     protected _timer:NetTimer = null;
 
-    
-    
 
     protected _keepAliveTimer: any = null;                                  // 心跳定时器
     protected _reconnectTimer: any = null;                                  // 重连定时器
@@ -118,7 +107,7 @@ export class NetNode {
         this._socket.onClosed = (event) => { this.onClosed(event) };
         this._socket.onGetKey = () => { this.onGetKey() };
 
-        cc.systemEvent.on(NetEvent.ServerHandShake, this.onChecked, this);
+        EventMgr.on(NetEvent.ServerHandShake, this.onChecked, this);
     }
 
 
@@ -131,7 +120,7 @@ export class NetNode {
         //     this.onChecked();
         // }
 
-        cc.systemEvent.emit(NetEvent.ServerCheckLogin);
+        EventMgr.emit(NetEvent.ServerCheckLogin);
         
     }
 
@@ -139,7 +128,7 @@ export class NetNode {
     protected initTimer(){
         this._timer.init();
         
-        cc.systemEvent.on(NetEvent.ServerTimeOut, this.onTimeOut, this);
+        EventMgr.on(NetEvent.ServerTimeOut, this.onTimeOut, this);
     }
 
     protected onTimeOut(msg:any){
@@ -159,7 +148,7 @@ export class NetNode {
 
     protected updateNetTips(tipsType: NetTipsType, isShow: boolean) {
         if (tipsType == NetTipsType.Requesting) {
-            // cc.systemEvent.emit(NetEvent.ServerRequesting, isShow);
+            // EventMgr.emit(NetEvent.ServerRequesting, isShow);
 
         } else if (tipsType == NetTipsType.Connecting) {
 
@@ -177,7 +166,7 @@ export class NetNode {
         // 启动心跳
         this.resetHearbeatTimer();
 
-        // cc.systemEvent.emit(NetEvent.ServerConnected);
+        // EventMgr.emit(NetEvent.ServerConnected);
     }
 
     // 连接验证成功，进入工作状态
@@ -209,7 +198,7 @@ export class NetNode {
              // 接受到数据，重新定时收数据计时器
             //推送
             if(msg.seq == 0){
-                cc.systemEvent.emit(msg.name, msg);
+                EventMgr.emit(msg.name, msg);
                 // console.log("all_push:",msg.name, msg);
             }else{
                 this.cannelMsgTimer(msg);
@@ -221,9 +210,9 @@ export class NetNode {
                         this._requests.splice(i, 1);
                         i--;
                         // console.log("返回:",msg.name,"耗时:",new Date().getTime() - req.startTime)
-                        cc.systemEvent.emit(msg.name, msg , req.otherData);
+                        EventMgr.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
-                        cc.systemEvent.emit(NetEvent.ServerRequestSucess,msg);
+                        EventMgr.emit(NetEvent.ServerRequestSucess,msg);
                     }       
                 }
 
@@ -301,7 +290,7 @@ export class NetNode {
 
 
     public send(send_data:any,otherData:any,force: boolean = false):void{
-
+   
         var data = this.createInvoke();//new RequestObject();
         data.json = send_data;
         data.rspName = send_data.name;

@@ -1,17 +1,18 @@
+import { _decorator, Component, Node, Prefab, NodePool, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapCommand from "./MapCommand";
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class MapBaseLayerLogic extends cc.Component {
-    @property(cc.Node)
-    parentLayer: cc.Node = null;
-    @property(cc.Prefab)
-    entryPrefab: cc.Prefab = null;
+@ccclass('MapBaseLayerLogic')
+export default class MapBaseLayerLogic extends Component {
+    @property(Node)
+    parentLayer: Node = null;
+    @property(Prefab)
+    entryPrefab: Prefab = null;
 
     protected _cmd: MapCommand;
-    protected _itemPool: cc.NodePool = new cc.NodePool();
-    protected _itemMap: Map<number, Map<number, cc.Node>> = new Map<number, Map<number, cc.Node>>();
+    protected _itemPool: NodePool = new NodePool();
+    protected _itemMap: Map<number, Map<number, Node>> = new Map<number, Map<number, Node>>();
 
     protected onLoad(): void {
         this._cmd = MapCommand.getInstance();
@@ -19,7 +20,7 @@ export default class MapBaseLayerLogic extends cc.Component {
 
     protected onDestroy(): void {
         this._cmd = null;
-        this._itemMap.forEach((value: Map<number, cc.Node>, key: number) => {
+        this._itemMap.forEach((value: Map<number, Node>, key: number) => {
             value.clear();
         });
         this._itemMap.clear();
@@ -28,14 +29,14 @@ export default class MapBaseLayerLogic extends cc.Component {
         this._itemPool = null;
     }
 
-    public addItem(areaIndex: number, data: any): cc.Node {
+    public addItem(areaIndex: number, data: any): Node {
         if (this._itemMap.has(areaIndex)) {
             let id: number = this.getIdByData(data);
-            let item: cc.Node = this.getItem(areaIndex, id);
+            let item: Node = this.getItem(areaIndex, id);
             if (item == null) {
                 item = this.createItem();
                 item.parent = this.parentLayer;
-                let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+                let list: Map<number, Node> = this._itemMap.get(areaIndex);
                 list.set(this.getIdByData(data), item);
             }
             this.updateItem(areaIndex, data, item);
@@ -44,9 +45,9 @@ export default class MapBaseLayerLogic extends cc.Component {
         return null;
     }
 
-    public updateItem(areaIndex: number, data: any, item: cc.Node = null): void {
+    public updateItem(areaIndex: number, data: any, item: Node = null): void {
         if (this._itemMap.has(areaIndex)) {
-            let realItem: cc.Node = item;
+            let realItem: Node = item;
             if (item == null) {
                 let id: number = this.getIdByData(data);
                 realItem = this.getItem(areaIndex, id);
@@ -58,14 +59,14 @@ export default class MapBaseLayerLogic extends cc.Component {
     }
 
     //子类重写
-    public setItemData(item: cc.Node, data: any): void {
+    public setItemData(item: Node, data: any): void {
 
     }
 
     public removeItem(areaIndex: number, id: number): boolean {
-        let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+        let list: Map<number, Node> = this._itemMap.get(areaIndex);
         if (list.has(id)) {
-            let item: cc.Node = list.get(id);
+            let item: Node = list.get(id);
             this._itemPool.put(item);
             list.delete(id);
             return true;
@@ -73,26 +74,26 @@ export default class MapBaseLayerLogic extends cc.Component {
         return false;
     }
 
-    public getItem(areaIndex: number, id: number): cc.Node {
-        let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
+    public getItem(areaIndex: number, id: number): Node {
+        let list: Map<number, Node> = this._itemMap.get(areaIndex);
         if (list.has(id)) {
             return list.get(id);
         }
         return null;
     }
 
-    protected createItem(): cc.Node {
+    protected createItem(): Node {
         if (this._itemPool.size() > 0) {
             return this._itemPool.get();
         }
-        let node: cc.Node = cc.instantiate(this.entryPrefab);
+        let node: Node = instantiate(this.entryPrefab);
         return node;
     }
 
     public removeArea(areaIndex: number): void {
         if (this._itemMap.has(areaIndex)) {
-            let list: Map<number, cc.Node> = this._itemMap.get(areaIndex);
-            list.forEach((node: cc.Node, key: number) => {
+            let list: Map<number, Node> = this._itemMap.get(areaIndex);
+            list.forEach((node: Node, key: number) => {
                 this._itemPool.put(node);
             });
             list.clear();
@@ -102,7 +103,7 @@ export default class MapBaseLayerLogic extends cc.Component {
 
     public addArea(areaIndex: number): void {
         if (this._itemMap.has(areaIndex) == false) {
-            this._itemMap.set(areaIndex, new Map<number, cc.Node>());
+            this._itemMap.set(areaIndex, new Map<number, Node>());
         }
     }
 

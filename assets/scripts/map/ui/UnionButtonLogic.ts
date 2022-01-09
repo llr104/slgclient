@@ -1,26 +1,20 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Node } from 'cc';
+const { ccclass, property } = _decorator;
 
 import UnionCommand from "../../union/UnionCommand";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
+import { EventMgr } from '../../utils/EventMgr';
+
+@ccclass('UnionButtonLogic')
+export default class WarButtonLogic extends Component {
 
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class WarButtonLogic extends cc.Component {
-
-
-    @property(cc.Node)
-    tipsNode:cc.Node = null;
+    @property(Node)
+    tipsNode:Node = null;
 
     protected onLoad():void{
-        cc.systemEvent.on("update_union_apply", this.updateView, this);
+        EventMgr.on("update_union_apply", this.updateView, this);
         this.tipsNode.active = false;
     }
 
@@ -32,7 +26,7 @@ export default class WarButtonLogic extends cc.Component {
     }
 
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {

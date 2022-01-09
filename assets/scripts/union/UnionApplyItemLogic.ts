@@ -1,40 +1,22 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
-import LoginCommand from "../login/LoginCommand";
-import { Role } from "../login/LoginProxy";
+import { _decorator, Component, Label } from 'cc';
+const { ccclass, property } = _decorator;
 import UnionCommand from "./UnionCommand";
-import { Apply, Member, Union } from "./UnionProxy";
+import { Apply } from "./UnionProxy";
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class UnionApplyItemLogic extends cc.Component {
-
-
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
-
+@ccclass('UnionApplyItemLogic')
+export default class UnionApplyItemLogic extends Component {
+    @property(Label)
+    nameLabel: Label | null = null;
     protected _applyData:Apply = null;
-
     protected onLoad():void{
-        
-    }
 
+    }
     protected updateItem(data:Apply):void{
         this._applyData = data;
         this.nameLabel.string = this._applyData.nick_name;
     }
-
-
-
     protected verify(event:any,decide:number = 0):void{
         UnionCommand.getInstance().unionVerify(this._applyData.id,Number(decide));
     }
-
 }
+

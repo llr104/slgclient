@@ -1,13 +1,15 @@
+import { _decorator, Component, Label } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { MapCityData } from "../MapCityProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class RightCityItemLogic extends cc.Component {
-    @property(cc.Label)
-    labelInfo: cc.Label = null;
-    @property(cc.Label)
-    labelPos: cc.Label = null;
+@ccclass('RightCityItemLogic')
+export default class RightCityItemLogic extends Component {
+    @property(Label)
+    labelInfo: Label = null;
+    @property(Label)
+    labelPos: Label = null;
 
     protected _data: MapCityData = null;
 
@@ -22,7 +24,7 @@ export default class RightCityItemLogic extends cc.Component {
 
     protected onClickBg(): void {
         if (this._data) {
-            cc.systemEvent.emit("scroll_to_map", this._data.x, this._data.y);
+            EventMgr.emit("scroll_to_map", this._data.x, this._data.y);
         }
     }
 

@@ -1,4 +1,4 @@
-
+import { _decorator } from 'cc';
 
 export class ChatMsg {
     rid: number = 0;
@@ -14,7 +14,7 @@ export default class ChatProxy {
 
     private _worldMsgList:ChatMsg[] = [];
     private _unionMsgList:ChatMsg[] = [];
-    ]
+    
     public clearData(): void {
 
     }

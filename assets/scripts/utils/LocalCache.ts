@@ -1,9 +1,11 @@
+import { sys } from "cc";
+
 export class LocalCache{
     public static userListKey = "userListKey";
 
 
     public static setPersonMemory(keyStr, Value):void {
-        //cc.log("setPersonMemory:" + keyStr + ", " + Value);
+        //log("setPersonMemory:" + keyStr + ", " + Value);
     
         if (keyStr === undefined || keyStr === null || keyStr === "") {
             return;
@@ -20,14 +22,14 @@ export class LocalCache{
         jsonContent[keyStr] = Value;
     
         var jsonstring = JSON.stringify(jsonContent);
-        cc.sys.localStorage.setItem(LocalCache.userListKey, jsonstring);
+        sys.localStorage.setItem(LocalCache.userListKey, jsonstring);
     };
 
 
 
     
     public static getPersonMemory(keyStr, defaultValue):any {
-        //cc.log("getPersonMemory:" + keyStr + ", " + defaultValue);
+        //log("getPersonMemory:" + keyStr + ", " + defaultValue);
     
         //key不存在就gg了
         if (keyStr === undefined || keyStr === null || keyStr === "") {
@@ -53,7 +55,7 @@ export class LocalCache{
                 //默认存在  设置默认保存并且返回默认值
                 jsonContent[keyStr] = defaultValue;
                 var jsonstring = JSON.stringify(jsonContent);
-                cc.sys.localStorage.setItem(LocalCache.userListKey, jsonstring);
+                sys.localStorage.setItem(LocalCache.userListKey, jsonstring);
                 return jsonContent[keyStr];
             }
         }
@@ -62,8 +64,8 @@ export class LocalCache{
 
 
     public static getListForJson():any {
-        var jsondata = cc.sys.localStorage.getItem(LocalCache.userListKey);
-        if (0 == jsondata || jsondata == undefined)
+        var jsondata = sys.localStorage.getItem(LocalCache.userListKey);
+        if (0 == Number(jsondata) || jsondata == undefined)
             return;
     
         var jsonArray = JSON.parse(jsondata);

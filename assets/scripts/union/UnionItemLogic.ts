@@ -1,35 +1,19 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
-import LoginCommand from "../login/LoginCommand";
-import { Role } from "../login/LoginProxy";
+import { _decorator, Component, Label, Node } from 'cc';
+const { ccclass, property } = _decorator;
 import UnionCommand from "./UnionCommand";
 import { Union } from "./UnionProxy";
+import { EventMgr } from '../utils/EventMgr';
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class UnionItemLogic extends cc.Component {
-
-
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
-
-
-    @property(cc.Node)
-    joinButtonNode: cc.Node = null;
-
+@ccclass('UnionItemLogic')
+export default class UnionItemLogic extends Component {
+    @property(Label)
+    nameLabel: Label | null = null;
+    @property(Node)
+    joinButtonNode: Node | null = null;
     protected _unionData:Union = null;
-
     protected onLoad():void{
         this.joinButtonNode.active = false;
     }
-
     protected updateItem(data:Union):void{
         this._unionData = data;
         this.nameLabel.string = this._unionData.name;
@@ -37,20 +21,16 @@ export default class UnionItemLogic extends cc.Component {
 
 
     }
-
     protected isCanJoin():boolean{
         return !UnionCommand.getInstance().proxy.isMeInUnion();
     }
-
     protected join():void{
         UnionCommand.getInstance().unionJoin(this._unionData.id)
     }
-
     protected click():void{
         var isCanjoin:boolean = this.isCanJoin();
         if(!isCanjoin){
-            cc.systemEvent.emit("open_my_union",this._unionData)
+            EventMgr.emit("open_my_union",this._unionData)
         }
     }
-
 }

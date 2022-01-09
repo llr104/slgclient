@@ -1,3 +1,4 @@
+
 import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "../login/LoginCommand";
 import { MapCityData } from "../map/MapCityProxy";
@@ -6,6 +7,7 @@ import { NetManager } from "../network/socket/NetManager";
 import ArmyProxy, { ArmyCmd, ArmyData } from "./ArmyProxy";
 import GeneralCommand from "./GeneralCommand";
 import { GenaralLevelConfig, GeneralConfig, GeneralData } from "./GeneralProxy";
+import { EventMgr } from "../utils/EventMgr";
 
 
 export default class ArmyCommand {
@@ -31,14 +33,14 @@ export default class ArmyCommand {
     protected _proxy: ArmyProxy = new ArmyProxy();
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.army_myList, this.onQryArmyList, this);
-        cc.systemEvent.on(ServerConfig.army_myOne, this.onQryArmyOne, this);
+        EventMgr.on(ServerConfig.army_myList, this.onQryArmyList, this);
+        EventMgr.on(ServerConfig.army_myOne, this.onQryArmyOne, this);
 
-        cc.systemEvent.on(ServerConfig.army_dispose, this.onGeneralDispose, this);
-        cc.systemEvent.on(ServerConfig.army_conscript, this.onGeneralConscript, this);
-        cc.systemEvent.on(ServerConfig.army_assign, this.onGeneralAssignArmy, this);
-        cc.systemEvent.on(ServerConfig.army_push, this.onGeneralArmyStatePush, this);
-        cc.systemEvent.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
+        EventMgr.on(ServerConfig.army_dispose, this.onGeneralDispose, this);
+        EventMgr.on(ServerConfig.army_conscript, this.onGeneralConscript, this);
+        EventMgr.on(ServerConfig.army_assign, this.onGeneralAssignArmy, this);
+        EventMgr.on(ServerConfig.army_push, this.onGeneralArmyStatePush, this);
+        EventMgr.on(ServerConfig.nationMap_scanBlock, this.onNationMapScanBlock, this);
 
         //定时检测自己的军队是否有武将已经征兵完，如果是请求刷新
         setInterval(() => {
@@ -62,7 +64,7 @@ export default class ArmyCommand {
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public clearData(): void {
@@ -78,7 +80,7 @@ export default class ArmyCommand {
         console.log("onQryArmyList", data);
         if (data.code == 0) {
             let armyDatas: ArmyData[] = this._proxy.updateArmys(data.msg.cityId, data.msg.armys);
-            cc.systemEvent.emit("update_army_list", armyDatas);
+            EventMgr.emit("update_army_list", armyDatas);
         }
     }
 
@@ -87,8 +89,8 @@ export default class ArmyCommand {
         if (data.code == 0) {
             let armyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
             let armyDatas: ArmyData[] = this._proxy.getArmyList(data.msg.army.cityId);
-            cc.systemEvent.emit("update_army_list", armyDatas);
-            cc.systemEvent.emit("update_army", armyData);
+            EventMgr.emit("update_army_list", armyDatas);
+            EventMgr.emit("update_army", armyData);
         }
     }
 
@@ -100,7 +102,7 @@ export default class ArmyCommand {
         if (data.code == 0) {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
             console.log("armyData", armyData);
-            cc.systemEvent.emit("update_army", armyData);
+            EventMgr.emit("update_army", armyData);
         }
     }
 
@@ -109,11 +111,11 @@ export default class ArmyCommand {
         console.log("onGeneralConscript", data);
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("upate_my_roleRes");
+            EventMgr.emit("upate_my_roleRes");
 
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
-            cc.systemEvent.emit("update_army", armyData);
-            cc.systemEvent.emit("conscript_army_success");
+            EventMgr.emit("update_army", armyData);
+            EventMgr.emit("conscript_army_success");
         }
     }
 
@@ -122,8 +124,8 @@ export default class ArmyCommand {
         console.log("onGeneralAssignArmy", data);
         if (data.code == 0) {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.army.cityId, data.msg.army);
-            cc.systemEvent.emit("update_army", armyData);
-            cc.systemEvent.emit("update_army_assign");
+            EventMgr.emit("update_army", armyData);
+            EventMgr.emit("update_army_assign");
         }
     }
 
@@ -132,7 +134,7 @@ export default class ArmyCommand {
         console.log("onGeneralArmyState", data);
         if (data.code == 0) {
             let armyData: ArmyData = this._proxy.updateArmy(data.msg.cityId, data.msg);
-            cc.systemEvent.emit("update_army", armyData);
+            EventMgr.emit("update_army", armyData);
         }
     }
 
@@ -140,7 +142,7 @@ export default class ArmyCommand {
         if (data.code == 0) {
             for (let i: number = 0; i < data.msg.armys.length; i++) {
                 let armyData: ArmyData = this._proxy.updateArmy(data.msg.armys[i].cityId, data.msg.armys[i]);
-                cc.systemEvent.emit("update_army", armyData);
+                EventMgr.emit("update_army", armyData);
             }
         }
     }
@@ -149,7 +151,7 @@ export default class ArmyCommand {
     public updateMyProperty(datas: any[]): void {
         if (datas.length > 0) {
             let armyDatas: ArmyData[] = this._proxy.updateArmys(datas[0].cityId, datas);
-            cc.systemEvent.emit("update_army_list", armyDatas);
+            EventMgr.emit("update_army_list", armyDatas);
         }
     }
 

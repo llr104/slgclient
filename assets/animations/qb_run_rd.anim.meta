@@ -1,5 +1,13 @@
 {
-  "ver": "2.1.0",
+  "ver": "2.0.3",
+  "importer": "animation-clip",
+  "imported": true,
   "uuid": "6deb3b1d-22ec-4d27-b221-7cc47111e68f",
-  "subMetas": {}
+  "files": [
+    ".cconb"
+  ],
+  "subMetas": {},
+  "userData": {
+    "name": "qb_run_rd"
+  }
 }

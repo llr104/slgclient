@@ -1,53 +1,48 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Label, Prefab, Node, ScrollView, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import { GeneralItemType } from "./GeneralItemLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('GeneralComposeLogic')
+export default class GeneralComposeLogic  extends Component {
 
-@ccclass
-export default class GeneralComposeLogic  extends cc.Component {
+    @property(Label)
+    nameLab: Label = null;
 
-    @property(cc.Label)
-    nameLab: cc.Label = null;
+    @property(Prefab)
+    generalItemPrefab: Prefab = null;
 
-    @property(cc.Prefab)
-    generalItemPrefab: cc.Prefab = null;
-
-    @property(cc.Node)
-    generalItemParent: cc.Node = null;
+    @property(Node)
+    generalItemParent: Node = null;
 
 
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
+    @property(ScrollView)
+    scrollView:ScrollView = null;
 
-    @property(cc.Node)
-    composeNode: cc.Node = null;
+    @property(Node)
+    composeNode: Node = null;
 
     private _currData:GeneralData = null;
     private _cfgData:GeneralConfig = null;
 
-    private _generalNode:cc.Node = null;
+    private _generalNode:Node = null;
     private _gIdsArr:number[] = [];
 
     protected onLoad():void{
-        this._generalNode = cc.instantiate(this.generalItemPrefab);
+        this._generalNode = instantiate(this.generalItemPrefab);
         this._generalNode.parent = this.generalItemParent;
     }
 
     protected onEnable():void{
-        cc.systemEvent.on("open_general_select", this.selectItem, this); 
+        EventMgr.on("open_general_select", this.selectItem, this); 
         this.updataView();
     }
 
     protected onDisable():void{
-        cc.systemEvent.removeAll(this);
+        EventMgr.targetOff(this);
     }
 
     private selectItem(cfg:any,curData:any):void{

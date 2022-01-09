@@ -1,23 +1,16 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import DateUtil from "../utils/DateUtil";
 import { ChatMsg } from "./ChatProxy";
+import { _decorator, Component, Label } from "cc";
 
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class ChatItemLogic extends cc.Component {
+const { ccclass, property } = _decorator;
+@ccclass('ChatItemLogic')
+export default class ChatItemLogic extends Component {
 
 
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
+    @property(Label)
+    nameLabel: Label = null;
 
 
     protected onLoad():void{

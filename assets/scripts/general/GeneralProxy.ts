@@ -1,4 +1,5 @@
-import { Skill } from "../skill/SkillProxy";
+
+import { SpriteFrame } from "cc";
 
 /**武将(配置)*/
 export class GeneralConfig {
@@ -123,7 +124,7 @@ export default class GeneralProxy {
     protected _generalConfigs: Map<number, GeneralConfig> = new Map<number, GeneralConfig>();
     protected _levelConfigs: GenaralLevelConfig[] = [];
     protected _commonConfig: GeneralCommonConfig = new GeneralCommonConfig();
-    protected _generalTexs: Map<number, cc.SpriteFrame> = new Map<number, cc.SpriteFrame>();
+    protected _generalTexs: Map<number, SpriteFrame> = new Map<number, SpriteFrame>();
     protected _myGenerals: Map<number, GeneralData> = new Map<number, GeneralData>();
 
     public clearData(): void {
@@ -188,7 +189,7 @@ export default class GeneralProxy {
         this._commonConfig.draw_general_cost = bCost.general.draw_general_cost;
     }
 
-    public initGeneralTex(texs: cc.SpriteFrame[]): void {
+    public initGeneralTex(texs: SpriteFrame[]): void {
         this._generalTexs.clear();
         for (let i: number = 0; i < texs.length; i++) {
             let id: number = Number(String(texs[i].name).split("_")[1]);
@@ -245,14 +246,14 @@ export default class GeneralProxy {
     }
 
     /**武将头像素材*/
-    public getGeneralTex(cfgId: number): cc.SpriteFrame {
+    public getGeneralTex(cfgId: number): SpriteFrame {
         if (this._generalTexs.has(cfgId)) {
             return this._generalTexs.get(cfgId);
         }
         return null;
     }
 
-    public setGeneralTex(cfgId: number, frame: cc.SpriteFrame) {
+    public setGeneralTex(cfgId: number, frame: SpriteFrame) {
         this._generalTexs.set(cfgId, frame);
     }
 

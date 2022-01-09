@@ -1,4 +1,5 @@
-const {ccclass, property} = cc._decorator;
+import { _decorator, Component, Enum, sys, director, UITransform } from 'cc';
+const {ccclass, property} = _decorator;
 
 export enum BGScaleType {
     FULL_SCREEN,                    
@@ -17,10 +18,10 @@ export enum BGAlignmentType {
 }
 
 @ccclass
-export default class BgScale extends cc.Component {
-    @property({type: cc.Enum(BGAlignmentType)})
+export default class BgScale extends Component {
+    @property({type: Enum(BGAlignmentType)})
     alignmentType:BGAlignmentType = BGAlignmentType.CENTER;
-    @property({type: cc.Enum(BGScaleType)})
+    @property({type: Enum(BGScaleType)})
     scaleType:BGScaleType = BGScaleType.FULL_SCREEN;
 
     private realW:number = 0;
@@ -28,10 +29,10 @@ export default class BgScale extends cc.Component {
     private _resizeCallback:any = null;
 
     protected onLoad ():void {
-        this.realW = this.node.width;
-        this.realH = this.node.height;
+        this.realW = this.node.getComponent(UITransform).width;
+        this.realH = this.node.getComponent(UITransform).height;
         this.setMyFrameSize();
-        if (cc.sys.isBrowser) {
+        if (sys.isBrowser) {
             this._resizeCallback = this.setMyFrameSizeAgain.bind(this);
             window.addEventListener('resize', this._resizeCallback);
             window.addEventListener('orientationchange', this._resizeCallback);
@@ -41,7 +42,7 @@ export default class BgScale extends cc.Component {
     }
 
     protected onDestroy():void {
-        if (cc.sys.isBrowser) {
+        if (sys.isBrowser) {
             window.removeEventListener('resize', this._resizeCallback);
             window.removeEventListener('orientationchange', this._resizeCallback);
             document.removeEventListener('rotateScreen', this._resizeCallback);
@@ -55,10 +56,10 @@ export default class BgScale extends cc.Component {
             return;
         }
         var wsize = null;
-        if (cc.sys.isBrowser) {
-            wsize = cc.visibleRect;
+        if (sys.isBrowser) {
+            wsize = visibleRect;
         } else {
-            wsize = cc.director.getWinSize();
+            wsize = director.getWinSize();
         }
         var scale1 = wsize.width / this.realW;
         var scale2 = wsize.height / this.realH;
@@ -74,7 +75,7 @@ export default class BgScale extends cc.Component {
         } else if (this.scaleType == BGScaleType.SCALE_ONLY_HEIGHT) {
             scaleX = 1;
             scaleY = scale2;
-        } else if (cc.sys.isBrowser) {
+        } else if (sys.isBrowser) {
             //横向浏览器 只缩放宽度
             scaleX = scaleY = max_scale;
             // scaleY = 1;
@@ -85,11 +86,11 @@ export default class BgScale extends cc.Component {
         this.node.width = this.realW * scaleX;
         this.node.height = this.realH * scaleY;
 
-        var widget = this.node.getComponent(cc.Widget);
+        var widget = this.node.getComponent(Widget);
         if (widget == null) {
-            widget = this.node.addComponent(cc.Widget);
+            widget = this.node.addComponent(Widget);
         }
-        var canvas = cc.director.getScene().getChildByName('Canvas');
+        var canvas = director.getScene().getChildByName('Canvas');
         widget.target = canvas;
         if (this.alignmentType == BGAlignmentType.BOTTOM) {
             widget.isAlignHorizontalCenter = true;

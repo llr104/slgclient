@@ -1,17 +1,18 @@
 import { ArmyData } from "../../general/ArmyProxy";
 import DateUtil from "../../utils/DateUtil";
 import MapUtil from "../MapUtil";
+import { Vec2, Node, Animation, Vec3, UITransform } from "cc";
 
 export default class ArmyLogic {
     public data: ArmyData = null;
-    public aniNode: cc.Node = null;
-    public arrowNode: cc.Node = null;
+    public aniNode: Node = null;
+    public arrowNode: Node = null;
 
-    protected _parentLayer: cc.Node;
+    protected _parentLayer: Node;
 
     protected _aniName: string = "";
-    protected _startPixelPos: cc.Vec2 = null;
-    protected _endPixelPos: cc.Vec2 = null;
+    protected _startPixelPos: Vec3 = null;
+    protected _endPixelPos: Vec3 = null;
     protected _lenX: number = 0;
     protected _lenY: number = 0;
 
@@ -28,15 +29,19 @@ export default class ArmyLogic {
         this.clear();
     }
 
-    public update(): cc.Vec2 {
+    public update(): Vec2 {
         if (this.data && this.data.state > 0) {
             let nowTime: number = DateUtil.getServerTime();
             if (nowTime < this.data.endTime) {
                 //代表移动中
                 let percent: number = Math.max(0, (nowTime - this.data.startTime) / (this.data.endTime - this.data.startTime));
-                this.aniNode.x = this._startPixelPos.x + percent * this._lenX;
-                this.aniNode.y = this._startPixelPos.y + percent * this._lenY;
-                let cellPoint: cc.Vec2 = MapUtil.mapPixelToCellPoint(cc.v2(this.aniNode.x, this.aniNode.y));
+               
+                let pos = this.aniNode.position.clone();
+                pos.x = this._startPixelPos.x + percent * this._lenX;
+                pos.y = this._startPixelPos.y + percent * this._lenY;
+                this.aniNode.setPosition(pos);
+
+                let cellPoint: Vec2 = MapUtil.mapPixelToCellPoint(new Vec2(pos.x, pos.y));
                 this.data.x = cellPoint.x;
                 this.data.y = cellPoint.y;
             } else {
@@ -45,7 +50,7 @@ export default class ArmyLogic {
                 this.data.y = this.data.toY;
             }
             this.updateArrow();
-            return cc.v2(this.data.x, this.data.y);
+            return new Vec2(this.data.x, this.data.y);
         }
         return null;
     }
@@ -53,27 +58,36 @@ export default class ArmyLogic {
     protected updateArrow(): void {
         this.arrowNode.active = this.data && this.data.state > 0;
         if (this.arrowNode.active == true) {
-            this.arrowNode.x = this.aniNode.x;
-            this.arrowNode.y = this.aniNode.y;
+        
+            this.arrowNode.setPosition(this.aniNode.getPosition());
             let len: number = Math.sqrt(
-                Math.abs((this._endPixelPos.y - this.arrowNode.y) * (this._endPixelPos.y - this.arrowNode.y))
-                + Math.abs((this._endPixelPos.x - this.arrowNode.x) * (this._endPixelPos.x - this.arrowNode.x)));
-            let angle: number = Math.atan2(this._endPixelPos.y - this.arrowNode.y, this._endPixelPos.x - this.arrowNode.x);
+                Math.abs((this._endPixelPos.y - this.arrowNode.position.y) * (this._endPixelPos.y - this.arrowNode.position.y))
+                + Math.abs((this._endPixelPos.x - this.arrowNode.position.x) * (this._endPixelPos.x - this.arrowNode.position.x)));
+            let angle: number = Math.atan2(this._endPixelPos.y - this.arrowNode.position.y, this._endPixelPos.x - this.arrowNode.position.x);
             this.arrowNode.angle = angle * 180 / Math.PI + 90;
-            this.arrowNode.height = len;
+            this.arrowNode.getComponent(UITransform).height = len;
         }
     }
 
-    public setArmyData(data: ArmyData, aniNode: cc.Node, arrowNode: cc.Node): void {
+    public setArmyData(data: ArmyData, aniNode: Node, arrowNode: Node): void {
         this.data = data;
         this.aniNode = aniNode;
         this.arrowNode = arrowNode;
 
-        this._startPixelPos = MapUtil.mapCellToPixelPoint(cc.v2(this.data.fromX, this.data.fromY));
-        this._endPixelPos = MapUtil.mapCellToPixelPoint(cc.v2(this.data.toX, this.data.toY));
+        let startPos:Vec2 = MapUtil.mapCellToPixelPoint(new Vec2(this.data.fromX, this.data.fromY));
+        this._startPixelPos.x = startPos.x;
+        this._startPixelPos.y = startPos.y;
+
+        let endPos:Vec2 = MapUtil.mapCellToPixelPoint(new Vec2(this.data.toX, this.data.toY));
+        this._endPixelPos.x = endPos.x;
+        this._endPixelPos.y = endPos.y;
+
         this._lenX = this._endPixelPos.x - this._startPixelPos.x;
         this._lenY = this._endPixelPos.y - this._startPixelPos.y;
-        this.aniNode.setPosition(MapUtil.mapCellToPixelPoint(cc.v2(this.data.x, this.data.y)));
+
+        let pos = MapUtil.mapCellToPixelPoint(new Vec2(this.data.x, this.data.y));
+        this.aniNode.setPosition(new Vec3(pos.x, pos.y, 0));
+
         this._aniName = "qb_run_r";
         if (this._startPixelPos.y == this._endPixelPos.y) {
             //平行
@@ -101,7 +115,8 @@ export default class ArmyLogic {
                 this._aniName = "qb_run_ld";
             }
         }
-        this.aniNode.getComponent(cc.Animation).play(this._aniName);
+
+        this.aniNode.getComponent(Animation).play(this._aniName);
 
         this.updateArrow();
     }

@@ -1,37 +1,36 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+// // Learn TypeScript:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
+// // Learn Attribute:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
+// // Learn life-cycle callbacks:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import { ArmyData } from "../../general/ArmyProxy";
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
+import { _decorator, Component, ScrollView, Prefab, Node, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
+import WarReportDesLogic from './WarReportDesLogic';
+import { EventMgr } from '../../utils/EventMgr';
 
+@ccclass('WarReportLogic')
+export default class WarReportLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(ScrollView)
+    scrollView:ScrollView = null;
 
-@ccclass
-export default class WarReportLogic extends cc.Component {
-
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
-
-    @property(cc.Prefab)
-    warPortDesPrefab: cc.Prefab = null;
-    private _warPortDesNode:cc.Node = null;
+    @property(Prefab)
+    warPortDesPrefab: Prefab = null;
+    private _warPortDesNode:Node = null;
 
     protected onLoad():void{
-        cc.systemEvent.on("upate_war_report", this.initView, this);
-        cc.systemEvent.on("click_war_report", this.openWarPortDes, this);
+        EventMgr.on("upate_war_report", this.initView, this);
+        EventMgr.on("click_war_report", this.openWarPortDes, this);
     }
 
 
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onClickClose(): void {
@@ -53,13 +52,13 @@ export default class WarReportLogic extends cc.Component {
 
     protected openWarPortDes(data:WarReport):void{
         if (this._warPortDesNode == null) {
-            this._warPortDesNode = cc.instantiate(this.warPortDesPrefab);
+            this._warPortDesNode = instantiate(this.warPortDesPrefab);
             this._warPortDesNode.parent = this.node;
         } else {
             this._warPortDesNode.active = true;
         }
 
-        this._warPortDesNode.getComponent("WarReportDesLogic").setData(data);
+        this._warPortDesNode.getComponent(WarReportDesLogic).setData(data);
     }
 
     protected allRead():void{

@@ -1,4 +1,4 @@
-
+import { _decorator } from 'cc';
 import { HttpInvoke,HttpInvokeType } from "./HttpInvoke";
 
 export class HttpManager {

@@ -1,4 +1,7 @@
+import { _decorator } from 'cc';
 import { NetEvent } from "../socket/NetInterface";
+import { EventMgr } from '../../utils/EventMgr';
+
 
 export enum HttpInvokeType {
     GET,
@@ -29,8 +32,8 @@ export class HttpInvoke {
                 console.log("onComplete--e:",e)
             }
         }
-        cc.systemEvent.emit(this._name, json,this._otherData);
-        cc.systemEvent.emit(NetEvent.ServerRequestSucess,json);
+        EventMgr.emit(this._name, json,this._otherData);
+        EventMgr.emit(NetEvent.ServerRequestSucess,json);
         
     }
 

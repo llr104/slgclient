@@ -1,3 +1,6 @@
+import { _decorator, Component, Node, Label, Sprite, ProgressBar } from 'cc';
+const { ccclass, property } = _decorator;
+
 import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
@@ -5,45 +8,44 @@ import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/Gener
 import DateUtil from "../../utils/DateUtil";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import MapUICommand from "./MapUICommand";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class CityGeneralItemLogic extends cc.Component {
-    @property(cc.Node)
-    infoNode: cc.Node = null;
-    @property(cc.Node)
-    addNode: cc.Node = null;
-    @property(cc.Node)
-    lockNode: cc.Node = null;
-    @property(cc.Node)
-    btnDown: cc.Node = null;
-    @property(cc.Label)
-    labelTitle: cc.Label = null;
-    @property(cc.Sprite)
-    headIcon: cc.Sprite = null;
-    @property(cc.Label)
-    labelLv: cc.Label = null;
-    @property(cc.Label)
-    labelName: cc.Label = null;
-    @property(cc.Label)
-    labelArms: cc.Label = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Label)
-    labelCost: cc.Label = null;
-    @property(cc.Label)
-    labelCamp: cc.Label = null;
-    @property(cc.Label)
-    labelTip: cc.Label = null;
-    @property(cc.Label)
-    labelConTime: cc.Label = null;
-    @property(cc.Label)
-    labelConCnt: cc.Label = null;
-    @property(cc.ProgressBar)
-    progressBar: cc.ProgressBar = null;
-    @property(cc.Node)
-    conBg: cc.Node = null;
+@ccclass('CityGeneralItemLogic')
+export default class CityGeneralItemLogic extends Component {
+    @property(Node)
+    infoNode: Node = null;
+    @property(Node)
+    addNode: Node = null;
+    @property(Node)
+    lockNode: Node = null;
+    @property(Node)
+    btnDown: Node = null;
+    @property(Label)
+    labelTitle: Label = null;
+    @property(Sprite)
+    headIcon: Sprite = null;
+    @property(Label)
+    labelLv: Label = null;
+    @property(Label)
+    labelName: Label = null;
+    @property(Label)
+    labelArms: Label = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Label)
+    labelCost: Label = null;
+    @property(Label)
+    labelCamp: Label = null;
+    @property(Label)
+    labelTip: Label = null;
+    @property(Label)
+    labelConTime: Label = null;
+    @property(Label)
+    labelConCnt: Label = null;
+    @property(ProgressBar)
+    progressBar: ProgressBar = null;
+    @property(Node)
+    conBg: Node = null;
 
     public index: number = 0;
     protected _order: number = 0;
@@ -75,11 +77,11 @@ export default class CityGeneralItemLogic extends cc.Component {
         if (this._data) {
             //点击展示武将信息
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._data.cfgId);
-            cc.systemEvent.emit("open_general_des", cfg, this._data);
+            EventMgr.emit("open_general_des", cfg, this._data);
         } else if (this.addNode.active) {
             //上阵武将
             var generalArr: number[] = this.getAllGenerals();
-            cc.systemEvent.emit("open_general_choose", generalArr, this.index);
+            EventMgr.emit("open_general_choose", generalArr, this.index);
         }
     }
 

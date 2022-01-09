@@ -1,6 +1,7 @@
+// /**征兵相关**/
+// /**武将相关**/
 
-
-/**征兵相关**/
+import { _decorator } from 'cc';
 export class Conscript {
     cost_wood: number = 0;
     cost_iron: number = 0;
@@ -9,7 +10,6 @@ export class Conscript {
     cost_gold: number = 0;
 }
 
-/**武将相关**/
 export class General {
 	physical_power_limit: number = 0;       //体力上限
 	cost_physical_power: number = 0;        //消耗体力
@@ -20,7 +20,6 @@ export class General {
 	pr_point: number = 0;                   //合成一个武将或者的技能点
 	limit: number = 0;                      //武将数量上限
 }
-
 
 export class Role {
 	wood: number = 0;
@@ -67,7 +66,6 @@ export class NpcLevel  {
 export class Npc {
 	levels: NpcLevel[]
 }
-
 
 export class Basic {
     conscript: Conscript;

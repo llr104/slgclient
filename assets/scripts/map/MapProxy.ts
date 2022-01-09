@@ -1,7 +1,8 @@
-import SysCityLogic from "./entries/SysCityLogic";
+import { _decorator, TiledMapAsset, Vec2, game } from 'cc';
 import MapUtil from "./MapUtil";
+import { EventMgr } from '../utils/EventMgr';
 
-/**地图基础资源配置*/
+
 export class MapResConfig {
     type: number = 0;
     level: number = 0;
@@ -86,9 +87,9 @@ export class MapAreaData {
 
 export default class MapProxy {
     public warFree:number = 0; //免战时间
-    public tiledMapAsset: cc.TiledMapAsset = null;
+    public tiledMapAsset: TiledMapAsset = null;
     //当前地图中心点
-    protected _curCenterPoint: cc.Vec2 = null;
+    protected _curCenterPoint: Vec2 = null;
     //当前展示区域
     protected _curCenterAreaId: number = -1;
     protected _mapAreaDatas: MapAreaData[] = [];
@@ -184,15 +185,15 @@ export default class MapProxy {
 
 
     /**设置地图当前中心点的信息*/
-    public setCurCenterPoint(point: cc.Vec2, pixelPoint: cc.Vec2): boolean {
+    public setCurCenterPoint(point: Vec2, pixelPoint: Vec2): boolean {
         if (this._curCenterPoint == null
             || this._curCenterPoint.x != point.x
             || this._curCenterPoint.y != point.y) {
             this._curCenterPoint = point;
-            let areaPoint: cc.Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
+            let areaPoint: Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
             let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
 
-            cc.systemEvent.emit("map_center_change", this._curCenterPoint);
+            EventMgr.emit("map_center_change", this._curCenterPoint);
             if (this._curCenterAreaId == -1 || this._curCenterAreaId != areaId) {
                 //展示区域变化
                 let areaData: MapAreaData = this.getMapAreaData(areaId);
@@ -208,10 +209,10 @@ export default class MapProxy {
                     oldIds = [];
                     addIds = newIds;
                     //计算四个角所在的区域 用于判断需要优先请求的区域
-                    let leftTopPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(-cc.game.canvas.width * 0.5, cc.game.canvas.height * 0.5));
-                    let leftDownPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(-cc.game.canvas.width * 0.5, -cc.game.canvas.height * 0.5));
-                    let rightTopPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(cc.game.canvas.width * 0.5, cc.game.canvas.height * 0.5));
-                    let rightDownPixelPoint: cc.Vec2 = pixelPoint.add(cc.v2(cc.game.canvas.width * 0.5, -cc.game.canvas.height * 0.5));
+                    let leftTopPixelPoint: Vec2 = pixelPoint.add(new Vec2(-game.canvas.width * 0.5, game.canvas.height * 0.5));
+                    let leftDownPixelPoint: Vec2 = pixelPoint.add(new Vec2(-game.canvas.width * 0.5, -game.canvas.height * 0.5));
+                    let rightTopPixelPoint: Vec2 = pixelPoint.add(new Vec2(game.canvas.width * 0.5, game.canvas.height * 0.5));
+                    let rightDownPixelPoint: Vec2 = pixelPoint.add(new Vec2(game.canvas.width * 0.5, -game.canvas.height * 0.5));
                     firstAreaIds = MapUtil.getVaildAreaIdsByPixelPoints(pixelPoint, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
                 } else {
                     oldIds = MapUtil.get9GridVaildAreaIds(this._curCenterAreaId);
@@ -251,14 +252,14 @@ export default class MapProxy {
                 // this.qryAreaIds = [18];
 
                 this._curCenterAreaId = areaId;
-                cc.systemEvent.emit("map_show_area_change", point, this._curCenterAreaId, addIds, removeIds);
+                EventMgr.emit("map_show_area_change", point, this._curCenterAreaId, addIds, removeIds);
             }
             return true;
         }
         return false;
     }
 
-    public getCurCenterPoint():cc.Vec2 {
+    public getCurCenterPoint():Vec2 {
         return this._curCenterPoint;
     }
 
@@ -271,8 +272,8 @@ export default class MapProxy {
         if (this._mapAreaDatas[id] == undefined) {
             let data: MapAreaData = new MapAreaData();
             data.id = id;
-            let point: cc.Vec2 = MapUtil.getAreaPointById(id);
-            let startCellPoint: cc.Vec2 = MapUtil.getStartCellPointByAreaPoint(point.x, point.y);
+            let point: Vec2 = MapUtil.getAreaPointById(id);
+            let startCellPoint: Vec2 = MapUtil.getStartCellPointByAreaPoint(point.x, point.y);
             data.x = point.x;
             data.y = point.y;
             data.startCellX = startCellPoint.x;

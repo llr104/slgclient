@@ -1,29 +1,29 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+// // Learn TypeScript:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
+// // Learn Attribute:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
+// // Learn life-cycle callbacks:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import LoginCommand from "../login/LoginCommand";
-import { Role } from "../login/LoginProxy";
+import { _decorator, Component, Label } from 'cc';
+const { ccclass, property } = _decorator;
+
+
 import UnionCommand from "./UnionCommand";
-import { Member, Union } from "./UnionProxy";
+import { Member } from "./UnionProxy";
+import { EventMgr } from '../utils/EventMgr';
 
+@ccclass('UnionMemItemLogic')
+export default class UnionMemItemLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(Label)
+    nameLabel: Label = null;
 
-@ccclass
-export default class UnionMemItemLogic extends cc.Component {
+    @property(Label)
+    titleLabel: Label = null;
 
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
-
-    @property(cc.Label)
-    titleLabel: cc.Label = null;
-
-    @property(cc.Label)
-    posLabel: cc.Label = null;
+    @property(Label)
+    posLabel: Label = null;
 
     protected _menberData:Member = null;
 
@@ -38,7 +38,7 @@ export default class UnionMemItemLogic extends cc.Component {
     }
 
     protected click():void{
-        cc.systemEvent.emit("clickUnionMemberItem", this._menberData);
+        EventMgr.emit("clickUnionMemberItem", this._menberData);
     }
 
     protected kick():void{
@@ -55,8 +55,8 @@ export default class UnionMemItemLogic extends cc.Component {
     }
     
     protected jump():void{
-        cc.systemEvent.emit("close_union");
-        cc.systemEvent.emit("scroll_to_map", this._menberData.x, this._menberData.y);
+        EventMgr.emit("close_union");
+        EventMgr.emit("scroll_to_map", this._menberData.x, this._menberData.y);
     }
 
 }

@@ -1,9 +1,5 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, ScrollView } from 'cc';
+const {ccclass, property} = _decorator;
 
 import { General } from "../../config/Basci";
 import { SkillConf } from "../../config/skill/Skill";
@@ -12,15 +8,13 @@ import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
 import SkillInfoLogic from "./SkillInfoLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
+@ccclass('SkillLogic')
+export default class SkillLogic extends Component {
 
-const {ccclass, property} = cc._decorator;
-
-@ccclass
-export default class SkillLogic extends cc.Component {
-
-    @property(cc.ScrollView)
-    scrollView: cc.ScrollView = null;
+    @property(ScrollView)
+    scrollView: ScrollView = null;
 
     _general: GeneralData = null;
     _type: number = 0;
@@ -30,14 +24,12 @@ export default class SkillLogic extends cc.Component {
    
     protected onEnable():void{
        
-        cc.systemEvent.on("skill_list_info", this.onSkillList, this);
-        
-
+        EventMgr.on("skill_list_info", this.onSkillList, this);
         SkillCommand.getInstance().qrySkillList();
     }
 
     protected onDisable():void {
-        cc.systemEvent.targetOff(this)
+        EventMgr.targetOff(this)
     }
 
     protected onSkillList(){
@@ -75,7 +67,7 @@ export default class SkillLogic extends cc.Component {
     }
 
     protected onClickItem(data: Skill, target): void {
-        cc.systemEvent.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
+        EventMgr.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
     }
 
 

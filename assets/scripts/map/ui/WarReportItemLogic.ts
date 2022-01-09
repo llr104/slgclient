@@ -1,56 +1,48 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Node, Label } from 'cc';
+const { ccclass, property } = _decorator;
 
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralData } from "../../general/GeneralProxy";
 import LoginCommand from "../../login/LoginCommand";
 import { Role } from "../../login/LoginProxy";
 import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class WarReportItemLogic extends cc.Component {
+@ccclass('WarReportItemLogic')
+export default class WarReportItemLogic extends Component {
 
 
     private _curData:WarReport = null;
 
-    @property(cc.Node)
-    readBg:cc.Node = null;
+    @property(Node)
+    readBg:Node = null;
 
-    @property([cc.Node])
-    ackNode:cc.Node[] = [];
-
-
-    @property([cc.Node])
-    defNode:cc.Node[] = [];
+    @property([Node])
+    ackNode:Node[] = [];
 
 
-    @property(cc.Node)
-    winNode:cc.Node = null;
+    @property([Node])
+    defNode:Node[] = [];
 
 
-    @property(cc.Node)
-    loseNode:cc.Node = null;
+    @property(Node)
+    winNode:Node = null;
 
 
-    @property(cc.Label)
-    timeLabel: cc.Label = null;
+    @property(Node)
+    loseNode:Node = null;
 
 
-    @property(cc.Label)
-    leftLabel: cc.Label = null;
+    @property(Label)
+    timeLabel: Label = null;
 
 
-    @property(cc.Label)
-    rightLabel: cc.Label = null;
+    @property(Label)
+    leftLabel: Label = null;
+
+
+    @property(Label)
+    rightLabel: Label = null;
 
     protected onLoad():void{
         this.winNode.active = this.loseNode.active = false;
@@ -106,9 +98,9 @@ export default class WarReportItemLogic extends cc.Component {
 
 
 
-    protected setTeams(node:cc.Node[],generals:any[]){
+    protected setTeams(node:Node[],generals:any[]){
         for(var i = 0; i < node.length ;i++){
-            let item:cc.Node = node[i];
+            let item:Node = node[i];
             let com = item.getComponent("GeneralItemLogic");
             var general = generals[i];
             if(general){
@@ -130,7 +122,7 @@ export default class WarReportItemLogic extends cc.Component {
             MapUICommand.getInstance().warRead(this._curData.id);
         }
 
-        cc.systemEvent.emit("click_war_report", this._curData);
+        EventMgr.emit("click_war_report", this._curData);
        
     }
 }

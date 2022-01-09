@@ -1,17 +1,6 @@
 
-/*
-*   网络相关接口定义
-*   
-*   2019-10-8 by 宝爷
-*/
-
 export type NetData = (string | ArrayBufferLike | Blob | ArrayBufferView);
 
-
-// 回调对象
-
-
-// 请求对象
 export class RequestObject {
     public json: any   = null;           // 请求的json
     public rspName: string = "";       // 接口名

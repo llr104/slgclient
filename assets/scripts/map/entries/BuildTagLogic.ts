@@ -1,31 +1,30 @@
-import DateUtil from "../../utils/DateUtil";
-import { MapBuildData } from "../MapBuildProxy";
+import { _decorator, Component, Node } from 'cc';
 import MapCommand from "../MapCommand";
 import { MapResData } from "../MapProxy";
-// import MapCommand from "../MapCommand";
+import { EventMgr } from '../../utils/EventMgr';
+const { ccclass, property } = _decorator;
 
-const { ccclass, property } = cc._decorator;
 
-@ccclass
-export default class BuildTagLogic extends cc.Component {
+@ccclass('BuildTagLogic')
+export default class BuildTagLogic extends Component {
    
     protected _data: MapResData = null;
 
-    @property(cc.Node)
-    tagIconNode: cc.Node = null;
+    @property(Node)
+    tagIconNode: Node = null;
 
     protected onLoad(): void {
         this.tagIconNode.active = false;
     }
 
     protected onEnable(): void {
-        cc.systemEvent.on("update_tag", this.onUpdateTag, this);
+        EventMgr.on("update_tag", this.onUpdateTag, this);
 
     }
 
     protected onDisable(): void {
         this._data = null;
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
      public setResourceData(data: MapResData): void {

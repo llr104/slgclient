@@ -1,33 +1,22 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import { _decorator, Component, RichText, Label } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { WarReportRound } from "./MapUIProxy";
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class WarReportDesItemLogic extends cc.Component {
-
+@ccclass('WarReportDesItemLogic')
+export default class WarReportDesItemLogic extends Component {
 
     private _curData:WarReportRound = null;
 
+    @property(RichText)
+    warLab1:RichText = null;
 
-    @property(cc.RichText)
-    warLab1:cc.RichText = null;
+    @property(RichText)
+    warLab2:RichText = null;
 
-    @property(cc.RichText)
-    warLab2:cc.RichText = null;
-
-
-    @property(cc.Label)
-    roundsLabel:cc.Label = null;
+    @property(Label)
+    roundsLabel:Label = null;
 
 
     protected onLoad():void{

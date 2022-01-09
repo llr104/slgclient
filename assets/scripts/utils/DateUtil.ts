@@ -1,3 +1,4 @@
+
 export default class DateUtil {
     protected static _serverTime: number = 0;
     protected static _getServerTime: number = 0;

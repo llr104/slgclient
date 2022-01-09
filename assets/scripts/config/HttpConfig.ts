@@ -1,10 +1,11 @@
-/**http接口配置*/
+// /**http接口配置*/
+// //账号注册
+
+import { _decorator } from 'cc';
 const HttpConfig = {
-    //账号注册
     register: {
         name: "register",
         url: "/account/register"
     },
 }
-
 export { HttpConfig };

@@ -1,3 +1,6 @@
+import { _decorator, Component, Node, Label, ProgressBar, Button, Vec2, tween, UIOpacity, Tween, UITransform } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { ArmyCmd } from "../general/ArmyProxy";
 import DateUtil from "../utils/DateUtil";
 import { MapBuildData } from "./MapBuildProxy";
@@ -5,61 +8,61 @@ import { MapCityData } from "./MapCityProxy";
 import MapCommand from "./MapCommand";
 import { MapResConfig, MapResData, MapResType } from "./MapProxy";
 import MapUICommand from "./ui/MapUICommand";
+import { EventMgr } from '../utils/EventMgr';
 
+@ccclass('MapClickUILogic')
+export default class MapClickUILogic extends Component {
+    @property(Node)
+    bgSelect: Node = null;
+    @property(Label)
+    labelName: Label = null;
+    @property(Label)
+    labelUnion: Label = null;
+    @property(Label)
+    labelLunxian: Label = null;
+    @property(Label)
+    labelPos: Label = null;
+    @property(Label)
+    labelMian: Label = null;
+    @property(Node)
+    bgMain: Node = null;
 
-const { ccclass, property } = cc._decorator;
+    @property(Node)
+    durableNode: Node = null;
+    @property(Label)
+    labelDurable: Label = null;
+    @property(ProgressBar)
+    progressBarDurable: ProgressBar = null;
+    @property(Node)
+    leftInfoNode: Node = null;
+    @property(Label)
+    labelYield: Label = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Button)
+    btnMove: Button = null;
+    @property(Button)
+    btnOccupy: Button = null;
+    @property(Button)
+    btnGiveUp: Button = null;
+    @property(Button)
+    btnReclaim: Button = null;
+    @property(Button)
+    btnEnter: Button = null;
+    @property(Button)
+    btnBuild: Button = null;
+    @property(Button)
+    btnTransfer: Button = null;
 
-@ccclass
-export default class MapClickUILogic extends cc.Component {
-    @property(cc.Node)
-    bgSelect: cc.Node = null;
-    @property(cc.Label)
-    labelName: cc.Label = null;
-    @property(cc.Label)
-    labelUnion: cc.Label = null;
-    @property(cc.Label)
-    labelLunxian: cc.Label = null;
-    @property(cc.Label)
-    labelPos: cc.Label = null;
-    @property(cc.Label)
-    labelMian: cc.Label = null;
-    @property(cc.Node)
-    bgMain: cc.Node = null;
-
-    @property(cc.Node)
-    durableNode: cc.Node = null;
-    @property(cc.Label)
-    labelDurable: cc.Label = null;
-    @property(cc.ProgressBar)
-    progressBarDurable: cc.ProgressBar = null;
-    @property(cc.Node)
-    leftInfoNode: cc.Node = null;
-    @property(cc.Label)
-    labelYield: cc.Label = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Button)
-    btnMove: cc.Button = null;
-    @property(cc.Button)
-    btnOccupy: cc.Button = null;
-    @property(cc.Button)
-    btnGiveUp: cc.Button = null;
-    @property(cc.Button)
-    btnReclaim: cc.Button = null;
-    @property(cc.Button)
-    btnEnter: cc.Button = null;
-    @property(cc.Button)
-    btnBuild: cc.Button = null;
-    @property(cc.Button)
-    btnTransfer: cc.Button = null;
-
-    @property(cc.Button)
-    btnTagAdd: cc.Button = null;
-    @property(cc.Button)
-    btnTagRemove: cc.Button = null;
+    @property(Button)
+    btnTagAdd: Button = null;
+    @property(Button)
+    btnTagRemove: Button = null;
 
     protected _data: any = null;
-    protected _pixelPos: cc.Vec2 = null;
+    protected _pixelPos: Vec2 = null;
+    protected _t = null;
+    
     protected onLoad(): void {
 
     }
@@ -70,17 +73,22 @@ export default class MapClickUILogic extends cc.Component {
     }
 
     protected onEnable(): void {
-        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
+        EventMgr.on("update_build", this.onUpdateBuild, this);
 
-        this.bgSelect.opacity = 255;
-        let tween: cc.Tween = cc.tween(this.bgSelect).to(0.8, { opacity: 0 }).to(0.8, { opacity: 255 });
-        tween = tween.repeatForever(tween);
-        tween.start();
+        var uiOpacity = this.bgSelect.getComponent(UIOpacity);
+        uiOpacity.opacity = 255;
+
+        let t = tween(uiOpacity).to(0.8, { opacity: 0 }).to(0.8, { opacity: 255 });
+        t = t.repeatForever(t);
+        t.start();
+
+        this._t = t;
+    
     }
 
     protected onDisable(): void {
-        cc.systemEvent.targetOff(this);
-        cc.Tween.stopAllByTarget(this.bgSelect);
+        EventMgr.targetOff(this);
+        this._t.stop();
         this.stopCountDown();
     }
 
@@ -95,16 +103,16 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onClickEnter(): void {
         if (this._data instanceof MapBuildData){
-            cc.systemEvent.emit("open_fortress_about", this._data);
+            EventMgr.emit("open_fortress_about", this._data);
         }else if (this._data instanceof MapCityData){
-            cc.systemEvent.emit("open_city_about", this._data);
+            EventMgr.emit("open_city_about", this._data);
         }
        
         this.node.parent = null;
     }
 
     protected onClickReclaim(): void {
-        cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Reclaim, this._data.x, this._data.y);
+        EventMgr.emit("open_army_select_ui", ArmyCmd.Reclaim, this._data.x, this._data.y);
         this.node.parent = null;
     }
 
@@ -121,12 +129,12 @@ export default class MapClickUILogic extends cc.Component {
     protected onClickTransfer(): void{
         console.log("onClickTransfer");
         this.node.parent = null;
-        cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Transfer, this._data.x, this._data.y);
+        EventMgr.emit("open_army_select_ui", ArmyCmd.Transfer, this._data.x, this._data.y);
     }
 
     protected onClickMove(): void {
         if (MapCommand.getInstance().isCanMoveCell(this._data.x, this._data.y)) {
-            cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
+            EventMgr.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
         } else {
             console.log("只能驻军自己占领的地");
         }
@@ -146,7 +154,7 @@ export default class MapClickUILogic extends cc.Component {
 
     protected onClickOccupy(): void {
         if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
-            cc.systemEvent.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
+            EventMgr.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
         } else {
             console.log("只能占领自己相邻的地");
         }
@@ -154,14 +162,16 @@ export default class MapClickUILogic extends cc.Component {
         this.node.parent = null;
     }
 
-    public setCellData(data: any, pixelPos: cc.Vec2): void {
+    public setCellData(data: any, pixelPos: Vec2): void {
         this._data = data;
         this._pixelPos = pixelPos;
         this.labelPos.string = "(" + data.x + ", " + data.y + ")";
         this.leftInfoNode.active = true;
         this.btnReclaim.node.active = false;
         this.btnEnter.node.active = false;
-        this.bgSelect.setContentSize(200, 100);
+        this.bgSelect.getComponent(UITransform).width = 200;
+        this.bgSelect.getComponent(UITransform).height = 100;
+    
         var isTag = MapCommand.getInstance().proxy.isPosTag(this._data.x, this._data.y);
 
         // console.log("isTag:", isTag);

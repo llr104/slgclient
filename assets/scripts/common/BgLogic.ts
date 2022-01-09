@@ -1,7 +1,9 @@
-//因为适配的原因，背景和界面其他元素是分离的，
-//那么背景的缩放包括场景图片背景和弹窗半透明黑色背景都可以挂这个脚本进行缩放
-const { ccclass, property } = cc._decorator;
-//bg缩放类型
+// //因为适配的原因，背景和界面其他元素是分离的，
+// //那么背景的缩放包括场景图片背景和弹窗半透明黑色背景都可以挂这个脚本进行缩放
+
+import { _decorator, Component, Enum, Size, Widget, UITransform, Canvas, game } from 'cc';
+const { ccclass, property } = _decorator;
+
 export enum BgScaleType {
     FULL_SCREEN = 1,
     SCALE_BY_WIDTH = 2,
@@ -9,8 +11,7 @@ export enum BgScaleType {
     SCALE_ONLY_WIDTH = 4,
     SCALE_ONLY_HEIGHT = 5,
 };
-
-//bg对齐方位
+// //bg对齐方位
 export enum BgAlignmentType {
     TOP = 1,
     BOTTOM = 2,
@@ -19,26 +20,25 @@ export enum BgAlignmentType {
     RIGHT = 5
 };
 
-@ccclass
-export default class BgLogic extends cc.Component {
-    @property({ type: cc.Enum(BgScaleType) })
+@ccclass('BgLogic')
+export default class BgLogic extends Component {
+    @property({ type: Enum(BgScaleType) })
     scaleType: BgScaleType = BgScaleType.FULL_SCREEN;
-    @property({ type: cc.Enum(BgAlignmentType) })
+    @property({ type: Enum(BgAlignmentType) })
     alignmentType: BgAlignmentType = BgAlignmentType.CENTER;
-
     protected _realW: number = 0;
     protected _realH: number = 0;
-
     protected onLoad(): void {
-        this._realW = this.node.width;
-        this._realH = this.node.height;
+        this._realW = this.node.getComponent(UITransform).width;
+        this._realH = this.node.getComponent(UITransform).height;
         this.updateFrameSize();
     }
-
     protected updateFrameSize(): void {
-        let winSize: cc.Size = cc.Canvas.instance.node.getContentSize();
-        let scaleW: number = winSize.width / this._realW;
-        let scaleH: number = winSize.height / this._realH;
+        let width = game.canvas.width;
+        let height = game.canvas.height;
+
+        let scaleW: number = width / this._realW;
+        let scaleH: number = height / this._realH;
         let scaleX: number = 1;
         let scaleY: number = 1;
         if (this.scaleType == BgScaleType.SCALE_BY_WIDTH) {
@@ -55,14 +55,15 @@ export default class BgLogic extends cc.Component {
             scaleX = scaleY = Math.max(scaleW, scaleH);
         }
 
-        this.node.width = this._realW * scaleX;
-        this.node.height = this._realH * scaleY;
+        this.node.getComponent(UITransform).width = this._realW * scaleX;
+        this.node.getComponent(UITransform).height = this._realH * scaleY;
 
-        let widget: cc.Widget = this.node.getComponent(cc.Widget);
+        let widget: Widget = this.node.getComponent(Widget);
         if (widget == null) {
-            widget = this.node.addComponent(cc.Widget);
+            widget = this.node.addComponent(Widget);
         }
-        widget.target = cc.Canvas.instance.node;
+
+        widget.target = this.node.parent;
         if (this.alignmentType == BgAlignmentType.BOTTOM) {
             widget.isAlignHorizontalCenter = true;
             widget.isAlignBottom = true;
@@ -85,3 +86,4 @@ export default class BgLogic extends cc.Component {
         }
     }
 }
+

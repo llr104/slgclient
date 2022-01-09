@@ -1,20 +1,22 @@
+import { _decorator, Component, TiledMap, EditBox, Label, Size } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { MapResType } from "../map/MapProxy";
+import { JSB } from 'cc/env';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('MapTool')
+export default class MapTool extends Component {
 
-@ccclass
-export default class MapTool extends cc.Component {
+    @property(TiledMap)
+    tiledMap: TiledMap = null;
 
-    @property(cc.TiledMap)
-    tiledMap: cc.TiledMap = null;
+    @property(EditBox)
+    editBox: EditBox = null;
 
-    @property(cc.EditBox)
-    editBox: cc.EditBox = null;
+    @property(Label)
+    tipsLab: Label = null;
 
-    @property(cc.Label)
-    tipsLab: cc.Label = null;
-
-    protected _mapSize: cc.Size = null;
+    protected _mapSize: Size = null;
     protected _mapGroundIds: number[] = null;
     protected _resList: any[] = null;
 
@@ -74,7 +76,7 @@ export default class MapTool extends cc.Component {
             return
         }
 
-        if (!CC_JSB) {
+        if (!JSB) {
             this.tipsLab.string = "请使用 Windows 模拟器运行";
             return
         }

@@ -1,3 +1,6 @@
+import { _decorator, Component, Label, Node, Prefab, EditBox, Slider, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
 import GeneralCommand from "../../general/GeneralCommand";
 import ArmyCommand from "../../general/ArmyCommand";
@@ -9,41 +12,40 @@ import { CityAddition, CityAdditionType, Facility } from "./MapUIProxy";
 import CityGeneralItemLogic from "./CityGeneralItemLogic";
 import LoginCommand from "../../login/LoginCommand";
 import { Conscript } from "../../config/Basci";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class CityArmySettingLogic extends cc.Component {
-    @property(cc.Label)
-    labelId: cc.Label = null;
-    @property(cc.Label)
-    labelCost: cc.Label = null;
-    @property(cc.Label)
-    labelSoldierCnt: cc.Label = null;
-    @property(cc.Label)
-    labelSpeed: cc.Label = null;
-    @property(cc.Label)
-    labelAtkCity: cc.Label = null;
-    @property(cc.Label)
-    labelAddition: cc.Label = null;
-    @property(cc.Label)
-    labelAdditionTip: cc.Label = null;
-    @property(cc.Node)
-    additionTouchNode: cc.Node = null;
-    @property(cc.Node)
-    additionTipNode: cc.Node = null;
-    @property(cc.Label)
-    labelResCost: cc.Label = null;
-    @property(cc.Node)
-    generalLayer: cc.Node = null;
-    @property(cc.Prefab)
-    generalPrefab: cc.Prefab = null;
-    @property([cc.EditBox])
-    editBoxs: cc.EditBox[] = [];
-    @property([cc.Slider])
-    sliders: cc.Slider[] = [];
-    @property([cc.Node])
-    tipNodes: cc.Node[] = [];
+@ccclass('CityArmySettingLogic')
+export default class CityArmySettingLogic extends Component {
+    @property(Label)
+    labelId: Label = null;
+    @property(Label)
+    labelCost: Label = null;
+    @property(Label)
+    labelSoldierCnt: Label = null;
+    @property(Label)
+    labelSpeed: Label = null;
+    @property(Label)
+    labelAtkCity: Label = null;
+    @property(Label)
+    labelAddition: Label = null;
+    @property(Label)
+    labelAdditionTip: Label = null;
+    @property(Node)
+    additionTouchNode: Node = null;
+    @property(Node)
+    additionTipNode: Node = null;
+    @property(Label)
+    labelResCost: Label = null;
+    @property(Node)
+    generalLayer: Node = null;
+    @property(Prefab)
+    generalPrefab: Prefab = null;
+    @property([EditBox])
+    editBoxs: EditBox[] = [];
+    @property([Slider])
+    sliders: Slider[] = [];
+    @property([Node])
+    tipNodes: Node[] = [];
 
     protected _generalCnt: number = 3;
     protected _order: number = 0;
@@ -63,9 +65,9 @@ export default class CityArmySettingLogic extends cc.Component {
     protected onLoad(): void {
         this.initView();
         this.additionTipNode.active = false;
-        this.additionTouchNode.on(cc.Node.EventType.TOUCH_START, this.onShowAdditionTip, this);
-        this.additionTouchNode.on(cc.Node.EventType.TOUCH_END, this.onHideAdditionTip, this);
-        this.additionTouchNode.on(cc.Node.EventType.TOUCH_CANCEL, this.onHideAdditionTip, this);
+        this.additionTouchNode.on(Node.EventType.TOUCH_START, this.onShowAdditionTip, this);
+        this.additionTouchNode.on(Node.EventType.TOUCH_END, this.onHideAdditionTip, this);
+        this.additionTouchNode.on(Node.EventType.TOUCH_CANCEL, this.onHideAdditionTip, this);
     }
 
     protected onDestroy(): void {
@@ -80,13 +82,13 @@ export default class CityArmySettingLogic extends cc.Component {
         this._conTimes = [0, 0, 0];
         this._conCnts = [0, 0, 0];
 
-        cc.systemEvent.on("update_army", this.onUpdateArmy, this);
-        cc.systemEvent.on("chosed_general", this.onChooseGeneral, this);
-        cc.systemEvent.on("update_city_addition", this.onUpdateAddition, this);
+        EventMgr.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on("chosed_general", this.onChooseGeneral, this);
+        EventMgr.on("update_city_addition", this.onUpdateAddition, this);
     }
 
     protected onDisable(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._data = null;
         this._addition = null;
         this._cityData = null;
@@ -94,7 +96,7 @@ export default class CityArmySettingLogic extends cc.Component {
 
     protected initView(): void {
         for (let i: number = 0; i < this._generalCnt; i++) {
-            let item: cc.Node = cc.instantiate(this.generalPrefab);
+            let item: Node = instantiate(this.generalPrefab);
             item.parent = this.generalLayer;
             let comp: CityGeneralItemLogic = item.getComponent(CityGeneralItemLogic);
             comp.index = i;
@@ -272,7 +274,7 @@ export default class CityArmySettingLogic extends cc.Component {
         }
     }
 
-    protected onChangeEditBox(editBox: cc.EditBox): void {
+    protected onChangeEditBox(editBox: EditBox): void {
         let index: number = this.editBoxs.indexOf(editBox);
         if (index >= 0) {
             this.setCurConscriptForIndex(index, parseInt(this.editBoxs[index].string));
@@ -280,7 +282,7 @@ export default class CityArmySettingLogic extends cc.Component {
         }
     }
 
-    protected onChangeSlider(slider: cc.Slider): void {
+    protected onChangeSlider(slider: Slider): void {
         let index: number = this.sliders.indexOf(slider);
         if (index >= 0) {
             let maxCnt: number = this._totalSoldiers[index] - this._soldiers[index];

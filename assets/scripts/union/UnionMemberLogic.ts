@@ -1,49 +1,43 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, ScrollView, Node, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
 
 import UnionCommand from "./UnionCommand";
 import { Member, Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import UnionMemberItemOpLogic from "./UnionMemberItemOpLogic";
+import { EventMgr } from '../utils/EventMgr';
 
+@ccclass('UnionMemberLogic')
+export default class UnionMemberLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(ScrollView)
+    memberView:ScrollView = null;
 
-@ccclass
-export default class UnionMemberLogic extends cc.Component {
+    @property(Node)
+    disMissButton: Node = null;
 
-    @property(cc.ScrollView)
-    memberView:cc.ScrollView = null;
+    @property(Node)
+    exitButton: Node = null;
 
-    @property(cc.Node)
-    disMissButton: cc.Node = null;
+    @property(Node)
+    opNode: Node = null;
 
-    @property(cc.Node)
-    exitButton: cc.Node = null;
-
-    @property(cc.Node)
-    opNode: cc.Node = null;
-
-    protected _op: cc.Node = null;
+    protected _op: Node = null;
 
     protected onLoad():void{
 
-        cc.systemEvent.on("update_union_member",this.updateMember,this);
-        cc.systemEvent.on("kick_union_success",this.getMember,this);
-        cc.systemEvent.on("union_appoint",this.getMember,this);
-        cc.systemEvent.on("union_abdicate",this.getMember,this);
-        cc.systemEvent.on("clickUnionMemberItem",this.onClickItem,this);
+        EventMgr.on("update_union_member",this.updateMember,this);
+        EventMgr.on("kick_union_success",this.getMember,this);
+        EventMgr.on("union_appoint",this.getMember,this);
+        EventMgr.on("union_abdicate",this.getMember,this);
+        EventMgr.on("clickUnionMemberItem",this.onClickItem,this);
         
 
     }
 
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected click():void{
@@ -54,7 +48,7 @@ export default class UnionMemberLogic extends cc.Component {
 
     protected onClickItem(menberData):void{
         if (this._op == null){
-            var node = cc.instantiate(this.opNode);
+            var node = instantiate(this.opNode);
             node.parent = this.node;
             this._op = node;
         }

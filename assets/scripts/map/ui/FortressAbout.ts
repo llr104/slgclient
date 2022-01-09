@@ -1,33 +1,35 @@
+import { _decorator, Component, Node, Label, Button, Prefab, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
 import ArmyCommand from "../../general/ArmyCommand";
 import { ArmyData } from "../../general/ArmyProxy";
 import DateUtil from "../../utils/DateUtil";
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
-import { MapAreaData, MapResType } from "../MapProxy";
+import { MapResType } from "../MapProxy";
 import CityArmyItemLogic from "./CityArmyItemLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class FortressAbout extends cc.Component {
-    @property(cc.Node)
-    armyLayer: cc.Node = null;
-    @property(cc.Label)
-    nameLab: cc.Label = null;
-    @property(cc.Label)
-    lvLab: cc.Label = null;
-    @property(cc.Label)
-    timeLab: cc.Label = null;
+@ccclass('FortressAbout')
+export default class FortressAbout extends Component {
+    @property(Node)
+    armyLayer: Node = null;
+    @property(Label)
+    nameLab: Label = null;
+    @property(Label)
+    lvLab: Label = null;
+    @property(Label)
+    timeLab: Label = null;
 
 
-    @property(cc.Button)
-    upBtn: cc.Button = null;
+    @property(Button)
+    upBtn: Button = null;
 
-    @property(cc.Button)
-    destroyBtn: cc.Button = null;
+    @property(Button)
+    destroyBtn: Button = null;
 
-    @property(cc.Prefab)
-    armyItem: cc.Prefab = null;
+    @property(Prefab)
+    armyItem: Prefab = null;
 
     protected _armyCnt: number = 5;//队伍数量 固定值
     protected _data: MapBuildData = null;
@@ -41,20 +43,20 @@ export default class FortressAbout extends cc.Component {
     }
 
     onEnable (): void{
-        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
-        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
-        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+        EventMgr.on("update_builds", this.onUpdateBuilds, this);
+        EventMgr.on("update_build", this.onUpdateBuild, this);
+        EventMgr.on("delete_build", this.onDeleteBuild, this);
 
         this.initView();
     }
 
     protected onDisable(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected initView(): void {
         for (let i: number = 0; i < this._armyCnt; i++) {
-            let item = cc.instantiate(this.armyItem);
+            let item = instantiate(this.armyItem);
             item.parent = this.armyLayer;
             let comp: CityArmyItemLogic = item.getComponent(CityArmyItemLogic);
             comp.order = i + 1;

@@ -1,8 +1,9 @@
+import { _decorator } from 'cc';
+
 import { NetManager } from "../network/socket/NetManager";
 import { ServerConfig } from "../config/ServerConfig";
-import { MapCityData } from "../map/MapCityProxy";
-import MapCommand from "../map/MapCommand";
 import ChatProxy from "./ChatProxy";
+import { EventMgr } from '../utils/EventMgr';
 
 export default class ChatCommand {
     //单例
@@ -30,9 +31,9 @@ export default class ChatCommand {
     //数据model
 
     constructor() {
-        // cc.systemEvent.on(ServerConfig.chat_chat, this.onChat, this)
-        cc.systemEvent.on(ServerConfig.chat_history, this.onChatHistory, this)
-        cc.systemEvent.on(ServerConfig.chat_push, this.onChat, this)
+        EventMgr.on(ServerConfig.chat_chat, this.onChat, this)
+        EventMgr.on(ServerConfig.chat_history, this.onChatHistory, this)
+        EventMgr.on(ServerConfig.chat_push, this.onChat, this)
     }
 
     protected onChat(data:any):void{
@@ -43,7 +44,7 @@ export default class ChatCommand {
             }else if (data.msg.type == 1){
                 this._proxy.updateUnionChat(data.msg);
             }
-            cc.systemEvent.emit("update_chat_history");
+            EventMgr.emit("update_chat_history");
         }
     }
 
@@ -56,12 +57,12 @@ export default class ChatCommand {
             }else if(data.msg.type == 1){
                 this._proxy.updateUnionChatList(data.msg.msgs);
             }
-            cc.systemEvent.emit("update_chat_history");
+            EventMgr.emit("update_chat_history");
         }
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public clearData(): void {

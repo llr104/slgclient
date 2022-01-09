@@ -1,23 +1,25 @@
+import { _decorator, Node, Vec2, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import MapUtil from "./MapUtil";
 import SysCityLogic from "./entries/SysCityLogic";
 import { MapBuildData } from "./MapBuildProxy";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
+@ccclass('MapSysCityLogic')
 export default class MapSysCityLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
-        cc.systemEvent.on("update_builds", this.onUpdateBuilds, this);
-        cc.systemEvent.on("update_build", this.onUpdateBuild, this);
-        cc.systemEvent.on("delete_build", this.onDeleteBuild, this);
+        EventMgr.on("update_builds", this.onUpdateBuilds, this);
+        EventMgr.on("update_build", this.onUpdateBuild, this);
+        EventMgr.on("delete_build", this.onDeleteBuild, this);
 
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         super.onDestroy();
     }
 
@@ -48,10 +50,10 @@ export default class MapSysCityLogic extends MapBaseLayerLogic {
         this.removeItem(areaIndex, id);
     }
 
-    public setItemData(item: cc.Node, data: any): void {
+    public setItemData(item: Node, data: any): void {
         let cityData: MapBuildData = data as MapBuildData;
-        let position: cc.Vec2 = MapUtil.mapCellToPixelPoint(cc.v2(cityData.x, cityData.y));
-        item.setPosition(position);
+        let position: Vec2 = MapUtil.mapCellToPixelPoint(new Vec2(cityData.x, cityData.y));
+        item.setPosition(new Vec3(position.x, position.y, 0));
         item.getComponent(SysCityLogic).setCityData(cityData);
     }
 

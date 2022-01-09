@@ -1,4 +1,7 @@
+
+import { _decorator } from 'cc';
 import { NetEvent } from "./NetInterface";
+import { EventMgr } from '../../utils/EventMgr';
 
 
 export class NetTimerData {
@@ -6,11 +9,6 @@ export class NetTimerData {
     public seq:number = 0;
     public timeId:number = 0;
 }
-
-/*
-*   时间管理
-*
-*/
 
 export class NetTimer {
     private _tokens:any = null;
@@ -39,7 +37,7 @@ export class NetTimer {
     private handleTimeout(id:number = 0):void{
         var data = this._tokens.get(id);
         if(data){
-            cc.systemEvent.emit(NetEvent.ServerTimeOut, data);
+            EventMgr.emit(NetEvent.ServerTimeOut, data);
             this._tokens.delete(id);
         }
     }

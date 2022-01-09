@@ -1,5 +1,5 @@
-import { LocalCache } from "./LocalCache";
 
+import { LocalCache } from "./LocalCache";
 
 export class Tools{
     public static getUUID():string{

@@ -1,17 +1,18 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+// // Learn TypeScript:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
+// // Learn Attribute:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
+// // Learn life-cycle callbacks:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const {ccclass, property} = cc._decorator;
+import { _decorator, Component, Label } from 'cc';
+const {ccclass, property} = _decorator;
 
-@ccclass
-export default class Dialog extends cc.Component {
+@ccclass('Dialog')
+export default class Dialog extends Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property(Label)
+    label: Label = null;
 
     protected closeCallBack: Function = null;
 

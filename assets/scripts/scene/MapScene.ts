@@ -1,3 +1,6 @@
+import { _decorator, Component, Node, Vec2, TiledMap } from 'cc';
+const { ccclass, property } = _decorator;
+
 import MapResBuildLogic from "../map/MapResBuildLogic";
 import MapBuildTipsLogic from "../map/MapBuildTipsLogic";
 import MapCityLogic from "../map/MapCityLogic";
@@ -10,13 +13,12 @@ import MapUtil from "../map/MapUtil";
 import MapFacilityBuildLogic from "../map/MapFacilityBuildLogic";
 import MapBuildTagLogic from "../map/MapBuildTagLogic";
 import MapSysCityLogic from "../map/MapSysCityLogic";
+import { EventMgr } from '../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class MapScene extends cc.Component {
-    @property(cc.Node)
-    mapLayer: cc.Node = null;
+@ccclass('MapScene')
+export default class MapScene extends Component {
+    @property(Node)
+    mapLayer: Node = null;
 
     protected _cmd: MapCommand = null;
     protected _centerX: number = 0;
@@ -25,25 +27,27 @@ export default class MapScene extends cc.Component {
 
     protected onLoad(): void {
         this._cmd = MapCommand.getInstance();
+        
 
         //初始化地图
-        let tiledMap: cc.TiledMap = this.mapLayer.addComponent(cc.TiledMap);
+        let tiledMap: TiledMap = this.mapLayer.addComponent(TiledMap);
         tiledMap.tmxAsset = this._cmd.proxy.tiledMapAsset;
+        
         MapUtil.initMapConfig(tiledMap);
         this._cmd.initData();
-        cc.systemEvent.on("map_show_area_change", this.onMapShowAreaChange, this);
-        cc.systemEvent.on("scroll_to_map", this.onScrollToMap, this);
+        EventMgr.on("map_show_area_change", this.onMapShowAreaChange, this);
+        EventMgr.on("scroll_to_map", this.onScrollToMap, this);
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
-            this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(myCity.x, myCity.y));
+            this.node.getComponent(MapLogic).scrollToMapPoint(new Vec2(myCity.x, myCity.y));
             this.onTimer();//立即执行一次
         });
         this.schedule(this.onTimer, 0.2);
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
         this._cmd.proxy.clearData();
         this._cmd = null;
     }
@@ -61,7 +65,7 @@ export default class MapScene extends cc.Component {
         if (nowTime - this._lastUpPosTime > 1000) {
             this._lastUpPosTime = nowTime;
             //间隔一秒检测中心点是否改变
-            let point: cc.Vec2 = MapCommand.getInstance().proxy.getCurCenterPoint();
+            let point: Vec2 = MapCommand.getInstance().proxy.getCurCenterPoint();
             if (point != null && (this._centerX != point.x || this._centerY != point.y)) {
                 this._centerX = point.x;
                 this._centerY = point.y;
@@ -70,7 +74,7 @@ export default class MapScene extends cc.Component {
         }
     }
 
-    protected onMapShowAreaChange(centerPoint: cc.Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
+    protected onMapShowAreaChange(centerPoint: Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
         console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
@@ -143,6 +147,6 @@ export default class MapScene extends cc.Component {
     }
 
     protected onScrollToMap(x: number, y: number): void {
-        this.node.getComponent(MapLogic).scrollToMapPoint(cc.v2(x, y));
+        this.node.getComponent(MapLogic).scrollToMapPoint(new Vec2(x, y));
     }
 }

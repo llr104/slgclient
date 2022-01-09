@@ -1,32 +1,27 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import { _decorator, Component, EditBox, Toggle } from 'cc';
+const { ccclass, property } = _decorator;
 
 import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "./LoginCommand";
-const { ccclass, property } = cc._decorator;
+import { EventMgr } from '../utils/EventMgr';
 
-@ccclass
-export default class CreateLogic extends cc.Component {
+@ccclass('CreateLogic')
+export default class CreateLogic extends Component {
 
-    @property(cc.EditBox)
-    editName: cc.EditBox = null;
+    @property(EditBox)
+    editName: EditBox = null;
 
 
-    @property(cc.Toggle)
-    manToggle: cc.Toggle = null;
+    @property(Toggle)
+    manToggle: Toggle = null;
     
 
-    @property(cc.Toggle)
-    girlToggle: cc.Toggle = null;
+    @property(Toggle)
+    girlToggle: Toggle = null;
 
 
     protected onLoad():void{
-        cc.systemEvent.on(ServerConfig.role_create, this.create, this);
+        EventMgr.on(ServerConfig.role_create, this.create, this);
         this.editName.string = this.getRandomName();
     }
 
@@ -65,6 +60,6 @@ export default class CreateLogic extends cc.Component {
 
 
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 }

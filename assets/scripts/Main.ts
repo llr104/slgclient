@@ -1,3 +1,6 @@
+import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, UITransform } from 'cc';
+const { ccclass, property } = _decorator;
+
 import { GameConfig } from "./config/GameConfig";
 import LoaderManager, { LoadData, LoadDataType } from "./core/LoaderManager";
 import ArmyCommand from "./general/ArmyCommand";
@@ -12,40 +15,49 @@ import { NetNodeType } from "./network/socket/NetNode";
 import SkillCommand from "./skill/SkillCommand";
 import Toast from "./utils/Toast";
 import { Tools } from "./utils/Tools";
+import { EventMgr } from './utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('Main')
+export default class Main extends Component {
+    @property(Prefab)
+    loginScenePrefab: Prefab = null;
 
-@ccclass
-export default class Main extends cc.Component {
-    @property(cc.Prefab)
-    loginScenePrefab: cc.Prefab = null;
+    @property(Prefab)
+    mapScenePrefab: Prefab = null;
+    @property(Prefab)
+    mapUIScenePrefab: Prefab = null;
 
-    @property(cc.Prefab)
-    mapScenePrefab: cc.Prefab = null;
-    @property(cc.Prefab)
-    mapUIScenePrefab: cc.Prefab = null;
-
-    @property(cc.Prefab)
-    loadingPrefab: cc.Prefab = null;
+    @property(Prefab)
+    loadingPrefab: Prefab = null;
 
 
-    @property(cc.Prefab)
-    waitPrefab: cc.Prefab = null;
+    @property(Prefab)
+    waitPrefab: Prefab = null;
 
-    @property(cc.Prefab)
-    toastPrefab: cc.Prefab = null;
+    @property(Prefab)
+    toastPrefab: Prefab = null;
 
-    @property(cc.Node)
-    toastNode: cc.Node = null;
+    private toastNode: Node = null;
 
-    protected _loginScene: cc.Node = null;
-    protected _mapScene: cc.Node = null;
-    protected _mapUIScene: cc.Node = null;
-    protected _loadingNode: cc.Node = null;
-    protected _waitNode: cc.Node = null;
+    protected _loginScene: Node = null;
+    protected _mapScene: Node = null;
+    protected _mapUIScene: Node = null;
+    protected _loadingNode: Node = null;
+    protected _waitNode: Node = null;
     private _retryTimes: number = 0;
 
     protected onLoad(): void {
+
+        console.log("main load");
+        
+
+        EventMgr.on("enter_map", this.onEnterMap, this);
+        EventMgr.on("enter_login", this.enterLogin, this);
+        EventMgr.on("show_toast", this.onShowToast, this);
+        EventMgr.on(NetEvent.ServerRequesting, this.showWaitNode,this);
+        EventMgr.on(NetEvent.ServerRequestSucess,this.onServerRequest,this);
+
+
         //初始化连接
         NetManager.getInstance().connect({ url: GameConfig.serverUrl , type:NetNodeType.BaseServer });
         HttpManager.getInstance().setWebUrl(GameConfig.webUrl);
@@ -58,16 +70,11 @@ export default class Main extends cc.Component {
         ArmyCommand.getInstance();
 
         this.enterLogin();
-        cc.systemEvent.on("enter_map", this.onEnterMap, this);
-        cc.systemEvent.on("enter_login", this.enterLogin, this);
-        cc.systemEvent.on("show_toast", this.onShowToast, this);
-        cc.systemEvent.on(NetEvent.ServerRequesting, this.showWaitNode,this);
-        cc.systemEvent.on(NetEvent.ServerRequestSucess,this.onServerRequest,this);
-
+       
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected clearData(): void {
@@ -79,24 +86,24 @@ export default class Main extends cc.Component {
     private enterLogin(): void {
         this.clearAllScene();
         this.clearData();
-        this._loginScene = cc.instantiate(this.loginScenePrefab);
+        this._loginScene = instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
     }
 
     protected onEnterMap(): void {
         let dataList: LoadData[] = [];
-        dataList.push(new LoadData("./world/map", LoadDataType.FILE, cc.TiledMapAsset));
-        dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, cc.JsonAsset));
-        dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, cc.JsonAsset));
-        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
-        if(cc.sys.isBrowser){
-            dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, cc.SpriteFrame));
+        dataList.push(new LoadData("./world/map", LoadDataType.FILE, TiledMapAsset));
+        dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, JsonAsset));
+        dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, JsonAsset));
+        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, JsonAsset));
+        if(sys.isBrowser){
+            dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, SpriteFrame));
         }else{
-            dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
+            dataList.push(new LoadData("./generalpic", LoadDataType.DIR, SpriteFrame));
         }
        
-        dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
-        dataList.push(new LoadData("./config/json/skill/", LoadDataType.DIR, cc.JsonAsset));
+        dataList.push(new LoadData("./config/basic", LoadDataType.FILE, JsonAsset));
+        dataList.push(new LoadData("./config/json/skill/", LoadDataType.DIR, JsonAsset));
 
         this.addLoadingNode();
         console.log("onEnterMap");
@@ -107,17 +114,17 @@ export default class Main extends cc.Component {
                     return;
                 }
                 console.log("loadComplete", paths, datas);
-                MapCommand.getInstance().proxy.tiledMapAsset = datas[0] as cc.TiledMapAsset;
-                MapCommand.getInstance().proxy.initMapResConfig((datas[1] as cc.JsonAsset).json);
+                MapCommand.getInstance().proxy.tiledMapAsset = datas[0] as TiledMapAsset;
+                MapCommand.getInstance().proxy.initMapResConfig((datas[1] as JsonAsset).json);
 
                 MapUICommand.getInstance().proxy.setAllFacilityCfg(datas[2]);
-                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as cc.JsonAsset).json);
+                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[3],(datas[5] as JsonAsset).json);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[4]);
                 MapUICommand.getInstance().proxy.setBasic(datas[5]);
                 SkillCommand.getInstance().proxy.initSkillConfig(datas[6]);
 
-                var d = (datas[5] as cc.JsonAsset).json
-                MapCommand.getInstance().proxy.setWarFree(d.build.war_free);
+                var d = (datas[5] as JsonAsset).json
+                MapCommand.getInstance().proxy.setWarFree(d["build"].war_free);
 
                 let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
                 GeneralCommand.getInstance().qryMyGenerals();
@@ -126,9 +133,9 @@ export default class Main extends cc.Component {
                 SkillCommand.getInstance().qrySkillList();
 
                 this.clearAllScene();
-                this._mapScene = cc.instantiate(this.mapScenePrefab);
+                this._mapScene = instantiate(this.mapScenePrefab);
                 this._mapScene.parent = this.node;
-                this._mapUIScene = cc.instantiate(this.mapUIScenePrefab);
+                this._mapUIScene = instantiate(this.mapUIScenePrefab);
                 this._mapUIScene.parent = this.node;
             },
             this
@@ -138,9 +145,9 @@ export default class Main extends cc.Component {
     protected addLoadingNode(): void {
         if (this.loadingPrefab) {
             if (this._loadingNode == null) {
-                this._loadingNode = cc.instantiate(this.loadingPrefab);
+                this._loadingNode = instantiate(this.loadingPrefab);
             }
-            this._loadingNode.zIndex = 1;
+            this._loadingNode.getComponent(UITransform).priority = 1;
             this._loadingNode.parent = this.node;
         }
     }
@@ -148,9 +155,9 @@ export default class Main extends cc.Component {
 
     protected showWaitNode(isShow:boolean):void{
         if (this._waitNode == null) {
-            this._waitNode = cc.instantiate(this.waitPrefab);
+            this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
-            this._waitNode.zIndex = 2;
+            this._waitNode.getComponent(UITransform).priority = 2;
         }
         this._waitNode.active = isShow;
 
@@ -159,9 +166,9 @@ export default class Main extends cc.Component {
 
     protected showTopToast(text:string = ""):void{
         if(this.toastNode == null){
-            let toast = cc.instantiate(this.toastPrefab);
+            let toast = instantiate(this.toastPrefab);
             toast.parent = this.node;
-            toast.zIndex = 10;
+            toast.getComponent(UITransform).priority = 10;
             this.toastNode = toast;
         }
         this.toastNode.active = true;

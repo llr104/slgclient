@@ -1,27 +1,21 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, EditBox, Label } from 'cc';
+const { ccclass, property } = _decorator;
 
 import { LocalCache } from "../utils/LocalCache";
 import LoginCommand from "./LoginCommand";
+import { EventMgr } from '../utils/EventMgr';
 
+@ccclass('LoginLogic')
+export default class LoginLogic extends Component {
 
-const { ccclass, property } = cc._decorator;
+    @property(EditBox)
+    editName:EditBox = null;
 
-@ccclass
-export default class LoginLogic extends cc.Component {
-
-    @property(cc.EditBox)
-    editName: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    editPass: cc.Label = null;
+    @property(EditBox)
+    editPass:Label = null;
 
     protected onLoad(): void {
-        cc.systemEvent.on("loginComplete", this.onLoginComplete, this);
+        EventMgr.on("loginComplete", this.onLoginComplete, this);
 
         var data = LocalCache.getLoginValidation();
         console.log("LoginLogic  data:",data)
@@ -32,7 +26,7 @@ export default class LoginLogic extends cc.Component {
     }
 
     protected onDestroy(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onLoginComplete():void {

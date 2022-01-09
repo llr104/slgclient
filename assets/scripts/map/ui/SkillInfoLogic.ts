@@ -1,9 +1,5 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Label, Node, Button } from 'cc';
+const {ccclass, property} = _decorator;
 
 import { SkillConf, SkillOutline } from "../../config/skill/Skill";
 import GeneralCommand from "../../general/GeneralCommand";
@@ -11,48 +7,47 @@ import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
 import SkillIconLogic from "./SkillIconLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-const {ccclass, property} = cc._decorator;
+@ccclass('SkillInfoLogic')
+export default class SkillInfoLogic extends Component {
 
-@ccclass
-export default class SkillInfoLogic extends cc.Component {
+    @property(Label)
+    nameLab: Label = null;
 
-    @property(cc.Label)
-    nameLab: cc.Label = null;
-
-    @property(cc.Node)
-    icon:cc.Node = null;
+    @property(Node)
+    icon:Node = null;
 
  
-    @property(cc.Label)
-    lvLab: cc.Label = null;
+    @property(Label)
+    lvLab: Label = null;
 
-    @property(cc.Label)
-    triggerLab: cc.Label = null;
+    @property(Label)
+    triggerLab: Label = null;
 
-    @property(cc.Label)
-    targetLab: cc.Label = null;
+    @property(Label)
+    targetLab: Label = null;
 
-    @property(cc.Label)
-    armLab: cc.Label = null;
+    @property(Label)
+    armLab: Label = null;
 
-    @property(cc.Label)
-    rateLab: cc.Label = null;
+    @property(Label)
+    rateLab: Label = null;
 
-    @property(cc.Label)
-    curDesLab: cc.Label = null;
+    @property(Label)
+    curDesLab: Label = null;
 
-    @property(cc.Label)
-    nextDesLab: cc.Label = null;
+    @property(Label)
+    nextDesLab: Label = null;
 
-    @property(cc.Button)
-    learnBtn: cc.Button = null;
+    @property(Button)
+    learnBtn: Button = null;
 
-    @property(cc.Button)
-    lvBtn: cc.Button = null;
+    @property(Button)
+    lvBtn: Button = null;
 
-    @property(cc.Button)
-    giveUpBtn: cc.Button = null;
+    @property(Button)
+    giveUpBtn: Button = null;
 
     _data: Skill = null;
     _cfg: SkillConf = null;
@@ -154,7 +149,7 @@ export default class SkillInfoLogic extends cc.Component {
         if(this._general){
             GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;
-            cc.systemEvent.emit("close_skill");
+            EventMgr.emit("close_skill");
         }
     }
 
@@ -162,7 +157,7 @@ export default class SkillInfoLogic extends cc.Component {
         if(this._general){
             GeneralCommand.getInstance().lvSkill(this._general.id, this._skillPos);
             this.node.active = false;
-            cc.systemEvent.emit("close_skill");
+            EventMgr.emit("close_skill");
         }
     }
 
@@ -170,7 +165,7 @@ export default class SkillInfoLogic extends cc.Component {
         if(this._general){
             GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;
-            cc.systemEvent.emit("close_skill");
+            EventMgr.emit("close_skill");
         }
     }
 }

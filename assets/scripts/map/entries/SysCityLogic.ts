@@ -1,26 +1,25 @@
+import { _decorator, Component, Sprite, SpriteAtlas, Node, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
 
 import DateUtil from "../../utils/DateUtil";
-import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
 import { MapResType } from "../MapProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('SysCityLogic')
+export default class SysCityLogic extends Component {
 
-@ccclass
-export default class SysCityLogic extends cc.Component {
+    @property(Sprite)
+    upSpr: Sprite = null;
 
+    @property(Sprite)
+    downSpr: Sprite = null;
 
-    @property(cc.Sprite)
-    upSpr: cc.Sprite = null;
+    @property(SpriteAtlas)
+    resourceAtlas: SpriteAtlas = null;
 
-    @property(cc.Sprite)
-    downSpr: cc.Sprite = null;
-
-    @property(cc.SpriteAtlas)
-    resourceAtlas: cc.SpriteAtlas = null;
-
-    @property(cc.Node)
-    mianNode: cc.Node = null;
+    @property(Node)
+    mianNode: Node = null;
 
     protected _limitTime: number = 0;
     protected _data: any = null;
@@ -31,13 +30,13 @@ export default class SysCityLogic extends cc.Component {
     }
 
     protected onEnable(): void {
-        cc.systemEvent.on("unionChange", this.onUnionChange, this);
+        EventMgr.on("unionChange", this.onUnionChange, this);
     }
 
     protected onDisable(): void {
         this._data = null;
         this.unscheduleAllCallbacks();
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public setCityData(data: any): void {
@@ -64,11 +63,11 @@ export default class SysCityLogic extends cc.Component {
         }
 
         if(this._data.level >= 8){
-            this.node.scale = 1.5;
+            this.node.scale = new Vec3(1.5, 1.5, 1.5);
         }else if(this._data.level >= 5){
-            this.node.scale = 1;
+            this.node.scale = new Vec3(1, 1, 1);
         }else {
-            this.node.scale = 0.5;
+            this.node.scale = new Vec3(0.5, 0.5, 0.5);
         }
 
         if(!this._data.rid){

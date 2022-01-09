@@ -1,14 +1,40 @@
 {
-  "ver": "2.3.5",
+  "ver": "1.0.22",
+  "importer": "image",
+  "imported": true,
   "uuid": "85c6a86e-749f-4dec-aa72-fe6ef6f90278",
-  "type": "raw",
-  "wrapMode": "clamp",
-  "filterMode": "bilinear",
-  "premultiplyAlpha": false,
-  "genMipmaps": false,
-  "packable": true,
-  "width": 1000,
-  "height": 500,
-  "platformSettings": {},
-  "subMetas": {}
+  "files": [
+    ".png",
+    ".json"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "85c6a86e-749f-4dec-aa72-fe6ef6f90278@6c48a",
+      "displayName": "map_frame_color",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "85c6a86e-749f-4dec-aa72-fe6ef6f90278"
+      },
+      "ver": "1.0.21",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "texture",
+    "hasAlpha": true,
+    "redirect": "85c6a86e-749f-4dec-aa72-fe6ef6f90278@6c48a"
+  }
 }

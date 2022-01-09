@@ -1,4 +1,6 @@
-/**服务器接口配置*/
+// /**服务器接口配置*/
+import { _decorator } from 'cc';
+
 const ServerConfig = {
     account_login: "account.login",
     account_logout: "account.logout",

@@ -1,15 +1,15 @@
-
 import { HttpConfig } from "../config/HttpConfig";
 import { ServerConfig } from "../config/ServerConfig";
 import { HttpManager } from "../network/http/HttpManager";
 import { NetManager } from "../network/socket/NetManager";
 import { Tools } from "../utils/Tools";
-import CryptoJS = require("../libs/crypto/crypto-js.min");
 import LoginProxy from "./LoginProxy";
 import { NetEvent } from "../network/socket/NetInterface";
 import MapCommand from "../map/MapCommand";
 import { LocalCache } from "../utils/LocalCache";
 import DateUtil from "../utils/DateUtil";
+import { EventMgr } from "../utils/EventMgr";
+import { Md5 } from "../libs/crypto/md5";
 
 export default class LoginCommand {
     //单例
@@ -34,26 +34,26 @@ export default class LoginCommand {
     protected _proxy: LoginProxy = new LoginProxy();
 
     constructor() {
-        cc.systemEvent.on(NetEvent.ServerCheckLogin, this.onServerConneted, this);
-        cc.systemEvent.on(HttpConfig.register.name, this.onRegister, this);
-        cc.systemEvent.on(ServerConfig.account_login, this.onAccountLogin, this);
-        cc.systemEvent.on(ServerConfig.role_enterServer, this.onEnterServer, this);
-        cc.systemEvent.on(ServerConfig.account_reLogin, this.onAccountRelogin, this);
-        cc.systemEvent.on(ServerConfig.role_create, this.onRoleCreate, this);
-        cc.systemEvent.on(ServerConfig.account_logout, this.onAccountLogout, this);
-        cc.systemEvent.on(ServerConfig.account_robLogin, this.onAccountRobLogin, this)
-        cc.systemEvent.on(ServerConfig.chat_login, this.onChatLogin, this)
+        EventMgr.on(NetEvent.ServerCheckLogin, this.onServerConneted, this);
+        EventMgr.on(HttpConfig.register.name, this.onRegister, this);
+        EventMgr.on(ServerConfig.account_login, this.onAccountLogin, this);
+        EventMgr.on(ServerConfig.role_enterServer, this.onEnterServer, this);
+        EventMgr.on(ServerConfig.account_reLogin, this.onAccountRelogin, this);
+        EventMgr.on(ServerConfig.role_create, this.onRoleCreate, this);
+        EventMgr.on(ServerConfig.account_logout, this.onAccountLogout, this);
+        EventMgr.on(ServerConfig.account_robLogin, this.onAccountRobLogin, this)
+        EventMgr.on(ServerConfig.chat_login, this.onChatLogin, this)
 
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     //抢登录
     private onAccountRobLogin(): void{
         console.log("onAccountRobLogin")
-        cc.systemEvent.emit("robLoginUI");
+        EventMgr.emit("robLoginUI");
     }
 
     /**注册回调*/
@@ -75,7 +75,7 @@ export default class LoginCommand {
 
 
             this.role_enterServer(this._proxy.getSession());           
-            cc.systemEvent.emit("loginComplete", data.code);
+            EventMgr.emit("loginComplete", data.code);
         }
         
     }
@@ -85,7 +85,7 @@ export default class LoginCommand {
         console.log("LoginProxy  enter:", data,isLoadMap);
         //没有创建打开创建
         if (data.code == 9) {
-            cc.systemEvent.emit("CreateRole");
+            EventMgr.emit("CreateRole");
             DateUtil.setServerTime(data.msg.time);
         } else {
             if(data.code == 0){
@@ -99,9 +99,9 @@ export default class LoginCommand {
                 if(isLoadMap == true){
                     console.log("enterServerComplete");
                     MapCommand.getInstance().enterMap();
-                    cc.systemEvent.emit("enterServerComplete");
+                    EventMgr.emit("enterServerComplete");
                 }else{
-                    cc.systemEvent.emit(NetEvent.ServerHandShake);
+                    EventMgr.emit(NetEvent.ServerHandShake);
                 }
 
             }
@@ -118,7 +118,7 @@ export default class LoginCommand {
         if (loginData) {
             this.account_reLogin(loginData.session);
         }else{
-            cc.systemEvent.emit(NetEvent.ServerHandShake);
+            EventMgr.emit(NetEvent.ServerHandShake);
         }
     }
 
@@ -127,7 +127,7 @@ export default class LoginCommand {
         //断线重新登录
         console.log("LoginProxy  relogin:", data);
         if(data.code == 0){
-            // cc.systemEvent.emit(NetEvent.ServerHandShake);
+            // EventMgr.emit(NetEvent.ServerHandShake);
             this.role_enterServer(this._proxy.getSession(),false);
         }
     }
@@ -147,7 +147,7 @@ export default class LoginCommand {
         //重换成功再次调用
         if (data.code == 0) {
             this._proxy.clear();
-            cc.systemEvent.emit("enter_login");
+            EventMgr.emit("enter_login");
         }
     }
 
@@ -168,10 +168,13 @@ export default class LoginCommand {
      * @param data 
      */
     public register(name: string, password: string) {
+
+        var pwd =  Md5.encrypt(password);
         var params = "username=" + name
-            + "&password=" + CryptoJS.SHA256(password).toString()
+            + "&password=" + pwd
             + "&hardware=" + Tools.getUUID();
 
+        console.log("register:", params);
         var otherData = { username: name, password: password };
         HttpManager.getInstance().doGet(HttpConfig.register.name, HttpConfig.register.url, params, otherData);
     }
@@ -181,16 +184,20 @@ export default class LoginCommand {
      * @param data 
      */
     public accountLogin(name: string, password: string) {
+        
         var api_name = ServerConfig.account_login;
+        var pwd =  Md5.encrypt(password);
+
         var send_data = {
             name: api_name,
             msg: {
                 username: name,
-                password: CryptoJS.SHA256(password).toString(),
+                password: pwd,
                 hardware: Tools.getUUID()
             }
         };
 
+        console.log("accountLogin:", send_data);
         var otherData = { username: name, password: password };
         NetManager.getInstance().send(send_data,otherData);
     }

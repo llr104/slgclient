@@ -1,4 +1,7 @@
+// //技能大纲
+// //技能配置
 
+import { _decorator } from 'cc';
 export class trigger {
 	type: number
 	des: string
@@ -15,7 +18,6 @@ export class effect {
 	isRate: boolean
 }
 
-
 export class effectType  {
 	des: string
 	list:effect[] 
@@ -31,13 +33,11 @@ export class targetType {
 	list:target[] 
 }
 
-//技能大纲
 export class SkillOutline {
 	trigger_type: triggerType 
 	effect_type: effectType
 	target_type: targetType
 }
-
 
 export class SkillLevel {
     probability: number     //发动概率
@@ -45,7 +45,6 @@ export class SkillLevel {
     effect_round: number[]  //效果持续回合数
 }
 
-//技能配置
 export class SkillConf {
 	cfgId: number
 	name: string
@@ -57,4 +56,3 @@ export class SkillConf {
     include_effect: number[] //技能包括的效果
     levels:SkillLevel[]
 }
-

@@ -1,9 +1,11 @@
+import { _decorator } from 'cc';
 import { ServerConfig } from "../../config/ServerConfig";
 import LoginCommand from "../../login/LoginCommand";
 import { NetManager } from "../../network/socket/NetManager";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import MapUIProxy, { CityAddition, Facility } from "./MapUIProxy";
+import { EventMgr } from '../../utils/EventMgr';
 
 export default class MapUICommand {
     //单例
@@ -28,16 +30,16 @@ export default class MapUICommand {
     protected _proxy: MapUIProxy = new MapUIProxy();
 
     constructor() {
-        cc.systemEvent.on(ServerConfig.city_facilities, this.onCityFacilities, this);
-        cc.systemEvent.on(ServerConfig.city_upFacility, this.onCityUpFacility, this);
-        cc.systemEvent.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
-        cc.systemEvent.on(ServerConfig.war_report, this.onUpdataWarReports, this);
-        cc.systemEvent.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
-        cc.systemEvent.on(ServerConfig.war_read, this.onUpdataWarRead, this);
-        cc.systemEvent.on(ServerConfig.interior_collect, this.onCollect, this);
-        cc.systemEvent.on(ServerConfig.interior_openCollect, this.onOpenCollect, this);
+        EventMgr.on(ServerConfig.city_facilities, this.onCityFacilities, this);
+        EventMgr.on(ServerConfig.city_upFacility, this.onCityUpFacility, this);
+        EventMgr.on(ServerConfig.role_myRoleRes, this.onRoleMyRoleRes, this);
+        EventMgr.on(ServerConfig.war_report, this.onUpdataWarReports, this);
+        EventMgr.on(ServerConfig.war_reportPush, this.onUpdataWarReport, this);
+        EventMgr.on(ServerConfig.war_read, this.onUpdataWarRead, this);
+        EventMgr.on(ServerConfig.interior_collect, this.onCollect, this);
+        EventMgr.on(ServerConfig.interior_openCollect, this.onOpenCollect, this);
 
-        cc.systemEvent.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
+        EventMgr.on(ServerConfig.roleRes_push, this.updataRoleRes, this);
         
 
         setInterval(() => {
@@ -59,13 +61,13 @@ export default class MapUICommand {
         console.log("onCityFacilities :", data);
         if (data.code == 0) {
             this._proxy.updateMyFacilityList(data.msg.cityId, data.msg.facilities);
-            cc.systemEvent.emit("update_my_facilities");
+            EventMgr.emit("update_my_facilities");
 
             //刷新城池附加加成
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
             cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
-            cc.systemEvent.emit("update_city_addition", data.msg.cityId, addition);
+            EventMgr.emit("update_city_addition", data.msg.cityId, addition);
         }
     }
 
@@ -74,15 +76,15 @@ export default class MapUICommand {
         console.log("onCityUpFacility :", data);
         if (data.code == 0) {
             let facilityData: Facility = this._proxy.updateMyFacility(data.msg.cityId, data.msg.facility);
-            cc.systemEvent.emit("update_my_facility", data.msg.cityId, facilityData);
+            EventMgr.emit("update_my_facility", data.msg.cityId, facilityData);
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("upate_my_roleRes");
+            EventMgr.emit("upate_my_roleRes");
 
             //刷新城池附加加成
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(data.msg.cityId);
             cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
-            cc.systemEvent.emit("update_city_addition", data.msg.cityId, addition);
+            EventMgr.emit("update_city_addition", data.msg.cityId, addition);
         }
     }
 
@@ -91,7 +93,7 @@ export default class MapUICommand {
         console.log("onRoleMyProperty :", data);
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            cc.systemEvent.emit("upate_my_roleRes");
+            EventMgr.emit("upate_my_roleRes");
         }
     }
 
@@ -99,7 +101,7 @@ export default class MapUICommand {
     protected updataRoleRes(data: any): void {
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.setRoleResData(data.msg);
-            cc.systemEvent.emit("upate_my_roleRes");
+            EventMgr.emit("upate_my_roleRes");
         }
     }
 
@@ -108,7 +110,7 @@ export default class MapUICommand {
         console.log("onUpdataWarReport :", data);
         if (data.code == 0) {
             this._proxy.updateWarReports(data.msg);
-            cc.systemEvent.emit("upate_war_report");
+            EventMgr.emit("upate_war_report");
         }
     }
 
@@ -118,7 +120,7 @@ export default class MapUICommand {
         console.log("onUpdataWarReport :", data);
         if (data.code == 0) {
             this._proxy.updateWarReport(data.msg);
-            cc.systemEvent.emit("upate_war_report");
+            EventMgr.emit("upate_war_report");
         }
     }
 
@@ -132,26 +134,26 @@ export default class MapUICommand {
                 this._proxy.updateWarRead(id, true);
             }
            
-            cc.systemEvent.emit("upate_war_report");
+            EventMgr.emit("upate_war_report");
         }
     }
 
     protected onCollect(data:any):void {
         console.log("onCollect :", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("interior_collect", data.msg);
+            EventMgr.emit("interior_collect", data.msg);
         }
     }
 
     protected onOpenCollect(data:any):void{
         console.log("onOpenCollect :", data);
         if (data.code == 0) {
-            cc.systemEvent.emit("interior_openCollect", data.msg);
+            EventMgr.emit("interior_openCollect", data.msg);
         }
     }
 
     public onDestory(): void {
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     public get proxy(): MapUIProxy {
@@ -210,7 +212,7 @@ export default class MapUICommand {
      */
     public updateMyProperty(data: any): void {
         LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-        cc.systemEvent.emit("upate_my_roleRes");
+        EventMgr.emit("upate_my_roleRes");
     }
 
 

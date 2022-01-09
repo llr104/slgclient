@@ -1,23 +1,17 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { _decorator, Component, ScrollView } from 'cc';
+const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig } from "../../general/GeneralProxy";
+import { EventMgr } from '../../utils/EventMgr';
+
+@ccclass('GeneralRosterListLogic')
+export default class GeneralRosterListLogic extends Component {
 
 
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class GeneralRosterListLogic extends cc.Component {
-
-
-    @property(cc.ScrollView)
-    scrollView:cc.ScrollView = null;
+    @property(ScrollView)
+    scrollView:ScrollView = null;
 
     protected onEnable(): void {
         this.initGeneralCfg();
@@ -25,7 +19,7 @@ export default class GeneralRosterListLogic extends cc.Component {
 
     protected onClickClose(): void {
         this.node.active = false;
-        cc.systemEvent.emit("open_general");
+        EventMgr.emit("open_general");
     }
 
 
@@ -50,7 +44,4 @@ export default class GeneralRosterListLogic extends cc.Component {
             return -1;
         }
     }
-
-
-
 }

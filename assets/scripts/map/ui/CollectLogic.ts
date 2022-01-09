@@ -1,38 +1,40 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+// // Learn TypeScript:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
+// // Learn Attribute:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
+// // Learn life-cycle callbacks:
+// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+
+import { _decorator, Component, Label, Button } from 'cc';
+const {ccclass, property} = _decorator;
 
 import LoginCommand from "../../login/LoginCommand";
 import DateUtil from "../../utils/DateUtil";
 import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
+import { EventMgr } from '../../utils/EventMgr';
 
-const {ccclass, property} = cc._decorator;
+@ccclass('CollectLogic')
+export default class CollectLogic extends Component {
 
-@ccclass
-export default class CollectLogic extends cc.Component {
+    @property(Label)
+    cdLab: Label = null;
 
-    @property(cc.Label)
-    cdLab: cc.Label = null;
+    @property(Label)
+    timesLab: Label = null;
 
-    @property(cc.Label)
-    timesLab: cc.Label = null;
+    @property(Label)
+    goldLab: Label = null;
 
-    @property(cc.Label)
-    goldLab: cc.Label = null;
-
-    @property(cc.Button)
-    collectBtn: cc.Button = null;
+    @property(Button)
+    collectBtn: Button = null;
 
     _data: any = null;
 
     protected onEnable():void{
         console.log("add interior_openCollect");
-        cc.systemEvent.on("interior_openCollect", this.onOpenCollect, this);
-        cc.systemEvent.on("interior_collect", this.onCollect, this);
+        EventMgr.on("interior_openCollect", this.onOpenCollect, this);
+        EventMgr.on("interior_collect", this.onCollect, this);
 
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         this.goldLab.string = Tools.numberToShow(roleRes.gold_yield);
@@ -42,7 +44,7 @@ export default class CollectLogic extends cc.Component {
 
 
     protected onDisable():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
 
     protected onOpenCollect(msg:any):void{

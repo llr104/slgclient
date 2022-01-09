@@ -1,3 +1,4 @@
+import { _decorator } from 'cc';
 import LoginCommand from "../login/LoginCommand";
 import { Role } from "../login/LoginProxy";
 import { MapCityData } from "../map/MapCityProxy";

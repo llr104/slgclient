@@ -1,74 +1,58 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Label, Node, EditBox, Button } from 'cc';
+const {ccclass, property} = _decorator;
 
 import UnionCommand from "./UnionCommand";
-import { Member, Union } from "./UnionProxy";
+import { Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
-const {ccclass, property} = cc._decorator;
+import { EventMgr } from '../utils/EventMgr';
 
-@ccclass
-export default class UnionMainLogic extends cc.Component {
-
-    @property(cc.Label)
-    nameLab: cc.Label = null;
-
-    @property(cc.Label)
-    mengZhuLab: cc.Label = null;
-
-    @property(cc.Label)
-    noticeLab: cc.Label = null;
-
-    @property(cc.Node)
-    editNode: cc.Node = null;
-
-    @property(cc.EditBox)
-    editBox: cc.EditBox = null;
-
-    @property(cc.Button)
-    modifyBtn: cc.Button = null;
-
-    @property(cc.Button)
-    applyBtn: cc.Button = null;
-
-    @property(cc.Node)
-    applyRedDot: cc.Node = null;
+@ccclass('UnionMainLogic')
+export default class UnionMainLogic extends Component {
+    @property(Label)
+    nameLab: Label | null = null;
+    @property(Label)
+    mengZhuLab: Label | null = null;
+    @property(Label)
+    noticeLab: Label | null = null;
+    @property(Node)
+    editNode: Node | null = null;
+    @property(EditBox)
+    editBox: EditBox | null = null;
+    @property(Button)
+    modifyBtn: Button | null = null;
+    @property(Button)
+    applyBtn: Button | null = null;
+    @property(Node)
+    applyRedDot: Node | null = null;
     
     onLoad () {
-        cc.systemEvent.on("union_notice",this.onUnionNotice,this);
-        cc.systemEvent.on("union_info",this.onInfo, this);
-        cc.systemEvent.on("update_union_apply", this.onUnionApply, this);
+        EventMgr.on("union_notice",this.onUnionNotice,this);
+        EventMgr.on("union_info",this.onInfo, this);
+        EventMgr.on("update_union_apply", this.onUnionApply, this);
     }
-
     
     protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
+        EventMgr.targetOff(this);
     }
-
     onEnable() {
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         UnionCommand.getInstance().unionInfo(city.unionId);
         this.updateRedDot()
     }
-
     updateRedDot(){
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let cnt = UnionCommand.getInstance().proxy.getApplyCnt(city.unionId);
         this.applyRedDot.active = cnt > 0;
     }
-
     onInfo(){
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         this.nameLab.string = "联盟:" + unionData.name;
         if (unionData.notice == ""){
-            this.noticeLab.string = "暂无公告";
+        this.noticeLab.string = "暂无公告";
         }else{
-            this.noticeLab.string = unionData.notice;
+        this.noticeLab.string = unionData.notice;
         }
         this.mengZhuLab.string = "盟主:" + unionData.getChairman().name
         this.editNode.active = false;
@@ -77,15 +61,12 @@ export default class UnionMainLogic extends cc.Component {
         this.modifyBtn.node.active = ok;
         this.applyBtn.node.active = ok;
     }
-
     onUnionNotice(data){
         this.noticeLab.string = data.text;
     }
-
     onUnionApply(){
-       this.updateRedDot();
+        this.updateRedDot();
     }
-
     onEditSubmit(){
         this.noticeLab.node.active = true;
         this.editNode.active = false;
@@ -94,17 +75,14 @@ export default class UnionMainLogic extends cc.Component {
         var str = this.editBox.string
         UnionCommand.getInstance().modNotice(str);
     }
-
     onModify(){
         this.noticeLab.node.active = false;
         this.editNode.active = true;
         this.modifyBtn.node.active = false;
     }
-
     onCancel(){
         this.noticeLab.node.active = true;
         this.editNode.active = false;
         this.modifyBtn.node.active = true;
     }
-
 }

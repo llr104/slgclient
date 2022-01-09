@@ -1,16 +1,17 @@
+import { _decorator, Component, Sprite, SpriteAtlas } from 'cc';
+const { ccclass, property } = _decorator;
+
 import {MapResData, MapResType } from "../MapProxy";
 
-const { ccclass, property } = cc._decorator;
+@ccclass('ResLogic')
+export default class ResLogic extends Component {
+    @property(Sprite)
+    spr: Sprite = null;
+    @property(SpriteAtlas)
+    resourceAtlas1: SpriteAtlas = null;
 
-@ccclass
-export default class ResLogic extends cc.Component {
-    @property(cc.Sprite)
-    spr: cc.Sprite = null;
-    @property(cc.SpriteAtlas)
-    resourceAtlas1: cc.SpriteAtlas = null;
-
-    @property(cc.SpriteAtlas)
-    resourceAtlas2: cc.SpriteAtlas = null;
+    @property(SpriteAtlas)
+    resourceAtlas2: SpriteAtlas = null;
 
     protected _data: MapResData = null;
 

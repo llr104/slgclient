@@ -1,77 +1,79 @@
+import { _decorator, Component, EditBox, Label, Node, Prefab, ToggleContainer, instantiate, JsonAsset, SpriteFrame } from 'cc';
+const { ccclass, property } = _decorator;
+
 import LoaderManager, { LoadData, LoadDataType } from "../core/LoaderManager";
 import GeneralCommand from "../general/GeneralCommand";
 import { GeneralConfig } from "../general/GeneralProxy";
 import GeneralRosterLogic from "../map/ui/GeneralRosterLogic";
+import { JSB } from 'cc/env';
 
-const { ccclass, property } = cc._decorator;
+@ccclass('GeneralTool')
+export default class GeneralTool extends Component {
 
-@ccclass
-export default class GeneralTool extends cc.Component {
+    @property(EditBox)
+    outDirEditBox: EditBox = null;
 
-    @property(cc.EditBox)
-    outDirEditBox: cc.EditBox = null;
+    @property(Label)
+    tipsLab: Label = null;
 
-    @property(cc.Label)
-    tipsLab: cc.Label = null;
-
-    @property(cc.Node)
-    generalParentNode: cc.Node = null;
+    @property(Node)
+    generalParentNode: Node = null;
     
     
-    @property(cc.Node)
-    opNode: cc.Node = null;
+    @property(Node)
+    opNode: Node = null;
 
-    @property(cc.Prefab)
-    generalRoster: cc.Prefab = null;
+    @property(Prefab)
+    generalRoster: Prefab = null;
 
-    @property(cc.ToggleContainer)
-    toggleCampGroup: cc.ToggleContainer = null;
+    @property(ToggleContainer)
+    toggleCampGroup: ToggleContainer = null;
 
-    @property(cc.ToggleContainer)
-    toggleArmGroup: cc.ToggleContainer = null;
-
-
-    @property(cc.EditBox)
-    nameEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    xjEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    wlEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    mlEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    fyEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    gcEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    sdEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    costEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    wlAddEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    mlAddEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    fyAddEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    gcAddEditBox: cc.EditBox = null;
-
-    @property(cc.EditBox)
-    sdAddEditBox: cc.EditBox = null;
+    @property(ToggleContainer)
+    toggleArmGroup: ToggleContainer = null;
 
 
-    _generalNode: cc.Node = null;
+    @property(EditBox)
+    nameEditBox: EditBox = null;
+
+    @property(EditBox)
+    xjEditBox: EditBox = null;
+
+    @property(EditBox)
+    wlEditBox: EditBox = null;
+
+    @property(EditBox)
+    mlEditBox: EditBox = null;
+
+    @property(EditBox)
+    fyEditBox: EditBox = null;
+
+    @property(EditBox)
+    gcEditBox: EditBox = null;
+
+    @property(EditBox)
+    sdEditBox: EditBox = null;
+
+    @property(EditBox)
+    costEditBox: EditBox = null;
+
+    @property(EditBox)
+    wlAddEditBox: EditBox = null;
+
+    @property(EditBox)
+    mlAddEditBox: EditBox = null;
+
+    @property(EditBox)
+    fyAddEditBox: EditBox = null;
+
+    @property(EditBox)
+    gcAddEditBox: EditBox = null;
+
+    @property(EditBox)
+    sdAddEditBox: EditBox = null;
+
+
+    _generalNode: Node = null;
 
     protected _cfgs: GeneralConfig[] = [];
 
@@ -85,9 +87,9 @@ export default class GeneralTool extends cc.Component {
         this.opNode.active = false;
 
         let dataList: LoadData[] = [];
-        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, cc.JsonAsset));
-        dataList.push(new LoadData("./generalpic", LoadDataType.DIR, cc.SpriteFrame));
-        dataList.push(new LoadData("./config/basic", LoadDataType.FILE, cc.JsonAsset));
+        dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, JsonAsset));
+        dataList.push(new LoadData("./generalpic", LoadDataType.DIR, SpriteFrame));
+        dataList.push(new LoadData("./config/basic", LoadDataType.FILE, JsonAsset));
     
         LoaderManager.getInstance().startLoadList(dataList, null,
             (error: Error, paths: string[], datas: any[]) => {
@@ -97,7 +99,7 @@ export default class GeneralTool extends cc.Component {
                 }
                 console.log("loadComplete", paths, datas);
  
-                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[0],(datas[2] as cc.JsonAsset).json);
+                GeneralCommand.getInstance().proxy.initGeneralConfig(datas[0],(datas[2] as JsonAsset).json);
                 GeneralCommand.getInstance().proxy.initGeneralTex(datas[1]);
 
                 this.loadFinish();
@@ -149,7 +151,7 @@ export default class GeneralTool extends cc.Component {
             }
 
             if(this._generalNode == null){
-                var g = cc.instantiate(this.generalRoster);
+                var g = instantiate(this.generalRoster);
                 g.parent = this.generalParentNode;
                 this._generalNode = g;
             }
@@ -248,7 +250,7 @@ export default class GeneralTool extends cc.Component {
             return
         }
 
-        if (!CC_JSB) {
+        if (!JSB) {
             this.tipsLab.string = "请使用 Windows 模拟器运行";
             return
         }

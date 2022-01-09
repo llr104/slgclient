@@ -1,46 +1,37 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Button, Node } from 'cc';
+const { ccclass, property } = _decorator;
 
-import LoginCommand from "../login/LoginCommand";
-import { Role } from "../login/LoginProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import UnionCommand from "./UnionCommand";
 import { Member, Union } from "./UnionProxy";
 
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class UnionMemberItemOpLogic extends cc.Component {
+@ccclass('UnionMemberItemOpLogic')
+export default class UnionMemberItemOpLogic extends Component {
 
 
-    @property(cc.Button)
-    kickButton: cc.Button = null;
+    @property(Button)
+    kickButton: Button = null;
 
-    @property(cc.Button)
-    abdicateButton: cc.Button = null;
+    @property(Button)
+    abdicateButton: Button = null;
 
-    @property(cc.Button)
-    appointButton: cc.Button = null;
+    @property(Button)
+    appointButton: Button = null;
 
     
-    @property(cc.Button)
-    unAppointButton: cc.Button = null;
+    @property(Button)
+    unAppointButton: Button = null;
     
 
     protected _menberData:Member = null;
 
     protected onLoad():void{
-        this.node.on(cc.Node.EventType.TOUCH_END, this.click, this);
+        this.node.on(Node.EventType.TOUCH_END, this.click, this);
     }
 
     protected onDestroy():void{
-        this.node.off(cc.Node.EventType.TOUCH_END, this.click, this);
+        this.node.off(Node.EventType.TOUCH_END, this.click, this);
     }
 
     protected click():void{

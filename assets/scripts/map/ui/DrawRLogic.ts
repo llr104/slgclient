@@ -1,31 +1,21 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+import { _decorator, Component, Prefab, Layout, instantiate, Vec3 } from 'cc';
+const { ccclass, property } = _decorator;
 
-import { ArmyData } from "../../general/ArmyProxy";
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralCommonConfig } from "../../general/GeneralProxy";
-import LoginCommand from "../../login/LoginCommand";
-import { GeneralItemType } from "./GeneralItemLogic";
+import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
+import { EventMgr } from '../../utils/EventMgr';
+
+@ccclass('DrawRLogic')
+export default class DrawRLogic extends Component {
 
 
-const { ccclass, property } = cc._decorator;
+    @property(Prefab)
+    generalItemPrefab: Prefab = null;
 
-@ccclass
-export default class DrawRLogic extends cc.Component {
+    @property(Layout)
+    tenLayout:Layout = null;
 
-
-    @property(cc.Prefab)
-    generalItemPrefab: cc.Prefab = null;
-
-    @property(cc.Layout)
-    tenLayout:cc.Layout = null;
-
-    @property(cc.Layout)
-    oneLayout:cc.Layout = null;
+    @property(Layout)
+    oneLayout:Layout = null;
 
     private _maxSize:number = 10;
     private _scale:number = 0.4;
@@ -33,16 +23,16 @@ export default class DrawRLogic extends cc.Component {
     protected onLoad():void{
 
         for(var i = 0; i < this._maxSize;i++){
-            let _generalNode = cc.instantiate(this.generalItemPrefab);
+            let _generalNode = instantiate(this.generalItemPrefab);
             _generalNode.parent = this.tenLayout.node;
-            _generalNode.scale = this._scale;
+            _generalNode.scale = new Vec3(this._scale, this._scale, this._scale);
             _generalNode.active = false;
         }
 
 
-        let _generalNode = cc.instantiate(this.generalItemPrefab);
+        let _generalNode = instantiate(this.generalItemPrefab);
         _generalNode.parent = this.oneLayout.node;
-        _generalNode.scale = this._scale
+        _generalNode.scale = new Vec3(this._scale, this._scale, this._scale);
         _generalNode.active = false;
 
     }
@@ -54,7 +44,7 @@ export default class DrawRLogic extends cc.Component {
         if(data.length == 1){
             this.oneLayout.node.active = true;
             var children = this.oneLayout.node.children;
-            let com = children[0].getComponent("GeneralItemLogic");
+            let com = children[0].getComponent(GeneralItemLogic);
             children[0].active = true;
             if(com){
                 com.setData(data[0],GeneralItemType.GeneralNoThing);
@@ -67,7 +57,7 @@ export default class DrawRLogic extends cc.Component {
                 var child = children[i];
                 if(data[i]){
                     child.active = true;
-                    let com = child.getComponent("GeneralItemLogic");
+                    let com = child.getComponent(GeneralItemLogic);
                     if(com){
                         com.setData(data[i],GeneralItemType.GeneralNoThing);
                     }
@@ -80,9 +70,6 @@ export default class DrawRLogic extends cc.Component {
 
     }
 
-    protected onDestroy():void{
-        cc.systemEvent.targetOff(this);
-    }
 
     protected onClickClose(): void {
         this.node.active = false;

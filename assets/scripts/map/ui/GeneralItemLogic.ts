@@ -1,13 +1,13 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import { _decorator, Component, Label, Sprite, Layout, Node, color } from 'cc';
+const { ccclass, property } = _decorator;
 
+import GeneralCommand from "../../general/GeneralCommand";
+import { GeneralCampType, GeneralData } from "../../general/GeneralProxy";
+import GeneralHeadLogic from "./GeneralHeadLogic";
+import { EventMgr } from '../../utils/EventMgr';
 
-/**军队命令*/
+// /**军队命令*/
 export class GeneralItemType {
     static GeneralInfo: number = 0;//武将详情
     static GeneralDispose: number = 1;//武将上阵
@@ -17,47 +17,39 @@ export class GeneralItemType {
 }
 
 
-import GeneralCommand from "../../general/GeneralCommand";
-import { GeneralCampType, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
-import GeneralHeadLogic from "./GeneralHeadLogic";
+@ccclass('GeneralItemLogic')
+export default class GeneralItemLogic extends Component {
 
+    @property(Label)
+    nameLabel: Label = null;
 
-const { ccclass, property } = cc._decorator;
+    @property(Label)
+    lvLabel: Label = null;
 
-@ccclass
-export default class GeneralItemLogic extends cc.Component {
+    @property(Sprite)
+    spritePic:Sprite = null;
 
+    @property(Label)
+    costLabel: Label = null;
 
-    @property(cc.Label)
-    nameLabel: cc.Label = null;
+    @property(Label)
+    campLabel: Label = null;
 
-    @property(cc.Label)
-    lvLabel: cc.Label = null;
-
-    @property(cc.Sprite)
-    spritePic:cc.Sprite = null;
-
-    @property(cc.Label)
-    costLabel: cc.Label = null;
-
-    @property(cc.Label)
-    campLabel: cc.Label = null;
-
-    @property(cc.Label)
-    armLabel: cc.Label = null;
+    @property(Label)
+    armLabel: Label = null;
     
-    @property(cc.Layout)
-    starLayout:cc.Layout = null;
+    @property(Layout)
+    starLayout:Layout = null;
 
-    @property(cc.Node)
-    delNode:cc.Node = null;
+    @property(Node)
+    delNode:Node = null;
 
-    @property(cc.Node)
-    useNode:cc.Node = null;
+    @property(Node)
+    useNode:Node = null;
 
 
-    @property(cc.Node)
-    selectNode:cc.Node = null;
+    @property(Node)
+    selectNode:Node = null;
 
     private _curData:any = null;
     private _type:number = -1;
@@ -78,7 +70,7 @@ export default class GeneralItemLogic extends cc.Component {
 
 
 
-    protected updateItem(curData:any):void{
+    public updateItem(curData:any):void{
         this.updateView(curData);
         this._type = this._curData.type == undefined?-1:this._curData.type;
         this._position = this._curData.position == undefined?0:this._curData.position;
@@ -152,9 +144,9 @@ export default class GeneralItemLogic extends cc.Component {
             if(i < star){
                 childen[i].active = true;
                 if(i < star_lv){
-                    childen[i].color = cc.color(255,0,0);
+                    childen[i].getComponent(Sprite).color = color(255,0,0);
                 }else{
-                    childen[i].color = cc.color(255,255,255);
+                    childen[i].getComponent(Sprite).color = color(255,255,255);
                 }
             }else{
                 childen[i].active = false; 
@@ -175,23 +167,23 @@ export default class GeneralItemLogic extends cc.Component {
 
             //武将详情
              if(this._type == GeneralItemType.GeneralInfo){
-                 cc.systemEvent.emit("open_general_des",cfgData, this._curData);
+                 EventMgr.emit("open_general_des",cfgData, this._curData);
              }
              
              //上阵
              else if(this._type == GeneralItemType.GeneralDispose){
-                 cc.systemEvent.emit("chosed_general", cfgData, this._curData, this._position);
+                 EventMgr.emit("chosed_general", cfgData, this._curData, this._position);
              }
 
              //征兵
              else if(this._type == GeneralItemType.GeneralConScript){
-                 cc.systemEvent.emit("open_army_conscript", this._orderId, this._cityData);
+                 EventMgr.emit("open_army_conscript", this._orderId, this._cityData);
              }
 
              else if(this._type == GeneralItemType.GeneralSelect){
                 this._isSelect = !this._isSelect;
                 this.select(this._isSelect);
-                cc.systemEvent.emit("open_general_select", cfgData, this._curData, this.node);
+                EventMgr.emit("open_general_select", cfgData, this._curData, this.node);
              }
         }
 
@@ -206,7 +198,7 @@ export default class GeneralItemLogic extends cc.Component {
      */
     protected onDelete():void{
         var cfgData = this._curData.config;
-        cc.systemEvent.emit("chosed_general",cfgData,this._curData,-1);
+        EventMgr.emit("chosed_general",cfgData,this._curData,-1);
     }
 
 
