@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Label, ProgressBar, Button, Vec2, tween, UIOpacity, Tween, UITransform } from 'cc';
+import { _decorator, Component, Node, Label, ProgressBar, Button, Vec2, tween, UIOpacity, Tween, UITransform, UIRenderable } from 'cc';
 const { ccclass, property } = _decorator;
 
 import { ArmyCmd } from "../general/ArmyProxy";
@@ -283,7 +283,7 @@ export default class MapClickUILogic extends Component {
                 this.btnBuild.node.active = false;
                 this.btnTransfer.node.active = false;
             }
-            this.bgSelect.setContentSize(600, 300);
+            this.bgSelect.getComponent(UITransform).setContentSize(600, 300);
             this.leftInfoNode.active = false;
             this.durableNode.active = true;
             this.labelDurable.string = Math.ceil(this._data.curDurable/100) + "/" +  Math.ceil(this._data.maxDurable/100);
@@ -296,11 +296,11 @@ export default class MapClickUILogic extends Component {
         if(this._data.type == MapResType.SYS_CITY){
 
             if(this._data.level >= 8){
-                this.bgSelect.setContentSize(960*1.5, 480*1.5);
+                this.bgSelect.getComponent(UITransform).setContentSize(960*1.5, 480*1.5);
             }else if(this._data.level >= 5){
-                this.bgSelect.setContentSize(960, 480);
+                this.bgSelect.getComponent(UITransform).setContentSize(960, 480);
             }else {
-                this.bgSelect.setContentSize(960*0.5, 480*0.5);
+                this.bgSelect.getComponent(UITransform).setContentSize(960*0.5, 480*0.5);
             }
         }
 

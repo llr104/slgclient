@@ -57,18 +57,20 @@ export default class MapLogic extends Component {
     }
 
     protected openCityAbout(data: any): void {
-        this._mapCamera.zoomRatio = this._maxZoomRatio;
+        //this._mapCamera.zoomRatio = this._maxZoomRatio;
     }
 
     protected closeCityAbout(): void {
-        this._mapCamera.zoomRatio = this._minZoomRatio;
+        //this._mapCamera.zoomRatio = this._minZoomRatio;
     }
 
     protected onMouseWheel(event: EventMouse): void {
-        let scrollY: number = event.getScrollY();
-        let changeRatio: number = Number((scrollY / this._changeZoomRadix).toFixed(1));
-        let newZoomRatio: number = Math.min(this._maxZoomRatio, Math.max(this._minZoomRatio, this._mapCamera.zoomRatio + changeRatio));
-        this._mapCamera.zoomRatio = newZoomRatio;
+        console.log("onMouseWheel");
+
+        // let scrollY: number = event.getScrollY();
+        // let changeRatio: number = Number((scrollY / this._changeZoomRadix).toFixed(1));
+        // let newZoomRatio: number = Math.min(this._maxZoomRatio, Math.max(this._minZoomRatio, this._mapCamera.zoomRatio + changeRatio));
+        // this._mapCamera.zoomRatio = newZoomRatio;
     }
 
     protected onTouchMove(event: EventTouch): void {
@@ -135,9 +137,11 @@ export default class MapLogic extends Component {
         // console.log("scrollToMapPoint", pixelPoint.x, pixelPoint.y);
         let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
         let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
-        this._mapCamera.node.x = positionX;
-        this._mapCamera.node.y = positionY;
-        // console.log("scrollToMapPoint", point.x, point.y, this._mapCamera.node.x, this._mapCamera.node.y);
+        let pos = this._mapCamera.node.position.clone();
+        pos.x = positionX;
+        pos.y = positionY;
+        this._mapCamera.node.position = pos;
+  
         this.setCenterMapCellPoint(point, pixelPoint);
     }
 

@@ -75,12 +75,13 @@ export default class ListLogic extends Component {
         this._maxRowColSize = 0;//当前一行或者一列可以显示的最大宽度或者高度
         this._itemWidth = this._itemHeight = 0;
         if (this.itemPrefab) {
-            this._itemWidth = this.itemPrefab.data.width * this.scale;//item宽度
-            this._itemHeight = this.itemPrefab.data.height * this.scale;//item高度
+            
+            this._itemWidth = this.itemPrefab.data.getComponent(UITransform).width * this.scale;//item宽度
+            this._itemHeight = this.itemPrefab.data.getComponent(UITransform).height * this.scale;//item高度
         } else if (this.itemNode) {
             this.itemNode.active = false;
             this._itemWidth = this.itemNode.getComponent(UITransform).width * this.scale;//item宽度
-            this._itemHeight = this.itemNode.getComponent(UITransform).width * this.scale;//item高度
+            this._itemHeight = this.itemNode.getComponent(UITransform).height * this.scale;//item高度
         }
 
         this._isUpdateList = false;//是否正在更新列表
@@ -91,6 +92,9 @@ export default class ListLogic extends Component {
 
         console.log("this._itemHeight:", this._itemHeight);
     }
+
+
+
 
 
     protected onDestroy():void {
@@ -124,6 +128,8 @@ export default class ListLogic extends Component {
     }
 
 
+
+
     protected setCurOffset(curOffset):void {
         if (this._datas == null || this._datas.length == 0) {
             return;//没有数据不执行刷新
@@ -149,6 +155,7 @@ export default class ListLogic extends Component {
         }
     }
 
+    
 
 
     protected setStartIndex(index) {
@@ -183,6 +190,7 @@ export default class ListLogic extends Component {
     }
 
 
+    
         /**设置item实例数量*/
     protected  updateItemCount(count):boolean {
             if (this._itemCount != count) {
@@ -298,6 +306,8 @@ export default class ListLogic extends Component {
         //console.log("updatelist y", this.scrollView.content.y);
     }
 
+
+    
 
 
         //刷新所有item数据

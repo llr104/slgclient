@@ -301,7 +301,7 @@
     "_shutter": 7,
     "_iso": 0,
     "_screenScale": 1,
-    "_visibility": 0,
+    "_visibility": 4,
     "_targetTexture": null,
     "_id": "75wU9TIcFIVo04C8p2Nd7P"
   },
@@ -346,7 +346,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 12
@@ -424,7 +424,7 @@
     "_shutter": 7,
     "_iso": 0,
     "_screenScale": 1,
-    "_visibility": 0,
+    "_visibility": 2,
     "_targetTexture": null,
     "_id": "9dcZO8lNZL0Z5WONTm6D+2"
   },

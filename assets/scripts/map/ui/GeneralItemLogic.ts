@@ -116,7 +116,7 @@ export default class GeneralItemLogic extends Component {
     }
 
     protected armstr(arms:number []): string{
-        console.log("armstr:", arms);
+        // console.log("armstr:", arms);
 
         var str = ""
         if(arms.indexOf(1)>=0 || arms.indexOf(4)>=0 || arms.indexOf(7)>=0){

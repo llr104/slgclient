@@ -147,7 +147,7 @@ export default class Main extends Component {
             if (this._loadingNode == null) {
                 this._loadingNode = instantiate(this.loadingPrefab);
             }
-            this._loadingNode.getComponent(UITransform).priority = 1;
+            this._loadingNode.setSiblingIndex(1);
             this._loadingNode.parent = this.node;
         }
     }
@@ -157,7 +157,7 @@ export default class Main extends Component {
         if (this._waitNode == null) {
             this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
-            this._waitNode.getComponent(UITransform).priority = 2;
+            this._waitNode.setSiblingIndex(2);
         }
         this._waitNode.active = isShow;
 
@@ -168,7 +168,7 @@ export default class Main extends Component {
         if(this.toastNode == null){
             let toast = instantiate(this.toastPrefab);
             toast.parent = this.node;
-            toast.getComponent(UITransform).priority = 10;
+            toast.setSiblingIndex(10);
             this.toastNode = toast;
         }
         this.toastNode.active = true;
