@@ -1,7 +1,7 @@
 // //因为适配的原因，背景和界面其他元素是分离的，
 // //那么背景的缩放包括场景图片背景和弹窗半透明黑色背景都可以挂这个脚本进行缩放
 
-import { _decorator, Component, Enum, Size, Widget, UITransform, Canvas, game } from 'cc';
+import { _decorator, Component, Enum, Widget, UITransform, game, view } from 'cc';
 const { ccclass, property } = _decorator;
 
 export enum BgScaleType {
@@ -31,11 +31,16 @@ export default class BgLogic extends Component {
     protected onLoad(): void {
         this._realW = this.node.getComponent(UITransform).width;
         this._realH = this.node.getComponent(UITransform).height;
+
         this.updateFrameSize();
     }
     protected updateFrameSize(): void {
-        let width = game.canvas.width;
-        let height = game.canvas.height;
+
+        
+        let width = view.getDesignResolutionSize().width;
+        let height = view.getDesignResolutionSize().height;
+
+        console.log("BgLogic updateFrameSize:", width, height);
 
         let scaleW: number = width / this._realW;
         let scaleH: number = height / this._realH;
@@ -63,7 +68,6 @@ export default class BgLogic extends Component {
             widget = this.node.addComponent(Widget);
         }
 
-        widget.target = this.node.parent;
         if (this.alignmentType == BgAlignmentType.BOTTOM) {
             widget.isAlignHorizontalCenter = true;
             widget.isAlignBottom = true;

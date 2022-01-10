@@ -12,5 +12,11 @@
       "name": "map",
       "value": 4
     }
-  ]
+  ],
+  "general": {
+    "designResolution": {
+      "width": 1280,
+      "height": 720
+    }
+  }
 }

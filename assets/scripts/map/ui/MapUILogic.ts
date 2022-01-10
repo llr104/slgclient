@@ -26,6 +26,9 @@ import { EventMgr } from '../../utils/EventMgr';
 @ccclass('MapUILogic')
 export default class MapUILogic extends Component {
 
+    @property(Node)
+    contentNode:Node = null;
+
     @property(Prefab)
     facilityPrefab: Prefab = null;
     protected _facilityNode: Node = null;
@@ -172,8 +175,8 @@ export default class MapUILogic extends Component {
     protected showTip(text:string, close:Function):void {
         if (this._dialogNode == null){
             this._dialogNode = instantiate(this.dialog)
-            this._dialogNode.getComponent(UITransform).priority = 10;
-            this._dialogNode.parent = this.node;
+            this._dialogNode.setSiblingIndex(10);
+            this._dialogNode.parent = this.contentNode;
         }else{
             this._dialogNode.active = true;
         }
@@ -216,8 +219,7 @@ export default class MapUILogic extends Component {
     protected openFacility(data: any): void {
         if (this._facilityNode == null) {
             this._facilityNode = instantiate(this.facilityPrefab);
-            this._facilityNode.getComponent(UITransform).priority = 2;
-            this._facilityNode.parent = this.node;
+            this._facilityNode.parent = this.contentNode;
         } else {
             this._facilityNode.active = true;
         }
@@ -227,8 +229,7 @@ export default class MapUILogic extends Component {
     protected openArmySetting(cityId: number, order: number): void {
         if (this._armySettingNode == null) {
             this._armySettingNode = instantiate(this.armySettingPrefab);
-            this._armySettingNode.getComponent(UITransform).priority = 2;
-            this._armySettingNode.parent = this.node;
+            this._armySettingNode.parent = this.contentNode;
         } else {
             this._armySettingNode.active = true;
         }
@@ -240,8 +241,8 @@ export default class MapUILogic extends Component {
     protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = instantiate(this.generalPrefab);
-            this._generalNode.getComponent(UITransform).priority = 3;
-            this._generalNode.parent = this.node;
+            this._generalNode.setSiblingIndex(1);
+            this._generalNode.parent = this.contentNode;
         } else {
             this._generalNode.active = true;
         }
@@ -277,12 +278,11 @@ export default class MapUILogic extends Component {
     protected openGeneralDes(cfgData: any, curData: any): void {
         if (this._generalDesNode == null) {
             this._generalDesNode = instantiate(this.generalDesPrefab);
-            this._generalDesNode.getComponent(UITransform).priority = 4;
-            this._generalDesNode.parent = this.node;
+            this._generalDesNode.setSiblingIndex(2);
+            this._generalDesNode.parent = this.contentNode;
         } else {
             this._generalDesNode.active = true;
         }
-        // this._generalDesNode.getComponent(UITransform).priority = 1;
         this._generalDesNode.getComponent(GeneralInfoLogic).setData(cfgData, curData);
     }
 
@@ -293,8 +293,7 @@ export default class MapUILogic extends Component {
     protected openCityAbout(data: any): void {
         if (this._cityAboutNode == null) {
             this._cityAboutNode = instantiate(this.cityAboutPrefab);
-            this._cityAboutNode.getComponent(UITransform).priority = 1;
-            this._cityAboutNode.parent = this.node;
+            this._cityAboutNode.parent = this.contentNode;
         } else {
             this._cityAboutNode.active = true;
         }
@@ -312,8 +311,7 @@ export default class MapUILogic extends Component {
     protected openFortressAbout(data: any): void {
         if (this._fortressAboutNode == null) {
             this._fortressAboutNode = instantiate(this.fortressAboutPrefab);
-            this._fortressAboutNode.getComponent(UITransform).priority = 1;
-            this._fortressAboutNode.parent = this.node;
+            this._fortressAboutNode.parent = this.contentNode;
         } else {
             this._fortressAboutNode.active = true;
         }
@@ -378,7 +376,7 @@ export default class MapUILogic extends Component {
     protected openDraw(): void {
         if (this._drawNode == null) {
             this._drawNode = instantiate(this.drawPrefab);
-            this._drawNode.parent = this.node;
+            this._drawNode.parent = this.contentNode;
         } else {
             this._drawNode.active = true;
         }
@@ -394,11 +392,11 @@ export default class MapUILogic extends Component {
     protected openDrawR(data: any): void {
         if (this._drawResultNode == null) {
             this._drawResultNode = instantiate(this.drawResultrefab);
-            this._drawResultNode.parent = this.node;
+            this._drawResultNode.parent = this.contentNode;
         } else {
             this._drawResultNode.active = true;
         }
-        this._drawResultNode.getComponent(UITransform).priority = 2;
+        this._drawResultNode.setSiblingIndex(4);
         this._drawResultNode.getComponent(DrawRLogic).setData(data);
     }
 
@@ -407,7 +405,7 @@ export default class MapUILogic extends Component {
     protected openUnion(): void {
         if (this._unionNode == null) {
             this._unionNode = instantiate(this.unionPrefab);
-            this._unionNode.parent = this.node;
+            this._unionNode.parent = this.contentNode;
         } else {
             this._unionNode.active = true;
         }
@@ -417,7 +415,7 @@ export default class MapUILogic extends Component {
     protected openChat(): void {
         if (this._chatNode == null) {
             this._chatNode = instantiate(this.chatPrefab);
-            this._chatNode.parent = this.node;
+            this._chatNode.parent = this.contentNode;
         } else {
             this._chatNode.active = true;
         }
@@ -429,7 +427,7 @@ export default class MapUILogic extends Component {
     protected openTr(): void {
         if (this._transFormNode == null) {
             this._transFormNode = instantiate(this.transFormPrefab);
-            this._transFormNode.parent = this.node;
+            this._transFormNode.parent = this.contentNode;
         } else {
             this._transFormNode.active = true;
         }
@@ -441,8 +439,8 @@ export default class MapUILogic extends Component {
         console.log("onOpenGeneralConvert");
         if (this._generalConvertNode == null) {
             this._generalConvertNode = instantiate(this.generalConvertPrefab);
-            this._generalConvertNode.parent = this.node;
-            this._generalConvertNode.getComponent(UITransform).priority = 4;
+            this._generalConvertNode.parent = this.contentNode;
+            this._generalConvertNode.setSiblingIndex(3);
         } else {
             this._generalConvertNode.active = true;
         }
@@ -453,8 +451,8 @@ export default class MapUILogic extends Component {
         console.log("onOpenGeneralRoster");
         if (this._generalRosterNode == null) {
             this._generalRosterNode = instantiate(this.generalRosterPrefab);
-            this._generalRosterNode.parent = this.node;
-            this._generalRosterNode.getComponent(UITransform).priority = 4;
+            this._generalRosterNode.parent = this.contentNode;
+            this._generalRosterNode.setSiblingIndex(1);
         } else {
             this._generalRosterNode.active = true;
         }
@@ -469,11 +467,10 @@ export default class MapUILogic extends Component {
         console.log("onOpenSkill", type, general, skillPos);
         if (this._skillNode == null) {
             this._skillNode = instantiate(this.skillPrefab);
-            this._skillNode.parent = this.node;
+            this._skillNode.parent = this.contentNode;
         } else {
             this._skillNode.active = true;
         }
-        this._skillNode.getComponent(UITransform).priority = 5;
         this._skillNode.getComponent(SkillLogic).setData(type, general, skillPos);
     }
 
@@ -487,11 +484,10 @@ export default class MapUILogic extends Component {
         console.log("onOpenSkillInfo", cfg, type, general, skillPos);
         if (this._skillInfoNode == null) {
             this._skillInfoNode = instantiate(this.skillInfoPrefab);
-            this._skillInfoNode.parent = this.node;
+            this._skillInfoNode.parent = this.contentNode;
         } else {
             this._skillInfoNode.active = true;
         }
-        this._skillInfoNode.getComponent(UITransform).priority = 6;
         this._skillInfoNode.getComponent(SkillInfoLogic).setData(cfg, type, general, skillPos);
     }
 
@@ -510,7 +506,7 @@ export default class MapUILogic extends Component {
     protected onClickCollection():void {
         if(this._collectNode == null){
             this._collectNode = instantiate(this.collectPrefab);
-            this._collectNode.parent = this.node;
+            this._collectNode.parent = this.contentNode;
         }
         this._collectNode.active = true;
 

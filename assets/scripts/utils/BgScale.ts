@@ -1,4 +1,4 @@
-import { _decorator, Component, Enum, sys, director, UITransform } from 'cc';
+import { _decorator, Component, Enum, sys, director, UITransform, Widget, view, Vec3 } from 'cc';
 const {ccclass, property} = _decorator;
 
 export enum BGScaleType {
@@ -52,15 +52,13 @@ export default class BgScale extends Component {
     }
 
     protected setMyFrameSize():void {
+       
         if (!this.node) {
             return;
         }
         var wsize = null;
-        if (sys.isBrowser) {
-            wsize = visibleRect;
-        } else {
-            wsize = director.getWinSize();
-        }
+        wsize = view.getVisibleSize();
+        
         var scale1 = wsize.width / this.realW;
         var scale2 = wsize.height / this.realH;
         var max_scale = Math.max(scale1, scale2);
@@ -83,15 +81,14 @@ export default class BgScale extends Component {
             scaleX = scaleY = max_scale;
         }
 
-        this.node.width = this.realW * scaleX;
-        this.node.height = this.realH * scaleY;
+        this.node.getComponent(UITransform).width = this.realW * scaleX;
+        this.node.getComponent(UITransform).height = this.realH * scaleY;
 
         var widget = this.node.getComponent(Widget);
         if (widget == null) {
             widget = this.node.addComponent(Widget);
         }
-        var canvas = director.getScene().getChildByName('Canvas');
-        widget.target = canvas;
+  
         if (this.alignmentType == BGAlignmentType.BOTTOM) {
             widget.isAlignHorizontalCenter = true;
             widget.isAlignBottom = true;
