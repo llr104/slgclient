@@ -2,7 +2,7 @@
   "ver": "1.0.6",
   "importer": "sprite-atlas",
   "imported": true,
-  "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
+  "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2",
   "files": [
     ".plist",
     ".json"
@@ -10,12 +10,11 @@
   "subMetas": {
     "b246b": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@b246b",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@b246b",
       "displayName": "",
       "id": "b246b",
       "name": "land_ground_1_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -33,7 +32,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -44,12 +44,11 @@
     },
     "7146e": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@7146e",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@7146e",
       "displayName": "",
       "id": "7146e",
       "name": "land_ground_2_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -67,7 +66,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -78,12 +78,11 @@
     },
     "4fabd": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@4fabd",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@4fabd",
       "displayName": "",
       "id": "4fabd",
       "name": "land_ground_3_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -101,7 +100,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -112,12 +112,11 @@
     },
     "3c20b": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@3c20b",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@3c20b",
       "displayName": "",
       "id": "3c20b",
       "name": "land_ground_4_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -135,7 +134,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -146,12 +146,11 @@
     },
     "d91cf": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@d91cf",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@d91cf",
       "displayName": "",
       "id": "d91cf",
       "name": "land_ground_5_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -169,7 +168,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -180,12 +180,11 @@
     },
     "f7faa": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@f7faa",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@f7faa",
       "displayName": "",
       "id": "f7faa",
       "name": "land_ground_6_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -203,7 +202,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -214,12 +214,11 @@
     },
     "21da0": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@21da0",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@21da0",
       "displayName": "",
       "id": "21da0",
       "name": "land_ground_7_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -237,7 +236,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -248,12 +248,11 @@
     },
     "3c1bd": {
       "importer": "sprite-frame",
-      "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8@3c1bd",
+      "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2@3c1bd",
       "displayName": "",
       "id": "3c1bd",
       "name": "land_ground_8_1",
       "userData": {
-        "atlasUuid": "f688106c-3433-4cb3-9ec8-868b65b77df8",
         "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
@@ -271,7 +270,8 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "82532542-258a-4b1b-8db2-ed2335723022@6c48a"
+        "imageUuidOrDatabaseUri": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a",
+        "atlasUuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2"
       },
       "ver": "1.0.9",
       "imported": true,
@@ -284,7 +284,7 @@
   "userData": {
     "atlasTextureName": "land.png",
     "format": 3,
-    "textureUuid": "82532542-258a-4b1b-8db2-ed2335723022@6c48a",
-    "uuid": "f688106c-3433-4cb3-9ec8-868b65b77df8"
+    "uuid": "d0eaaae1-1a84-4ca7-8c42-a1df73c654e2",
+    "textureUuid": "76c5ffaf-8ea2-47a1-b27c-5a6efeb6c435@6c48a"
   }
 }

@@ -2,7 +2,7 @@
   "ver": "1.0.22",
   "importer": "image",
   "imported": true,
-  "uuid": "64724537-9a17-4b4f-87c9-67891bf7c81f",
+  "uuid": "46f47009-0266-4b9e-ad66-f66338254a25",
   "files": [
     ".png",
     ".json"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "64724537-9a17-4b4f-87c9-67891bf7c81f@6c48a",
+      "uuid": "46f47009-0266-4b9e-ad66-f66338254a25@6c48a",
       "displayName": "water_edge_1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "64724537-9a17-4b4f-87c9-67891bf7c81f",
+        "imageUuidOrDatabaseUri": "46f47009-0266-4b9e-ad66-f66338254a25",
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
@@ -33,7 +33,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "64724537-9a17-4b4f-87c9-67891bf7c81f@f9941",
+      "uuid": "46f47009-0266-4b9e-ad66-f66338254a25@f9941",
       "displayName": "water_edge_1",
       "id": "f9941",
       "name": "spriteFrame",
@@ -55,7 +55,7 @@
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "64724537-9a17-4b4f-87c9-67891bf7c81f@6c48a",
+        "imageUuidOrDatabaseUri": "46f47009-0266-4b9e-ad66-f66338254a25@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "type": "sprite-frame",
     "hasAlpha": true,
-    "redirect": "64724537-9a17-4b4f-87c9-67891bf7c81f@f9941"
+    "redirect": "46f47009-0266-4b9e-ad66-f66338254a25@f9941"
   }
 }

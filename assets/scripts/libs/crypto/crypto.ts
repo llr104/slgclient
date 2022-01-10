@@ -1737,11 +1737,11 @@ class ZeroPadding {
 
     static unpad(data) {
         
-        console.log("unpad 1:", data.clone());
+        // console.log("unpad 1:", data.clone());
         for (let i = data.words.length - 1; i>=0; i--) {
             if(data.words[i] != 0){
                 data.slice(0, i+1);
-                console.log("unpad 2:", data);
+                // console.log("unpad 2:", data);
                 return
             }
         }

@@ -2,7 +2,7 @@
   "ver": "1.0.22",
   "importer": "image",
   "imported": true,
-  "uuid": "68df75f6-8c81-4d11-8d0d-7c566b7490a6",
+  "uuid": "89d565c0-0359-44b5-b918-d8acdb1dac79",
   "files": [
     ".png",
     ".json"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "68df75f6-8c81-4d11-8d0d-7c566b7490a6@6c48a",
+      "uuid": "89d565c0-0359-44b5-b918-d8acdb1dac79@6c48a",
       "displayName": "hill",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "68df75f6-8c81-4d11-8d0d-7c566b7490a6",
+        "imageUuidOrDatabaseUri": "89d565c0-0359-44b5-b918-d8acdb1dac79",
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
@@ -30,11 +30,45 @@
         ".json"
       ],
       "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "89d565c0-0359-44b5-b918-d8acdb1dac79@f9941",
+      "displayName": "hill",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 14.5,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 1800,
+        "height": 1171,
+        "rawWidth": 1800,
+        "rawHeight": 1200,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "89d565c0-0359-44b5-b918-d8acdb1dac79@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.9",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
     }
   },
   "userData": {
-    "type": "texture",
+    "type": "sprite-frame",
     "hasAlpha": true,
-    "redirect": "68df75f6-8c81-4d11-8d0d-7c566b7490a6@6c48a"
+    "redirect": "89d565c0-0359-44b5-b918-d8acdb1dac79@f9941"
   }
 }
