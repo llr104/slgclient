@@ -1,4 +1,4 @@
-import { _decorator, Component, ScrollView, Prefab, Node, NodePool } from 'cc';
+import { _decorator, Component, ScrollView, Prefab, Node, NodePool, EventHandler, UITransform, instantiate, CCBoolean, CCString } from 'cc';
 const {ccclass, property} = _decorator;
 
 @ccclass('ListLogic')
@@ -14,11 +14,11 @@ export default class ListLogic extends Component {
     @property(Node)
     itemNode: Node = null;
 
-    @property(String)
+    @property(CCString)
     itemLogicScriptName:string  = "";
 
 
-    @property(Boolean)
+    @property(CCBoolean)
     isHorizontal:boolean  = false;
 
 
@@ -26,7 +26,7 @@ export default class ListLogic extends Component {
     columnCount = 1;
 
 
-    @property(Boolean)
+    @property(CCBoolean)
     autoColumnCount:boolean  = false;
 
 
@@ -43,12 +43,12 @@ export default class ListLogic extends Component {
     @property
     scale = 1;
 
-    @property([Component.EventHandler])
-    itemClickEvents:Component.EventHandler[]  = [];
+    @property([EventHandler])
+    itemClickEvents:EventHandler[]  = [];
 
 
     
-    @property(Boolean)
+    @property(CCBoolean)
     isVirtual:boolean  = false;
 
     private _curOffset:number = 0;
@@ -79,8 +79,8 @@ export default class ListLogic extends Component {
             this._itemHeight = this.itemPrefab.data.height * this.scale;//item高度
         } else if (this.itemNode) {
             this.itemNode.active = false;
-            this._itemWidth = this.itemNode.width * this.scale;//item宽度
-            this._itemHeight = this.itemNode.height * this.scale;//item高度
+            this._itemWidth = this.itemNode.getComponent(UITransform).width * this.scale;//item宽度
+            this._itemHeight = this.itemNode.getComponent(UITransform).width * this.scale;//item高度
         }
 
         this._isUpdateList = false;//是否正在更新列表
@@ -113,10 +113,11 @@ export default class ListLogic extends Component {
             return;//正在重新构建列表的时候 是不刷新的
         }
         let curOffset = 0;
+       
         if (this.isHorizontal) {
-            curOffset = this._initContentPos - this.scrollView.content.x;
+            curOffset = this._initContentPos - this.scrollView.content.position.x;
         } else {
-            curOffset = this.scrollView.content.y - this._initContentPos;
+            curOffset = this.scrollView.content.position.y - this._initContentPos;
         }
         curOffset = Math.max(Math.min(curOffset, this._maxOffset), 0);
         this.setCurOffset(curOffset);
@@ -154,25 +155,26 @@ export default class ListLogic extends Component {
         if (this._startIndex != index && this._items.length > 0) {
             //console.log("setStartIndex", this._startIndex, index);
             this._startIndex = index;
+            let suit = this.scrollView.content.getComponent(UITransform);
             for (var i = 0; i < this._items.length; i++) {
-                var item = this._items[i];
+                var item:Node = this._items[i];
                 var index1 = this._startIndex + i;
+                let iuit = item.getComponent(UITransform);
+                let pos = item.position.clone();
+
                 if (this.isHorizontal) {
                     let _row = i % this.columnCount;
-                    let _toY = _row * (this._itemHeight + this.spaceRow) + item.anchorY * this._itemHeight
-                        - this.scrollView.content.height * this.scrollView.content.anchorY;
-                    item.y = -_toY - (this.scrollView.content.height - this._maxRowColSize) / 2;
-                    item.x = Math.floor(index1 / this.columnCount) * (this._itemWidth + this.spaceColumn)
-                        + this.spaceColumn + (1 - item.anchorX) * this._itemWidth;
+                    let _toY = _row * (this._itemHeight + this.spaceRow) + iuit.anchorY * this._itemHeight - suit.height * suit.anchorY;
+                    pos.y = -_toY - (suit.height - this._maxRowColSize) / 2;
+                    pos.x = Math.floor(index1 / this.columnCount) * (this._itemWidth + this.spaceColumn) + this.spaceColumn + (1 - iuit.anchorX) * this._itemWidth;
                 } else {
                     let _col = i % this.columnCount;
-                    let _toX = _col * (this._itemWidth + this.spaceColumn) + item.anchorX * this._itemWidth
-                        - this.scrollView.content.width * this.scrollView.content.anchorX;
-                    item.x = _toX + (this.scrollView.content.width - this._maxRowColSize) / 2;
-                    item.y = -Math.floor(index1 / this.columnCount) * (this._itemHeight + this.spaceRow)
-                        - this.spaceRow - (1 - item.anchorY) * this._itemHeight;
+                    let _toX = _col * (this._itemWidth + this.spaceColumn) + iuit.anchorX * this._itemWidth - suit.width * suit.anchorX;
+                    pos.x = _toX + (suit.width - this._maxRowColSize) / 2;
+                    pos.y = -Math.floor(index1 / this.columnCount) * (this._itemHeight + this.spaceRow) - this.spaceRow - (1 - iuit.anchorY) * this._itemHeight;
                 }
                 item.itemIdx = index1;
+                item.setPosition(pos);
                 //console.log("update item position x: " + item.x + ", y: " + item.y);
             }
 
@@ -187,10 +189,10 @@ export default class ListLogic extends Component {
                 this._itemCount = count;
                 //清空列表
                 var children = this.scrollView.content.children.slice();
-                this.scrollView.content.removeAllChildren(false);
+                this.scrollView.content.removeAllChildren();
                 for (var i = 0; i < children.length; i++) {
                     let item = children[i];
-                    if (isValid(item)) {
+                    if (item.isValid) {
                         item.off(Node.EventType.TOUCH_END, this.onItemClick, this);
                         this._itemPool.put(item);//加入对象池
                     }
@@ -234,56 +236,61 @@ export default class ListLogic extends Component {
         var rowCount = 1;
         var showCount = 1;
         var dataLen = this._datas.length;
+        let uit = this.scrollView.content.parent.getComponent(UITransform);
         if (this.isHorizontal) {
             if (this.autoColumnCount) {
                 //自动排列
-                this.columnCount = Math.floor(this.scrollView.content.parent.height / this._itemHeight);
+                this.columnCount = Math.floor(uit.height / this._itemHeight);
             }
             if (this.columnCount < 1) {
                 this.columnCount = 1;
             }
             this._maxRowColSize = this.columnCount * (this._itemHeight + this.spaceRow) - this.spaceRow;
-            rowCount = Math.ceil(this.scrollView.content.parent.width / (this._itemWidth + this.spaceColumn)) + 1;
+            rowCount = Math.ceil(uit.width / (this._itemWidth + this.spaceColumn)) + 1;
             if (this.isVirtual) {
                 showCount = rowCount * this.columnCount;
             } else {
                 showCount = dataLen;
             }
-            this.scrollView.content.width = Math.ceil(dataLen / this.columnCount) * (this._itemWidth + this.spaceColumn);
+            uit.width = Math.ceil(dataLen / this.columnCount) * (this._itemWidth + this.spaceColumn);
             this._maxOffset = this.scrollView.getMaxScrollOffset().x;
-            this._initContentPos = this.scrollView.content.parent.width * (0 - this.scrollView.content.parent.anchorX);
+            this._initContentPos = uit.width * (0 - uit.anchorX);
         } else {
             if (this.autoColumnCount) {
                 //自动排列
-                this.columnCount = Math.floor(this.scrollView.content.parent.width / this._itemWidth);
+                this.columnCount = Math.floor(uit.width / this._itemWidth);
             }
             if (this.columnCount < 1) {
                 this.columnCount = 1;
             }
             this._maxRowColSize = this.columnCount * (this._itemWidth + this.spaceColumn) - this.spaceColumn;
-            rowCount = Math.ceil(this.scrollView.content.parent.height / (this._itemHeight + this.spaceRow)) + 1;
+            rowCount = Math.ceil(uit.height / (this._itemHeight + this.spaceRow)) + 1;
             if (this.isVirtual) {
                 showCount = rowCount * this.columnCount;
             } else {
                 showCount = dataLen;
             }
-            this.scrollView.content.height = Math.ceil(dataLen / this.columnCount) * (this._itemHeight + this.spaceRow);
+            uit.height = Math.ceil(dataLen / this.columnCount) * (this._itemHeight + this.spaceRow);
             this._maxOffset = this.scrollView.getMaxScrollOffset().y;
-            this._initContentPos = this.scrollView.content.parent.height * (1 - this.scrollView.content.parent.anchorY);
+            this._initContentPos = uit.height * (1 - uit.anchorY);
         }
 
         var isItemChange = this.updateItemCount(showCount);
         this._newOffset = Math.max(Math.min(this._newOffset, this._maxOffset), 0);
+       
+
         if ((isItemChange || this._newOffset != this._curOffset)) {
+            let pos = this.scrollView.content.position.clone();
             this._curOffset = this._newOffset;
             if (this.isHorizontal) {
-                this.scrollView.content.x = -Math.abs(this._initContentPos - this._newOffset);
+                pos.x = -Math.abs(this._initContentPos - this._newOffset);
             } else {
-                this.scrollView.content.y = Math.abs(this._initContentPos + this._newOffset);
+                pos.y = Math.abs(this._initContentPos + this._newOffset);
             }
             this._curOffset = -1;//重置纪录
             this._startIndex = -1;//重置纪录
             this.setCurOffset(this._newOffset);
+            this.scrollView.content.setPosition(pos);
         } else {
             this.updateItems();
         }
@@ -295,20 +302,7 @@ export default class ListLogic extends Component {
 
         //刷新所有item数据
     protected updateItems():void {
-        // try {
-        //     for (var i = 0; i < this._items.length; i++) {
-        //         var item = this._items[i];
-        //         item.active = item.itemIdx < this._datas.length;
-        //         if (item.active) {
-        //             this.updateItem(item, item.itemIdx);
-        //             this.selectItem(item, item.itemIdx == this._curIndex);
-        //         }
-        //             //console.log("update item i: " + item.itemIdx + ", active: " + item.active);
-        //     }
-        // } catch (e) {
-        //     console.log("List update item error:", e);
-        // }
-
+        
         for (var i = 0; i < this._items.length; i++) {
             var item = this._items[i];
             item.active = item.itemIdx < this._datas.length;
