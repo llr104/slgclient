@@ -105,7 +105,7 @@ export class GeneralData {
         data.config = generalCfg;
         data.skills = serverData.skills;
 
-        console.log("createFromServer:", data);
+        // console.log("createFromServer:", data);
 
         return data;
     }

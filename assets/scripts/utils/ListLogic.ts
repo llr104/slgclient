@@ -1,4 +1,4 @@
-import { _decorator, Component, ScrollView, Prefab, Node, NodePool, EventHandler, UITransform, instantiate, CCBoolean, CCString } from 'cc';
+import { _decorator, Component, ScrollView, Prefab, Node, NodePool, EventHandler, UITransform, instantiate, CCBoolean, CCString, Vec3 } from 'cc';
 const {ccclass, property} = _decorator;
 
 @ccclass('ListLogic')
@@ -84,13 +84,16 @@ export default class ListLogic extends Component {
             this._itemHeight = this.itemNode.getComponent(UITransform).height * this.scale;//item高度
         }
 
+        if (this.isHorizontal) {
+            this.scrollView.content.getComponent(UITransform).anchorX = 0;
+        } else {
+            this.scrollView.content.getComponent(UITransform).anchorY = 1;
+        }
+
         this._isUpdateList = false;//是否正在更新列表
         this._itemPool = new NodePool();//item缓存对象池
         this._items = [];//item列表
         this.updateList();
-
-
-        console.log("this._itemHeight:", this._itemHeight);
     }
 
 
@@ -125,12 +128,14 @@ export default class ListLogic extends Component {
         }
         curOffset = Math.max(Math.min(curOffset, this._maxOffset), 0);
         this.setCurOffset(curOffset);
+       
     }
 
 
 
 
     protected setCurOffset(curOffset):void {
+    
         if (this._datas == null || this._datas.length == 0) {
             return;//没有数据不执行刷新
         }
@@ -245,6 +250,7 @@ export default class ListLogic extends Component {
         var showCount = 1;
         var dataLen = this._datas.length;
         let uit = this.scrollView.content.parent.getComponent(UITransform);
+        let cuit = this.scrollView.content.getComponent(UITransform);
         if (this.isHorizontal) {
             if (this.autoColumnCount) {
                 //自动排列
@@ -260,7 +266,7 @@ export default class ListLogic extends Component {
             } else {
                 showCount = dataLen;
             }
-            uit.width = Math.ceil(dataLen / this.columnCount) * (this._itemWidth + this.spaceColumn);
+            cuit.width = Math.ceil(dataLen / this.columnCount) * (this._itemWidth + this.spaceColumn);
             this._maxOffset = this.scrollView.getMaxScrollOffset().x;
             this._initContentPos = uit.width * (0 - uit.anchorX);
         } else {
@@ -278,7 +284,7 @@ export default class ListLogic extends Component {
             } else {
                 showCount = dataLen;
             }
-            uit.height = Math.ceil(dataLen / this.columnCount) * (this._itemHeight + this.spaceRow);
+            cuit.height = Math.ceil(dataLen / this.columnCount) * (this._itemHeight + this.spaceRow);
             this._maxOffset = this.scrollView.getMaxScrollOffset().y;
             this._initContentPos = uit.height * (1 - uit.anchorY);
         }
@@ -304,6 +310,8 @@ export default class ListLogic extends Component {
         }
         this._isUpdateList = false;
         //console.log("updatelist y", this.scrollView.content.y);
+
+        console.log("this.scrollView:", this.scrollView);
     }
 
 
@@ -382,12 +390,13 @@ export default class ListLogic extends Component {
             item = this._itemPool.get();
         } else if (this.itemPrefab) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 instantiate 重新创建
             item = instantiate(this.itemPrefab);
-            item.scale = this.scale;
+            
         } else if (this.itemNode) { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 instantiate 重新创建
             item = instantiate(this.itemNode);
-            item.acitve = true;
-            item.scale = this.scale;
+            
         }
+        item.scale = new Vec3(this.scale, this.scale, this.scale);
+        item.acitve = true;
         item.on(Node.EventType.TOUCH_END, this.onItemClick, this);
         return item;
     }

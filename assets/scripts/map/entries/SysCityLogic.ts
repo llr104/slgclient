@@ -40,7 +40,7 @@ export default class SysCityLogic extends Component {
     }
 
     public setCityData(data: any): void {
-        console.log("setCityData:", data);
+        // console.log("setCityData:", data);
         this._data = data;
         this.updateUI();
     }

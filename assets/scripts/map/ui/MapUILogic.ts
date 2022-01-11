@@ -23,6 +23,12 @@ import { SkillConf } from "../../config/skill/Skill";
 import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 
+
+const TIP_LAYER1 = 100;
+const TIP_LAYER2 = 200;
+const TIP_LAYER3 = 300;
+const TIP_ZORDER = 1000;
+
 @ccclass('MapUILogic')
 export default class MapUILogic extends Component {
 
@@ -175,7 +181,7 @@ export default class MapUILogic extends Component {
     protected showTip(text:string, close:Function):void {
         if (this._dialogNode == null){
             this._dialogNode = instantiate(this.dialog)
-            this._dialogNode.setSiblingIndex(10);
+            this._dialogNode.setSiblingIndex(TIP_ZORDER);
             this._dialogNode.parent = this.contentNode;
         }else{
             this._dialogNode.active = true;
@@ -241,7 +247,7 @@ export default class MapUILogic extends Component {
     protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = instantiate(this.generalPrefab);
-            this._generalNode.setSiblingIndex(1);
+            this._generalNode.setSiblingIndex(TIP_LAYER1);
             this._generalNode.parent = this.contentNode;
         } else {
             this._generalNode.active = true;
@@ -278,7 +284,7 @@ export default class MapUILogic extends Component {
     protected openGeneralDes(cfgData: any, curData: any): void {
         if (this._generalDesNode == null) {
             this._generalDesNode = instantiate(this.generalDesPrefab);
-            this._generalDesNode.setSiblingIndex(2);
+            this._generalDesNode.setSiblingIndex(TIP_LAYER2);
             this._generalDesNode.parent = this.contentNode;
         } else {
             this._generalDesNode.active = true;
@@ -396,8 +402,10 @@ export default class MapUILogic extends Component {
         } else {
             this._drawResultNode.active = true;
         }
-        this._drawResultNode.setSiblingIndex(4);
+        this._drawResultNode.setSiblingIndex(TIP_LAYER3);
         this._drawResultNode.getComponent(DrawRLogic).setData(data);
+
+        console.log("openDrawR:", this.contentNode);
     }
 
 
@@ -440,7 +448,7 @@ export default class MapUILogic extends Component {
         if (this._generalConvertNode == null) {
             this._generalConvertNode = instantiate(this.generalConvertPrefab);
             this._generalConvertNode.parent = this.contentNode;
-            this._generalConvertNode.setSiblingIndex(3);
+            this._generalConvertNode.setSiblingIndex(TIP_LAYER3);
         } else {
             this._generalConvertNode.active = true;
         }
@@ -452,7 +460,6 @@ export default class MapUILogic extends Component {
         if (this._generalRosterNode == null) {
             this._generalRosterNode = instantiate(this.generalRosterPrefab);
             this._generalRosterNode.parent = this.contentNode;
-            this._generalRosterNode.setSiblingIndex(1);
         } else {
             this._generalRosterNode.active = true;
         }
