@@ -42,9 +42,6 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 847
-      },
-      {
         "__id__": 849
       },
       {
@@ -52,16 +49,19 @@
       },
       {
         "__id__": 853
+      },
+      {
+        "__id__": 855
       }
     ],
     "_prefab": {
-      "__id__": 855
+      "__id__": 857
     },
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": -0.86603
+      "z": 0
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -16531,10 +16531,13 @@
     "_components": [
       {
         "__id__": 844
+      },
+      {
+        "__id__": 846
       }
     ],
     "_prefab": {
-      "__id__": 846
+      "__id__": 848
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -16592,6 +16595,41 @@
     "fileId": "136ley50ZI6IykaXJ8qSBl"
   },
   {
+    "__type__": "cc.Widget",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 843
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 847
+    },
+    "_alignFlags": 45,
+    "_target": null,
+    "_left": 0,
+    "_right": 0,
+    "_top": 0,
+    "_bottom": 0,
+    "_horizontalCenter": 0,
+    "_verticalCenter": 0,
+    "_isAbsLeft": true,
+    "_isAbsRight": true,
+    "_isAbsTop": true,
+    "_isAbsBottom": true,
+    "_isAbsHorizontalCenter": true,
+    "_isAbsVerticalCenter": true,
+    "_originalWidth": 1280,
+    "_originalHeight": 720,
+    "_alignMode": 2,
+    "_lockFlags": 0,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "65Y+lANMlOQ7X4M8F+Nh2+"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -16610,7 +16648,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 848
+      "__id__": 850
     },
     "_alignFlags": 45,
     "_target": null,
@@ -16645,7 +16683,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 850
+      "__id__": 852
     },
     "contentNode": {
       "__id__": 843
@@ -16753,7 +16791,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 852
+      "__id__": 854
     },
     "_opacity": 255,
     "_id": ""
@@ -16771,7 +16809,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 854
+      "__id__": 856
     },
     "_contentSize": {
       "__type__": "cc.Size",

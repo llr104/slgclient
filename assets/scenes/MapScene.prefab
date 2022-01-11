@@ -43,16 +43,13 @@
       },
       {
         "__id__": 50
+      },
+      {
+        "__id__": 56
       }
     ],
     "_active": true,
     "_components": [
-      {
-        "__id__": 56
-      },
-      {
-        "__id__": 58
-      },
       {
         "__id__": 60
       },
@@ -88,10 +85,16 @@
       },
       {
         "__id__": 82
+      },
+      {
+        "__id__": 84
+      },
+      {
+        "__id__": 86
       }
     ],
     "_prefab": {
-      "__id__": 84
+      "__id__": 88
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1049,6 +1052,88 @@
     "fileId": "e9PO1k49lBDYot78vWg9jx"
   },
   {
+    "__type__": "cc.Node",
+    "_name": "touch",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 57
+      }
+    ],
+    "_prefab": {
+      "__id__": 59
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 4,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.UITransform",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 56
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 58
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 100,
+      "height": 100
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "5bLBLGWSRL/LNyFnNR6xqi"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "0bS1kY5a9FuJe8vA6eQx49"
+  },
+  {
     "__type__": "cc.Widget",
     "_name": "",
     "_objFlags": 0,
@@ -1057,7 +1142,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 57
+      "__id__": 61
     },
     "_alignFlags": 45,
     "_target": null,
@@ -1092,7 +1177,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 59
+      "__id__": 63
     },
     "mapLayer": {
       "__id__": 2
@@ -1112,7 +1197,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 61
+      "__id__": 65
     },
     "_id": ""
   },
@@ -1129,11 +1214,14 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 63
+      "__id__": 67
     },
     "clickUIPrefab": {
       "__uuid__": "9bebda81-65c4-49bd-b297-a70c16735f0f",
       "__expectedType__": "cc.Prefab"
+    },
+    "touch": {
+      "__id__": 56
     },
     "_id": ""
   },
@@ -1150,7 +1238,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 65
+      "__id__": 69
     },
     "parentLayer": {
       "__id__": 8
@@ -1174,7 +1262,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 67
+      "__id__": 71
     },
     "parentLayer": {
       "__id__": 14
@@ -1198,7 +1286,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 69
+      "__id__": 73
     },
     "parentLayer": {
       "__id__": 32
@@ -1222,7 +1310,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 71
+      "__id__": 75
     },
     "parentLayer": {
       "__id__": 26
@@ -1246,7 +1334,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 73
+      "__id__": 77
     },
     "parentLayer": {
       "__id__": 44
@@ -1270,7 +1358,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 75
+      "__id__": 79
     },
     "parentLayer": {
       "__id__": 50
@@ -1298,7 +1386,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 77
+      "__id__": 81
     },
     "parentLayer": {
       "__id__": 38
@@ -1322,7 +1410,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 79
+      "__id__": 83
     },
     "parentLayer": {
       "__id__": 20
@@ -1346,7 +1434,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 81
+      "__id__": 85
     },
     "_opacity": 255,
     "_id": ""
@@ -1364,7 +1452,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 83
+      "__id__": 87
     },
     "_contentSize": {
       "__type__": "cc.Size",

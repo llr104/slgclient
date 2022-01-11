@@ -14,6 +14,9 @@ export default class MapTouchLogic extends Component {
     @property(Prefab)
     clickUIPrefab: Prefab = null;
 
+    @property(Node)
+    touch:Node = null;
+
     protected _cmd: MapCommand;
     protected _clickUINode: Node = null;
 
@@ -89,7 +92,7 @@ export default class MapTouchLogic extends Component {
             this._clickUINode = instantiate(this.clickUIPrefab);
 
         }
-        this._clickUINode.parent = this.node;
+        this._clickUINode.parent = this.touch;
         this._clickUINode.setPosition(new Vec3(pos.x, pos.y, 0));
         this._clickUINode.getComponent(MapClickUILogic).setCellData(data, pos);
     }

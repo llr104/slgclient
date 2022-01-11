@@ -31,7 +31,7 @@ export default class ChatCommand {
     //数据model
 
     constructor() {
-        EventMgr.on(ServerConfig.chat_chat, this.onChat, this)
+        // EventMgr.on(ServerConfig.chat_chat, this.onChat, this)
         EventMgr.on(ServerConfig.chat_history, this.onChatHistory, this)
         EventMgr.on(ServerConfig.chat_push, this.onChat, this)
     }
