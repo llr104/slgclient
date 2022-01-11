@@ -46,6 +46,7 @@ export default class MapBaseLayerLogic extends Component {
     }
 
     public updateItem(areaIndex: number, data: any, item: Node = null): void {
+        
         if (this._itemMap.has(areaIndex)) {
             let realItem: Node = item;
             if (item == null) {

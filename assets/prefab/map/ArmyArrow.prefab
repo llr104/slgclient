@@ -8,13 +8,13 @@
       "__id__": 1
     },
     "optimizationPolicy": 0,
-    "asyncLoadAssets": false,
-    "readonly": false
+    "asyncLoadAssets": false
   },
   {
     "__type__": "cc.Node",
     "_name": "ArmyArrow",
     "_objFlags": 0,
+    "__editorExtras__": {},
     "_parent": null,
     "_children": [],
     "_active": true,
@@ -51,16 +51,13 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 1,
+    "_layer": 4,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
       "z": 0
     },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": false,
     "_id": ""
   },
   {
@@ -74,10 +71,11 @@
     "__prefab": {
       "__id__": 3
     },
-    "_customMaterial": {
-      "__uuid__": "fda095cb-831d-4601-ad94-846013963de8"
-    },
     "_visFlags": 0,
+    "_customMaterial": {
+      "__uuid__": "fda095cb-831d-4601-ad94-846013963de8",
+      "__expectedType__": "cc.Material"
+    },
     "_srcBlendFactor": 2,
     "_dstBlendFactor": 4,
     "_color": {
@@ -88,7 +86,8 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "6f4a03b4-8150-4fc7-bc3a-281d144c1c87@f9941"
+      "__uuid__": "6f4a03b4-8150-4fc7-bc3a-281d144c1c87@f9941",
+      "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 1,
     "_fillType": 0,
@@ -120,7 +119,8 @@
     "__prefab": {
       "__id__": 5
     },
-    "_opacity": 255
+    "_opacity": 255,
+    "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
@@ -137,7 +137,6 @@
     "__prefab": {
       "__id__": 7
     },
-    "_priority": 0,
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 20,
@@ -147,7 +146,8 @@
       "__type__": "cc.Vec2",
       "x": 0.5,
       "y": 1
-    }
+    },
+    "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",

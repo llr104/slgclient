@@ -42,7 +42,7 @@ export default class MapLogic extends Component {
 
     public setTiledMap(tiledMap: TiledMap): void {
         this._tiledMap = tiledMap;
-        this._tiledMap.enableCulling = true;
+        this._tiledMap.enableCulling = false;
         var uit = this._tiledMap.node.getComponent(UITransform);
         this._maxMapX = (uit.width - game.canvas.width) * 0.5;
         this._maxMapY = (uit.height - game.canvas.height) * 0.5;

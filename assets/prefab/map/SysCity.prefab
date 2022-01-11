@@ -61,7 +61,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 1,
+    "_layer": 4,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -430,7 +430,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 1,
+    "_layer": 4,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -485,7 +485,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 1,
+    "_layer": 4,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -536,7 +536,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 1,
+    "_layer": 4,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
