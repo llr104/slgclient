@@ -14,8 +14,10 @@ export default class MapLogic extends Component {
     protected _isMove: boolean = false;
     //地图相机缩放倍率边界
     protected _minZoomRatio: number = 1;
-    protected _maxZoomRatio: number = 1.5;
+    protected _maxZoomRatio: number = 0.8;
     protected _changeZoomRadix: number = 200;
+    protected _orthoHeight:number = 360;
+
     //地图相机移动边界
     protected _maxMapX: number = 1;
     protected _maxMapY: number = 1;
@@ -28,6 +30,7 @@ export default class MapLogic extends Component {
         this._cmd = MapCommand.getInstance();
         this._mapCamera = this.node.parent.getChildByName("Map Camera").getComponent(Camera);
         console.log("_mapCamera:", this._mapCamera);
+        this._orthoHeight = this._mapCamera.orthoHeight;
 
         EventMgr.on("open_city_about", this.openCityAbout, this);
         EventMgr.on("close_city_about", this.closeCityAbout, this);
@@ -57,20 +60,22 @@ export default class MapLogic extends Component {
     }
 
     protected openCityAbout(data: any): void {
-        //this._mapCamera.zoomRatio = this._maxZoomRatio;
+        this._mapCamera.orthoHeight = this._orthoHeight * this._maxZoomRatio;
     }
 
     protected closeCityAbout(): void {
-        //this._mapCamera.zoomRatio = this._minZoomRatio;
+        this._mapCamera.orthoHeight = this._orthoHeight * this._minZoomRatio;
     }
 
     protected onMouseWheel(event: EventMouse): void {
         console.log("onMouseWheel");
 
-        // let scrollY: number = event.getScrollY();
-        // let changeRatio: number = Number((scrollY / this._changeZoomRadix).toFixed(1));
-        // let newZoomRatio: number = Math.min(this._maxZoomRatio, Math.max(this._minZoomRatio, this._mapCamera.zoomRatio + changeRatio));
-        // this._mapCamera.zoomRatio = newZoomRatio;
+        let scrollY: number = event.getScrollY();
+        let changeRatio: number = Number((scrollY / this._changeZoomRadix).toFixed(1));
+        let newZoomRatio: number = Math.min(this._minZoomRatio, Math.max(this._maxZoomRatio, this._mapCamera.orthoHeight/this._orthoHeight + changeRatio));
+
+        console.log("onMouseWheel:", newZoomRatio);
+        this._mapCamera.orthoHeight = this._orthoHeight * newZoomRatio;
     }
 
     protected onTouchMove(event: EventTouch): void {
@@ -98,10 +103,12 @@ export default class MapLogic extends Component {
         this._isTouch = false;
         if (this._isMove == false) {
             let touchLocation: Vec2 = event.touch.getLocation();
-            touchLocation = this.viewPointToWorldPoint(touchLocation);
-            let mapPoint: Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation);
+            let touchLocation1 = this.viewPointToWorldPoint(touchLocation);
+            let mapPoint: Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation1);
             let clickCenterPoint: Vec2 = MapUtil.mapCellToPixelPoint(mapPoint);
             //派发事件
+            console.log("onTouchEnd:", touchLocation, touchLocation1, clickCenterPoint);
+
             EventMgr.emit("touch_map", mapPoint, clickCenterPoint);
         } else {
             EventMgr.emit("move_map");
@@ -117,12 +124,20 @@ export default class MapLogic extends Component {
     //界面坐标转世界坐标
     protected viewPointToWorldPoint(point: Vec2): Vec2 {
         let canvasNode: Node = this.node.parent;
+        console.log("canvasNode:", canvasNode);
+
         let cuit = canvasNode.getComponent(UITransform);
         let uit = this._tiledMap.node.getComponent(UITransform);
+
+
         let cameraWorldX: number = uit.width * uit.anchorX - cuit.width * cuit.anchorX + this._mapCamera.node.position.x;
         let cameraWorldY: number = uit.height * uit.anchorY - cuit.height * cuit.anchorY + this._mapCamera.node.position.y;
+
+        console.log("viewPointToWorldPoint:", cameraWorldX, cameraWorldY);
+        
         return new Vec2(point.x + cameraWorldX, point.y + cameraWorldY);
     }
+
 
     //世界坐标转化为相对地图的像素坐标
     protected worldToMapPixelPoint(point: Vec2): Vec2 {

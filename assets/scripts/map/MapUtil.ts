@@ -26,14 +26,34 @@ export default class MapUtil {
         this._tileSize = map.getTileSize();
         this._mapSize = map.getMapSize();
         this._mapPixelSize = size(uit.width, uit.height);
+
         this._zeroPixelPoint.x = this._mapSize.width * this._tileSize.width * 0.5;
         this._zeroPixelPoint.y = this._mapSize.height * this._tileSize.height - this._tileSize.height * 0.5;
+
+        console.log("game.canvas.height:", game.canvas.height);
 
         //划分区域的大小
         let showH: number = Math.min(Math.ceil(game.canvas.height / this._tileSize.height / 2) * 2 + 2, this._mapSize.height);
         this._areaCellSize = size(showH, showH);
         this._areaSize = size(Math.ceil(this._mapSize.width / showH), Math.ceil(this._mapSize.height / showH));
     }
+
+    // public static initMapConfig(map: cc.TiledMap): void {
+    //     this._mapPixelSize = cc.size(map.node.width, map.node.height);
+    //     this._mapOffsetPoint = cc.v2(map.node.width * map.node.anchorX, map.node.height * map.node.anchorY);
+    //     this._tileSize = map.getTileSize();
+    //     this._mapSize = map.getMapSize();
+    //     this._mapPixelSize = cc.size(map.node.width, map.node.height);
+    //     this._zeroPixelPoint.x = this._mapSize.width * this._tileSize.width * 0.5;
+    //     this._zeroPixelPoint.y = this._mapSize.height * this._tileSize.height - this._tileSize.height * 0.5;
+
+    //     //划分区域的大小
+    //     let showH: number = Math.min(Math.ceil(cc.game.canvas.height / this._tileSize.height / 2) * 2 + 2, this._mapSize.height);
+    //     this._areaCellSize = cc.size(showH, showH);
+    //     this._areaSize = cc.size(Math.ceil(this._mapSize.width / showH), Math.ceil(this._mapSize.height / showH));
+    // }
+
+
 
     /**地图的像素大小*/
     public static get mapPixcelSize(): Size {
