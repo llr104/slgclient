@@ -1,4 +1,4 @@
-import { _decorator, Component, TiledMap, Camera, Node, Vec2, Event, game, UITransform, EventMouse, EventTouch, Vec3 } from 'cc';
+import { _decorator, Component, TiledMap, Camera, Node, Vec2, Event, game, UITransform, EventMouse, EventTouch, Vec3, view } from 'cc';
 const { ccclass, property } = _decorator;
 
 import MapCommand from "./MapCommand";
@@ -102,12 +102,12 @@ export default class MapLogic extends Component {
     protected onTouchEnd(event: EventTouch): void {
         this._isTouch = false;
         if (this._isMove == false) {
-            let touchLocation: Vec2 = event.touch.getLocation();
+            let touchLocation: Vec2 = event.touch.getUILocation();
             let touchLocation1 = this.viewPointToWorldPoint(touchLocation);
             let mapPoint: Vec2 = MapUtil.worldPixelToMapCellPoint(touchLocation1);
             let clickCenterPoint: Vec2 = MapUtil.mapCellToPixelPoint(mapPoint);
             //派发事件
-            console.log("onTouchEnd:", touchLocation, touchLocation1, clickCenterPoint);
+            // console.log("onTouchEnd:", touchLocation1, clickCenterPoint);
 
             EventMgr.emit("touch_map", mapPoint, clickCenterPoint);
         } else {
@@ -123,20 +123,19 @@ export default class MapLogic extends Component {
 
     //界面坐标转世界坐标
     protected viewPointToWorldPoint(point: Vec2): Vec2 {
-        let canvasNode: Node = this.node.parent;
-        console.log("canvasNode:", canvasNode);
+        // console.log("viewPointToWorldPoint in", point.x, point.y);
 
+        let canvasNode: Node = this.node.parent;
         let cuit = canvasNode.getComponent(UITransform);
         let uit = this._tiledMap.node.getComponent(UITransform);
 
 
-        let cameraWorldX: number = uit.width * uit.anchorX - cuit.width * cuit.anchorX + this._mapCamera.node.position.x;
-        let cameraWorldY: number = uit.height * uit.anchorY - cuit.height * cuit.anchorY + this._mapCamera.node.position.y;
+        let cameraWorldX: number = uit.width * uit.anchorX - view.getVisibleSize().width * cuit.anchorX + this._mapCamera.node.position.x;
+        let cameraWorldY: number = uit.height * uit.anchorY - view.getVisibleSize().height * cuit.anchorY + this._mapCamera.node.position.y;
 
-        console.log("viewPointToWorldPoint:", cameraWorldX, cameraWorldY);
-        
         return new Vec2(point.x + cameraWorldX, point.y + cameraWorldY);
     }
+
 
 
     //世界坐标转化为相对地图的像素坐标
