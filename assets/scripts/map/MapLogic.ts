@@ -47,10 +47,7 @@ export default class MapLogic extends Component {
         this._tiledMap = tiledMap;
         this._tiledMap.enableCulling = true;
 
-        this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
-        this.scheduleOnce(()=>{
-            this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
-        });
+        this.updateCulling();
         
         var uit = this._tiledMap.node.getComponent(UITransform);
         this._maxMapX = (uit.width - view.getVisibleSize().width) * 0.5;
@@ -92,9 +89,8 @@ export default class MapLogic extends Component {
                 pixelPoint.x = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
                 pixelPoint.y = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
                 this._mapCamera.node.setPosition(new Vec3(pixelPoint.x, pixelPoint.y, this._mapCamera.node.position.z));
-
-                this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
                 this.setCenterMapCellPoint(MapUtil.mapPixelToCellPoint(pixelPoint), pixelPoint);
+                this.updateCulling();
             }
         }
     }
@@ -160,16 +156,37 @@ export default class MapLogic extends Component {
         pos.x = positionX;
         pos.y = positionY;
         this._mapCamera.node.position = pos;
-        this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
-        this.scheduleOnce(()=>{
-            this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
-        })
-
+    
         this.setCenterMapCellPoint(point, pixelPoint);
+
+        this.updateCulling();
     }
 
     protected setCenterMapCellPoint(point: Vec2, pixelPoint: Vec2): void {
         this._cmd.proxy.setCurCenterPoint(point, pixelPoint);
-        
     }
+
+    private updateCulling() {
+        if(this._tiledMap){
+            // let layers = this._tiledMap.getLayers();
+            // for (let index = 0; index < layers.length; index++) {
+            //     const l = layers[index];
+            //     l.updateCulling();
+            // }
+
+            // this.scheduleOnce(()=>{
+            //     for (let index = 0; index < layers.length; index++) {
+            //         const l = layers[index];
+            //         l.updateCulling();
+            //     }
+            // })
+
+            this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+            this.scheduleOnce(()=>{
+                this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+            })
+    
+        }
+
+     }
 }

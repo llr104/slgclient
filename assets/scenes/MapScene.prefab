@@ -115,7 +115,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 4,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -176,6 +176,7 @@
     "__type__": "cc.UIOpacity",
     "_name": "",
     "_objFlags": 0,
+    "__editorExtras__": {},
     "node": {
       "__id__": 2
     },
@@ -194,6 +195,7 @@
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
+    "__editorExtras__": {},
     "node": {
       "__id__": 2
     },
