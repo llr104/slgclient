@@ -18,13 +18,13 @@ export default class SkillProxy {
 
         for (let i: number = 0; i < cfgs.length; i++) {
 
-        if (cfgs[i]._name == "skill_outline") {
-        console.log("skill_outline");
-        this._skillOutLine = cfgs[i].json;
-        } else {
-        this._skillConfs.push(cfgs[i].json);
-        this._skillCfgMap.set(cfgs[i].json.cfgId, cfgs[i].json);
-        }
+            if (cfgs[i]._name == "skill_outline") {
+                console.log("skill_outline");
+                this._skillOutLine = cfgs[i].json;
+            } else {
+                this._skillConfs.push(cfgs[i].json);
+                this._skillCfgMap.set(cfgs[i].json.cfgId, cfgs[i].json);
+            }
         }
     }
     public get skillConfs(): SkillConf[] {
@@ -35,22 +35,22 @@ export default class SkillProxy {
     }
     public getSkillCfg(cfgId:number): SkillConf{
         if(this._skillCfgMap.has(cfgId)){
-        return this._skillCfgMap.get(cfgId);
+            return this._skillCfgMap.get(cfgId);
         }else{
-        return null;
+            return null;
         }
     }
     public getSkill(cfgId:number): Skill{
         if(this._skills.has(cfgId)){
-        return this._skills.get(cfgId);
+            return this._skills.get(cfgId);
         }else{
-        return null;
+            return null;
         }
     }
     public updateSkills(skills: Skill[]) {
 
         skills.forEach(skill => {
-        this._skills.set(skill.cfgId, skill);
+            this._skills.set(skill.cfgId, skill);
         });
 
     }

@@ -71,7 +71,6 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onDestroy(): void {
-        this.additionTouchNode.targetOff(this);
         this._gengeralLogics.length = 0;
     }
 

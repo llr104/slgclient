@@ -24,10 +24,6 @@ import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 
 
-const TIP_LAYER1 = 100;
-const TIP_LAYER2 = 200;
-const TIP_LAYER3 = 300;
-const TIP_ZORDER = 1000;
 
 @ccclass('MapUILogic')
 export default class MapUILogic extends Component {
@@ -181,12 +177,11 @@ export default class MapUILogic extends Component {
     protected showTip(text:string, close:Function):void {
         if (this._dialogNode == null){
             this._dialogNode = instantiate(this.dialog)
-            this._dialogNode.setSiblingIndex(TIP_ZORDER);
             this._dialogNode.parent = this.contentNode;
         }else{
             this._dialogNode.active = true;
         }
-
+        this._dialogNode.setSiblingIndex(this.topLayer());
         this._dialogNode.getComponent(Dialog).text(text);
         this._dialogNode.getComponent(Dialog).setClose(close)
     }
@@ -219,6 +214,10 @@ export default class MapUILogic extends Component {
     }
 
 
+
+    public topLayer():number {
+        return this.contentNode.children.length+1;
+    }
     /**
      * 设施
      */
@@ -229,6 +228,7 @@ export default class MapUILogic extends Component {
         } else {
             this._facilityNode.active = true;
         }
+        this._facilityNode.setSiblingIndex(this.topLayer());
         this._facilityNode.getComponent(FacilityListLogic).setData(data);
     }
 
@@ -239,6 +239,7 @@ export default class MapUILogic extends Component {
         } else {
             this._armySettingNode.active = true;
         }
+        this._armySettingNode.setSiblingIndex(this.topLayer());
         this._armySettingNode.getComponent(CityArmySettingLogic).setData(cityId, order);
     }
     /**
@@ -247,12 +248,11 @@ export default class MapUILogic extends Component {
     protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = instantiate(this.generalPrefab);
-            this._generalNode.setSiblingIndex(TIP_LAYER1);
             this._generalNode.parent = this.contentNode;
         } else {
             this._generalNode.active = true;
         }
-
+        this._generalNode.setSiblingIndex(this.topLayer());
         this._generalNode.getComponent(GeneralListLogic).setData(data, type, position);
     }
 
@@ -274,6 +274,7 @@ export default class MapUILogic extends Component {
         } else {
             this._armySelectNode.active = true;
         }
+        this._armySelectNode.setSiblingIndex(this.topLayer());
         this._armySelectNode.getComponent(ArmySelectNodeLogic).setData(cmd, x, y);
     }
 
@@ -284,11 +285,11 @@ export default class MapUILogic extends Component {
     protected openGeneralDes(cfgData: any, curData: any): void {
         if (this._generalDesNode == null) {
             this._generalDesNode = instantiate(this.generalDesPrefab);
-            this._generalDesNode.setSiblingIndex(TIP_LAYER2);
             this._generalDesNode.parent = this.contentNode;
         } else {
             this._generalDesNode.active = true;
         }
+        this._generalDesNode.setSiblingIndex(this.topLayer());
         this._generalDesNode.getComponent(GeneralInfoLogic).setData(cfgData, curData);
     }
 
@@ -304,7 +305,7 @@ export default class MapUILogic extends Component {
             this._cityAboutNode.active = true;
         }
 
-
+        this._cityAboutNode.setSiblingIndex(this.topLayer());
         this.widgetNode.active = false;
         EventMgr.emit("scroll_to_map", data.x, data.y);
         this._cityAboutNode.getComponent(CityAboutLogic).setData(data);
@@ -321,6 +322,7 @@ export default class MapUILogic extends Component {
         } else {
             this._fortressAboutNode.active = true;
         }
+        this._fortressAboutNode.setSiblingIndex(this.topLayer());
         this._fortressAboutNode.getComponent(FortressAbout).setData(data);
     }
 
@@ -336,7 +338,7 @@ export default class MapUILogic extends Component {
         } else {
             this._warReportNode.active = true;
         }
-
+        this._warReportNode.setSiblingIndex(this.topLayer());
         this._warReportNode.getComponent(WarReportLogic).updateView();
     }
 
@@ -386,6 +388,7 @@ export default class MapUILogic extends Component {
         } else {
             this._drawNode.active = true;
         }
+        this._drawNode.setSiblingIndex(this.topLayer());
     }
 
 
@@ -402,7 +405,7 @@ export default class MapUILogic extends Component {
         } else {
             this._drawResultNode.active = true;
         }
-        this._drawResultNode.setSiblingIndex(TIP_LAYER3);
+        this._drawResultNode.setSiblingIndex(this.topLayer());
         this._drawResultNode.getComponent(DrawRLogic).setData(data);
 
         console.log("openDrawR:", this.contentNode);
@@ -417,6 +420,7 @@ export default class MapUILogic extends Component {
         } else {
             this._unionNode.active = true;
         }
+        this._unionNode.setSiblingIndex(this.topLayer());
     }
 
 
@@ -427,7 +431,7 @@ export default class MapUILogic extends Component {
         } else {
             this._chatNode.active = true;
         }
-        
+        this._chatNode.setSiblingIndex(this.topLayer());
     }
 
 
@@ -439,7 +443,7 @@ export default class MapUILogic extends Component {
         } else {
             this._transFormNode.active = true;
         }
-
+        this._transFormNode.setSiblingIndex(this.topLayer());
         this._transFormNode.getComponent(TransformLogic).initView();
     }
 
@@ -448,10 +452,12 @@ export default class MapUILogic extends Component {
         if (this._generalConvertNode == null) {
             this._generalConvertNode = instantiate(this.generalConvertPrefab);
             this._generalConvertNode.parent = this.contentNode;
-            this._generalConvertNode.setSiblingIndex(TIP_LAYER3);
+            
         } else {
             this._generalConvertNode.active = true;
         }
+
+        this._generalConvertNode.setSiblingIndex(this.topLayer());
 
     }
 
@@ -463,6 +469,7 @@ export default class MapUILogic extends Component {
         } else {
             this._generalRosterNode.active = true;
         }
+        this._generalRosterNode.setSiblingIndex(this.topLayer());
 
     }
     
@@ -478,6 +485,7 @@ export default class MapUILogic extends Component {
         } else {
             this._skillNode.active = true;
         }
+        this._skillNode.setSiblingIndex(this.topLayer());
         this._skillNode.getComponent(SkillLogic).setData(type, general, skillPos);
     }
 
@@ -495,6 +503,7 @@ export default class MapUILogic extends Component {
         } else {
             this._skillInfoNode.active = true;
         }
+        this._skillInfoNode.setSiblingIndex(this.topLayer());
         this._skillInfoNode.getComponent(SkillInfoLogic).setData(cfg, type, general, skillPos);
     }
 
@@ -516,6 +525,7 @@ export default class MapUILogic extends Component {
             this._collectNode.parent = this.contentNode;
         }
         this._collectNode.active = true;
+        this._collectNode.setSiblingIndex(this.topLayer());
 
     }
 

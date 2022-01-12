@@ -34,8 +34,8 @@ export default class SkillCommand {
     }
     public qrySkillList(): void {
         let sendData: any = {
-        name: ServerConfig.skill_list,
-        msg: {}
+            name: ServerConfig.skill_list,
+            msg: {}
         };
         NetManager.getInstance().send(sendData);
     }
@@ -43,12 +43,13 @@ export default class SkillCommand {
     protected onSkillList(data: any): void {
         console.log("onSkillList", data);
         if (data.code == 0) {
-        this._proxy.updateSkills(data.msg.list);
-        EventMgr.emit("skill_list_info");
+            this._proxy.updateSkills(data.msg.list);
+            EventMgr.emit("skill_list_info");
         }
     }
     protected onSkillPush(data: any): void {
         console.log("onSkillPush", data);
         this._proxy.updateSkills([data.msg]);
+        EventMgr.emit("update_general");
     }
 }
