@@ -54,9 +54,6 @@ export default class MapLogic extends Component {
         this._tiledMap.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this._tiledMap.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
         this._tiledMap.node.on(Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-
-
-        this._tiledMap.getProperty("aaa");
     }
 
     protected openCityAbout(data: any): void {

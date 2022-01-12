@@ -102,6 +102,8 @@ export default class MapClickUILogic extends Component {
     }
 
     protected onClickEnter(): void {
+        console.log("onClickEnter");
+
         if (this._data instanceof MapBuildData){
             EventMgr.emit("open_fortress_about", this._data);
         }else if (this._data instanceof MapCityData){
