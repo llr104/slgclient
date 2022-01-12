@@ -69,6 +69,8 @@ export default class MapArmyLogic extends Component {
             return;
         }
         let logic:ArmyLogic = this._armyLogics.get(data.id);
+        console.log("onUpdateArmy 1111:", logic);
+
         if (logic == null) {
             logic = new ArmyLogic();
             aniNode = this.createArmy();
@@ -78,11 +80,14 @@ export default class MapArmyLogic extends Component {
             arrowNode.zIndex = 2;
             arrowNode.parent = this.parentLayer;
             this._armyLogics.set(data.id, logic);
+
+            console.log("onUpdateArmy 2222:", logic);
         } else {
             aniNode = logic.aniNode;
             arrowNode = logic.arrowNode;
             logic = this._armyLogics.get(data.id);
         }
+        console.log("onUpdateArmy 3333:", logic);
         logic.setArmyData(data, aniNode, arrowNode);
     }
 

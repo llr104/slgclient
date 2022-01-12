@@ -323,6 +323,7 @@ export default class ListLogic extends Component {
         
         for (var i = 0; i < this._items.length; i++) {
             var item = this._items[i];
+            // console.log("updateItems:", item, item.itemIdx, this._datas.length, item.itemIdx < this._datas.length)
             item.active = item.itemIdx < this._datas.length;
             if (item.active) {
                 this.updateItem(item, item.itemIdx);

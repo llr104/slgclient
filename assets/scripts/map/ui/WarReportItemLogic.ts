@@ -7,6 +7,7 @@ import DateUtil from "../../utils/DateUtil";
 import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import GeneralItemLogic from './GeneralItemLogic';
 
 @ccclass('WarReportItemLogic')
 export default class WarReportItemLogic extends Component {
@@ -101,7 +102,7 @@ export default class WarReportItemLogic extends Component {
     protected setTeams(node:Node[],generals:any[]){
         for(var i = 0; i < node.length ;i++){
             let item:Node = node[i];
-            let com = item.getComponent("GeneralItemLogic");
+            let com = item.getComponent(GeneralItemLogic);
             var general = generals[i];
             if(general){
                 item.active = true;

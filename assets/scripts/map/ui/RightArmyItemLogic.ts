@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, Sprite } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 import { ArmyCmd, ArmyData } from "../../general/ArmyProxy";
@@ -39,6 +39,7 @@ export default class RightArmyItemLogic extends Component {
 
     protected onLoad(): void {
         EventMgr.on("update_general", this.onUpdateGeneral, this);
+        this.node.getComponent(UITransform).height -= this.bottomNode.getComponent(UITransform).height;
         this.bottomNode.active = false;
     }
 
@@ -73,6 +74,11 @@ export default class RightArmyItemLogic extends Component {
 
     protected onClickTop(): void {
         this.bottomNode.active = !this.bottomNode.active;
+        if(this.bottomNode.active){
+            this.node.getComponent(UITransform).height += this.bottomNode.getComponent(UITransform).height;
+        }else{
+            this.node.getComponent(UITransform).height -= this.bottomNode.getComponent(UITransform).height;
+        }
     }
 
     protected onClickBack(): void {

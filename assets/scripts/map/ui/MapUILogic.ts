@@ -334,7 +334,7 @@ export default class MapUILogic extends Component {
     protected openWarReport(): void {
         if (this._warReportNode == null) {
             this._warReportNode = instantiate(this.warReportPrefab);
-            this._warReportNode.parent = this.node;
+            this._warReportNode.parent = this.contentNode;
         } else {
             this._warReportNode.active = true;
         }

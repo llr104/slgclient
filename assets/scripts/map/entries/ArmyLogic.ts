@@ -11,8 +11,8 @@ export default class ArmyLogic {
     protected _parentLayer: Node;
 
     protected _aniName: string = "";
-    protected _startPixelPos: Vec3 = null;
-    protected _endPixelPos: Vec3 = null;
+    protected _startPixelPos: Vec3 = new Vec3(0, 0, 0);
+    protected _endPixelPos: Vec3 = new Vec3(0, 0, 0);
     protected _lenX: number = 0;
     protected _lenY: number = 0;
 

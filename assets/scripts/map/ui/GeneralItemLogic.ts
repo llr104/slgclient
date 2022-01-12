@@ -164,7 +164,8 @@ export default class GeneralItemLogic extends Component {
     protected onClickGeneral(event:any): void {
         if(this._curData){
             var cfgData = this._curData.config;
-
+            console.log("onClickGeneral:", this._type);
+            
             //武将详情
              if(this._type == GeneralItemType.GeneralInfo){
                  EventMgr.emit("open_general_des",cfgData, this._curData);
