@@ -45,10 +45,16 @@ export default class MapLogic extends Component {
 
     public setTiledMap(tiledMap: TiledMap): void {
         this._tiledMap = tiledMap;
-        this._tiledMap.enableCulling = false;
+        this._tiledMap.enableCulling = true;
+
+        this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+        this.scheduleOnce(()=>{
+            this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+        });
+        
         var uit = this._tiledMap.node.getComponent(UITransform);
-        this._maxMapX = (uit.width - game.canvas.width) * 0.5;
-        this._maxMapY = (uit.height - game.canvas.height) * 0.5;
+        this._maxMapX = (uit.width - view.getVisibleSize().width) * 0.5;
+        this._maxMapY = (uit.height - view.getVisibleSize().height) * 0.5;
         this._tiledMap.node.on(Node.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
         this._tiledMap.node.on(Node.EventType.TOUCH_START, this.onTouchBegan, this);
         this._tiledMap.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
@@ -86,6 +92,8 @@ export default class MapLogic extends Component {
                 pixelPoint.x = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
                 pixelPoint.y = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
                 this._mapCamera.node.setPosition(new Vec3(pixelPoint.x, pixelPoint.y, this._mapCamera.node.position.z));
+
+                this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
                 this.setCenterMapCellPoint(MapUtil.mapPixelToCellPoint(pixelPoint), pixelPoint);
             }
         }
@@ -152,12 +160,16 @@ export default class MapLogic extends Component {
         pos.x = positionX;
         pos.y = positionY;
         this._mapCamera.node.position = pos;
-  
+        this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+        this.scheduleOnce(()=>{
+            this._tiledMap.node.emit(Node.EventType.TRANSFORM_CHANGED);
+        })
+
         this.setCenterMapCellPoint(point, pixelPoint);
     }
 
     protected setCenterMapCellPoint(point: Vec2, pixelPoint: Vec2): void {
-        // console.log("setCenterMapCellPoint", point);
         this._cmd.proxy.setCurCenterPoint(point, pixelPoint);
+        
     }
 }

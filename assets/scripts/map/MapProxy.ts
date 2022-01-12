@@ -1,4 +1,4 @@
-import { _decorator, TiledMapAsset, Vec2, game } from 'cc';
+import { _decorator, TiledMapAsset, Vec2, game, view } from 'cc';
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
 
@@ -209,11 +209,20 @@ export default class MapProxy {
                     oldIds = [];
                     addIds = newIds;
                     //计算四个角所在的区域 用于判断需要优先请求的区域
-                    let leftTopPixelPoint: Vec2 = pixelPoint.add(new Vec2(-game.canvas.width * 0.5, game.canvas.height * 0.5));
-                    let leftDownPixelPoint: Vec2 = pixelPoint.add(new Vec2(-game.canvas.width * 0.5, -game.canvas.height * 0.5));
-                    let rightTopPixelPoint: Vec2 = pixelPoint.add(new Vec2(game.canvas.width * 0.5, game.canvas.height * 0.5));
-                    let rightDownPixelPoint: Vec2 = pixelPoint.add(new Vec2(game.canvas.width * 0.5, -game.canvas.height * 0.5));
-                    firstAreaIds = MapUtil.getVaildAreaIdsByPixelPoints(pixelPoint, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
+                    let temp = pixelPoint.clone();
+                    let leftTopPixelPoint: Vec2 = temp.add(new Vec2(-view.getVisibleSize().width * 0.5, view.getVisibleSize().height * 0.5));
+                    temp = pixelPoint.clone();
+
+                    let leftDownPixelPoint: Vec2 = temp.add(new Vec2(-view.getVisibleSize().width * 0.5, -view.getVisibleSize().height * 0.5));
+                    temp = pixelPoint.clone();
+
+                    let rightTopPixelPoint: Vec2 = temp.add(new Vec2(view.getVisibleSize().width * 0.5, view.getVisibleSize().height * 0.5));
+                    temp = pixelPoint.clone();
+
+                    let rightDownPixelPoint: Vec2 = temp.add(new Vec2(view.getVisibleSize().width * 0.5, -view.getVisibleSize().height * 0.5));
+                    temp = pixelPoint.clone();
+
+                    firstAreaIds = MapUtil.getVaildAreaIdsByPixelPoints(temp, leftTopPixelPoint, leftDownPixelPoint, rightTopPixelPoint, rightDownPixelPoint);
                 } else {
                     oldIds = MapUtil.get9GridVaildAreaIds(this._curCenterAreaId);
                     for (let i: number = 0; i < newIds.length; i++) {

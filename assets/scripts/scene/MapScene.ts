@@ -75,6 +75,7 @@ export default class MapScene extends Component {
     }
 
     protected onMapShowAreaChange(centerPoint: Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
+        
         console.log("map_show_area_change", arguments);
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
@@ -129,7 +130,7 @@ export default class MapScene extends Component {
 
                     //标记
                     if (this._cmd.proxy.getResData(cellId).type <= MapResType.FORTRESS) {
-                        console.log("tagLogic");
+            
                         tagLogic.addItem(addIds[i], this._cmd.proxy.getResData(cellId));
                     }
 
