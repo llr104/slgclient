@@ -1,4 +1,5 @@
 import { _decorator, Component, ScrollView } from 'cc';
+import ListLogic from '../../utils/ListLogic';
 const { ccclass, property } = _decorator;
 import { WarReport } from "./MapUIProxy";
 
@@ -18,8 +19,11 @@ export default class WarReportDesLogic extends Component {
 
 
     public setData(data:any):void{
+        
         this._curData = data;
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        console.log("WarReportDesLogic rounds:", this._curData.rounds);
+        
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(this._curData.rounds);
     }
 

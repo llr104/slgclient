@@ -123,6 +123,7 @@ export default class WarReportItemLogic extends Component {
             MapUICommand.getInstance().warRead(this._curData.id);
         }
 
+        console.log("click_war_report:", this._curData);
         EventMgr.emit("click_war_report", this._curData);
        
     }

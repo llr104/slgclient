@@ -323,7 +323,7 @@ export default class ListLogic extends Component {
         
         for (var i = 0; i < this._items.length; i++) {
             var item = this._items[i];
-            // console.log("updateItems:", item, item.itemIdx, this._datas.length, item.itemIdx < this._datas.length)
+            console.log("updateItems:", item, item.itemIdx, this._datas.length, item.itemIdx < this._datas.length)
             item.active = item.itemIdx < this._datas.length;
             if (item.active) {
                 this.updateItem(item, item.itemIdx);
@@ -433,7 +433,7 @@ export default class ListLogic extends Component {
      * 设置列表数据
      * scrollOffset 没有传值代表刷新到初始位置 其他整数代表刷新到当前位置的相对偏移量
      */
-    protected setData(data, scrollOffset):void{
+    public setData(data, scrollOffset?:any):void{
         this._datas = data;
         if (scrollOffset != null && scrollOffset != undefined && !isNaN(scrollOffset)) {
             this._newOffset = this._curOffset + scrollOffset;

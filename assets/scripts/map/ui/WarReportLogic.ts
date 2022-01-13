@@ -12,6 +12,7 @@ import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
 import WarReportDesLogic from './WarReportDesLogic';
 import { EventMgr } from '../../utils/EventMgr';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('WarReportLogic')
 export default class WarReportLogic extends Component {
@@ -41,7 +42,7 @@ export default class WarReportLogic extends Component {
     protected initView():void{
         var report:WarReport[] = MapUICommand.getInstance().proxy.getWarReport();
         
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(report);
     }
 
@@ -51,6 +52,7 @@ export default class WarReportLogic extends Component {
     }
 
     protected openWarPortDes(data:WarReport):void{
+        console.log("openWarPortDes");
         if (this._warPortDesNode == null) {
             this._warPortDesNode = instantiate(this.warPortDesPrefab);
             this._warPortDesNode.parent = this.node;
