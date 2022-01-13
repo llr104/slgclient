@@ -130,7 +130,7 @@ export class WebSock implements ISocket {
      * @param send_data 
      */
     public packAndSend(send_data:any){
-        console.log("packAndSend:", send_data);
+        // console.log("packAndSend:", send_data);
         var encrypt = this._key == ""?send_data:this.encrypt(send_data);
 
         var data = gzip.zip(encrypt, {level:9});

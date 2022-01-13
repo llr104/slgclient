@@ -39,20 +39,30 @@ export class HttpInvoke {
 
 
     public doSend(url:string,params:any,type:HttpInvokeType):Promise<any>{
-        var self = this;
+       
         let xhr = new XMLHttpRequest();
         xhr.timeout = this._receiveTime;
-
+        var self = this;
+        
         let p = new Promise(function(resolve, reject){
+            
+        
+            let onlyOne = (f, data)=> {
+                if(f){
+                    f(data)
+                }
+            }
+
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
-                    console.log("onreadystatechange:",xhr.responseText);
+                    console.log("onreadystatechange:",xhr);
                     if (xhr.status >= 200 && xhr.status < 400) {
                         self.onComplete(xhr);
-                        resolve(xhr);
+                        onlyOne(resolve, xhr);
                     } else {
                         self.onComplete(null);
-                        reject(null);
+                        console.log("onreadystatechange 1111");
+                        onlyOne(resolve, xhr);
                     }
                 }
     
@@ -60,12 +70,13 @@ export class HttpInvoke {
             xhr.ontimeout = function () {
                 console.log("xhr.ontimeout");
                 self.onComplete(null);
-                reject(null);
+                reject();
             };
             xhr.onerror = function (e) {
                 console.log("xhr.onerror:", xhr.readyState, xhr.status, e);
                 self.onComplete(null);
-                reject(null);
+                console.log("reject:", reject);
+                reject();
             };
             
             
