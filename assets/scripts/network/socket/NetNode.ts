@@ -141,6 +141,7 @@ export class NetNode {
                 this.destroyInvoke(req);
                 i--;
 
+                EventMgr.emit("recvMessageError", msg, req);
             }       
         }
 
@@ -203,13 +204,13 @@ export class NetNode {
             }else{
                 this.cannelMsgTimer(msg);
 
-                // console.log("this._requests.length:",this._requests.length)
                 for (var i = 0; i < this._requests.length;i++) {
                     let req = this._requests[i];
                     if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                         this._requests.splice(i, 1);
                         i--;
-                        // console.log("返回:",msg.name,"耗时:",new Date().getTime() - req.startTime)
+               
+                        EventMgr.emit("recvMessage", msg, req);
                         EventMgr.emit(msg.name, msg , req.otherData);
                         this.destroyInvoke(req);
                         EventMgr.emit(NetEvent.ServerRequestSucess,msg);
@@ -289,18 +290,50 @@ export class NetNode {
 
 
 
-    public send(send_data:any,otherData:any,force: boolean = false):void{
+    public send(send_data:any,otherData:any,force: boolean = false) :Promise<any>{
    
-        var data = this.createInvoke();//new RequestObject();
+        let data = this.createInvoke();
         data.json = send_data;
         data.rspName = send_data.name;
         data.otherData = otherData;
 
+        let p = new Promise(function(resolve, reject){
+            let self = this;
+            let ok = (rsp, req)=>{
+                if(data == req){
+                    let obj = {
+                        req: data.json,
+                        rsp: rsp
+                    };
+                    EventMgr.off("recvMessage", ok, self);
+                    EventMgr.off("recvMessageError", error, self);
+                    resolve(obj);
+                }
+            }
+
+            let error = (rsp, req)=>{
+                if(data == req){
+                    let obj = {
+                        req: data.json,
+                        rsp: rsp
+                    };
+                    EventMgr.off("recvMessage", ok, self);
+                    EventMgr.off("recvMessageError", error, self);
+                    reject(obj);
+                }
+            }
+
+            EventMgr.on("recvMessage", ok, self);
+            EventMgr.on("recvMessageError", error, self);
+        
+        });
+         
         this.sendPack(data,force);
+        return p;
     }
 
     // 发起请求，如果当前处于重连中，进入缓存列表等待重连完成后发送
-    public sendPack(obj: RequestObject, force: boolean = false): boolean {
+    public sendPack(obj: RequestObject, force: boolean = false) :boolean {
         if (this._state == NetNodeState.Working || force) {
             this.socketSend(obj);
             this._requests.push(obj);

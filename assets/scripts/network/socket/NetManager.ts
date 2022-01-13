@@ -19,12 +19,12 @@ export class NetManager {
         this._netNode.connect(options);
     }
 
-    public send(send_data: any, otherData:any = {},force: boolean = false) :void{
+    public send(send_data: any, otherData:any = {},force: boolean = false) :Promise<any>{
         if(send_data.seq == undefined){
             send_data.seq = 0;
         }
         
-        this._netNode.send(send_data,otherData,force);
+        return this._netNode.send(send_data,otherData,force);
     }
 
     public close(code?: number, reason?: string):void {

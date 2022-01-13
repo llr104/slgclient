@@ -34,10 +34,21 @@ export default class LoginLogic extends Component {
     }
 
     protected onClickRegister(): void {
+
+        if(!this.editName.string || !this.editPass.string){
+            EventMgr.emit("show_toast", "账号密码有误");
+            return;
+        }
+
         LoginCommand.getInstance().register(this.editName.string, this.editPass.string);
     }
 
     protected onClickLogin(): void {
+        if(!this.editName.string || !this.editPass.string){
+            EventMgr.emit("show_toast", "账号密码有误");
+            return;
+        }
+
         LoginCommand.getInstance().accountLogin(this.editName.string, this.editPass.string)
     }
 
