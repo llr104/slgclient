@@ -46,23 +46,16 @@ export class HttpInvoke {
         
         let p = new Promise(function(resolve, reject){
             
-        
-            let onlyOne = (f, data)=> {
-                if(f){
-                    f(data)
-                }
-            }
-
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     console.log("onreadystatechange:",xhr);
                     if (xhr.status >= 200 && xhr.status < 400) {
                         self.onComplete(xhr);
-                        onlyOne(resolve, xhr);
+                        resolve(xhr);
                     } else {
                         self.onComplete(null);
                         console.log("onreadystatechange 1111");
-                        onlyOne(resolve, xhr);
+                        resolve(xhr);
                     }
                 }
     
@@ -70,13 +63,12 @@ export class HttpInvoke {
             xhr.ontimeout = function () {
                 console.log("xhr.ontimeout");
                 self.onComplete(null);
-                reject();
+                resolve(null);
             };
             xhr.onerror = function (e) {
                 console.log("xhr.onerror:", xhr.readyState, xhr.status, e);
                 self.onComplete(null);
-                console.log("reject:", reject);
-                reject();
+                resolve(null);
             };
             
             
