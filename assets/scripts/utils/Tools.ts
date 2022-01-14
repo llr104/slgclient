@@ -103,6 +103,8 @@ export class Tools{
         codeObj[63] = "兵种不符";
         codeObj[64] = "该位置没有技能";
         codeObj[65] = "技能等级已满";
+        codeObj[66] = "昵称已经存在";
+       
 
         if (codeObj[code] == null){
             str = "错误:" + code;
