@@ -27,20 +27,20 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 179
+        "__id__": 180
       },
       {
-        "__id__": 181
+        "__id__": 182
       },
       {
-        "__id__": 183
+        "__id__": 184
       },
       {
-        "__id__": 185
+        "__id__": 186
       }
     ],
     "_prefab": {
-      "__id__": 187
+      "__id__": 188
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -276,14 +276,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 174
+        "__id__": 175
       },
       {
-        "__id__": 176
+        "__id__": 177
       }
     ],
     "_prefab": {
-      "__id__": 178
+      "__id__": 179
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2022,7 +2022,7 @@
     },
     "component": "",
     "_componentId": "acbebNnj5dCba6wGoJDemL4",
-    "handler": "onCreate",
+    "handler": "onClickCreate",
     "customEventData": ""
   },
   {
@@ -2487,7 +2487,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 173
+      "__id__": 174
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -3621,12 +3621,26 @@
       "__id__": 172
     },
     "_allowSwitchOff": false,
-    "checkEvents": [],
+    "checkEvents": [
+      {
+        "__id__": 173
+      }
+    ],
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "f3V0Gk/cJFmJwVTggQ4/vJ"
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 1
+    },
+    "component": "",
+    "_componentId": "acbebNnj5dCba6wGoJDemL4",
+    "handler": "onClickToggle",
+    "customEventData": ""
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -3647,7 +3661,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 175
+      "__id__": 176
     },
     "_opacity": 255,
     "_id": ""
@@ -3665,7 +3679,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 177
+      "__id__": 178
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -3702,7 +3716,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 180
+      "__id__": 181
     },
     "editName": {
       "__id__": 68
@@ -3725,7 +3739,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 182
+      "__id__": 183
     },
     "mask": {
       "__id__": 2
@@ -3745,7 +3759,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 184
+      "__id__": 185
     },
     "_opacity": 255,
     "_id": ""
@@ -3763,7 +3777,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 186
+      "__id__": 187
     },
     "_contentSize": {
       "__type__": "cc.Size",

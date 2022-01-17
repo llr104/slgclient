@@ -45,7 +45,7 @@ export default class LoginScene extends Component {
     }
 
     protected onCreate(): void {
-        AudioManager.instance.playClick();
+ 
         if (this._createNode == null) {
             this._createNode = instantiate(this.createPrefab);
             this._createNode.parent = this.node;

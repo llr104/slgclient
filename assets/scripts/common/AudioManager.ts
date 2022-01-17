@@ -62,10 +62,8 @@ export class AudioManager {
      * @param {String} name 音效名称可通过constants.AUDIO_SOUND 获取
      */
     playSound (name:string) {
-        // debugger
         const audioSource = AudioManager._audioSource!;
         assert(audioSource, 'AudioManager not inited!');
-
         let path = '/audio/sound/';
         resources.load(path + name, AudioClip, (err, clip)=> {
             if (err) {

@@ -23,10 +23,15 @@ export default class CreateLogic extends Component {
         this.editName.string = this.getRandomName();
     }
 
-    protected onCreate() {
+    protected onClickCreate() {
+        AudioManager.instance.playClick();
         var sex = this.manToggle.isChecked?0:1;
         var loginData: any = LoginCommand.getInstance().proxy.getLoginData();
         LoginCommand.getInstance().role_create(loginData.uid, this.editName.string, sex,LoginCommand.getInstance().proxy.serverId, 0)
+    }
+
+    protected onClickToggle () {
+        AudioManager.instance.playClick();
     }
 
 

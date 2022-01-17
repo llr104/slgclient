@@ -13,6 +13,7 @@ import { Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
+import ListLogic from '../utils/ListLogic';
 
 @ccclass('UnionApplyLogic')
 export default class UnionApplyLogic extends Component {
@@ -27,14 +28,14 @@ export default class UnionApplyLogic extends Component {
         EventMgr.targetOff(this);
     }
     protected updateApply(data:any[]){
-        var comp = this.applyView.node.getComponent("ListLogic");
+        var comp = this.applyView.node.getComponent(ListLogic);
         comp.setData(data?data:[]);
     }
     protected getApply():void{
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         if(unionData.isMajor(city.rid)){
-        UnionCommand.getInstance().unionApplyList(unionData.id);
+            UnionCommand.getInstance().unionApplyList(unionData.id);
         }
     }
     protected onEnable():void{
