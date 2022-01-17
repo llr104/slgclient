@@ -1,5 +1,6 @@
 
 import { _decorator, Component, ScrollView } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
@@ -18,6 +19,7 @@ export default class GeneralRosterListLogic extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
         EventMgr.emit("open_general");
     }

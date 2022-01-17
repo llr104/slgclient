@@ -9,6 +9,7 @@ import MapCommand from "../MapCommand";
 import { MapResType } from "../MapProxy";
 import CityArmyItemLogic from "./CityArmyItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('FortressAbout')
 export default class FortressAbout extends Component {
@@ -137,14 +138,17 @@ export default class FortressAbout extends Component {
     }
 
     protected onClickUpBuild(): void {
+        AudioManager.instance.playClick();
         this._cmd.upBuild(this._data.x, this._data.y);
     }
 
     protected onClickDestroyBuild(): void {
+        AudioManager.instance.playClick();
         this._cmd.delBuild(this._data.x, this._data.y);
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 

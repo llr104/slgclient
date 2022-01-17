@@ -8,10 +8,10 @@ import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
 import GeneralItemLogic from './GeneralItemLogic';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('WarReportItemLogic')
 export default class WarReportItemLogic extends Component {
-
 
     private _curData:WarReport = null;
 
@@ -95,10 +95,6 @@ export default class WarReportItemLogic extends Component {
 
     }
 
-
-
-
-
     protected setTeams(node:Node[],generals:any[]){
         for(var i = 0; i < node.length ;i++){
             let item:Node = node[i];
@@ -118,6 +114,8 @@ export default class WarReportItemLogic extends Component {
     }
 
     protected onClickItem():void{
+        AudioManager.instance.playClick();
+
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         if(!isRead){
             MapUICommand.getInstance().warRead(this._curData.id);

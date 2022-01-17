@@ -82,8 +82,6 @@ export class LocalCache{
     };
 
 
-
-
     public static setLoginValidation(data:any):void{
         LocalCache.setPersonMemory("loginvalidation", data);
     }
@@ -91,6 +89,23 @@ export class LocalCache{
     public static getLoginValidation():any{
         return LocalCache.getPersonMemory("loginvalidation", "");
     }
+
+    public static getMusic() {
+        return LocalCache.getPersonMemory("music", false);
+    }
+
+    public static setMusic(state:Boolean) {
+        return LocalCache.setPersonMemory("music", state);
+    }
+
+    public static getSound() {
+        return LocalCache.getPersonMemory("sound", false);
+    }
+
+    public static setSound(state:Boolean) {
+        return LocalCache.setPersonMemory("sound", state);
+    }
+
 
 
 }

@@ -1,4 +1,5 @@
 import { _decorator, Component, ScrollView } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 import ListLogic from '../../utils/ListLogic';
 const { ccclass, property } = _decorator;
 import { WarReport } from "./MapUIProxy";
@@ -13,10 +14,6 @@ export default class WarReportDesLogic extends Component {
     @property(ScrollView)
     scrollView:ScrollView = null;
 
-   
-    protected onLoad():void{
-    }
-
 
     public setData(data:any):void{
         
@@ -30,5 +27,6 @@ export default class WarReportDesLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 }

@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import DateUtil from "../../utils/DateUtil";
 import { Facility, FacilityConfig } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('FacilityItemLogic')
 export default class FacilityItemLogic extends Component {
@@ -40,6 +41,7 @@ export default class FacilityItemLogic extends Component {
     }
 
     protected onTouchItem() {
+        AudioManager.instance.playClick();
         EventMgr.emit("select_facility_item", this.cityId, this.data.type);
     }
 

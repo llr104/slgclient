@@ -1,4 +1,5 @@
 import { _decorator, Component, Prefab, Node, instantiate } from 'cc';
+import { AudioManager } from '../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import LoginCommand from "../login/LoginCommand";
@@ -34,6 +35,7 @@ export default class LoginScene extends Component {
     }
 
     protected openLogin(): void {
+
         if (this._loginNode == null) {
             this._loginNode = instantiate(this.loginPrefab);
             this._loginNode.parent = this.node;
@@ -43,6 +45,7 @@ export default class LoginScene extends Component {
     }
 
     protected onCreate(): void {
+        AudioManager.instance.playClick();
         if (this._createNode == null) {
             this._createNode = instantiate(this.createPrefab);
             this._createNode.parent = this.node;
@@ -59,7 +62,7 @@ export default class LoginScene extends Component {
 
     protected onClickEnter(): void {
         //未登录 就弹登录界面
-
+        AudioManager.instance.playClick();
         var loginData = LoginCommand.getInstance().proxy.getLoginData();
         if (loginData == null) {
             this.openLogin();

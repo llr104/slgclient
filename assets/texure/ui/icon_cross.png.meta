@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "34c2d5e8-0053-4a66-ac32-67dd893831e7@6c48a",
-      "displayName": "friends_icon_cross",
+      "displayName": "icon_cross",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -34,7 +34,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "34c2d5e8-0053-4a66-ac32-67dd893831e7@f9941",
-      "displayName": "friends_icon_cross",
+      "displayName": "icon_cross",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {

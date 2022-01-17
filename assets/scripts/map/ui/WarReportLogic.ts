@@ -13,6 +13,7 @@ import { WarReport } from "./MapUIProxy";
 import WarReportDesLogic from './WarReportDesLogic';
 import { EventMgr } from '../../utils/EventMgr';
 import ListLogic from '../../utils/ListLogic';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('WarReportLogic')
 export default class WarReportLogic extends Component {
@@ -36,6 +37,7 @@ export default class WarReportLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
 
@@ -64,6 +66,7 @@ export default class WarReportLogic extends Component {
     }
 
     protected allRead():void{
+        AudioManager.instance.playClick();
         MapUICommand.getInstance().warRead(0);
     }
 }

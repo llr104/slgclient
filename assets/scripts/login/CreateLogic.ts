@@ -5,6 +5,7 @@ import { ServerConfig } from "../config/ServerConfig";
 import LoginCommand from "./LoginCommand";
 import { EventMgr } from '../utils/EventMgr';
 import { createName } from '../libs/NameDict';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('CreateLogic')
 export default class CreateLogic extends Component {
@@ -37,6 +38,7 @@ export default class CreateLogic extends Component {
     }
 
     protected onRandomName():void{
+        AudioManager.instance.playClick();
         this.editName.string = this.getRandomName();
     }
 

@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import { LocalCache } from "../utils/LocalCache";
 import LoginCommand from "./LoginCommand";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('LoginLogic')
 export default class LoginLogic extends Component {
@@ -34,6 +35,7 @@ export default class LoginLogic extends Component {
     }
 
     protected onClickRegister(): void {
+        AudioManager.instance.playClick();
 
         if(!this.editName.string || !this.editPass.string){
             EventMgr.emit("show_toast", "账号密码有误");
@@ -44,6 +46,8 @@ export default class LoginLogic extends Component {
     }
 
     protected onClickLogin(): void {
+        AudioManager.instance.playClick();
+
         if(!this.editName.string || !this.editPass.string){
             EventMgr.emit("show_toast", "账号密码有误");
             return;
@@ -53,6 +57,7 @@ export default class LoginLogic extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 }

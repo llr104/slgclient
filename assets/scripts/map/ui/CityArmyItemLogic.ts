@@ -8,6 +8,7 @@ import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import MapUICommand from "./MapUICommand";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('CityArmyItemLogic')
 export default class CityArmyItemLogic extends Component {
@@ -61,6 +62,7 @@ export default class CityArmyItemLogic extends Component {
     }
 
     protected onClickItem(): void {
+        AudioManager.instance.playClick();
         if (this.maskNode.active == false) {
             if(this._isOut){
                 if(this._data){

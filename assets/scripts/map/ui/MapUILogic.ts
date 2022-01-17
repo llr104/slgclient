@@ -22,6 +22,7 @@ import SkillLogic from "./SkillLogic";
 import { SkillConf } from "../../config/skill/Skill";
 import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 
 
@@ -107,6 +108,11 @@ export default class MapUILogic extends Component {
     skillInfoPrefab: Prefab = null;
     protected _skillInfoNode: Node = null;
 
+    @property(Prefab)
+    settingPrefab: Prefab = null;
+    protected _settingNode: Node = null;
+
+    
     @property(Node)
     widgetNode: Node = null;
 
@@ -196,6 +202,7 @@ export default class MapUILogic extends Component {
     }
 
     protected onBack(): void {
+        AudioManager.instance.playClick();
         LoginCommand.getInstance().account_logout();
     }
 
@@ -245,7 +252,13 @@ export default class MapUILogic extends Component {
     /**
      * 武将
      */
-    protected openGeneral(data: number[], type: number = 0, position: number = 0, zIndex: number = 0): void {
+    
+    protected onClickGeneral(){
+        AudioManager.instance.playClick();
+        this.openGeneral([]);
+    } 
+    
+    protected openGeneral(data: number[], type: number = 0, position: number = 0): void {
         if (this._generalNode == null) {
             this._generalNode = instantiate(this.generalPrefab);
             this._generalNode.parent = this.contentNode;
@@ -263,7 +276,7 @@ export default class MapUILogic extends Component {
      * @param zIndex 
      */
     protected openGeneralChoose(data: number[], position: number = 0): void {
-        this.openGeneral(data, 1, position, 1);
+        this.openGeneral(data, 1, position);
     }
 
     /**打开军队选择界面*/
@@ -298,6 +311,7 @@ export default class MapUILogic extends Component {
      * 城市
      */
     protected openCityAbout(data: any): void {
+   
         if (this._cityAboutNode == null) {
             this._cityAboutNode = instantiate(this.cityAboutPrefab);
             this._cityAboutNode.parent = this.contentNode;
@@ -332,6 +346,7 @@ export default class MapUILogic extends Component {
      * 战报
      */
     protected openWarReport(): void {
+        AudioManager.instance.playClick();
         if (this._warReportNode == null) {
             this._warReportNode = instantiate(this.warReportPrefab);
             this._warReportNode.parent = this.contentNode;
@@ -382,6 +397,7 @@ export default class MapUILogic extends Component {
      * 抽卡
      */
     protected openDraw(): void {
+        AudioManager.instance.playClick();
         if (this._drawNode == null) {
             this._drawNode = instantiate(this.drawPrefab);
             this._drawNode.parent = this.contentNode;
@@ -414,6 +430,7 @@ export default class MapUILogic extends Component {
 
 
     protected openUnion(): void {
+        AudioManager.instance.playClick();
         if (this._unionNode == null) {
             this._unionNode = instantiate(this.unionPrefab);
             this._unionNode.parent = this.contentNode;
@@ -425,6 +442,7 @@ export default class MapUILogic extends Component {
 
 
     protected openChat(): void {
+        AudioManager.instance.playClick();
         if (this._chatNode == null) {
             this._chatNode = instantiate(this.chatPrefab);
             this._chatNode.parent = this.contentNode;
@@ -437,6 +455,7 @@ export default class MapUILogic extends Component {
 
 
     protected openTr(): void {
+        AudioManager.instance.playClick();
         if (this._transFormNode == null) {
             this._transFormNode = instantiate(this.transFormPrefab);
             this._transFormNode.parent = this.contentNode;
@@ -448,6 +467,7 @@ export default class MapUILogic extends Component {
     }
 
     protected onOpenGeneralConvert(): void {
+        AudioManager.instance.playClick();
         console.log("onOpenGeneralConvert");
         if (this._generalConvertNode == null) {
             this._generalConvertNode = instantiate(this.generalConvertPrefab);
@@ -462,6 +482,7 @@ export default class MapUILogic extends Component {
     }
 
     protected onOpenGeneralRoster(): void {
+        AudioManager.instance.playClick();
         console.log("onOpenGeneralRoster");
         if (this._generalRosterNode == null) {
             this._generalRosterNode = instantiate(this.generalRosterPrefab);
@@ -474,6 +495,7 @@ export default class MapUILogic extends Component {
     }
     
     onClickSkillBtn(): void{
+        AudioManager.instance.playClick();
         this.onOpenSkill(0);
     }
 
@@ -490,6 +512,7 @@ export default class MapUILogic extends Component {
     }
 
     protected onCloseSkill(){
+        AudioManager.instance.playClick();
         if (this._skillNode) {
            this._skillNode.active = false;
         } 
@@ -497,6 +520,7 @@ export default class MapUILogic extends Component {
     
     protected onOpenSkillInfo(cfg:SkillConf, type:number=0, general:GeneralData = null, skillPos:number=-1){
         console.log("onOpenSkillInfo", cfg, type, general, skillPos);
+        AudioManager.instance.playClick();
         if (this._skillInfoNode == null) {
             this._skillInfoNode = instantiate(this.skillInfoPrefab);
             this._skillInfoNode.parent = this.contentNode;
@@ -520,12 +544,24 @@ export default class MapUILogic extends Component {
     }
 
     protected onClickCollection():void {
+        AudioManager.instance.playClick();
         if(this._collectNode == null){
             this._collectNode = instantiate(this.collectPrefab);
             this._collectNode.parent = this.contentNode;
         }
         this._collectNode.active = true;
         this._collectNode.setSiblingIndex(this.topLayer());
+
+    }
+
+    protected onClickSetting():void {
+        AudioManager.instance.playClick();
+        if(this._settingNode == null){
+            this._settingNode = instantiate(this.settingPrefab);
+            this._settingNode.parent = this.contentNode;
+        }
+        this._settingNode.active = true;
+        this._settingNode.setSiblingIndex(this.topLayer());
 
     }
 

@@ -13,6 +13,7 @@ import CityGeneralItemLogic from "./CityGeneralItemLogic";
 import LoginCommand from "../../login/LoginCommand";
 import { Conscript } from "../../config/Basci";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('CityArmySettingLogic')
 export default class CityArmySettingLogic extends Component {
@@ -291,6 +292,7 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onClickQuick(): void {
+        AudioManager.instance.playClick();
         if (this._data && this._data.cmd == ArmyCmd.Idle || this._data.cmd == ArmyCmd.Conscript) {
             for (let i: number = 0; i < this._totalSoldiers.length; i++) {
                 if(this._conCnts[i] > 0){
@@ -309,6 +311,7 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onClickSure(): void {
+        AudioManager.instance.playClick();
         if (this._data && this._data.cmd == ArmyCmd.Idle || this._data.cmd == ArmyCmd.Conscript) {
             let totalCnt: number = this.getTotalConscriptCnt();
             if (totalCnt > 0) {
@@ -318,6 +321,7 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onClickPrev(): void {
+        AudioManager.instance.playClick();
         this._curConscripts = [0, 0, 0];
         if (this._order == 1) {
             //第一个就跳到最后一个
@@ -328,6 +332,7 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onClickNext(): void {
+        AudioManager.instance.playClick();
         this._curConscripts = [0, 0, 0];
         if (this._order == this._addition.armyCnt) {
             //最后一个就跳到第一个
@@ -338,6 +343,7 @@ export default class CityArmySettingLogic extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 

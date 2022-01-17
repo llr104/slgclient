@@ -6,6 +6,7 @@ import { Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('UnionMainLogic')
 export default class UnionMainLogic extends Component {
@@ -64,10 +65,13 @@ export default class UnionMainLogic extends Component {
     onUnionNotice(data){
         this.noticeLab.string = data.text;
     }
+    
     onUnionApply(){
         this.updateRedDot();
     }
+
     onEditSubmit(){
+        AudioManager.instance.playClick();
         this.noticeLab.node.active = true;
         this.editNode.active = false;
         this.modifyBtn.node.active = true;
@@ -75,12 +79,16 @@ export default class UnionMainLogic extends Component {
         var str = this.editBox.string
         UnionCommand.getInstance().modNotice(str);
     }
+
     onModify(){
+        AudioManager.instance.playClick();
         this.noticeLab.node.active = false;
         this.editNode.active = true;
         this.modifyBtn.node.active = false;
     }
+    
     onCancel(){
+        AudioManager.instance.playClick();
         this.noticeLab.node.active = true;
         this.editNode.active = false;
         this.modifyBtn.node.active = true;

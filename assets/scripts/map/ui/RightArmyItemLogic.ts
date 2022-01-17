@@ -10,6 +10,7 @@ import MapCommand from "../MapCommand";
 import DateUtil from "../../utils/DateUtil";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('RightArmyItemLogic')
 export default class RightArmyItemLogic extends Component {
@@ -73,6 +74,7 @@ export default class RightArmyItemLogic extends Component {
     }
 
     protected onClickTop(): void {
+        AudioManager.instance.playClick();
         this.bottomNode.active = !this.bottomNode.active;
         if(this.bottomNode.active){
             this.node.getComponent(UITransform).height += this.bottomNode.getComponent(UITransform).height;
@@ -82,6 +84,7 @@ export default class RightArmyItemLogic extends Component {
     }
 
     protected onClickBack(): void {
+        AudioManager.instance.playClick();
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
             ArmyCommand.getInstance().generalAssignArmy(this._data.id, ArmyCmd.Return, cityData.x, cityData.y, null);
@@ -89,6 +92,7 @@ export default class RightArmyItemLogic extends Component {
     }
 
     protected onClickSetting(): void {
+        AudioManager.instance.playClick();
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
             EventMgr.emit("open_army_setting", this._data.cityId, this.order);

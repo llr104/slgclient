@@ -19,11 +19,6 @@ export default class WarReportDesItemLogic extends Component {
     roundsLabel:Label = null;
 
 
-    protected onLoad():void{
-
-    }
-
-
     protected updateItem(data:WarReportRound):void{
         console.log("updateItem:", data);
       

@@ -6,6 +6,7 @@ import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralCampType, GeneralData } from "../../general/GeneralProxy";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 // /**军队命令*/
 export class GeneralItemType {
@@ -162,6 +163,7 @@ export default class GeneralItemLogic extends Component {
 
 
     protected onClickGeneral(event:any): void {
+        AudioManager.instance.playClick();
         if(this._curData){
             var cfgData = this._curData.config;
             console.log("onClickGeneral:", this._type);

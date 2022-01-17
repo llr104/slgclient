@@ -5,6 +5,7 @@ import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import { GeneralItemType } from "./GeneralItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('GeneralComposeLogic')
 export default class GeneralComposeLogic  extends Component {
@@ -94,6 +95,7 @@ export default class GeneralComposeLogic  extends Component {
 
 
     protected onCompose(): void {
+        AudioManager.instance.playClick();
         GeneralCommand.getInstance().composeGeneral(this._currData.id,this._gIdsArr);
     }
 

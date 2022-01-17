@@ -7,6 +7,7 @@ import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import UnionMemberItemOpLogic from "./UnionMemberItemOpLogic";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('UnionMemberLogic')
 export default class UnionMemberLogic extends Component {
@@ -41,12 +42,14 @@ export default class UnionMemberLogic extends Component {
     }
 
     protected click():void{
+        AudioManager.instance.playClick();
         if(this._op != null){
             this._op.active = false;
         }
     }
 
     protected onClickItem(menberData):void{
+        AudioManager.instance.playClick();
         if (this._op == null){
             var node = instantiate(this.opNode);
             node.parent = this.node;
@@ -93,10 +96,12 @@ export default class UnionMemberLogic extends Component {
     }
 
     protected dismiss():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionDismiss();
     }
 
     protected exit():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionExit();
     }
 

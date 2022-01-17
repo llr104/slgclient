@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Prefab, ToggleContainer, Node, instantiate } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 import { EventMgr } from '../../utils/EventMgr';
 const { ccclass, property } = _decorator;
 
@@ -61,6 +62,7 @@ export default class GeneralInfoLogic  extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 
@@ -94,6 +96,7 @@ export default class GeneralInfoLogic  extends Component {
 
     protected selectHandle(event:any,other:any):void{
         // console.log("event:",event,other)
+        AudioManager.instance.playClick();
         this.setIndex(other)
     }
 

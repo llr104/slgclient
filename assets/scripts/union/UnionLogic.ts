@@ -1,11 +1,6 @@
-// // Learn TypeScript:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// // Learn Attribute:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// // Learn life-cycle callbacks:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { _decorator, Component, Node, Label } from 'cc';
+import { AudioManager } from '../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import { MapCityData } from "../map/MapCityProxy";
@@ -32,8 +27,8 @@ export default class UnionLogic extends Component {
     protected onLoad():void{
         this.visibleView();
         EventMgr.on("open_my_union",this.openMyUnion,this);
-        EventMgr.on("dismiss_union_success",this.exit,this);
-        EventMgr.on("close_union",this.onClickClose,this);
+        EventMgr.on("dismiss_union_success",this.onDismiss,this);
+        EventMgr.on("close_union",this.closeUnion,this);
         EventMgr.on("create_union_success",this.openMyUnion,this);
     }
     protected onDestroy():void{
@@ -41,21 +36,26 @@ export default class UnionLogic extends Component {
     }
     protected onClickClose(): void {
         console.log("onClickClose");
-        this.node.active = false;
+        AudioManager.instance.playClick();
+        this.closeUnion();
     }
     protected onClickMember(): void {
+        AudioManager.instance.playClick();
         this.memberNode.active = true;
         this.mainNode.active = false;
     }
     protected onClickApply(): void {
+        AudioManager.instance.playClick();
         this.mainNode.active = false;
         this.applyNode.active = true;
     }
     protected onClickLog(): void {
+        AudioManager.instance.playClick();
         this.mainNode.active = false;
         this.logNode.active = true;
     }
     protected openCreate():void{
+        AudioManager.instance.playClick();
         this.createNode.active = true;
     }
     protected visibleView():void{
@@ -66,7 +66,13 @@ export default class UnionLogic extends Component {
         this.memberNode.active =
         this.logNode.active = false;
     }
+
+    protected closeUnion(){
+        this.node.active = false;
+    }
+
     protected openMyUnion():void{
+        
         this.visibleView();
         this.mainNode.active = true
     }
@@ -74,19 +80,20 @@ export default class UnionLogic extends Component {
 
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         if(city.unionId > 0){
-        this.openMyUnion();
+            this.openMyUnion();
         }else{
-        this.mainNode.active = false;
-        this.lobbyNode.active = true;
+            this.mainNode.active = false;
+            this.lobbyNode.active = true;
         }
     }
     protected onDisable():void{
         this.visibleView();
     }
     protected back():void{
+        AudioManager.instance.playClick();
         this.openMyUnion();
     }
-    protected exit():void{
+    protected onDismiss():void{
         this.visibleView();
         this.lobbyNode.active = true
     }

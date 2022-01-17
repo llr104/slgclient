@@ -6,6 +6,7 @@ import FacilityItemLogic from "./FacilityItemLogic";
 import MapUICommand from "./MapUICommand";
 import { Facility, FacilityConfig } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('FacilityListLogic')
 export default class FacilityListLogic extends Component {
@@ -114,6 +115,7 @@ export default class FacilityListLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
     public setCurSelectType(type: number): void {

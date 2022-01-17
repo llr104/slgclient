@@ -6,6 +6,7 @@ const { ccclass, property } = _decorator;
 import GeneralCommand from "../../general/GeneralCommand";
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('GeneralConvertLogic')
 export default class GeneralConvertLogic extends Component {
@@ -38,6 +39,7 @@ export default class GeneralConvertLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
         EventMgr.emit("open_general");
     }
 
@@ -109,6 +111,7 @@ export default class GeneralConvertLogic extends Component {
     }
 
     protected onClickOK():void{
+        AudioManager.instance.playClick();
         var keys = this._upMap.keys();
         var ids = Array.from(keys);
         GeneralCommand.getInstance().convert(ids);

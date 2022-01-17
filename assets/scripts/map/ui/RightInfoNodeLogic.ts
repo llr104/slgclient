@@ -9,6 +9,7 @@ import { MapCityData } from "../MapCityProxy";
 import RightCityItemLogic from "./RightCityItemLogic";
 import RightTagItemLogic from "./RightTagItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('RightInfoNodeLogic')
 export default class RightInfoNodeLogic extends Component {
@@ -108,6 +109,7 @@ export default class RightInfoNodeLogic extends Component {
     }
 
     onClockToggle(toggle: Toggle): void {
+        AudioManager.instance.playClick();
         let index: number = this.toggles.indexOf(toggle);
         if (index == 1) {
             this.armyScrollView.node.active = false;

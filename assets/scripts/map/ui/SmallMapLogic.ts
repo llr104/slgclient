@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import MapCommand from "../MapCommand";
 import MapUtil from "../MapUtil";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('SmallMapLogic')
 export default class SmallMapLogic extends Component {
@@ -42,6 +43,7 @@ export default class SmallMapLogic extends Component {
     }
 
     onClickJump(): void {
+        AudioManager.instance.playClick();
         let x: number = Number(this.editBoxX.string);
         let y: number = Number(this.editBoxY.string);
         if (x >= 0 

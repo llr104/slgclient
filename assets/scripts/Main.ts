@@ -1,4 +1,4 @@
-import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, UITransform } from 'cc';
+import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, UITransform, AudioSource, assert, tweenUtil } from 'cc';
 const { ccclass, property } = _decorator;
 
 import { GameConfig } from "./config/GameConfig";
@@ -16,6 +16,7 @@ import SkillCommand from "./skill/SkillCommand";
 import Toast from "./utils/Toast";
 import { Tools } from "./utils/Tools";
 import { EventMgr } from './utils/EventMgr';
+import { AudioManager } from './common/AudioManager';
 
 @ccclass('Main')
 export default class Main extends Component {
@@ -37,8 +38,8 @@ export default class Main extends Component {
     @property(Prefab)
     toastPrefab: Prefab = null;
 
+    private _audioSource: AudioSource = null!;
     private toastNode: Node = null;
-
     protected _loginScene: Node = null;
     protected _mapScene: Node = null;
     protected _mapUIScene: Node = null;
@@ -46,11 +47,18 @@ export default class Main extends Component {
     protected _waitNode: Node = null;
     private _retryTimes: number = 0;
 
+
+
     protected onLoad(): void {
 
         console.log("main load");
         
+        const audioSource = this.getComponent(AudioSource)!;
+        assert(audioSource);
+        this._audioSource = audioSource;
 
+        AudioManager.instance.init(this._audioSource);
+  
         EventMgr.on("enter_map", this.onEnterMap, this);
         EventMgr.on("enter_login", this.enterLogin, this);
         EventMgr.on("show_toast", this.onShowToast, this);

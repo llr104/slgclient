@@ -8,9 +8,7 @@ export default class UnionApplyItemLogic extends Component {
     @property(Label)
     nameLabel: Label | null = null;
     protected _applyData:Apply = null;
-    protected onLoad():void{
 
-    }
     protected updateItem(data:Apply):void{
         this._applyData = data;
         this.nameLabel.string = this._applyData.nick_name;

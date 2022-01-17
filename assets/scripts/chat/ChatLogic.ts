@@ -9,6 +9,7 @@ import ChatCommand from "./ChatCommand";
 import { ChatMsg } from "./ChatProxy";
 import ListLogic from '../utils/ListLogic';
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('ChatLogic')
 export default class ChatLogic extends Component {
@@ -56,6 +57,7 @@ export default class ChatLogic extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 
@@ -65,6 +67,7 @@ export default class ChatLogic extends Component {
     }
 
     protected onClickChat(): void {
+        AudioManager.instance.playClick();
         if (this._type == 0){
             ChatCommand.getInstance().chat(this.editConent.string, this._type);
         }else if (this._type == 1){
@@ -77,11 +80,13 @@ export default class ChatLogic extends Component {
     }
 
     protected onClickWorld(): void {
+        AudioManager.instance.playClick();
         this._type = 0;
         this.updateView();
     }
 
     protected onClickUnion(): void {
+        AudioManager.instance.playClick();
         this._type = 1;
         this.updateView();
     }
