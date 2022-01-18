@@ -194,7 +194,7 @@ export class NetNode {
 
     // 接收到一个完整的消息包
     protected onMessage(msg): void {
-        console.log(`NetNode onMessage msg ` ,msg);
+        // console.log(`NetNode onMessage msg ` ,msg);
         
         if(msg){
 
@@ -210,7 +210,7 @@ export class NetNode {
                     let req = this._requests[i];
                     if(msg.name == req.rspName && msg.seq == req.seq && req.sended == true){
                         
-                        console.log("req:", req);
+                        // console.log("req:", req);
                         this._requests.splice(i, 1);
                         i--;
                
@@ -310,7 +310,7 @@ export class NetNode {
                         rsp: rsp
                     };
                     EventMgr.off(recvMessage, ok, self);
-                    console.log("ok");
+                    // console.log("ok");
                     resolve(obj);
                 }
             }

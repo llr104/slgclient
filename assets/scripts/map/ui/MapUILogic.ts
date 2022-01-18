@@ -283,7 +283,7 @@ export default class MapUILogic extends Component {
     protected onOpenArmySelectUI(cmd: number, x: number, y: number): void {
         if (this._armySelectNode == null) {
             this._armySelectNode = instantiate(this.armySelectPrefab);
-            this._armySelectNode.parent = this.node;
+            this._armySelectNode.parent = this.contentNode;
         } else {
             this._armySelectNode.active = true;
         }
