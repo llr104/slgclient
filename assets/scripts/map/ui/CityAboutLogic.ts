@@ -31,6 +31,9 @@ export default class CityAboutLogic extends Component {
     }
 
     protected initView(): void {
+        this.armyLayer.removeAllChildren();
+        this._armyComps = [];
+
         for (let i: number = 0; i < this._armyCnt; i++) {
             let item = instantiate(this.armyItem);
             item.parent = this.armyLayer;
