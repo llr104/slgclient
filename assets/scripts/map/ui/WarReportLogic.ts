@@ -25,19 +25,24 @@ export default class WarReportLogic extends Component {
     warPortDesPrefab: Prefab = null;
     private _warPortDesNode:Node = null;
 
-    protected onLoad():void{
+    protected onEnable():void{
         EventMgr.on("upate_war_report", this.initView, this);
         EventMgr.on("click_war_report", this.openWarPortDes, this);
+        EventMgr.on("close_report", this.close, this);
     }
 
-
-    protected onDestroy():void{
+    
+    protected onDisable():void{
         EventMgr.targetOff(this);
     }
 
-    protected onClickClose(): void {
+    private close() {
         this.node.active = false;
+    }
+
+    protected onClickClose(): void {
         AudioManager.instance.playClick();
+        this.close();
     }
 
 

@@ -21,34 +21,30 @@ export default class WarReportItemLogic extends Component {
     @property([Node])
     ackNode:Node[] = [];
 
-
     @property([Node])
     defNode:Node[] = [];
-
 
     @property(Node)
     winNode:Node = null;
 
-
     @property(Node)
     loseNode:Node = null;
-
 
     @property(Label)
     timeLabel: Label = null;
 
-
     @property(Label)
     leftLabel: Label = null;
-
 
     @property(Label)
     rightLabel: Label = null;
 
+    @property(Label)
+    posLabel: Label = null;
+
     protected onLoad():void{
         this.winNode.active = this.loseNode.active = false;
     }
-
 
     protected updateItem(data:any):void{
         this._curData = data;
@@ -56,7 +52,6 @@ export default class WarReportItemLogic extends Component {
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         this.readBg.active = isRead;
        
-
         this.setTeams(this.ackNode,this._curData.beg_attack_general);
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
@@ -67,9 +62,9 @@ export default class WarReportItemLogic extends Component {
         this.rightLabel.string = roleData.rid == this._curData.defense_rid?"我":"敌"
 
         this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
+
+        this.posLabel.string = "(" + this._curData.x + "," + this._curData.y + ")";
     }
-
-
 
     protected isMeWin(rid:number = 0):void{
         var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
@@ -124,5 +119,11 @@ export default class WarReportItemLogic extends Component {
         console.log("click_war_report:", this._curData);
         EventMgr.emit("click_war_report", this._curData);
        
+    }
+
+    protected onClickPos(){
+        AudioManager.instance.playClick();
+        EventMgr.emit("close_report");
+        EventMgr.emit("scroll_to_map", this._curData.x, this._curData.y);
     }
 }

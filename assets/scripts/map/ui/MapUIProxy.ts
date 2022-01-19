@@ -571,10 +571,10 @@ export default class MapUIProxy {
 
             for (var j = 0; j < round.length; j++) {
                 var turn = round[j];
-                var attack_id = turn[0];
-                var defense_id = turn[1];
-                var attack_loss = turn[2];
-                var defense_loss = turn[3];
+                var attack_id = turn.a_id;
+                var defense_id = turn.d_id;
+                var attack_loss = turn.a_loss;
+                var defense_loss = turn.d_loss;
 
                 var obj = new WarReportRound();
                 obj.attack = this.getMatchGeneral(generals, attack_id);

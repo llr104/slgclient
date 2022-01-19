@@ -311,7 +311,7 @@ export default class ListLogic extends Component {
         this._isUpdateList = false;
         //console.log("updatelist y", this.scrollView.content.y);
 
-        console.log("this.scrollView:", this.scrollView);
+        // console.log("this.scrollView:", this.scrollView);
     }
 
 
