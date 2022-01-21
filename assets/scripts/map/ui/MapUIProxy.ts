@@ -155,8 +155,15 @@ export class WarReport {
 
 }
 
+export class WarReportSkill {
+    fromId:number
+    toId:number[]
+    cfgId:number
+    lv:number
+}
 
 export class WarReportRound {
+    id: number = 0;
     isAttack: boolean = false;
     attack: any = {};
     defense: any = {};
@@ -164,8 +171,10 @@ export class WarReportRound {
     defenseLoss: number = 0;
     round: number = 0;
     turn: number = 0;
+    attackBefore:WarReportSkill[] = [];
+    attackAfter:WarReportSkill[] = [];
+    defenseAfter:WarReportSkill[] = [];
 }
-
 
 
 export default class MapUIProxy {
@@ -522,6 +531,7 @@ export default class MapUIProxy {
 
 
     protected createWarReprot(data: any): WarReport {
+       
         var obj = new WarReport();
         obj.id = data.id;
         obj.attack_rid = data.a_rid;
@@ -539,11 +549,11 @@ export default class MapUIProxy {
             obj.end_defense_general = this.arrayToObject(JSON.parse(data.e_d_general));
             obj.rounds = this.createRoundsData(data.rounds, obj.beg_attack_general, obj.beg_defense_general)
         } catch (error) {
-            
-        }
+            console.log("createWarReprot:", error);
+        } 
+        
 
         obj.result = data.result;
-       
         obj.defense_is_read = data.d_is_read;
         obj.attack_is_read = data.a_is_read;
 
@@ -565,6 +575,7 @@ export default class MapUIProxy {
         var rounds: any[] = JSON.parse(data);
         for (var i = 0; i < rounds.length; i++) {
             var round: any[] = rounds[i].b;
+            
             if(!round){
                 continue;
             }
@@ -582,6 +593,47 @@ export default class MapUIProxy {
                 obj.isAttack = this.getMatchGeneral(attack_generals, attack_id) != null;
                 obj.attackLoss = attack_loss;
                 obj.defenseLoss = defense_loss;
+
+                if(turn.a_bs){
+                    var a_bs = turn.a_bs;
+                    for (let index = 0; index < a_bs.length; index++) {
+                        let s = a_bs[index];
+                        let wrs = new WarReportSkill();
+                        wrs.fromId = s.f_id;
+                        wrs.toId = s.t_id;
+                        wrs.cfgId = s.c_id;
+                        wrs.lv = s.lv;
+                        obj.attackBefore.push(wrs);
+                    }
+                   
+                }
+
+                if(turn.a_as){
+                    var a_as = turn.a_as;
+                    for (let index = 0; index < a_as.length; index++) {
+                        let s = a_as[index];
+                        let wrs = new WarReportSkill();
+                        wrs.fromId = s.f_id;
+                        wrs.toId = s.t_id;
+                        wrs.cfgId = s.c_id;
+                        wrs.lv = s.lv;
+                        obj.attackAfter.push(wrs);
+                    }
+                }
+
+                if(turn.d_as){
+                    var d_as = turn.d_as;
+                    for (let index = 0; index < d_as.length; index++) {
+                        let s = d_as[index];
+                        let wrs = new WarReportSkill();
+                        wrs.fromId = s.f_id;
+                        wrs.toId = s.t_id;
+                        wrs.cfgId = s.c_id;
+                        wrs.lv = s.lv;
+                        obj.defenseAfter.push(wrs);
+                    }
+                }
+
                 obj.round = i + 1;
                 obj.turn = j + 1;
                 _list.push(obj);
@@ -589,7 +641,7 @@ export default class MapUIProxy {
 
         }
 
-
+  
         return _list;
     }
 
@@ -696,15 +748,6 @@ export default class MapUIProxy {
         arr = arr.concat();
 
         var backArr: WarReport[] = [];
-        // for (var i = 0; i < arr.length; i++) {
-        //     if (arr[i].is_read == true) {
-        //         backArr.push(arr[i]);
-        //         arr.splice(i, 1);
-        //         i--;
-        //     }
-        // }
-
-
         backArr = arr.concat(backArr);
         // backArr = backArr.reverse();
         return backArr;

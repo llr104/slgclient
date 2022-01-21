@@ -55,7 +55,7 @@ export default class RightInfoNodeLogic extends Component {
     protected initArmys(): void {
         let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
         let datas: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(cityId);
-        this.armyScrollView.content.removeAllChildren(true);
+        this.armyScrollView.content.removeAllChildren();
         console.log("datas", datas);
         if (datas) {
             this._armys.length = datas.length;

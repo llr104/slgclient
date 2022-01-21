@@ -16,7 +16,7 @@ export default class GeneralHeadLogic extends Component {
             }
         }else{
 
-            console.log("load setHeadId:", id);
+            // console.log("load setHeadId:", id);
             resources.load("./generalpic/card_" + id + "/spriteFrame", SpriteFrame, 
                 (finish: number, total: number) => {
                 },

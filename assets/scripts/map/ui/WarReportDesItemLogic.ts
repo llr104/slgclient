@@ -1,8 +1,18 @@
-import { _decorator, Component, RichText, Label } from 'cc';
+import { _decorator, Component, RichText, Label, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
-import { WarReportRound } from "./MapUIProxy";
+import { GeneralConfig, GeneralData } from '../../general/GeneralProxy';
+import SkillCommand from '../../skill/SkillCommand';
+import MapUICommand from './MapUICommand';
+import { WarReport, WarReportRound } from "./MapUIProxy";
+
+
+export class GeneralDataX {
+    gdata:GeneralData
+    gcfg:GeneralConfig
+    isAttack:boolean
+}
 
 @ccclass('WarReportDesItemLogic')
 export default class WarReportDesItemLogic extends Component {
@@ -10,43 +20,132 @@ export default class WarReportDesItemLogic extends Component {
     private _curData:WarReportRound = null;
 
     @property(RichText)
-    warLab1:RichText = null;
-
-    @property(RichText)
-    warLab2:RichText = null;
+    warLab:RichText = null;
 
     @property(Label)
     roundsLabel:Label = null;
 
+    warReport:WarReport = null;
 
-    protected updateItem(data:WarReportRound):void{
-        console.log("updateItem:", data);
-      
+
+    public setData(data:WarReportRound, warReport:WarReport):void{
+
         this._curData = data;
+        this.warReport = warReport;
+
+        this.warLab.string = "";
         this.roundsLabel.string = "第" + this._curData.round + "轮/" + this._curData.turn+"回合";
 
+        let attColor = "<color=#ff0000>";
+        let denColor = "<color=#00ff00>";
+        let skillColor = "<color=#FD6500>";
+        let lossColor = "<color=#F2C420>"
+        let endColor = "</color>";
+
+        let attstr = "攻";
+        let denStr = "防";
+        let lineCnt = data.attackBefore.length + data.attackAfter.length + data.defenseAfter.length+3;
+
+        //技能
+        let str = ""
+        for (let i = 0; i < data.attackBefore.length; i++) {
+            let b = data.attackBefore[i];
+            let gx1 = this.getGeneralX(b.fromId);
+            
+            let skillCfg = SkillCommand.getInstance().proxy.getSkillCfg(b.cfgId);
+            if (gx1.isAttack){
+                str += (attColor + attstr + gx1.gcfg.name + endColor)
+            }else{
+                str += (denColor + denStr + gx1.gcfg.name + endColor)
+            }
+            str += " 使用技能 ";
+            str += (skillColor + skillCfg.name + "(lv" + b.lv + ") "+ endColor);
+            str += "作用于 "
+
+            for (let j = 0; j < b.toId.length; j++) {
+                let to = b.toId[j];
+                let gx2 = this.getGeneralX(to);
+                
+                if(gx2.isAttack){
+                    str += (attColor + attstr + gx2.gcfg.name)
+                }else{
+                    str += (attColor + denStr + gx2.gcfg.name)
+                }
+                str += endColor;
+
+                if(j < b.toId.length-1){
+                    str += ","
+                }else{
+                    str += "身上"
+                }
+            }
+            str += "\n"
+        }
+
+        this.warLab.string = str;
+        
+        //伤害
         var att_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.attack.cfgId);
         var def_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.defense.cfgId);
-
-        var title1 = ""
-        var title2 = ""
+   
         if(data.isAttack){
-            title1 = "攻";
-            title2 = "防";
+            this.warLab.string += (attColor + attstr + att_cfg.name + endColor  + " 对 " 
+            + denColor + denStr + def_cfg.name + endColor + " 发起攻击，" 
+            + denColor + denStr + def_cfg.name + endColor + " 损失 " + 
+            lossColor + this._curData.defenseLoss + endColor  + " 士兵");
+
+            this.warLab.string += "\n";
+            
+            this.warLab.string += denColor + denStr + def_cfg.name + endColor   + " 对 " 
+            + attColor + attstr + att_cfg.name +  endColor + " 发起攻击，" 
+            + attColor + attstr + att_cfg.name + endColor + " 损失 " + 
+            lossColor + this._curData.attackLoss + endColor  + " 士兵";
         }else{
-            title2 = "攻";
-            title1 = "防";
+            this.warLab.string += (denColor + denStr + att_cfg.name + endColor  + " 对 " 
+            + attColor + attstr + def_cfg.name + endColor + " 发起攻击，" 
+            + attColor + attstr + def_cfg.name + endColor + " 损失 " + 
+            lossColor + this._curData.defenseLoss + endColor  + " 士兵");
+
+            this.warLab.string += "\n";
+            
+            this.warLab.string += attColor + attstr + def_cfg.name + endColor   + " 对 " 
+            + denColor + denStr + att_cfg.name +  endColor + " 发起攻击，" 
+            + denColor + denStr + att_cfg.name + endColor + " 损失 " + 
+            lossColor + this._curData.attackLoss + endColor  + " 士兵";
         }
-        this.warLab1.string =  "<color=#ff0000>" + title1 + att_cfg.name + "</color>"   + " 对 " 
-        + "<color=#00ff00>" + title2 + def_cfg.name +  "</color>" + " 发起攻击，" 
-        + "<color=#00ff00>" + title2 + def_cfg.name + "</color>" + " 损失 " + 
-        "<color=#F2C420>" + this._curData.defenseLoss + "</color>"  + " 士兵";
 
-        this.warLab2.string =  "<color=#ff0000>" + title2 + def_cfg.name + "</color>"   + " 对 " 
-        + "<color=#00ff00>" + title1 + att_cfg.name +  "</color>" + " 发起攻击，" 
-        + "<color=#00ff00>" + title1 + att_cfg.name + "</color>" + " 损失 " + 
-        "<color=#F2C420>" + this._curData.attackLoss + "</color>"  + " 士兵";
+    
+        this.warLab.getComponent(UITransform).height = 40*lineCnt;
 
+        this.node.getComponent(UITransform).height = 40*lineCnt+20;
+
+    }
+
+
+    private getGeneralX(id:Number):GeneralDataX{
+        let gx = new GeneralDataX();
+        console.log("getGeneralX:", this.warReport);
+        let attgs = this.warReport.beg_attack_general;
+        for (let i = 0; i < attgs.length; i++) {
+            const g = attgs[i];
+            if(g.id == id){
+                gx.gdata = g;
+                gx.isAttack = true;
+                gx.gcfg = GeneralCommand.getInstance().proxy.getGeneralCfg(gx.gdata.cfgId);
+                return gx;
+            }
+        }
+
+        let dengs = this.warReport.beg_attack_general;
+        for (let i = 0; i < dengs.length; i++) {
+            const g = dengs[i];
+            if(g.id == id){
+                gx.gdata = g;
+                gx.isAttack = false;
+                gx.gcfg = GeneralCommand.getInstance().proxy.getGeneralCfg(gx.gdata.cfgId);
+                return gx;
+            }
+        }
     }
 
 }
