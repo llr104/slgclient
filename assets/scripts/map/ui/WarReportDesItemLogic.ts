@@ -207,9 +207,9 @@ export default class WarReportDesItemLogic extends Component {
             let to = skill.toId[i];
             let g = this.getGeneralX(to);
             if(g.isAttack){
-                str += (this.attColor + this.attstr + g.gcfg.name + this.endColor + "损失" + kill + "士兵")
+                str += (this.attColor + " " + this.attstr + g.gcfg.name + " "  + this.endColor + "损失" + kill + "士兵")
             }else{
-                str += (this.denColor + this.denStr + g.gcfg.name + this.endColor + "损失" + kill + "士兵")
+                str += (this.denColor + " " + this.denStr + g.gcfg.name + " "  + this.endColor + "损失" + kill + "士兵")
             }
         }
         return str
