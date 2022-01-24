@@ -1,10 +1,12 @@
-import { _decorator, Component, RichText, Label, UITransform } from 'cc';
+import { _decorator, Component, RichText, Label, UITransform, math, Node } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 import { SkillEffectType } from '../../config/skill/Skill';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from '../../general/GeneralProxy';
 import SkillCommand from '../../skill/SkillCommand';
+import { EventMgr } from '../../utils/EventMgr';
 import MapUICommand from './MapUICommand';
 import { WarReport, WarReportRound, WarReportSkill } from "./MapUIProxy";
 
@@ -18,7 +20,7 @@ export class GeneralDataX {
 @ccclass('WarReportDesItemLogic')
 export default class WarReportDesItemLogic extends Component {
 
-    private _curData:WarReportRound = null;
+    private _reportRound:WarReportRound = null;
 
     @property(RichText)
     warLab:RichText = null;
@@ -26,16 +28,22 @@ export default class WarReportDesItemLogic extends Component {
     @property(Label)
     roundsLabel:Label = null;
 
+    @property(Label)
+    endLab:Label = null;
+
+    @property(Node)
+    cNode:Node = null;
+
     warReport:WarReport = null;
 
 
-    public setData(data:WarReportRound, warReport:WarReport):void{
+    public setData(data:WarReportRound, warReport:WarReport, isEnd:boolean):void{
 
-        this._curData = data;
+        this._reportRound = data;
         this.warReport = warReport;
-
+        this.endLab.node.active = false;
         this.warLab.string = "";
-        this.roundsLabel.string = "第" + this._curData.round + "轮/" + this._curData.turn+"回合";
+        this.roundsLabel.string = "第" + this._reportRound.round + "轮/" + this._reportRound.turn+"回合";
 
         let attColor = "<color=#ff0000>";
         let denColor = "<color=#00ff00>";
@@ -45,7 +53,9 @@ export default class WarReportDesItemLogic extends Component {
 
         let attstr = "攻";
         let denStr = "防";
-        let lineCnt = data.attackBefore.length + data.attackAfter.length + data.defenseAfter.length+3;
+        let lineCnt = data.attackBefore.length + data.attackAfter.length + data.defenseAfter.length+2;
+
+        console.log("lineCnt:", lineCnt)
 
         //技能
         let str = ""
@@ -86,47 +96,61 @@ export default class WarReportDesItemLogic extends Component {
             let estr = this.effectstring(b);
             str += estr;
             str += endColor;
-            
+
             str += "\n"
         }
 
         this.warLab.string = str;
         
         //伤害
-        var att_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.attack.cfgId);
-        var def_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._curData.defense.cfgId);
+        var att_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._reportRound.attack.cfgId);
+        var def_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._reportRound.defense.cfgId);
    
         if(data.isAttack){
             this.warLab.string += (attColor + attstr + att_cfg.name + endColor  + " 对 " 
             + denColor + denStr + def_cfg.name + endColor + " 发起攻击，" 
             + denColor + denStr + def_cfg.name + endColor + " 损失 " + 
-            lossColor + this._curData.defenseLoss + endColor  + " 士兵");
+            lossColor + this._reportRound.defenseLoss + endColor  + " 士兵");
 
             this.warLab.string += "\n";
             
             this.warLab.string += denColor + denStr + def_cfg.name + endColor   + " 对 " 
             + attColor + attstr + att_cfg.name +  endColor + " 发起攻击，" 
             + attColor + attstr + att_cfg.name + endColor + " 损失 " + 
-            lossColor + this._curData.attackLoss + endColor  + " 士兵";
+            lossColor + this._reportRound.attackLoss + endColor  + " 士兵";
         }else{
             this.warLab.string += (denColor + denStr + att_cfg.name + endColor  + " 对 " 
             + attColor + attstr + def_cfg.name + endColor + " 发起攻击，" 
             + attColor + attstr + def_cfg.name + endColor + " 损失 " + 
-            lossColor + this._curData.defenseLoss + endColor  + " 士兵");
+            lossColor + this._reportRound.defenseLoss + endColor  + " 士兵");
 
             this.warLab.string += "\n";
             
             this.warLab.string += attColor + attstr + def_cfg.name + endColor   + " 对 " 
             + denColor + denStr + att_cfg.name +  endColor + " 发起攻击，" 
             + denColor + denStr + att_cfg.name + endColor + " 损失 " + 
-            lossColor + this._curData.attackLoss + endColor  + " 士兵";
+            lossColor + this._reportRound.attackLoss + endColor  + " 士兵";
         }
 
-    
-        this.warLab.getComponent(UITransform).height = 40*lineCnt;
+        this.cNode.getComponent(UITransform).height = this.warLab.getComponent(UITransform).height;
+        if(this.warReport.result == 2){
+            if(isEnd){
+                this.endLab.node.active = true;
+                if(1 == this.warReport.occupy){
+                    let str = ("占领了("+ this.warReport.x + "," + this.warReport.y + ")领地");
+                    this.endLab.string = str;
+                }else{
+                    let destroy = this.warReport.destroy_durable / 100;
+                    let str = ("对("+ this.warReport.x + "," + this.warReport.y + ")领地造成"+ Math.ceil(destroy) + "破坏");
+                    this.endLab.string = str;
+                }
 
-        this.node.getComponent(UITransform).height = 40*lineCnt+20;
+                this.cNode.getComponent(UITransform).height = this.warLab.getComponent(UITransform).height + this.endLab.getComponent(UITransform).height + 20;
+            }
+        }
 
+        this.node.getComponent(UITransform).height = this.cNode.getComponent(UITransform).height + 40;
+       
     }
 
 
@@ -178,6 +202,13 @@ export default class WarReportDesItemLogic extends Component {
            str += ( "持续" + er + "回合")
         }
         return str
+    }
+
+    protected clickPos() {
+        console.log("clickPos");
+        AudioManager.instance.playClick();
+        EventMgr.emit("close_report");
+        EventMgr.emit("scroll_to_map", this.warReport.x, this.warReport.y);
     }
 
 }
