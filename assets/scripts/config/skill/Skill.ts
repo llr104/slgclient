@@ -56,3 +56,13 @@ export class SkillConf {
     include_effect: number[] //技能包括的效果
     levels:SkillLevel[]
 }
+
+
+export enum SkillEffectType {
+	HurtRate = 1, //伤害率
+	Force,
+	Defense,
+	Strategy,
+	Speed,
+	Destroy,
+}

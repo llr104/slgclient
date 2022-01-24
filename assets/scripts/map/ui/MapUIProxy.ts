@@ -160,6 +160,9 @@ export class WarReportSkill {
     toId:number[]
     cfgId:number
     lv:number
+    includeEffect:number[]
+    effectValue:number[]//效果值
+	effectRound:number[]//效果持续回合数
 }
 
 export class WarReportRound {
@@ -603,6 +606,9 @@ export default class MapUIProxy {
                         wrs.toId = s.t_id;
                         wrs.cfgId = s.c_id;
                         wrs.lv = s.lv;
+                        wrs.includeEffect = s.i_e;
+                        wrs.effectValue = s.e_v;
+                        wrs.effectRound = s.e_r;
                         obj.attackBefore.push(wrs);
                     }
                    
@@ -617,6 +623,9 @@ export default class MapUIProxy {
                         wrs.toId = s.t_id;
                         wrs.cfgId = s.c_id;
                         wrs.lv = s.lv;
+                        wrs.includeEffect = s.i_e;
+                        wrs.effectValue = s.e_v;
+                        wrs.effectRound = s.e_r;
                         obj.attackAfter.push(wrs);
                     }
                 }
@@ -630,6 +639,9 @@ export default class MapUIProxy {
                         wrs.toId = s.t_id;
                         wrs.cfgId = s.c_id;
                         wrs.lv = s.lv;
+                        wrs.includeEffect = s.i_e;
+                        wrs.effectValue = s.e_v;
+                        wrs.effectRound = s.e_r;
                         obj.defenseAfter.push(wrs);
                     }
                 }

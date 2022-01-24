@@ -1,11 +1,12 @@
 import { _decorator, Component, RichText, Label, UITransform } from 'cc';
+import { SkillEffectType } from '../../config/skill/Skill';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from '../../general/GeneralProxy';
 import SkillCommand from '../../skill/SkillCommand';
 import MapUICommand from './MapUICommand';
-import { WarReport, WarReportRound } from "./MapUIProxy";
+import { WarReport, WarReportRound, WarReportSkill } from "./MapUIProxy";
 
 
 export class GeneralDataX {
@@ -58,10 +59,12 @@ export default class WarReportDesItemLogic extends Component {
             }else{
                 str += (denColor + denStr + gx1.gcfg.name + endColor)
             }
+
+           
             str += " 使用技能 ";
             str += (skillColor + skillCfg.name + "(lv" + b.lv + ") "+ endColor);
             str += "作用于 "
-
+            
             for (let j = 0; j < b.toId.length; j++) {
                 let to = b.toId[j];
                 let gx2 = this.getGeneralX(to);
@@ -79,6 +82,11 @@ export default class WarReportDesItemLogic extends Component {
                     str += "身上"
                 }
             }
+            str += skillColor
+            let estr = this.effectstring(b);
+            str += estr;
+            str += endColor;
+            
             str += "\n"
         }
 
@@ -146,6 +154,30 @@ export default class WarReportDesItemLogic extends Component {
                 return gx;
             }
         }
+    }
+
+    private effectstring(skill:WarReportSkill):string {
+        let str = ""
+        for (let i = 0; i < skill.includeEffect.length; i++) {
+            let ie = skill.includeEffect[i];
+            let ev = skill.effectValue[i];
+            let er = skill.effectRound[i];
+            if(ie == SkillEffectType.HurtRate){
+                str += ("伤害率提升" + ev + "%")
+            }else if (ie == SkillEffectType.Defense){
+                str += ("防御提升" + ev)
+            }else if (ie == SkillEffectType.Force){
+                str += ("武力提升" + ev)
+            }else if (ie == SkillEffectType.Strategy){
+                str += ("谋略提升" + ev)
+            }else if (ie == SkillEffectType.Speed){
+                str += ("速度提升" + ev)
+            }else if (ie == SkillEffectType.Destroy){
+                str += ("破坏提升" + ev)
+            }
+           str += ( "持续" + er + "回合")
+        }
+        return str
     }
 
 }
