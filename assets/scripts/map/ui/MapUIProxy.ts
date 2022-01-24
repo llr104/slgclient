@@ -163,6 +163,7 @@ export class WarReportSkill {
     includeEffect:number[]
     effectValue:number[]//效果值
 	effectRound:number[]//效果持续回合数
+    kill:number[] //技能死数量
 }
 
 export class WarReportRound {
@@ -170,7 +171,7 @@ export class WarReportRound {
     isAttack: boolean = false;
     attack: any = {};
     defense: any = {};
-    attackLoss: number = 0;
+
     defenseLoss: number = 0;
     round: number = 0;
     turn: number = 0;
@@ -587,14 +588,12 @@ export default class MapUIProxy {
                 var turn = round[j];
                 var attack_id = turn.a_id;
                 var defense_id = turn.d_id;
-                var attack_loss = turn.a_loss;
                 var defense_loss = turn.d_loss;
 
                 var obj = new WarReportRound();
                 obj.attack = this.getMatchGeneral(generals, attack_id);
                 obj.defense = this.getMatchGeneral(generals, defense_id);
                 obj.isAttack = this.getMatchGeneral(attack_generals, attack_id) != null;
-                obj.attackLoss = attack_loss;
                 obj.defenseLoss = defense_loss;
 
                 if(turn.a_bs){
@@ -609,6 +608,7 @@ export default class MapUIProxy {
                         wrs.includeEffect = s.i_e;
                         wrs.effectValue = s.e_v;
                         wrs.effectRound = s.e_r;
+                        wrs.kill = s.kill;
                         obj.attackBefore.push(wrs);
                     }
                    
@@ -626,6 +626,7 @@ export default class MapUIProxy {
                         wrs.includeEffect = s.i_e;
                         wrs.effectValue = s.e_v;
                         wrs.effectRound = s.e_r;
+                        wrs.kill = s.kill;
                         obj.attackAfter.push(wrs);
                     }
                 }
@@ -642,6 +643,7 @@ export default class MapUIProxy {
                         wrs.includeEffect = s.i_e;
                         wrs.effectValue = s.e_v;
                         wrs.effectRound = s.e_r;
+                        wrs.kill = s.kill;
                         obj.defenseAfter.push(wrs);
                     }
                 }
