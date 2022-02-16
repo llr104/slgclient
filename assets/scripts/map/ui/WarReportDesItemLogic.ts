@@ -61,9 +61,9 @@ export default class WarReportDesItemLogic extends Component {
             
             let skillCfg = SkillCommand.getInstance().proxy.getSkillCfg(b.cfgId);
             if (gx1.isAttack){
-                str += (this.attColor + this.attstr + gx1.gcfg.name + this.endColor)
+                str += (this.attColor + this.nameString(true, gx1.gcfg, gx1.gdata) + this.endColor)
             }else{
-                str += (this.denColor + this.denStr + gx1.gcfg.name + this.endColor)
+                str += (this.denColor + this.nameString(false, gx1.gcfg, gx1.gdata) + this.endColor)
             }
 
            
@@ -76,9 +76,9 @@ export default class WarReportDesItemLogic extends Component {
                 let gx2 = this.getGeneralX(to);
                 
                 if(gx2.isAttack){
-                    str += (this.attColor + this.attstr + gx2.gcfg.name)
+                    str += (this.attColor + this.nameString(true, gx2.gcfg, gx2.gdata));
                 }else{
-                    str += (this.denColor + this.denStr + gx2.gcfg.name)
+                    str += (this.denColor + this.nameString(false, gx2.gcfg, gx2.gdata));
                 }
                
                 if(j < b.toId.length-1){
@@ -90,15 +90,16 @@ export default class WarReportDesItemLogic extends Component {
                 }
             }
             str += this.skillColor
-            let estr = this.effectstring(b);
+            let estr = this.effectString(b);
             str += estr;
             str += this.endColor;
-            str += this.killstring(b);
+            str += this.killString(b);
            
         }
 
         this.warLab.string = str;
         
+
         //伤害
         if(this._reportRound.attack && this._reportRound.defense){
             this.warLab.string += "\n";
@@ -107,37 +108,50 @@ export default class WarReportDesItemLogic extends Component {
             var def_cfg = GeneralCommand.getInstance().proxy.getGeneralCfg(this._reportRound.defense.cfgId);
        
             if(data.isAttack){
-                this.warLab.string += (this.attColor + this.attstr + att_cfg.name + this.endColor  + " 对 " 
-                + this.denColor + this.denStr + def_cfg.name + this.endColor + " 发起攻击，" 
-                + this.denColor + this.denStr + def_cfg.name + this.endColor + " 损失 " + 
+                let aName = this.nameString(true, att_cfg, this._reportRound.attack);
+                let bName = this.nameString(false, def_cfg, this._reportRound.defense);
+
+                this.warLab.string += (this.attColor + aName + this.endColor  + " 对 " 
+                + this.denColor +  bName + this.endColor + 
+                " 发起攻击，" + this.denColor + bName + this.endColor + " 损失 " + 
                 this.lossColor + this._reportRound.defenseLoss + this.endColor  + " 士兵");
             }else{
-                this.warLab.string += (this.denColor + this.denStr + att_cfg.name + this.endColor  + " 对 " 
-                + this.attColor + this.attstr + def_cfg.name + this.endColor + " 发起攻击，" 
-                + this.attColor + this.attstr + def_cfg.name + this.endColor + " 损失 " + 
+                let bName = this.nameString(true, att_cfg, this._reportRound.attack);
+                let aName = this.nameString(false, def_cfg, this._reportRound.defense);
+
+                this.warLab.string += (this.denColor + aName + this.endColor  + " 对 " 
+                + this.attColor + bName + this.endColor + " 发起攻击，" 
+                + this.attColor + bName + this.endColor + " 损失 " + 
                 this.lossColor + this._reportRound.defenseLoss + this.endColor  + " 士兵");
-    
-               
             }
     
         }
       
         this.cNode.getComponent(UITransform).height = this.warLab.getComponent(UITransform).height;
-        if(this.warReport.result == 2){
-            if(isEnd){
-                this.endLab.node.active = true;
+        if(isEnd){
+            this.endLab.node.active = true;
+            this.endLab.string = "";
+            if (this.warReport.result == 0){
+                let str = "我方主将兵力被消耗殆尽，战斗失败";
+                this.endLab.string = str;
+            }else if(this.warReport.result == 1){
+                let str = "战斗不分胜负，打平";
+                this.endLab.string = str;
+            }else if(this.warReport.result == 2){
+                let str = "对方主将兵力被消耗殆尽，";
                 if(1 == this.warReport.occupy){
-                    let str = ("占领了("+ this.warReport.x + "," + this.warReport.y + ")领地");
+                    str += ("我方占领了("+ this.warReport.x + "," + this.warReport.y + ")领地");
                     this.endLab.string = str;
                 }else{
                     let destroy = this.warReport.destroy_durable / 100;
-                    let str = ("对("+ this.warReport.x + "," + this.warReport.y + ")领地造成"+ Math.ceil(destroy) + "破坏");
+                    str += ("对("+ this.warReport.x + "," + this.warReport.y + ")领地造成"+ Math.ceil(destroy) + "破坏");
                     this.endLab.string = str;
                 }
-
-                this.cNode.getComponent(UITransform).height = this.warLab.getComponent(UITransform).height + this.endLab.getComponent(UITransform).height + 20;
             }
+            
+            this.cNode.getComponent(UITransform).height = this.warLab.getComponent(UITransform).height + this.endLab.getComponent(UITransform).height + 20;
         }
+       
 
         this.node.getComponent(UITransform).height = this.cNode.getComponent(UITransform).height + 40;
        
@@ -170,7 +184,7 @@ export default class WarReportDesItemLogic extends Component {
         }
     }
 
-    private effectstring(skill:WarReportSkill):string {
+    private effectString(skill:WarReportSkill):string {
         let str = ""
         for (let i = 0; i < skill.includeEffect.length; i++) {
             let ie = skill.includeEffect[i];
@@ -196,7 +210,7 @@ export default class WarReportDesItemLogic extends Component {
         return str
     }
 
-    private killstring(skill:WarReportSkill):string {
+    private killString(skill:WarReportSkill):string {
         if(!skill.kill){
             return "";
         }
@@ -207,12 +221,45 @@ export default class WarReportDesItemLogic extends Component {
             let to = skill.toId[i];
             let g = this.getGeneralX(to);
             if(g.isAttack){
-                str += (this.attColor + " " + this.attstr + g.gcfg.name + " "  + this.endColor + "损失" + kill + "士兵")
+                str += (this.attColor + " " + this.nameString(true, g.gcfg, g.gdata) + " "  + this.endColor + "损失" + kill + "士兵")
             }else{
-                str += (this.denColor + " " + this.denStr + g.gcfg.name + " "  + this.endColor + "损失" + kill + "士兵")
+                str += (this.denColor + " " + this.nameString(false, g.gcfg, g.gdata) + " "  + this.endColor + "损失" + kill + "士兵")
             }
         }
         return str
+    }
+
+    private nameString(isAttack:boolean, cfg:GeneralConfig, general:any) {
+        if(isAttack){
+            let position = -1;
+            for (let index = 0; index < this.warReport.beg_attack_general.length; index++) {
+                const g = this.warReport.beg_attack_general[index];
+                if(g.id == general.id){
+                    position = index;
+                    break;
+                }
+            }
+            return this.attstr + cfg.name + "(" + this.positionString(position) + ")"
+        }else{
+            let position = -1;
+            for (let index = 0; index < this.warReport.beg_attack_general.length; index++) {
+                const g = this.warReport.beg_defense_general[index];
+                if(g.id == general.id){
+                    position = index;
+                    break;
+                }
+            }
+
+            return this.denStr + cfg.name + "(" + this.positionString(position) + ")"
+        }
+    }
+
+    private positionString(position:number) {
+        if(position == 0){
+            return "主将";
+        }else{
+            return "副将";
+        }
     }
 
     protected clickPos() {
