@@ -23,6 +23,7 @@ import { SkillConf } from "../../config/skill/Skill";
 import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { Skill } from '../../skill/SkillProxy';
 
 
 
@@ -518,7 +519,7 @@ export default class MapUILogic extends Component {
         } 
     }
     
-    protected onOpenSkillInfo(cfg:SkillConf, type:number=0, general:GeneralData = null, skillPos:number=-1){
+    protected onOpenSkillInfo(cfg:Skill, type:number=0, general:GeneralData = null, skillPos:number=-1){
         console.log("onOpenSkillInfo", cfg, type, general, skillPos);
         AudioManager.instance.playClick();
         if (this._skillInfoNode == null) {
