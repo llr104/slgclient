@@ -1,4 +1,4 @@
-import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, UITransform, AudioSource, assert, tweenUtil } from 'cc';
+import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, AudioSource, assert, resources } from 'cc';
 const { ccclass, property } = _decorator;
 
 import { GameConfig } from "./config/GameConfig";
@@ -46,7 +46,8 @@ export default class Main extends Component {
     protected _loadingNode: Node = null;
     protected _waitNode: Node = null;
     private _retryTimes: number = 0;
-
+    private _h5GeneralPicIndex: number = 0;
+    private _h5GeneralPic = [];
 
 
     protected onLoad(): void {
@@ -96,6 +97,8 @@ export default class Main extends Component {
         this.clearData();
         this._loginScene = instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
+
+        this.h5LoadGeneralTex();
     }
 
     protected onEnterMap(): void {
@@ -104,6 +107,7 @@ export default class Main extends Component {
         dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, JsonAsset));
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, JsonAsset));
+
         if(sys.isBrowser){
             dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, SpriteFrame));
         }else{
@@ -148,6 +152,60 @@ export default class Main extends Component {
             },
             this
         );
+        
+    }
+
+    private h5LoadGeneralTex() {
+        if(!sys.isBrowser){
+            return;
+        }
+
+        if(this._h5GeneralPic.length == 0){
+            let generalpic = resources.getDirWithPath("./generalpic");
+            // console.log("generalpic:", generalpic);
+            generalpic.forEach(v => {
+                if (v.ctor == SpriteFrame){
+                    this._h5GeneralPic.push(v);
+                }
+            });
+        }
+        
+        let f = ()=>{
+           
+            for (let index = this._h5GeneralPicIndex; index < this._h5GeneralPic.length; index++) {
+                const pic = this._h5GeneralPic[index];
+
+                let name = pic.path.replaceAll("spriteFrame", "");
+                name = name.replaceAll("/", "");
+                name = name.replaceAll("\\", "");
+
+                let id: number = Number(String(name).split("_")[1]);
+                let frame = GeneralCommand.getInstance().proxy.getGeneralTex(id);
+                this._h5GeneralPicIndex = index+1;
+                // console.log("load index 1111:", index);
+
+                if(!frame){
+                    resources.load(pic.path, SpriteFrame, 
+                    (finish: number, total: number) => {
+                    },
+                    (error: Error, asset: any) => {
+                        if (error != null) {
+                            console.log("h5LoadGeneralTex error:", error.message);
+                        }else{
+                            GeneralCommand.getInstance().proxy.setGeneralTex(id, asset);
+                        }
+                    });
+                    break;
+                }
+            }
+            if(this._h5GeneralPicIndex >= this._h5GeneralPic.length){
+                this.unschedule(f);
+                console.log("h5 load generalPic finish");
+            }
+        }
+
+        this.schedule(f, 0.01);
+    
     }
 
     protected addLoadingNode(): void {

@@ -7,16 +7,19 @@ export default class GeneralHeadLogic extends Component {
     
     public setHeadId(id:number) {
 
-        // console.log("setHeadId:", id);
+        var sp = this.node.getComponent(Sprite);
+        if (sp){
+            //sp.spriteFrame = null;
+        }
+        
         var frame = GeneralCommand.getInstance().proxy.getGeneralTex(id);
         if(frame){
-            var sp = this.node.getComponent(Sprite);
             if(sp){
                 sp.spriteFrame = frame;
             }
         }else{
 
-            // console.log("load setHeadId:", id);
+            console.log("load setHeadId:", id);
             resources.load("./generalpic/card_" + id + "/spriteFrame", SpriteFrame, 
                 (finish: number, total: number) => {
                 },
@@ -25,7 +28,6 @@ export default class GeneralHeadLogic extends Component {
                         console.log("setHeadId error:", error.message);
                     }else{
                         var frame = asset as SpriteFrame;
-                        var sp = this.node.getComponent(Sprite);
                         if(sp){
                             sp.spriteFrame = frame;
                         }

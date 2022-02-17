@@ -190,6 +190,10 @@ export default class GeneralProxy {
     }
 
     public initGeneralTex(texs: SpriteFrame[]): void {
+        if(texs.length == 0){
+            return;
+        }
+        
         this._generalTexs.clear();
         for (let i: number = 0; i < texs.length; i++) {
             let id: number = Number(String(texs[i].name).split("_")[1]);
