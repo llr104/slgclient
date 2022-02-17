@@ -61,7 +61,7 @@ export default class WarReportItemLogic extends Component {
         this.leftLabel.string = roleData.rid == this._curData.attack_rid?"我":"敌";
         this.rightLabel.string = roleData.rid == this._curData.defense_rid?"我":"敌"
 
-        this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
+        this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime, "YYYY-MM-DD hh:mm:ss");
 
         this.posLabel.string = "(" + this._curData.x + "," + this._curData.y + ")";
     }
