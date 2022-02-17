@@ -10,6 +10,7 @@ import { Skill } from "../../skill/SkillProxy";
 import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('SkillLogic')
 export default class SkillLogic extends Component {
@@ -60,7 +61,7 @@ export default class SkillLogic extends Component {
             }
         }
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(arr);
     }
 
