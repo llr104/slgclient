@@ -198,30 +198,30 @@ export default class ListLogic extends Component {
     
         /**设置item实例数量*/
     protected  updateItemCount(count):boolean {
-            if (this._itemCount != count) {
-                this._itemCount = count;
-                //清空列表
-                var children = this.scrollView.content.children.slice();
-                this.scrollView.content.removeAllChildren();
-                for (var i = 0; i < children.length; i++) {
-                    let item = children[i];
-                    if (item.isValid) {
-                        item.off(Node.EventType.TOUCH_END, this.onItemClick, this);
-                        this._itemPool.put(item);//加入对象池
-                    }
+        if (this._itemCount != count) {
+            this._itemCount = count;
+            //清空列表
+            var children = this.scrollView.content.children.slice();
+            this.scrollView.content.removeAllChildren();
+            for (var i = 0; i < children.length; i++) {
+                let item = children[i];
+                if (item.isValid) {
+                    item.off(Node.EventType.TOUCH_END, this.onItemClick, this);
+                    this._itemPool.put(item);//加入对象池
                 }
-                this._items.length = 0;
-                for (var i = 0; i < this._itemCount; i++) {
-                    let item = this.createItem();
-                    item.active = false;
-                    item.itemIdx = i;//在item上纪录当前下标
-                    item.on(Node.EventType.TOUCH_END, this.onItemClick, this);
-                    this.scrollView.content.addChild(item);
-                    this._items.push(item);
-                }
-                return true;
             }
-            return false;
+            this._items.length = 0;
+            for (var i = 0; i < this._itemCount; i++) {
+                let item = this.createItem();
+                item.active = false;
+                item.itemIdx = i;//在item上纪录当前下标
+                item.on(Node.EventType.TOUCH_END, this.onItemClick, this);
+                this.scrollView.content.addChild(item);
+                this._items.push(item);
+            }
+            return true;
+        }
+        return false;
     }
 
 

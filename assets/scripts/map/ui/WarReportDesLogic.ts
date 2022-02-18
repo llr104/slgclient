@@ -17,21 +17,35 @@ export default class WarReportDesLogic extends Component {
     @property(Node)
     item:Node = null;
 
+    _lastY:number = 0;
+
+    _curNum:number = 0;
 
     onLoad(){
         this.item.active = false;
+        this.scrollView.node.on("scroll-to-bottom", this.scrollToBottom, this);
     }
+
 
     onEnable(){
         this.scrollView.scrollToTop();
+        
     }
 
     public setData(data:any):void{
         
         this.scrollView.content.removeAllChildren();
         this._curData = data;
-       
-        for (let index = 0; index < this._curData.rounds.length; index++) {
+        this._curNum =  0;
+        this.make();
+
+        this.scrollView.scrollToTop();
+    }
+
+    private make() {
+        let max = Math.min(6, this._curData.rounds.length-this._curNum);
+        
+        for (let index = this._curNum; index < this._curNum + max; index++) {
             let r = this._curData.rounds[index];
             
             let item = instantiate(this.item);
@@ -40,8 +54,8 @@ export default class WarReportDesLogic extends Component {
 
             item.getComponent(WarReportDesItemLogic).setData(r, this._curData, index == this._curData.rounds.length-1);
         }
-        
-        this.scrollView.scrollToTop();
+
+        this._curNum += max;
     }
 
 
@@ -49,4 +63,12 @@ export default class WarReportDesLogic extends Component {
         this.node.active = false;
         AudioManager.instance.playClick();
     }
+
+
+    protected scrollToBottom(): void {
+        console.log("scrollToBottom");
+        this.make();
+    }
+    
+
 }
