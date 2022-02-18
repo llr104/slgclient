@@ -25,6 +25,7 @@ export default class MapLogic extends Component {
     protected _touchAniNode: Node = null;
     protected _centerPoint: Vec2 = null;
 
+    
     protected onLoad(): void {
         console.log("MapLogic onLoad");
         this._cmd = MapCommand.getInstance();
@@ -148,18 +149,16 @@ export default class MapLogic extends Component {
     }
 
     public scrollToMapPoint(point: Vec2): void {
-        let pixelPoint: Vec2 = MapUtil.mapCellToPixelPoint(point);
-        // console.log("scrollToMapPoint", pixelPoint.x, pixelPoint.y);
-        let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
-        let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
+        let temp = this.toCameraPoint(point);
         let pos = this._mapCamera.node.position.clone();
-        pos.x = positionX;
-        pos.y = positionY;
-        this._mapCamera.node.position = pos;
-    
-        this.setCenterMapCellPoint(point, pixelPoint);
+        let pixelPoint: Vec2 = MapUtil.mapCellToPixelPoint(point);
 
+        pos.x = temp.x;
+        pos.y = temp.y;
+        this._mapCamera.node.position = pos;
+        this.setCenterMapCellPoint(point, pixelPoint);
         this.updateCulling();
+
     }
 
     protected setCenterMapCellPoint(point: Vec2, pixelPoint: Vec2): void {
@@ -189,4 +188,18 @@ export default class MapLogic extends Component {
         }
 
      }
+
+ 
+    public curCameraPoint():Vec2 {
+        let pos = this._mapCamera.node.position;
+        return new Vec2(pos.x, pos.y);
+    }
+
+
+    public toCameraPoint(point: Vec2) {
+        let pixelPoint: Vec2 = MapUtil.mapCellToPixelPoint(point);
+        let positionX: number = Math.min(this._maxMapX, Math.max(-this._maxMapX, pixelPoint.x));
+        let positionY: number = Math.min(this._maxMapY, Math.max(-this._maxMapY, pixelPoint.y));
+        return new Vec2(positionX, positionY);
+    }
 }

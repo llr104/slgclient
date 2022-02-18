@@ -98,7 +98,7 @@ export default class Main extends Component {
         this._loginScene = instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
 
-        this.h5LoadGeneralTex();
+        //this.h5LoadGeneralTex();
     }
 
     protected onEnterMap(): void {
@@ -145,10 +145,16 @@ export default class Main extends Component {
                 SkillCommand.getInstance().qrySkillList();
 
                 this.clearAllScene();
+
+            
                 this._mapScene = instantiate(this.mapScenePrefab);
                 this._mapScene.parent = this.node;
+              
                 this._mapUIScene = instantiate(this.mapUIScenePrefab);
                 this._mapUIScene.parent = this.node;
+
+                this.addLoadingNode();
+             
             },
             this
         );
@@ -213,8 +219,9 @@ export default class Main extends Component {
             if (this._loadingNode == null) {
                 this._loadingNode = instantiate(this.loadingPrefab);
             }
-            this._loadingNode.setSiblingIndex(1);
+
             this._loadingNode.parent = this.node;
+            this._loadingNode.setSiblingIndex(this.topLayer()+1);
         }
     }
 
@@ -223,7 +230,7 @@ export default class Main extends Component {
         if (this._waitNode == null) {
             this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
-            this._waitNode.setSiblingIndex(2);
+            this._waitNode.setSiblingIndex(this.topLayer()+2);
         }
         this._waitNode.active = isShow;
 
@@ -234,7 +241,7 @@ export default class Main extends Component {
         if(this.toastNode == null){
             let toast = instantiate(this.toastPrefab);
             toast.parent = this.node;
-            toast.setSiblingIndex(10);
+            toast.setSiblingIndex(this.topLayer()+10);
             this.toastNode = toast;
         }
         this.toastNode.active = true;
@@ -284,5 +291,9 @@ export default class Main extends Component {
             this._waitNode = null;
         }
         
+    }
+
+    public topLayer():number {
+        return this.node.children.length+1;
     }
 }

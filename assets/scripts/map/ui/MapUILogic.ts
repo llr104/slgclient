@@ -1,4 +1,4 @@
-import { _decorator, Component, Prefab, Node, Layout, Label, instantiate, UITransform } from 'cc';
+import { _decorator, Component, Prefab, Node, Layout, Label, instantiate, UITransform, Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
 
 import LoginCommand from "../../login/LoginCommand";
@@ -114,6 +114,11 @@ export default class MapUILogic extends Component {
     protected _settingNode: Node = null;
 
     
+    @property(Prefab)
+    cloudAniPrefab: Prefab = null;
+    protected _cloudAniNode: Node = null;
+
+
     @property(Node)
     widgetNode: Node = null;
 
@@ -164,6 +169,7 @@ export default class MapUILogic extends Component {
         EventMgr.on("open_skill", this.onOpenSkill, this);
         EventMgr.on("close_skill", this.onCloseSkill, this);
         EventMgr.on("open_skillInfo", this.onOpenSkillInfo, this);
+        EventMgr.on("before_scroll_to_map", this.beforeScrollToMap, this);
         
         
 
@@ -565,5 +571,26 @@ export default class MapUILogic extends Component {
         this._settingNode.setSiblingIndex(this.topLayer());
 
     }
+
+    protected beforeScrollToMap(x:number, y:number, oldx:number, oldy:number):void {
+        let newPoint = new Vec2(x, y);
+        let oldPoint = new Vec2(oldx, oldy);
+        let dis = Vec2.squaredDistance(newPoint, oldPoint);
+        console.log("beforeScrollToMap:", x, y, oldx, oldy, dis);
+
+        if(dis < 360000){
+            return;
+        }
+
+        if(this._cloudAniNode == null){
+            this._cloudAniNode = instantiate(this.cloudAniPrefab);
+            this._cloudAniNode.parent = this.contentNode;
+        }
+        this._cloudAniNode.active = true;
+        this._cloudAniNode.setSiblingIndex(this.topLayer());
+
+    }
+
+    
 
 }

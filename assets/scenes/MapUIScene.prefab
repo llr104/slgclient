@@ -17064,6 +17064,10 @@
       "__uuid__": "2627c7e2-3663-4760-bd6b-9b0c85a2a189",
       "__expectedType__": "cc.Prefab"
     },
+    "cloudAniPrefab": {
+      "__uuid__": "c9155be2-3848-4076-bba7-800f6ec3d653",
+      "__expectedType__": "cc.Prefab"
+    },
     "widgetNode": {
       "__id__": 219
     },
