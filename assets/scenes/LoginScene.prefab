@@ -803,11 +803,11 @@
       "__id__": 40
     },
     "loginPrefab": {
-      "__uuid__": "decf86db-2ba0-47db-a203-9b6947f865bd",
+      "__uuid__": "bb68c98f-a2b5-4feb-af64-5a915d576361",
       "__expectedType__": "cc.Prefab"
     },
     "createPrefab": {
-      "__uuid__": "39c0c2e4-f623-45c4-9086-f1d4bae258e9",
+      "__uuid__": "9318c645-35ea-4422-8ba2-63dc50d87f38",
       "__expectedType__": "cc.Prefab"
     },
     "serverListPrefab": null,
