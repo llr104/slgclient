@@ -8,6 +8,7 @@ import MapCommand from "../MapCommand";
 import ArmySelectItemLogic from "./ArmySelectItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('ArmySelectNodeLogic')
 export default class ArmySelectNodeLogic extends Component {
@@ -17,7 +18,7 @@ export default class ArmySelectNodeLogic extends Component {
     itemPrefab: Prefab = null;
     
     protected onLoad(): void {
-        EventMgr.on("close_army_select_ui", this.onClickBack, this);
+        EventMgr.on(LogicEvent.closeArmyAelectUi, this.onClickBack, this);
     }
 
     protected onDestroy(): void {

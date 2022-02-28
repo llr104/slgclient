@@ -5,6 +5,7 @@ import { ServerConfig } from "../config/ServerConfig";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 export default class UnionCommand {
     //单例
@@ -65,7 +66,7 @@ export default class UnionCommand {
     protected onUnionCreate(data: any, otherData: any): void {
         console.log("onUnionCreate", data);
         if (data.code == 0) {
-            EventMgr.emit("create_union_success");
+            EventMgr.emit(LogicEvent.createUnionSuccess);
             this.unionList();
         }
     }
@@ -82,7 +83,7 @@ export default class UnionCommand {
         console.log("onUnionList", data);
         if (data.code == 0) {
             this._proxy.updateUnionList(data.msg.list);
-            EventMgr.emit("update_union_list",data.msg.list);
+            EventMgr.emit(LogicEvent.updateUnionList,data.msg.list);
         }
 
     }
@@ -92,7 +93,7 @@ export default class UnionCommand {
         console.log("onUnionMember", data);
         if (data.code == 0) {
             this._proxy.updateMemberList(data.msg.id,data.msg.Members);
-            EventMgr.emit("update_union_member",data.msg.Members);
+            EventMgr.emit(LogicEvent.updateUnionMember,data.msg.Members);
         }
         
     }
@@ -102,7 +103,7 @@ export default class UnionCommand {
         console.log("onUnionDisMiss", data);
         if (data.code == 0) {
             this.unionList();
-            EventMgr.emit("dismiss_union_success");
+            EventMgr.emit(LogicEvent.dismissUnionSuccess);
         }
     }
 
@@ -111,7 +112,7 @@ export default class UnionCommand {
         console.log("onUnionApply", data);
         if (data.code == 0) {
             this._proxy.updateApplyList(data.msg.id, data.msg.applys);
-            EventMgr.emit("update_union_apply", data.msg.applys);
+            EventMgr.emit(LogicEvent.updateUnionApply, data.msg.applys);
         }
     }
 
@@ -119,8 +120,8 @@ export default class UnionCommand {
     protected onUnionVerify(data: any, otherData: any): void {
         console.log("onUnionVerify", data);
         if (data.code == 0) {
-            EventMgr.emit("kick_union_success");
-            EventMgr.emit("verify_union_success");
+            EventMgr.emit(LogicEvent.kickUnionSuccess);
+            EventMgr.emit(LogicEvent.verifyUnionSuccess);
         }
     }
 
@@ -128,21 +129,21 @@ export default class UnionCommand {
     protected onUnionKick(data: any, otherData: any): void {
         console.log("onUnionKick", data);
         if (data.code == 0) {
-            EventMgr.emit("kick_union_success");
+            EventMgr.emit(LogicEvent.kickUnionSuccess);
         }
     }
 
     protected onUnionAppoint(data: any, otherData: any): void {
         console.log("onUnionAppoint", data);
         if (data.code == 0) {
-            EventMgr.emit("union_appoint", data.msg);
+            EventMgr.emit(LogicEvent.unionAppoint, data.msg);
         }
     }
 
     protected onUnionAbdicate(data: any, otherData: any): void {
         console.log("onUnionAbdicate", data);
         if (data.code == 0) {
-            EventMgr.emit("union_abdicate", data.msg);
+            EventMgr.emit(LogicEvent.unionAbdicate, data.msg);
         }
     }
 
@@ -151,7 +152,7 @@ export default class UnionCommand {
         console.log("onUnionNotice", data);
         if(data.code == 0){
             this._proxy.updateNotice(data.msg.id, data.msg.text)
-            EventMgr.emit("union_notice", data.msg);
+            EventMgr.emit(LogicEvent.unionNotice, data.msg);
         }
         
     }
@@ -163,14 +164,14 @@ export default class UnionCommand {
             l.push(data.msg.info)
             this._proxy.updateUnionList(l);
 
-            EventMgr.emit("union_info", data.msg);
+            EventMgr.emit(LogicEvent.unionInfo, data.msg);
         }
     }
 
     protected onUnionLog(data: any, otherData: any): void {
         console.log("onUnionLog", data);
         if(data.code == 0){
-            EventMgr.emit("union_log", data.msg.logs);
+            EventMgr.emit(LogicEvent.unionLog, data.msg.logs);
         }
     }
     
@@ -180,7 +181,7 @@ export default class UnionCommand {
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         if (unionData && unionData.isMajor(city.rid)){
             this._proxy.updateApply(city.unionId, data.msg);
-            EventMgr.emit("update_union_apply", data.msg);
+            EventMgr.emit(LogicEvent.updateUnionApply, data.msg);
         }
     }
 

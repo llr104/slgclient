@@ -10,6 +10,7 @@ import GeneralHeadLogic from "./GeneralHeadLogic";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CityGeneralItemLogic')
 export default class CityGeneralItemLogic extends Component {
@@ -80,11 +81,11 @@ export default class CityGeneralItemLogic extends Component {
         if (this._data) {
             //点击展示武将信息
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._data.cfgId);
-            EventMgr.emit("open_general_des", cfg, this._data);
+            EventMgr.emit(LogicEvent.openGeneralDes, cfg, this._data);
         } else if (this.addNode.active) {
             //上阵武将
             var generalArr: number[] = this.getAllGenerals();
-            EventMgr.emit("open_general_choose", generalArr, this.index);
+            EventMgr.emit(LogicEvent.openGeneralChoose, generalArr, this.index);
         }
     }
 

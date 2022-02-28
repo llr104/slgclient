@@ -10,6 +10,7 @@ import RightCityItemLogic from "./RightCityItemLogic";
 import RightTagItemLogic from "./RightTagItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('RightInfoNodeLogic')
 export default class RightInfoNodeLogic extends Component {
@@ -34,9 +35,9 @@ export default class RightInfoNodeLogic extends Component {
 
 
     protected onLoad(): void {
-        EventMgr.on("update_army_list", this.onUpdateArmyList, this);
-        EventMgr.on("update_army", this.onUpdateArmy, this);
-        EventMgr.on("update_tag", this.onUpdateTag, this);
+        EventMgr.on(LogicEvent.updateArmyList, this.onUpdateArmyList, this);
+        EventMgr.on(LogicEvent.updateArmy, this.onUpdateArmy, this);
+        EventMgr.on(LogicEvent.updateTag, this.onUpdateTag, this);
 
         this.armyScrollView.node.active = true;
         this.cityScrollView.node.active = false;

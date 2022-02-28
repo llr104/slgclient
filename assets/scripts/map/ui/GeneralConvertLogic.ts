@@ -7,6 +7,8 @@ import GeneralCommand from "../../general/GeneralCommand";
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('GeneralConvertLogic')
 export default class GeneralConvertLogic extends Component {
@@ -28,8 +30,8 @@ export default class GeneralConvertLogic extends Component {
 
     protected onEnable():void{
        this.initGeneralCfg();
-       EventMgr.on("open_general_select", this.onSelectGeneral, this);
-       EventMgr.on("general_convert", this.onGeneralConvert, this);
+       EventMgr.on(LogicEvent.openGeneralSelect, this.onSelectGeneral, this);
+       EventMgr.on(LogicEvent.generalConvert, this.onGeneralConvert, this);
     }
 
 
@@ -40,7 +42,7 @@ export default class GeneralConvertLogic extends Component {
     protected onClickClose(): void {
         this.node.active = false;
         AudioManager.instance.playClick();
-        EventMgr.emit("open_general");
+        EventMgr.emit(LogicEvent.openGeneral);
     }
 
     protected initGeneralCfg():void{
@@ -60,7 +62,7 @@ export default class GeneralConvertLogic extends Component {
             }
         }
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(listTemp);
     }
 
@@ -99,7 +101,7 @@ export default class GeneralConvertLogic extends Component {
 
    
     protected onGeneralConvert(msg:any):void{
-        EventMgr.emit("show_toast", "获得金币:"+msg.add_gold);
+        EventMgr.emit(LogicEvent.showToast, "获得金币:"+msg.add_gold);
         this._upMap.forEach((g:Node) => {
             g.parent = null;
         });

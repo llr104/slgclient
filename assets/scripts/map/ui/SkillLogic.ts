@@ -1,16 +1,13 @@
 import { _decorator, Component, ScrollView } from 'cc';
 const {ccclass, property} = _decorator;
 
-import { General } from "../../config/Basci";
-import { SkillConf } from "../../config/skill/Skill";
-import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralData } from "../../general/GeneralProxy";
 import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
-import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
 import ListLogic from '../../utils/ListLogic';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('SkillLogic')
 export default class SkillLogic extends Component {
@@ -26,7 +23,7 @@ export default class SkillLogic extends Component {
    
     protected onEnable():void{
        
-        EventMgr.on("skill_list_info", this.onSkillList, this);
+        EventMgr.on(LogicEvent.skillListInfo, this.onSkillList, this);
         SkillCommand.getInstance().qrySkillList();
     }
 
@@ -72,7 +69,7 @@ export default class SkillLogic extends Component {
 
     protected onClickItem(data: Skill, target): void {
         AudioManager.instance.playClick();
-        EventMgr.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
+        EventMgr.emit(LogicEvent.openSkillInfo, data, this._type, this._general, this._skillPos);
     }
 
 

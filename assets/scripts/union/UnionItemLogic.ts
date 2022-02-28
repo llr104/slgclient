@@ -4,6 +4,7 @@ import UnionCommand from "./UnionCommand";
 import { Union } from "./UnionProxy";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionItemLogic')
 export default class UnionItemLogic extends Component {
@@ -33,7 +34,7 @@ export default class UnionItemLogic extends Component {
         AudioManager.instance.playClick();
         var isCanjoin:boolean = this.isCanJoin();
         if(!isCanjoin){
-            EventMgr.emit("open_my_union",this._unionData)
+            EventMgr.emit(LogicEvent.openMyUnion,this._unionData)
         }
     }
 }

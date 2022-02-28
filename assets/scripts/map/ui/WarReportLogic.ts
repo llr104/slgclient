@@ -14,6 +14,7 @@ import WarReportDesLogic from './WarReportDesLogic';
 import { EventMgr } from '../../utils/EventMgr';
 import ListLogic from '../../utils/ListLogic';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('WarReportLogic')
 export default class WarReportLogic extends Component {
@@ -26,9 +27,9 @@ export default class WarReportLogic extends Component {
     private _warPortDesNode:Node = null;
 
     protected onEnable():void{
-        EventMgr.on("upate_war_report", this.initView, this);
-        EventMgr.on("click_war_report", this.openWarPortDes, this);
-        EventMgr.on("close_report", this.close, this);
+        EventMgr.on(LogicEvent.upateWarReport, this.initView, this);
+        EventMgr.on(LogicEvent.clickWarReport, this.openWarPortDes, this);
+        EventMgr.on(LogicEvent.closeReport, this.close, this);
     }
 
     

@@ -10,6 +10,7 @@ import { MapResType } from "../MapProxy";
 import CityArmyItemLogic from "./CityArmyItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('FortressAbout')
 export default class FortressAbout extends Component {
@@ -44,9 +45,9 @@ export default class FortressAbout extends Component {
     }
 
     onEnable (): void{
-        EventMgr.on("update_builds", this.onUpdateBuilds, this);
-        EventMgr.on("update_build", this.onUpdateBuild, this);
-        EventMgr.on("delete_build", this.onDeleteBuild, this);
+        EventMgr.on(LogicEvent.updateBuilds, this.onUpdateBuilds, this);
+        EventMgr.on(LogicEvent.updateBuild, this.onUpdateBuild, this);
+        EventMgr.on(LogicEvent.deleteBuild, this.onDeleteBuild, this);
 
         this.initView();
     }

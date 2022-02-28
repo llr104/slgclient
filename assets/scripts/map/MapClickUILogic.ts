@@ -10,6 +10,7 @@ import { MapResConfig, MapResData, MapResType } from "./MapProxy";
 import MapUICommand from "./ui/MapUICommand";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapClickUILogic')
 export default class MapClickUILogic extends Component {
@@ -74,7 +75,7 @@ export default class MapClickUILogic extends Component {
     }
 
     protected onEnable(): void {
-        EventMgr.on("update_build", this.onUpdateBuild, this);
+        EventMgr.on(LogicEvent.updateBuild, this.onUpdateBuild, this);
 
         var uiOpacity = this.bgSelect.getComponent(UIOpacity);
         uiOpacity.opacity = 255;
@@ -107,9 +108,9 @@ export default class MapClickUILogic extends Component {
         AudioManager.instance.playClick();
 
         if (this._data instanceof MapBuildData){
-            EventMgr.emit("open_fortress_about", this._data);
+            EventMgr.emit(LogicEvent.openFortressAbout, this._data);
         }else if (this._data instanceof MapCityData){
-            EventMgr.emit("open_city_about", this._data);
+            EventMgr.emit(LogicEvent.openCityAbout, this._data);
         }
        
         this.node.parent = null;
@@ -117,7 +118,7 @@ export default class MapClickUILogic extends Component {
 
     protected onClickReclaim(): void {
         AudioManager.instance.playClick();
-        EventMgr.emit("open_army_select_ui", ArmyCmd.Reclaim, this._data.x, this._data.y);
+        EventMgr.emit(LogicEvent.openArmySelectUi, ArmyCmd.Reclaim, this._data.x, this._data.y);
         this.node.parent = null;
     }
 
@@ -137,13 +138,13 @@ export default class MapClickUILogic extends Component {
         AudioManager.instance.playClick();
         console.log("onClickTransfer");
         this.node.parent = null;
-        EventMgr.emit("open_army_select_ui", ArmyCmd.Transfer, this._data.x, this._data.y);
+        EventMgr.emit(LogicEvent.openArmySelectUi, ArmyCmd.Transfer, this._data.x, this._data.y);
     }
 
     protected onClickMove(): void {
         AudioManager.instance.playClick();
         if (MapCommand.getInstance().isCanMoveCell(this._data.x, this._data.y)) {
-            EventMgr.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
+            EventMgr.emit(LogicEvent.openArmySelectUi, ArmyCmd.Garrison, this._data.x, this._data.y);
         } else {
             console.log("只能驻军自己占领的地");
         }
@@ -166,7 +167,7 @@ export default class MapClickUILogic extends Component {
     protected onClickOccupy(): void {
         AudioManager.instance.playClick();
         if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
-            EventMgr.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
+            EventMgr.emit(LogicEvent.openArmySelectUi, ArmyCmd.Attack, this._data.x, this._data.y);
         } else {
             console.log("只能占领自己相邻的地");
         }

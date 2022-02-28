@@ -7,6 +7,7 @@ import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import ListLogic from '../../utils/ListLogic';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('GeneralListLogic')
 export default class GeneralListLogic extends Component {
@@ -22,9 +23,9 @@ export default class GeneralListLogic extends Component {
     private _position:number = 0;
 
     protected onEnable():void{
-        EventMgr.on("update_my_generals", this.initGeneralCfg, this);
-        EventMgr.on("general_convert", this.initGeneralCfg, this);
-        EventMgr.on("chosed_general", this.onClickClose, this);
+        EventMgr.on(LogicEvent.updateMyGenerals, this.initGeneralCfg, this);
+        EventMgr.on(LogicEvent.generalConvert, this.initGeneralCfg, this);
+        EventMgr.on(LogicEvent.chosedGeneral, this.onClickClose, this);
     }
 
 
@@ -39,13 +40,13 @@ export default class GeneralListLogic extends Component {
 
     protected onClickConvert(): void {
         AudioManager.instance.playClick();
-        EventMgr.emit("open_general_convert");
+        EventMgr.emit(LogicEvent.openGeneralConvert);
         this.node.active = false;
     }
 
     protected onTuJianConvert(): void {
         AudioManager.instance.playClick();
-        EventMgr.emit("open_general_roster");
+        EventMgr.emit(LogicEvent.openGeneralRoster);
         this.node.active = false;
     }
 

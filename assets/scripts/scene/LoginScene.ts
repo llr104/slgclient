@@ -1,5 +1,6 @@
 import { _decorator, Component, Prefab, Node, instantiate } from 'cc';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 const { ccclass, property } = _decorator;
 
 import LoginCommand from "../login/LoginCommand";
@@ -23,8 +24,8 @@ export default class LoginScene extends Component {
 
     protected onLoad(): void {
         this.openLogin();
-        EventMgr.on("CreateRole", this.onCreate, this);
-        EventMgr.on("enterServerComplete", this.enterServer, this);
+        EventMgr.on(LogicEvent.createRole, this.onCreate, this);
+        EventMgr.on(LogicEvent.enterServerComplete, this.enterServer, this);
         
     }
 

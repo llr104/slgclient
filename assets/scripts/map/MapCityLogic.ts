@@ -6,6 +6,7 @@ import CityLogic from "./entries/CityLogic";
 import MapUtil from "./MapUtil";
 import { MapCityData } from "./MapCityProxy";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapCityLogic')
 
@@ -13,8 +14,8 @@ export default class MapCityLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
-        EventMgr.on("update_citys", this.onUpdateCitys, this);
-        EventMgr.on("update_city", this.onUpdateCity, this);
+        EventMgr.on(LogicEvent.updateCitys, this.onUpdateCitys, this);
+        EventMgr.on(LogicEvent.updateCity, this.onUpdateCity, this);
     }
 
     protected onDestroy(): void {
@@ -23,7 +24,7 @@ export default class MapCityLogic extends MapBaseLayerLogic {
     }
 
     protected onUpdateCitys(areaIndex: number, addIds: number[], removeIds: number[], updateIds: number[]): void {
-        // console.log("update_citys", arguments);
+    
         if (this._itemMap.has(areaIndex)) {
             for (let i: number = 0; i < addIds.length; i++) {
                 this.addItem(areaIndex, this._cmd.cityProxy.getCity(addIds[i]));

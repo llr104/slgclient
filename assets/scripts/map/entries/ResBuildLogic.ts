@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import { MapBuildData } from "../MapBuildProxy";
 import MapCommand from "../MapCommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { LogicEvent } from '../../common/LogicEvent';
 
 
 @ccclass('ResBuildLogic')
@@ -22,7 +23,7 @@ export default class ResBuildLogic extends Component {
 
     }
     protected onEnable():void {
-        EventMgr.on("unionChange", this.onUnionChange, this);
+        EventMgr.on(LogicEvent.unionChange, this.onUnionChange, this);
     }
     protected onDisable():void {
         this._data = null;

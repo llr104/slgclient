@@ -7,6 +7,7 @@ import { GeneralCampType, GeneralData } from "../../general/GeneralProxy";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 // /**军队命令*/
 export class GeneralItemType {
@@ -170,23 +171,23 @@ export default class GeneralItemLogic extends Component {
             
             //武将详情
              if(this._type == GeneralItemType.GeneralInfo){
-                 EventMgr.emit("open_general_des",cfgData, this._curData);
+                 EventMgr.emit(LogicEvent.openGeneralDes, cfgData, this._curData);
              }
              
              //上阵
              else if(this._type == GeneralItemType.GeneralDispose){
-                 EventMgr.emit("chosed_general", cfgData, this._curData, this._position);
+                 EventMgr.emit(LogicEvent.chosedGeneral, cfgData, this._curData, this._position);
              }
 
              //征兵
              else if(this._type == GeneralItemType.GeneralConScript){
-                 EventMgr.emit("open_army_conscript", this._orderId, this._cityData);
+                 EventMgr.emit(LogicEvent.openArmyConscript, this._orderId, this._cityData);
              }
 
              else if(this._type == GeneralItemType.GeneralSelect){
                 this._isSelect = !this._isSelect;
                 this.select(this._isSelect);
-                EventMgr.emit("open_general_select", cfgData, this._curData, this.node);
+                EventMgr.emit(LogicEvent.openGeneralSelect, cfgData, this._curData, this.node);
              }
         }
 
@@ -201,7 +202,7 @@ export default class GeneralItemLogic extends Component {
      */
     protected onDelete():void{
         var cfgData = this._curData.config;
-        EventMgr.emit("chosed_general",cfgData,this._curData,-1);
+        EventMgr.emit(LogicEvent.chosedGeneral,cfgData,this._curData,-1);
     }
 
 

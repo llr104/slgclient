@@ -11,6 +11,7 @@ import DateUtil from "../../utils/DateUtil";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('RightArmyItemLogic')
 export default class RightArmyItemLogic extends Component {
@@ -39,7 +40,7 @@ export default class RightArmyItemLogic extends Component {
     protected _qryReturnTime: number = 0;
 
     protected onLoad(): void {
-        EventMgr.on("update_general", this.onUpdateGeneral, this);
+        EventMgr.on(LogicEvent.updateGeneral, this.onUpdateGeneral, this);
         this.node.getComponent(UITransform).height -= this.bottomNode.getComponent(UITransform).height;
         this.bottomNode.active = false;
     }
@@ -95,7 +96,7 @@ export default class RightArmyItemLogic extends Component {
         AudioManager.instance.playClick();
         if (this._data) {
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(this._data.cityId);
-            EventMgr.emit("open_army_setting", this._data.cityId, this.order);
+            EventMgr.emit(LogicEvent.openArmySetting, this._data.cityId, this.order);
         }
     }
 

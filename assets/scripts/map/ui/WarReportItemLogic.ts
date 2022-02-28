@@ -9,6 +9,7 @@ import { WarReport } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
 import GeneralItemLogic from './GeneralItemLogic';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('WarReportItemLogic')
 export default class WarReportItemLogic extends Component {
@@ -116,14 +117,13 @@ export default class WarReportItemLogic extends Component {
             MapUICommand.getInstance().warRead(this._curData.id);
         }
 
-        console.log("click_war_report:", this._curData);
-        EventMgr.emit("click_war_report", this._curData);
+        EventMgr.emit(LogicEvent.clickWarReport, this._curData);
        
     }
 
     protected onClickPos(){
         AudioManager.instance.playClick();
-        EventMgr.emit("close_report");
-        EventMgr.emit("scroll_to_map", this._curData.x, this._curData.y);
+        EventMgr.emit(LogicEvent.closeReport);
+        EventMgr.emit(LogicEvent.scrollToMap, this._curData.x, this._curData.y);
     }
 }

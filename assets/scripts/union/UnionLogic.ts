@@ -1,6 +1,7 @@
 
 import { _decorator, Component, Node, Label } from 'cc';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 const { ccclass, property } = _decorator;
 
 import { MapCityData } from "../map/MapCityProxy";
@@ -26,10 +27,10 @@ export default class UnionLogic extends Component {
     nameLab:Label | null = null;
     protected onLoad():void{
         this.visibleView();
-        EventMgr.on("open_my_union",this.openMyUnion,this);
-        EventMgr.on("dismiss_union_success",this.onDismiss,this);
-        EventMgr.on("close_union",this.closeUnion,this);
-        EventMgr.on("create_union_success",this.openMyUnion,this);
+        EventMgr.on(LogicEvent.openMyUnion,this.openMyUnion,this);
+        EventMgr.on(LogicEvent.dismissUnionSuccess,this.onDismiss,this);
+        EventMgr.on(LogicEvent.closeUnion,this.closeUnion,this);
+        EventMgr.on(LogicEvent.createUnionSuccess,this.openMyUnion,this);
     }
     protected onDestroy():void{
         EventMgr.targetOff(this);

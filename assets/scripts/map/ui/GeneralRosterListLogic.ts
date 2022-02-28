@@ -1,11 +1,13 @@
 
 import { _decorator, Component, ScrollView } from 'cc';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig } from "../../general/GeneralProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('GeneralRosterListLogic')
 export default class GeneralRosterListLogic extends Component {
@@ -21,7 +23,7 @@ export default class GeneralRosterListLogic extends Component {
     protected onClickClose(): void {
         AudioManager.instance.playClick();
         this.node.active = false;
-        EventMgr.emit("open_general");
+        EventMgr.emit(LogicEvent.openGeneral);
     }
 
 
@@ -31,7 +33,7 @@ export default class GeneralRosterListLogic extends Component {
         var arr = Array.from(cfgs.values());
         arr.sort(this.sortStar);
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(arr);
 
     }

@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('WarButtonLogic')
 export default class WarButtonLogic extends Component {
@@ -13,7 +14,7 @@ export default class WarButtonLogic extends Component {
     tipsNode:Node = null;
 
     protected onLoad():void{
-        EventMgr.on("upate_war_report", this.updateView, this);
+        EventMgr.on(LogicEvent.upateWarReport, this.updateView, this);
         this.updateView();
     }
 

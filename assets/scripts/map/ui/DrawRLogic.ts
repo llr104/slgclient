@@ -2,7 +2,6 @@ import { _decorator, Component, Prefab, Layout, instantiate, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
-import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('DrawRLogic')

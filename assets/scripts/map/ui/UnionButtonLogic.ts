@@ -6,6 +6,7 @@ import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('UnionButtonLogic')
 export default class WarButtonLogic extends Component {
@@ -15,7 +16,7 @@ export default class WarButtonLogic extends Component {
     tipsNode:Node = null;
 
     protected onLoad():void{
-        EventMgr.on("update_union_apply", this.updateView, this);
+        EventMgr.on(LogicEvent.updateUnionApply, this.updateView, this);
         this.tipsNode.active = false;
     }
 

@@ -1,6 +1,7 @@
 import { _decorator, TiledMapAsset, Vec2, game, view } from 'cc';
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 
 export class MapResConfig {
@@ -193,7 +194,7 @@ export default class MapProxy {
             let areaPoint: Vec2 = MapUtil.getAreaPointByCellPoint(point.x, point.y);
             let areaId: number = MapUtil.getIdByAreaPoint(areaPoint.x, areaPoint.y);
 
-            EventMgr.emit("map_center_change", this._curCenterPoint);
+            EventMgr.emit(LogicEvent.mapEenterChange, this._curCenterPoint);
             if (this._curCenterAreaId == -1 || this._curCenterAreaId != areaId) {
                 //展示区域变化
                 let areaData: MapAreaData = this.getMapAreaData(areaId);
@@ -261,7 +262,7 @@ export default class MapProxy {
                 // this.qryAreaIds = [18];
 
                 this._curCenterAreaId = areaId;
-                EventMgr.emit("map_show_area_change", point, this._curCenterAreaId, addIds, removeIds);
+                EventMgr.emit(LogicEvent.mapShowAreaChange, point, this._curCenterAreaId, addIds, removeIds);
             }
             return true;
         }

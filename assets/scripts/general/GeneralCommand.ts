@@ -2,6 +2,7 @@ import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
 import GeneralProxy from "./GeneralProxy";
 import { EventMgr } from "../utils/EventMgr";
+import { LogicEvent } from "../common/LogicEvent";
 
 export default class GeneralCommand {
     //单例
@@ -56,7 +57,7 @@ export default class GeneralCommand {
         console.log("onMyGeneralsonMyGenerals ", data);
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
-            EventMgr.emit("update_my_generals");
+            EventMgr.emit(LogicEvent.updateMyGenerals);
         }
     }
 
@@ -64,7 +65,7 @@ export default class GeneralCommand {
         console.log("onGeneralPush ", data);
         if (data.code == 0) {
             this._proxy.updateGeneral(data.msg);
-            EventMgr.emit("update_general");
+            EventMgr.emit(LogicEvent.updateGeneral);
         }
     }
 
@@ -72,8 +73,8 @@ export default class GeneralCommand {
         console.log("onDrawGenerals ", data);
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
-            EventMgr.emit("update_my_generals");
-            EventMgr.emit("open_draw_result", data.msg.generals);
+            EventMgr.emit(LogicEvent.updateMyGenerals);
+            EventMgr.emit(LogicEvent.openDrawResult, data.msg.generals);
         }
     }
 
@@ -81,8 +82,8 @@ export default class GeneralCommand {
         console.log("onComposeGeneral ", data);
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
-            EventMgr.emit("update_my_generals");
-            EventMgr.emit("update_one_generals", data.msg.generals[data.msg.generals.length - 1]);
+            EventMgr.emit(LogicEvent.updateMyGenerals);
+            EventMgr.emit(LogicEvent.updateOneGenerals, data.msg.generals[data.msg.generals.length - 1]);
         }
     }
 
@@ -92,7 +93,7 @@ export default class GeneralCommand {
         console.log("onAddPrGeneral ", data);
         if (data.code == 0) {
             this._proxy.updateGeneral(data.msg.general);
-            EventMgr.emit("update_one_generals",data.msg.general);
+            EventMgr.emit(LogicEvent.updateOneGenerals,data.msg.general);
         }
     }
 
@@ -100,7 +101,7 @@ export default class GeneralCommand {
         console.log("onGeneralConvert ", data);
         if (data.code == 0) {
             this._proxy.removeMyGenerals(data.msg.gIds);
-            EventMgr.emit("general_convert", data.msg);
+            EventMgr.emit(LogicEvent.generalConvert, data.msg);
         }
     }
 
@@ -123,7 +124,7 @@ export default class GeneralCommand {
     /**我的角色属性*/
     public updateMyProperty(datas: any[]): void {
         this._proxy.updateMyGenerals(datas);
-        EventMgr.emit("update_my_generals");
+        EventMgr.emit(LogicEvent.updateMyGenerals);
     }
 
     public qryMyGenerals(): void {

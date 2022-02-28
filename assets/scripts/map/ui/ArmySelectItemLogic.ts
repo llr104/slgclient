@@ -8,6 +8,7 @@ import { GeneralCommonConfig, GeneralConfig, GeneralData } from "../../general/G
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('ArmySelectItemLogic')
 export default class ArmySelectItemLogic extends Component {
@@ -40,7 +41,7 @@ export default class ArmySelectItemLogic extends Component {
     protected _toY: number = 0;
 
     protected onLoad(): void {
-        EventMgr.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on(LogicEvent.updateArmy, this.onUpdateArmy, this);
         this.tipNode.active = false;
     }
 
@@ -59,7 +60,7 @@ export default class ArmySelectItemLogic extends Component {
         AudioManager.instance.playClick();
         if (this.tipNode.active == false) {
             ArmyCommand.getInstance().generalAssignArmy(this._data.id, this._cmd, this._toX, this._toY);
-            EventMgr.emit("close_army_select_ui");
+            EventMgr.emit(LogicEvent.closeArmyAelectUi);
         } else {
             console.log("军队忙");
         }

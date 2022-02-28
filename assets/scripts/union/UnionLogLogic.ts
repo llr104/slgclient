@@ -8,13 +8,15 @@ import { Union } from "./UnionProxy";
 import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
+import ListLogic from '../utils/ListLogic';
 
 @ccclass('UnionLogLogic')
 export default class UnionLogLogic extends Component {
     @property(ScrollView)
     logView:ScrollView | null = null;
     protected onLoad():void{
-        EventMgr.on("union_log",this.updateLog,this);
+        EventMgr.on(LogicEvent.unionLog,this.updateLog,this);
     }
     
     protected onDestroy():void{
@@ -22,7 +24,7 @@ export default class UnionLogLogic extends Component {
     }
     protected updateLog(data:any[]){
 
-        var comp = this.logView.node.getComponent("ListLogic");
+        var comp = this.logView.node.getComponent(ListLogic);
         comp.setData(data?data:[]);
     }
     protected getLog():void{

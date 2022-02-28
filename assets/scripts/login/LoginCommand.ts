@@ -10,6 +10,7 @@ import { LocalCache } from "../utils/LocalCache";
 import DateUtil from "../utils/DateUtil";
 import { EventMgr } from "../utils/EventMgr";
 import { Md5 } from "../libs/crypto/md5";
+import { LogicEvent } from "../common/LogicEvent";
 
 export default class LoginCommand {
     //单例
@@ -53,7 +54,7 @@ export default class LoginCommand {
     //抢登录
     private onAccountRobLogin(): void{
         console.log("onAccountRobLogin")
-        EventMgr.emit("robLoginUI");
+        EventMgr.emit(LogicEvent.robLoginUI);
     }
 
     /**注册回调*/
@@ -75,7 +76,7 @@ export default class LoginCommand {
 
 
             this.role_enterServer(this._proxy.getSession());           
-            EventMgr.emit("loginComplete", data.code);
+            EventMgr.emit(LogicEvent.loginComplete, data.code);
         }
         
     }
@@ -85,7 +86,7 @@ export default class LoginCommand {
         console.log("LoginProxy  enter:", data,isLoadMap);
         //没有创建打开创建
         if (data.code == 9) {
-            EventMgr.emit("CreateRole");
+            EventMgr.emit(LogicEvent.createRole);
             DateUtil.setServerTime(data.msg.time);
         } else {
             if(data.code == 0){
@@ -99,7 +100,7 @@ export default class LoginCommand {
                 if(isLoadMap == true){
                     console.log("enterServerComplete");
                     MapCommand.getInstance().enterMap();
-                    EventMgr.emit("enterServerComplete");
+                    EventMgr.emit(LogicEvent.enterServerComplete);
                 }else{
                     EventMgr.emit(NetEvent.ServerHandShake);
                 }
@@ -147,7 +148,7 @@ export default class LoginCommand {
         //重换成功再次调用
         if (data.code == 0) {
             this._proxy.clear();
-            EventMgr.emit("enter_login");
+            EventMgr.emit(LogicEvent.enterLogin);
         }
     }
 

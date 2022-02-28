@@ -5,6 +5,7 @@ import DateUtil from "../../utils/DateUtil";
 import MapCommand from "../MapCommand";
 import { MapResType } from "../MapProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('SysCityLogic')
 export default class SysCityLogic extends Component {
@@ -30,7 +31,7 @@ export default class SysCityLogic extends Component {
     }
 
     protected onEnable(): void {
-        EventMgr.on("unionChange", this.onUnionChange, this);
+        EventMgr.on(LogicEvent.unionChange, this.onUnionChange, this);
     }
 
     protected onDisable(): void {

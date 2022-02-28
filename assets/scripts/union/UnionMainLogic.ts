@@ -7,6 +7,7 @@ import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionMainLogic')
 export default class UnionMainLogic extends Component {
@@ -28,9 +29,9 @@ export default class UnionMainLogic extends Component {
     applyRedDot: Node | null = null;
     
     onLoad () {
-        EventMgr.on("union_notice",this.onUnionNotice,this);
-        EventMgr.on("union_info",this.onInfo, this);
-        EventMgr.on("update_union_apply", this.onUnionApply, this);
+        EventMgr.on(LogicEvent.unionNotice,this.onUnionNotice,this);
+        EventMgr.on(LogicEvent.unionInfo,this.onInfo, this);
+        EventMgr.on(LogicEvent.updateUnionApply, this.onUnionApply, this);
     }
     
     protected onDestroy():void{

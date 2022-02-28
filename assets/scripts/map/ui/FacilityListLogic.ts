@@ -7,6 +7,7 @@ import MapUICommand from "./MapUICommand";
 import { Facility, FacilityConfig } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('FacilityListLogic')
 export default class FacilityListLogic extends Component {
@@ -19,10 +20,10 @@ export default class FacilityListLogic extends Component {
 
     protected onLoad(): void {
         this.initView();
-        EventMgr.on("update_my_facilities", this.updateView, this);
-        EventMgr.on("update_my_facility", this.updateFacility, this);
-        EventMgr.on("select_facility_item", this.onSelectItem, this);
-        EventMgr.on("upate_my_roleRes", this.onUpdateMyRoleRes, this);
+        EventMgr.on(LogicEvent.updateMyFacilities, this.updateView, this);
+        EventMgr.on(LogicEvent.updateMyFacility, this.updateFacility, this);
+        EventMgr.on(LogicEvent.selectFacilityItem, this.onSelectItem, this);
+        EventMgr.on(LogicEvent.upateMyRoleRes, this.onUpdateMyRoleRes, this);
     }
 
     protected onDestroy(): void {

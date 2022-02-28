@@ -6,15 +6,16 @@ import MapBaseLayerLogic from "./MapBaseLayerLogic";
 import { MapBuildData } from "./MapBuildProxy";
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapFacilityBuildLogic')
 export default class MapFacilityBuildLogic extends MapBaseLayerLogic {
 
     protected onLoad(): void {
         super.onLoad();
-        EventMgr.on("update_builds", this.onUpdateBuilds, this);
-        EventMgr.on("update_build", this.onUpdateBuild, this);
-        EventMgr.on("delete_build", this.onDeleteBuild, this);
+        EventMgr.on(LogicEvent.updateBuilds, this.onUpdateBuilds, this);
+        EventMgr.on(LogicEvent.updateBuild, this.onUpdateBuild, this);
+        EventMgr.on(LogicEvent.deleteBuild, this.onDeleteBuild, this);
 
     }
 
@@ -39,7 +40,7 @@ export default class MapFacilityBuildLogic extends MapBaseLayerLogic {
     }
 
     protected onUpdateBuild(data: MapBuildData): void {
-        // console.log("update_build", data);
+
         let areaIndex: number = MapUtil.getAreaIdByCellPoint(data.x, data.y);
         this.addItem(areaIndex, data);
     }

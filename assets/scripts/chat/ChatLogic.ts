@@ -10,6 +10,7 @@ import { ChatMsg } from "./ChatProxy";
 import ListLogic from '../utils/ListLogic';
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 
 @ccclass('ChatLogic')
@@ -24,8 +25,8 @@ export default class ChatLogic extends Component {
     _type:number = 0;
 
     protected onLoad():void{
-        EventMgr.on("update_chat_history", this.updateChat, this);
-        EventMgr.on("unionChange", this.updateChat, this);
+        EventMgr.on(LogicEvent.updateChatHistory, this.updateChat, this);
+        EventMgr.on(LogicEvent.unionChange, this.updateChat, this);
     }
 
     protected onEnable():void{
@@ -70,7 +71,7 @@ export default class ChatLogic extends Component {
     protected onClickChat(): void {
         AudioManager.instance.playClick();
         if(this.editConent.string == ""){
-            EventMgr.emit("show_toast", "聊天内容不能为空");
+            EventMgr.emit(LogicEvent.showToast, "聊天内容不能为空");
             return;
         }
 

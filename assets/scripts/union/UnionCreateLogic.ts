@@ -1,9 +1,3 @@
-// // Learn TypeScript:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// // Learn Attribute:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// // Learn life-cycle callbacks:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { _decorator, Component, EditBox } from 'cc';
 const { ccclass, property } = _decorator;
@@ -12,13 +6,14 @@ import UnionCommand from "./UnionCommand";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
 import { createName } from '../libs/NameDict';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionCreateLogic')
 export default class UnionCreateLogic extends Component {
     @property(EditBox)
     editName: EditBox | null = null;
     protected onLoad():void{
-        EventMgr.on("create_union_success",this.onUnCreateOk,this)
+        EventMgr.on(LogicEvent.createUnionSuccess, this.onUnCreateOk,this)
         this.editName.string = this.getRandomName();
     }
 

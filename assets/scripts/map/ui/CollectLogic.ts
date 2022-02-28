@@ -14,6 +14,7 @@ import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CollectLogic')
 export default class CollectLogic extends Component {
@@ -34,8 +35,8 @@ export default class CollectLogic extends Component {
 
     protected onEnable():void{
         console.log("add interior_openCollect");
-        EventMgr.on("interior_openCollect", this.onOpenCollect, this);
-        EventMgr.on("interior_collect", this.onCollect, this);
+        EventMgr.on(LogicEvent.interiorOpenCollect, this.onOpenCollect, this);
+        EventMgr.on(LogicEvent.interiorCollect, this.onCollect, this);
 
         var roleRes = LoginCommand.getInstance().proxy.getRoleResData();
         this.goldLab.string = Tools.numberToShow(roleRes.gold_yield);

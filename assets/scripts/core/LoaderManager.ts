@@ -1,5 +1,6 @@
 import { _decorator, Asset, resources } from 'cc';
 import { EventMgr } from '../utils/EventMgr';
+import { CoreEvent } from './coreEvent';
 
 export enum LoadDataType {
     DIR,
@@ -105,7 +106,7 @@ export default class LoaderManager {
         let percent: number = 1 / this._loadDataList.length;
         let subPercent:number = (finish / total) * percent;
         let totalPercent:number = Number((subPercent + percent * this._curIndex).toFixed(2));
-        EventMgr.emit("load_progress", totalPercent);
+        EventMgr.emit(CoreEvent.loadProgress, totalPercent);
         
         if (this._target && this._progressCallback) {
             this._progressCallback.call(this._target, totalPercent);
@@ -115,7 +116,7 @@ export default class LoaderManager {
 
     protected onComplete(error: Error = null): void {
         
-        EventMgr.emit("load_complete");
+        EventMgr.emit(CoreEvent.loadComplete);
         if (this._target && this._completeCallback) {
             this._completeCallback.call(this._target, error, this._completePaths, this._completeAssets);
         }
