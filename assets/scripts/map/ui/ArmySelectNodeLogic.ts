@@ -7,6 +7,7 @@ import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import ArmySelectItemLogic from "./ArmySelectItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('ArmySelectNodeLogic')
 export default class ArmySelectNodeLogic extends Component {
@@ -24,6 +25,7 @@ export default class ArmySelectNodeLogic extends Component {
     }
 
     protected onClickBack(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 

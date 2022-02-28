@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Label, Prefab, Node, Layout, instantiate } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
@@ -27,7 +28,6 @@ export default class GeneralAddPrLogic  extends Component {
 
     @property(Node)
     addPr: Node = null;
-
 
 
     private _currData:GeneralData = null;
@@ -167,6 +167,7 @@ export default class GeneralAddPrLogic  extends Component {
 
 
     protected onClickAddPr():void{
+        AudioManager.instance.playClick();
         GeneralCommand.getInstance().addPrGeneral(
             this._currData.id, 
             this._addPrObj.force, 

@@ -3,6 +3,7 @@ const { ccclass, property } = _decorator;
 
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('DrawRLogic')
 export default class DrawRLogic extends Component {
@@ -73,6 +74,7 @@ export default class DrawRLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
 

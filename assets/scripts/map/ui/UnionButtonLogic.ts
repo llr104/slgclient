@@ -5,6 +5,7 @@ import UnionCommand from "../../union/UnionCommand";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('UnionButtonLogic')
 export default class WarButtonLogic extends Component {
@@ -31,6 +32,7 @@ export default class WarButtonLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
 

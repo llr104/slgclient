@@ -37,13 +37,19 @@ export default class MapScene extends Component {
         this._cmd.initData();
         EventMgr.on("map_show_area_change", this.onMapShowAreaChange, this);
         EventMgr.on("scroll_to_map", this.onScrollToMap, this);
+        
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
             this.node.getComponent(MapLogic).setTiledMap(tiledMap);
             this.node.getComponent(MapLogic).scrollToMapPoint(new Vec2(myCity.x, myCity.y));
             this.onTimer();//立即执行一次
-        });
+        }, 0.1);
+
         this.schedule(this.onTimer, 0.2);
+
+        this.scheduleOnce(()=>{
+            EventMgr.emit("load_complete");
+        }, 0.6);
     }
 
     protected onDestroy(): void {
@@ -53,7 +59,7 @@ export default class MapScene extends Component {
     }
 
     protected onTimer(): void {
-
+        
         if (this._cmd.proxy.qryAreaIds && this._cmd.proxy.qryAreaIds.length > 0) {
             let qryIndex: number = this._cmd.proxy.qryAreaIds.shift();
             let qryData: MapAreaData = this._cmd.proxy.getMapAreaData(qryIndex);
@@ -149,6 +155,10 @@ export default class MapScene extends Component {
     }
 
     protected onScrollToMap(x: number, y: number): void {
+        let old = this.node.getComponent(MapLogic).curCameraPoint();
+        let cur = this.node.getComponent(MapLogic).toCameraPoint(new Vec2(x, y));
+        
+        EventMgr.emit("before_scroll_to_map", cur.x, cur.y, old.x, old.y);
         this.node.getComponent(MapLogic).scrollToMapPoint(new Vec2(x, y));
     }
 }

@@ -1,4 +1,5 @@
 import { _decorator, Component, Button, Node } from 'cc';
+import { AudioManager } from '../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import { MapCityData } from "../map/MapCityProxy";
@@ -36,6 +37,7 @@ export default class UnionMemberItemOpLogic extends Component {
 
     protected click():void{
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
     
     public setData(data):void{
@@ -74,22 +76,26 @@ export default class UnionMemberItemOpLogic extends Component {
     }
 
     protected kick():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionKick(this._menberData.rid);
         this.node.active = false;
     }
 
     
     protected appoint():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionAppoint(this._menberData.rid, 1);
         this.node.active = false;
     }
 
     protected unAppoint():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionAppoint(this._menberData.rid, 2);
         this.node.active = false;
     }
 
     protected abdicate():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionAbdicate(this._menberData.rid);
         this.node.active = false;
     }

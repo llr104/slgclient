@@ -8,6 +8,7 @@ import CityArmyItemLogic from "./CityArmyItemLogic";
 import MapUICommand from "./MapUICommand";
 import { CityAddition } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('CityAboutLogic')
 export default class CityAboutLogic extends Component {
@@ -30,6 +31,9 @@ export default class CityAboutLogic extends Component {
     }
 
     protected initView(): void {
+        this.armyLayer.removeAllChildren();
+        this._armyComps = [];
+
         for (let i: number = 0; i < this._armyCnt; i++) {
             let item = instantiate(this.armyItem);
             item.parent = this.armyLayer;
@@ -68,12 +72,14 @@ export default class CityAboutLogic extends Component {
 
 
     protected onClickFacility(): void {
+        AudioManager.instance.playClick();
         //设施
         EventMgr.emit("open_facility", this._cityData);
     }
 
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
 
         EventMgr.emit("close_city_about", this._cityData);

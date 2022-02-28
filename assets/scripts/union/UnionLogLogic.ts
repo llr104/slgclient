@@ -1,9 +1,4 @@
-// // Learn TypeScript:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// // Learn Attribute:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// // Learn life-cycle callbacks:
-// //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
+
 
 import { _decorator, Component, ScrollView } from 'cc';
 const {ccclass, property} = _decorator;
@@ -34,7 +29,7 @@ export default class UnionLogLogic extends Component {
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         if(unionData.isMajor(city.rid)){
-        UnionCommand.getInstance().unionLog();
+            UnionCommand.getInstance().unionLog();
         }
     }
     protected onEnable():void{

@@ -7,6 +7,7 @@ import SkillCommand from "../../skill/SkillCommand";
 import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import SkillIconLogic from "./SkillIconLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('GeneralDesLogic')
 export default class GeneralDesLogic extends Component {
@@ -158,6 +159,7 @@ export default class GeneralDesLogic extends Component {
     }
 
     protected onClickSkill(event: EventTouch, pos){
+        AudioManager.instance.playClick();
         console.log("event", event, pos);
         var node: Node = event.target;
         var isEmpty = node.getComponent(SkillIconLogic).isEmpty();

@@ -5,6 +5,8 @@ const { ccclass, property } = _decorator;
 import GeneralCommand from "../../general/GeneralCommand";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import ListLogic from '../../utils/ListLogic';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('GeneralListLogic')
 export default class GeneralListLogic extends Component {
@@ -31,15 +33,18 @@ export default class GeneralListLogic extends Component {
     }
 
     protected onClickClose(): void {
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 
     protected onClickConvert(): void {
+        AudioManager.instance.playClick();
         EventMgr.emit("open_general_convert");
         this.node.active = false;
     }
 
     protected onTuJianConvert(): void {
+        AudioManager.instance.playClick();
         EventMgr.emit("open_general_roster");
         this.node.active = false;
     }
@@ -67,7 +72,7 @@ export default class GeneralListLogic extends Component {
             }
         }
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(listTemp);
     }
 

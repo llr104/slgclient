@@ -1,4 +1,5 @@
 import { _decorator, Component, Label, RichText, Button, Node, Prefab, NodePool, instantiate, UITransform } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 const { ccclass, property } = _decorator;
 
 import LoginCommand from "../../login/LoginCommand";
@@ -214,6 +215,7 @@ export default class FacilityDesLogic extends Component {
     }
 
     protected onClickUp(): void {
+        AudioManager.instance.playClick();
         MapUICommand.getInstance().upFacility(this._cityId, this._data.type);
     }
 }

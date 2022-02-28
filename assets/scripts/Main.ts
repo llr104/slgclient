@@ -1,4 +1,4 @@
-import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, UITransform } from 'cc';
+import { _decorator, Component, Prefab, Node, instantiate, TiledMapAsset, JsonAsset, SpriteFrame, sys, AudioSource, assert, resources } from 'cc';
 const { ccclass, property } = _decorator;
 
 import { GameConfig } from "./config/GameConfig";
@@ -16,6 +16,7 @@ import SkillCommand from "./skill/SkillCommand";
 import Toast from "./utils/Toast";
 import { Tools } from "./utils/Tools";
 import { EventMgr } from './utils/EventMgr';
+import { AudioManager } from './common/AudioManager';
 
 @ccclass('Main')
 export default class Main extends Component {
@@ -37,20 +38,28 @@ export default class Main extends Component {
     @property(Prefab)
     toastPrefab: Prefab = null;
 
+    private _audioSource: AudioSource = null!;
     private toastNode: Node = null;
-
     protected _loginScene: Node = null;
     protected _mapScene: Node = null;
     protected _mapUIScene: Node = null;
     protected _loadingNode: Node = null;
     protected _waitNode: Node = null;
     private _retryTimes: number = 0;
+    private _h5GeneralPicIndex: number = 0;
+    private _h5GeneralPic = [];
+
 
     protected onLoad(): void {
 
         console.log("main load");
         
+        const audioSource = this.getComponent(AudioSource)!;
+        assert(audioSource);
+        this._audioSource = audioSource;
 
+        AudioManager.instance.init(this._audioSource);
+  
         EventMgr.on("enter_map", this.onEnterMap, this);
         EventMgr.on("enter_login", this.enterLogin, this);
         EventMgr.on("show_toast", this.onShowToast, this);
@@ -88,6 +97,8 @@ export default class Main extends Component {
         this.clearData();
         this._loginScene = instantiate(this.loginScenePrefab);
         this._loginScene.parent = this.node;
+
+        //this.h5LoadGeneralTex();
     }
 
     protected onEnterMap(): void {
@@ -96,6 +107,7 @@ export default class Main extends Component {
         dataList.push(new LoadData("./config/mapRes_0", LoadDataType.FILE, JsonAsset));
         dataList.push(new LoadData("./config/json/facility/", LoadDataType.DIR, JsonAsset));
         dataList.push(new LoadData("./config/json/general/", LoadDataType.DIR, JsonAsset));
+
         if(sys.isBrowser){
             dataList.push(new LoadData("./generalpic1", LoadDataType.DIR, SpriteFrame));
         }else{
@@ -133,13 +145,73 @@ export default class Main extends Component {
                 SkillCommand.getInstance().qrySkillList();
 
                 this.clearAllScene();
+
+            
                 this._mapScene = instantiate(this.mapScenePrefab);
                 this._mapScene.parent = this.node;
+              
                 this._mapUIScene = instantiate(this.mapUIScenePrefab);
                 this._mapUIScene.parent = this.node;
+
+                this.addLoadingNode();
+             
             },
             this
         );
+        
+    }
+
+    private h5LoadGeneralTex() {
+        if(!sys.isBrowser){
+            return;
+        }
+
+        if(this._h5GeneralPic.length == 0){
+            let generalpic = resources.getDirWithPath("./generalpic");
+            // console.log("generalpic:", generalpic);
+            generalpic.forEach(v => {
+                if (v.ctor == SpriteFrame){
+                    this._h5GeneralPic.push(v);
+                }
+            });
+        }
+        
+        let f = ()=>{
+           
+            for (let index = this._h5GeneralPicIndex; index < this._h5GeneralPic.length; index++) {
+                const pic = this._h5GeneralPic[index];
+
+                let name = pic.path.replaceAll("spriteFrame", "");
+                name = name.replaceAll("/", "");
+                name = name.replaceAll("\\", "");
+
+                let id: number = Number(String(name).split("_")[1]);
+                let frame = GeneralCommand.getInstance().proxy.getGeneralTex(id);
+                this._h5GeneralPicIndex = index+1;
+                // console.log("load index 1111:", index);
+
+                if(!frame){
+                    resources.load(pic.path, SpriteFrame, 
+                    (finish: number, total: number) => {
+                    },
+                    (error: Error, asset: any) => {
+                        if (error != null) {
+                            console.log("h5LoadGeneralTex error:", error.message);
+                        }else{
+                            GeneralCommand.getInstance().proxy.setGeneralTex(id, asset);
+                        }
+                    });
+                    break;
+                }
+            }
+            if(this._h5GeneralPicIndex >= this._h5GeneralPic.length){
+                this.unschedule(f);
+                console.log("h5 load generalPic finish");
+            }
+        }
+
+        this.schedule(f, 0.01);
+    
     }
 
     protected addLoadingNode(): void {
@@ -147,8 +219,9 @@ export default class Main extends Component {
             if (this._loadingNode == null) {
                 this._loadingNode = instantiate(this.loadingPrefab);
             }
-            this._loadingNode.setSiblingIndex(1);
+
             this._loadingNode.parent = this.node;
+            this._loadingNode.setSiblingIndex(this.topLayer()+1);
         }
     }
 
@@ -157,7 +230,7 @@ export default class Main extends Component {
         if (this._waitNode == null) {
             this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
-            this._waitNode.setSiblingIndex(2);
+            this._waitNode.setSiblingIndex(this.topLayer()+2);
         }
         this._waitNode.active = isShow;
 
@@ -168,7 +241,7 @@ export default class Main extends Component {
         if(this.toastNode == null){
             let toast = instantiate(this.toastPrefab);
             toast.parent = this.node;
-            toast.setSiblingIndex(10);
+            toast.setSiblingIndex(this.topLayer()+10);
             this.toastNode = toast;
         }
         this.toastNode.active = true;
@@ -218,5 +291,9 @@ export default class Main extends Component {
             this._waitNode = null;
         }
         
+    }
+
+    public topLayer():number {
+        return this.node.children.length+1;
     }
 }

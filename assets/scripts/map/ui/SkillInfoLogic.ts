@@ -8,6 +8,7 @@ import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
 import SkillIconLogic from "./SkillIconLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('SkillInfoLogic')
 export default class SkillInfoLogic extends Component {
@@ -62,6 +63,7 @@ export default class SkillInfoLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
     public setData(data: Skill, type:number, general:GeneralData, skillPos: number) {
@@ -146,6 +148,7 @@ export default class SkillInfoLogic extends Component {
 
     
     protected onClickLearn():void {
+        AudioManager.instance.playClick();
         if(this._general){
             GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;
@@ -154,6 +157,7 @@ export default class SkillInfoLogic extends Component {
     }
 
     protected onClickLv():void {
+        AudioManager.instance.playClick();
         if(this._general){
             GeneralCommand.getInstance().lvSkill(this._general.id, this._skillPos);
             this.node.active = false;
@@ -162,6 +166,7 @@ export default class SkillInfoLogic extends Component {
     }
 
     protected onClickForget():void {
+        AudioManager.instance.playClick();
         if(this._general){
             GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;

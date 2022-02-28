@@ -9,6 +9,7 @@ import DateUtil from "../../utils/DateUtil";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('CityGeneralItemLogic')
 export default class CityGeneralItemLogic extends Component {
@@ -70,10 +71,12 @@ export default class CityGeneralItemLogic extends Component {
     }
 
     protected onClickDown(): void {
+        AudioManager.instance.playClick();
         ArmyCommand.getInstance().generalDispose(this._cityId, this._data.id, this._data.order, -1, null);
     }
 
     protected onClickItem(): void {
+        AudioManager.instance.playClick();
         if (this._data) {
             //点击展示武将信息
             let cfg: GeneralConfig = GeneralCommand.getInstance().proxy.getGeneralCfg(this._data.cfgId);

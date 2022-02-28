@@ -7,6 +7,7 @@ import { GeneralCommonConfig } from "../../general/GeneralProxy";
 import LoginCommand from "../../login/LoginCommand";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('DrawLogic')
 export default class DrawLogic extends Component {
@@ -35,6 +36,7 @@ export default class DrawLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
 
@@ -52,10 +54,12 @@ export default class DrawLogic extends Component {
 
 
     protected drawGeneralOnce():void{
+        AudioManager.instance.playClick();
         GeneralCommand.getInstance().drawGenerals();
     }
 
     protected drawGeneralTen():void{
+        AudioManager.instance.playClick();
         GeneralCommand.getInstance().drawGenerals(10);
     }
 

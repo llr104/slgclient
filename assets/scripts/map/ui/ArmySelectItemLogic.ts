@@ -7,6 +7,7 @@ import ArmyCommand from "../../general/ArmyCommand";
 import { GeneralCommonConfig, GeneralConfig, GeneralData } from "../../general/GeneralProxy";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('ArmySelectItemLogic')
 export default class ArmySelectItemLogic extends Component {
@@ -55,6 +56,7 @@ export default class ArmySelectItemLogic extends Component {
     }
 
     protected onClickItem(): void {
+        AudioManager.instance.playClick();
         if (this.tipNode.active == false) {
             ArmyCommand.getInstance().generalAssignArmy(this._data.id, this._cmd, this._toX, this._toY);
             EventMgr.emit("close_army_select_ui");

@@ -13,6 +13,7 @@ import DateUtil from "../../utils/DateUtil";
 import { Tools } from "../../utils/Tools";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('CollectLogic')
 export default class CollectLogic extends Component {
@@ -61,9 +62,11 @@ export default class CollectLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
     protected onClickCollect(): void{
+        AudioManager.instance.playClick();
         MapUICommand.getInstance().interiorCollect();
     }
 

@@ -10,34 +10,42 @@ const { ccclass, property } = _decorator;
 
 import UnionCommand from "./UnionCommand";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
+import { createName } from '../libs/NameDict';
 
 @ccclass('UnionCreateLogic')
 export default class UnionCreateLogic extends Component {
     @property(EditBox)
     editName: EditBox | null = null;
     protected onLoad():void{
-        EventMgr.on("create_union_success",this.onClickClose,this)
+        EventMgr.on("create_union_success",this.onUnCreateOk,this)
         this.editName.string = this.getRandomName();
     }
+
     protected onCreate() {
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionCreate(this.editName.string);
     }
+
     protected onRandomName():void{
+        AudioManager.instance.playClick();
         this.editName.string = this.getRandomName();
     }
     protected getRandomName():string{
-        let name = ""
-        var firstname:string[] = ["李","西门","沈","张","上官","司徒","欧阳","轩辕","咳咳","妈妈"];
-        var nameq:string[] = ["彪","巨昆","锐","翠花","小小","撒撒","熊大","宝强"];
-        var xingxing = firstname[Math.floor(Math.random() * (firstname.length))];
-        var mingming = nameq[Math.floor(Math.random() * (nameq.length))];
-        name = xingxing + mingming;
+        let name = createName("boy");
         return name
      }
+
     protected onDestroy():void{
         EventMgr.targetOff(this);
     }
+
+    protected onUnCreateOk(){
+        this.node.active = false;
+    }
+
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 }

@@ -5,6 +5,7 @@ import LoginCommand from "../../login/LoginCommand";
 import MapCommand from "../MapCommand";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('TransformLogic')
 export default class TransformLogic extends Component {
@@ -156,9 +157,11 @@ export default class TransformLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
     protected onTransForm():void{
+        AudioManager.instance.playClick();
         let from:number[] = [0,0,0,0];
         let to:number[] = [0,0,0,0];
 

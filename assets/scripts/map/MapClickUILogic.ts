@@ -9,6 +9,7 @@ import MapCommand from "./MapCommand";
 import { MapResConfig, MapResData, MapResType } from "./MapProxy";
 import MapUICommand from "./ui/MapUICommand";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('MapClickUILogic')
 export default class MapClickUILogic extends Component {
@@ -103,6 +104,7 @@ export default class MapClickUILogic extends Component {
 
     protected onClickEnter(): void {
         console.log("onClickEnter");
+        AudioManager.instance.playClick();
 
         if (this._data instanceof MapBuildData){
             EventMgr.emit("open_fortress_about", this._data);
@@ -114,27 +116,32 @@ export default class MapClickUILogic extends Component {
     }
 
     protected onClickReclaim(): void {
+        AudioManager.instance.playClick();
         EventMgr.emit("open_army_select_ui", ArmyCmd.Reclaim, this._data.x, this._data.y);
         this.node.parent = null;
     }
 
     protected onClickGiveUp(): void {
+        AudioManager.instance.playClick();
         MapCommand.getInstance().giveUpBuild(this._data.x, this._data.y);
         this.node.parent = null;
     }
 
     protected onClickBuild(): void {
+        AudioManager.instance.playClick();
         MapCommand.getInstance().build(this._data.x, this._data.y, MapResType.FORTRESS);
         this.node.parent = null;
     }
 
     protected onClickTransfer(): void{
+        AudioManager.instance.playClick();
         console.log("onClickTransfer");
         this.node.parent = null;
         EventMgr.emit("open_army_select_ui", ArmyCmd.Transfer, this._data.x, this._data.y);
     }
 
     protected onClickMove(): void {
+        AudioManager.instance.playClick();
         if (MapCommand.getInstance().isCanMoveCell(this._data.x, this._data.y)) {
             EventMgr.emit("open_army_select_ui", ArmyCmd.Garrison, this._data.x, this._data.y);
         } else {
@@ -145,16 +152,19 @@ export default class MapClickUILogic extends Component {
 
 
     protected onTagAdd(): void {
+        AudioManager.instance.playClick();
         MapCommand.getInstance().opPosTag(1, this._data.x, this._data.y, this.labelName.string);
         this.node.parent = null;
     }
 
     protected onTagRemove(): void {
+        AudioManager.instance.playClick();
         MapCommand.getInstance().opPosTag(0, this._data.x, this._data.y);
         this.node.parent = null;
     }
 
     protected onClickOccupy(): void {
+        AudioManager.instance.playClick();
         if (MapCommand.getInstance().isCanOccupyCell(this._data.x, this._data.y)) {
             EventMgr.emit("open_army_select_ui", ArmyCmd.Attack, this._data.x, this._data.y);
         } else {

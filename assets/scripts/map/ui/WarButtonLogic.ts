@@ -3,6 +3,7 @@ const { ccclass, property } = _decorator;
 
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('WarButtonLogic')
 export default class WarButtonLogic extends Component {
@@ -27,6 +28,7 @@ export default class WarButtonLogic extends Component {
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
 

@@ -6,6 +6,7 @@
 // //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { _decorator, Component, Label } from 'cc';
+import { AudioManager } from '../../common/AudioManager';
 const {ccclass, property} = _decorator;
 
 @ccclass('Dialog')
@@ -20,7 +21,7 @@ export default class Dialog extends Component {
         if (this.closeCallBack){
             this.closeCallBack()
         }
-
+        AudioManager.instance.playClick();
         this.node.active = false;
     }
 

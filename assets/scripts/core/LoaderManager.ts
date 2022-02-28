@@ -101,20 +101,24 @@ export default class LoaderManager {
     }
 
     protected onProgress(finish: number, total: number): void {
+        
         let percent: number = 1 / this._loadDataList.length;
         let subPercent:number = (finish / total) * percent;
         let totalPercent:number = Number((subPercent + percent * this._curIndex).toFixed(2));
+        EventMgr.emit("load_progress", totalPercent);
+        
         if (this._target && this._progressCallback) {
             this._progressCallback.call(this._target, totalPercent);
         }
-        EventMgr.emit("load_progress", totalPercent);
+        
     }
 
     protected onComplete(error: Error = null): void {
+        
+        EventMgr.emit("load_complete");
         if (this._target && this._completeCallback) {
             this._completeCallback.call(this._target, error, this._completePaths, this._completeAssets);
         }
-        EventMgr.emit("load_complete");
         this.clearData();
     }
 

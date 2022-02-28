@@ -13,6 +13,7 @@ import { WarReport } from "./MapUIProxy";
 import WarReportDesLogic from './WarReportDesLogic';
 import { EventMgr } from '../../utils/EventMgr';
 import ListLogic from '../../utils/ListLogic';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('WarReportLogic')
 export default class WarReportLogic extends Component {
@@ -24,18 +25,24 @@ export default class WarReportLogic extends Component {
     warPortDesPrefab: Prefab = null;
     private _warPortDesNode:Node = null;
 
-    protected onLoad():void{
+    protected onEnable():void{
         EventMgr.on("upate_war_report", this.initView, this);
         EventMgr.on("click_war_report", this.openWarPortDes, this);
+        EventMgr.on("close_report", this.close, this);
     }
 
-
-    protected onDestroy():void{
+    
+    protected onDisable():void{
         EventMgr.targetOff(this);
     }
 
-    protected onClickClose(): void {
+    private close() {
         this.node.active = false;
+    }
+
+    protected onClickClose(): void {
+        AudioManager.instance.playClick();
+        this.close();
     }
 
 
@@ -64,6 +71,7 @@ export default class WarReportLogic extends Component {
     }
 
     protected allRead():void{
+        AudioManager.instance.playClick();
         MapUICommand.getInstance().warRead(0);
     }
 }

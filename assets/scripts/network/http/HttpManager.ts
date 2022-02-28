@@ -19,17 +19,17 @@ export class HttpManager {
     }
 
 
-    public doGet(name:string,apiUrl:string,params:any,otherData:any = null):void{
+    public doGet(name:string,apiUrl:string,params:any,otherData:any = null): Promise<any>{
         var invoke = new HttpInvoke();
         invoke.init(name,otherData);
-        invoke.doSend(this._url + apiUrl,params,HttpInvokeType.GET);
+        return invoke.doSend(this._url + apiUrl,params,HttpInvokeType.GET);
     }
 
 
 
-    public doPost(name:string,apiUrl:string,params:any,otherData:any = null):void{
+    public doPost(name:string,apiUrl:string,params:any,otherData:any = null): Promise<any>{
         var invoke = new HttpInvoke();
         invoke.init(name,otherData);
-        invoke.doSend(this._url + apiUrl,params,HttpInvokeType.POST);
+        return invoke.doSend(this._url + apiUrl,params,HttpInvokeType.POST);
     }
 }

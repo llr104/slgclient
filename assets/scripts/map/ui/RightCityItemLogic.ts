@@ -3,6 +3,7 @@ const { ccclass, property } = _decorator;
 
 import { MapCityData } from "../MapCityProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('RightCityItemLogic')
 export default class RightCityItemLogic extends Component {
@@ -23,6 +24,7 @@ export default class RightCityItemLogic extends Component {
     }
 
     protected onClickBg(): void {
+        AudioManager.instance.playClick();
         if (this._data) {
             EventMgr.emit("scroll_to_map", this._data.x, this._data.y);
         }

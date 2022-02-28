@@ -8,10 +8,10 @@ import MapUICommand from "./MapUICommand";
 import { WarReport } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
 import GeneralItemLogic from './GeneralItemLogic';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('WarReportItemLogic')
 export default class WarReportItemLogic extends Component {
-
 
     private _curData:WarReport = null;
 
@@ -21,34 +21,30 @@ export default class WarReportItemLogic extends Component {
     @property([Node])
     ackNode:Node[] = [];
 
-
     @property([Node])
     defNode:Node[] = [];
-
 
     @property(Node)
     winNode:Node = null;
 
-
     @property(Node)
     loseNode:Node = null;
-
 
     @property(Label)
     timeLabel: Label = null;
 
-
     @property(Label)
     leftLabel: Label = null;
-
 
     @property(Label)
     rightLabel: Label = null;
 
+    @property(Label)
+    posLabel: Label = null;
+
     protected onLoad():void{
         this.winNode.active = this.loseNode.active = false;
     }
-
 
     protected updateItem(data:any):void{
         this._curData = data;
@@ -56,7 +52,6 @@ export default class WarReportItemLogic extends Component {
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         this.readBg.active = isRead;
        
-
         this.setTeams(this.ackNode,this._curData.beg_attack_general);
         this.setTeams(this.defNode,this._curData.beg_defense_general);
 
@@ -66,10 +61,10 @@ export default class WarReportItemLogic extends Component {
         this.leftLabel.string = roleData.rid == this._curData.attack_rid?"我":"敌";
         this.rightLabel.string = roleData.rid == this._curData.defense_rid?"我":"敌"
 
-        this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime);
+        this.timeLabel.string = DateUtil.converTimeStr(this._curData.ctime, "YYYY-MM-DD hh:mm:ss");
+
+        this.posLabel.string = "(" + this._curData.x + "," + this._curData.y + ")";
     }
-
-
 
     protected isMeWin(rid:number = 0):void{
         var roleData:Role = LoginCommand.getInstance().proxy.getRoleData();
@@ -95,10 +90,6 @@ export default class WarReportItemLogic extends Component {
 
     }
 
-
-
-
-
     protected setTeams(node:Node[],generals:any[]){
         for(var i = 0; i < node.length ;i++){
             let item:Node = node[i];
@@ -118,6 +109,8 @@ export default class WarReportItemLogic extends Component {
     }
 
     protected onClickItem():void{
+        AudioManager.instance.playClick();
+
         var isRead = MapUICommand.getInstance().proxy.isRead(this._curData.id);
         if(!isRead){
             MapUICommand.getInstance().warRead(this._curData.id);
@@ -126,5 +119,11 @@ export default class WarReportItemLogic extends Component {
         console.log("click_war_report:", this._curData);
         EventMgr.emit("click_war_report", this._curData);
        
+    }
+
+    protected onClickPos(){
+        AudioManager.instance.playClick();
+        EventMgr.emit("close_report");
+        EventMgr.emit("scroll_to_map", this._curData.x, this._curData.y);
     }
 }

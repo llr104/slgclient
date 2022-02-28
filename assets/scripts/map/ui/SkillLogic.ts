@@ -9,6 +9,8 @@ import SkillCommand from "../../skill/SkillCommand";
 import { Skill } from "../../skill/SkillProxy";
 import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('SkillLogic')
 export default class SkillLogic extends Component {
@@ -33,6 +35,7 @@ export default class SkillLogic extends Component {
     }
 
     protected onSkillList(){
+    
         var skills = SkillCommand.getInstance().proxy.skills;
         var skillConfs = SkillCommand.getInstance().proxy.skillConfs;
 
@@ -58,15 +61,17 @@ export default class SkillLogic extends Component {
             }
         }
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(arr);
     }
 
     protected onClickClose(): void {
         this.node.active = false;
+        AudioManager.instance.playClick();
     }
 
     protected onClickItem(data: Skill, target): void {
+        AudioManager.instance.playClick();
         EventMgr.emit("open_skillInfo", data, this._type, this._general, this._skillPos);
     }
 

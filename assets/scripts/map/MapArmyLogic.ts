@@ -74,10 +74,8 @@ export default class MapArmyLogic extends Component {
         if (logic == null) {
             logic = new ArmyLogic();
             aniNode = this.createArmy();
-            aniNode.zIndex = 1;
             aniNode.parent = this.parentLayer;
             arrowNode = this.createArrow();
-            arrowNode.zIndex = 2;
             arrowNode.parent = this.parentLayer;
             this._armyLogics.set(data.id, logic);
 

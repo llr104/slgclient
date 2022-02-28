@@ -12,6 +12,7 @@ const { ccclass, property } = _decorator;
 import UnionCommand from "./UnionCommand";
 import { Member } from "./UnionProxy";
 import { EventMgr } from '../utils/EventMgr';
+import { AudioManager } from '../common/AudioManager';
 
 @ccclass('UnionMemItemLogic')
 export default class UnionMemItemLogic extends Component {
@@ -38,23 +39,28 @@ export default class UnionMemItemLogic extends Component {
     }
 
     protected click():void{
+        AudioManager.instance.playClick();
         EventMgr.emit("clickUnionMemberItem", this._menberData);
     }
 
     protected kick():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionKick(this._menberData.rid);
     }
 
     
     protected appoint():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionKick(this._menberData.rid);
     }
 
     protected abdicate():void{
+        AudioManager.instance.playClick();
         UnionCommand.getInstance().unionKick(this._menberData.rid);
     }
     
     protected jump():void{
+        AudioManager.instance.playClick();
         EventMgr.emit("close_union");
         EventMgr.emit("scroll_to_map", this._menberData.x, this._menberData.y);
     }

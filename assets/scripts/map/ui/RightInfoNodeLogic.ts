@@ -9,6 +9,7 @@ import { MapCityData } from "../MapCityProxy";
 import RightCityItemLogic from "./RightCityItemLogic";
 import RightTagItemLogic from "./RightTagItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
+import { AudioManager } from '../../common/AudioManager';
 
 @ccclass('RightInfoNodeLogic')
 export default class RightInfoNodeLogic extends Component {
@@ -54,7 +55,7 @@ export default class RightInfoNodeLogic extends Component {
     protected initArmys(): void {
         let cityId: number = MapCommand.getInstance().cityProxy.getMyMainCity().cityId;
         let datas: ArmyData[] = ArmyCommand.getInstance().proxy.getArmyList(cityId);
-        this.armyScrollView.content.removeAllChildren(true);
+        this.armyScrollView.content.removeAllChildren();
         console.log("datas", datas);
         if (datas) {
             this._armys.length = datas.length;
@@ -108,6 +109,7 @@ export default class RightInfoNodeLogic extends Component {
     }
 
     onClockToggle(toggle: Toggle): void {
+        AudioManager.instance.playClick();
         let index: number = this.toggles.indexOf(toggle);
         if (index == 1) {
             this.armyScrollView.node.active = false;
