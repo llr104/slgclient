@@ -6,7 +6,7 @@ import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 import CityArmySettingLogic from "./CityArmySettingLogic";
 import FacilityListLogic from "./FacilityListLogic";
 import MapUICommand from "./MapUICommand";
-import Dialog from "./Dialog";
+import Dialog, { DialogType } from "./Dialog";
 import UnionCommand from "../../union/UnionCommand";
 import MapCommand from "../MapCommand";
 import FortressAbout from "./FortressAbout";
@@ -151,11 +151,8 @@ export default class MapUILogic extends Component {
 
         EventMgr.on(LogicEvent.openCityAbout, this.openCityAbout, this);
         EventMgr.on(LogicEvent.closeCityAbout, this.closeCityAbout, this);
-
         EventMgr.on(LogicEvent.openFortressAbout, this.openFortressAbout, this);
         EventMgr.on(LogicEvent.openFacility, this.openFacility, this);
-
-
         EventMgr.on(LogicEvent.openArmySetting, this.openArmySetting, this);
         EventMgr.on(LogicEvent.upateMyRoleRes, this.updateRoleRes, this);
         EventMgr.on(LogicEvent.openGeneralDes, this.openGeneralDes, this);
@@ -171,6 +168,7 @@ export default class MapUILogic extends Component {
         EventMgr.on(LogicEvent.closeSkill, this.onCloseSkill, this);
         EventMgr.on(LogicEvent.openSkillInfo, this.onOpenSkillInfo, this);
         EventMgr.on(LogicEvent.beforeScrollToMap, this.beforeScrollToMap, this);
+        EventMgr.on(LogicEvent.showTip, this.showTip, this);
         
         
 
@@ -196,7 +194,7 @@ export default class MapUILogic extends Component {
             this._dialogNode.active = true;
         }
         this._dialogNode.setSiblingIndex(this.topLayer());
-        this._dialogNode.getComponent(Dialog).text(text);
+        this._dialogNode.getComponent(Dialog).show(text, DialogType.OnlyConfirm);
         this._dialogNode.getComponent(Dialog).setClose(close)
     }
 
@@ -551,6 +549,7 @@ export default class MapUILogic extends Component {
 
     protected onClickCollection():void {
         AudioManager.instance.playClick();
+      
         if(this._collectNode == null){
             this._collectNode = instantiate(this.collectPrefab);
             this._collectNode.parent = this.contentNode;

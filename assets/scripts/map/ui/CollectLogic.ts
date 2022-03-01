@@ -82,10 +82,10 @@ export default class CollectLogic extends Component {
         var diff = DateUtil.leftTime(this._data.next_time);
         if (diff>0){
             this.cdLab.string = DateUtil.leftTimeStr(this._data.next_time);
-            this.collectBtn.interactable = false;
+            this.collectBtn.node.active = false;
         }else{
             this.cdLab.string = "目前可以征收";
-            this.collectBtn.interactable = true;
+            this.collectBtn.node.active = true;
         }
     }
 

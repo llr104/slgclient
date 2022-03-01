@@ -70,12 +70,13 @@ export default class GeneralCommand {
     }
 
     protected onDrawGenerals(data: any): void {
-        console.log("onDrawGenerals ", data);
+        console.log("onDrawGenerals", data);
         if (data.code == 0) {
             this._proxy.updateMyGenerals(data.msg.generals);
             EventMgr.emit(LogicEvent.updateMyGenerals);
             EventMgr.emit(LogicEvent.openDrawResult, data.msg.generals);
         }
+        EventMgr.emit(LogicEvent.hideWaiting);
     }
 
     protected onComposeGeneral(data:any):void{

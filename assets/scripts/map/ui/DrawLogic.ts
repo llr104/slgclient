@@ -27,7 +27,6 @@ export default class DrawLogic extends Component {
     protected onEnable():void{
         EventMgr.on(LogicEvent.upateMyRoleRes, this.updateRoleRes, this);
         EventMgr.on(LogicEvent.updateMyGenerals, this.updateRoleRes, this);
-        EventMgr.on(LogicEvent.openDrawResult, this.onResult, this);
         this.updateRoleRes();
     }
 
@@ -68,8 +67,5 @@ export default class DrawLogic extends Component {
         EventMgr.emit(LogicEvent.showWaiting);
     }
 
-    protected onResult():void{
-        EventMgr.emit(LogicEvent.hideWaiting);
-    }
-    
+ 
 }

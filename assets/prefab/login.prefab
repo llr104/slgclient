@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "login",
+    "_name": "Login",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
