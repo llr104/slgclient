@@ -29,6 +29,10 @@ export default class ChatLogic extends Component {
         EventMgr.on(LogicEvent.unionChange, this.updateChat, this);
     }
 
+    protected onDisable():void{
+        EventMgr.targetOff(this);
+    }
+
     protected onEnable():void{
         console.log("onEnable")
         this.updateUnion();
