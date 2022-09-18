@@ -13,6 +13,7 @@ import UnionCommand from "./UnionCommand";
 import { Member } from "./UnionProxy";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionMemItemLogic')
 export default class UnionMemItemLogic extends Component {
@@ -40,7 +41,7 @@ export default class UnionMemItemLogic extends Component {
 
     protected click():void{
         AudioManager.instance.playClick();
-        EventMgr.emit("clickUnionMemberItem", this._menberData);
+        EventMgr.emit(LogicEvent.clickUnionMemberItem, this._menberData);
     }
 
     protected kick():void{
@@ -61,8 +62,8 @@ export default class UnionMemItemLogic extends Component {
     
     protected jump():void{
         AudioManager.instance.playClick();
-        EventMgr.emit("close_union");
-        EventMgr.emit("scroll_to_map", this._menberData.x, this._menberData.y);
+        EventMgr.emit(LogicEvent.closeUnion);
+        EventMgr.emit(LogicEvent.scrollToMap, this._menberData.x, this._menberData.y);
     }
 
 }

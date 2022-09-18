@@ -9,6 +9,7 @@ import MapUICommand from "./MapUICommand";
 import GeneralHeadLogic from "./GeneralHeadLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CityArmyItemLogic')
 export default class CityArmyItemLogic extends Component {
@@ -46,7 +47,7 @@ export default class CityArmyItemLogic extends Component {
     protected _isOut: boolean = true;
 
     protected onLoad(): void {
-        EventMgr.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on(LogicEvent.updateArmy, this.onUpdateArmy, this);
         this.tipNode.active = false;
     }
 
@@ -66,10 +67,10 @@ export default class CityArmyItemLogic extends Component {
         if (this.maskNode.active == false) {
             if(this._isOut){
                 if(this._data){
-                    EventMgr.emit("open_army_setting", this._cityId, this._data.order);
+                    EventMgr.emit(LogicEvent.openArmySetting, this._cityId, this._data.order);
                 }
             }else{
-                EventMgr.emit("open_army_setting", this._cityId, this.order);
+                EventMgr.emit(LogicEvent.openArmySetting, this._cityId, this.order);
             }
         }
     }

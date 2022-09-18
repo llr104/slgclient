@@ -5,6 +5,7 @@ import MapCommand from "../MapCommand";
 import MapUtil from "../MapUtil";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('SmallMapLogic')
 export default class SmallMapLogic extends Component {
@@ -17,8 +18,8 @@ export default class SmallMapLogic extends Component {
     protected _citys: Node[] = [];
 
     protected onLoad(): void {
-        EventMgr.on("map_center_change", this.onMapCenterChange, this);
-        EventMgr.on("scroll_to_map", this.onScrollToMap, this);
+        EventMgr.on(LogicEvent.mapEenterChange, this.onMapCenterChange, this);
+        EventMgr.on(LogicEvent.scrollToMap, this.onScrollToMap, this);
         this.updateView();
     }
 
@@ -50,7 +51,7 @@ export default class SmallMapLogic extends Component {
             && y >= 0 
             && x < MapUtil.mapSize.width 
             && y < MapUtil.mapSize.height) {
-                EventMgr.emit("scroll_to_map", x, y);
+                EventMgr.emit(LogicEvent.scrollToMap, x, y);
         } else {
             console.log("跳转无效位置", x, y);
         }

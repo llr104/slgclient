@@ -8,6 +8,7 @@ import LoginCommand from "../../login/LoginCommand";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('DrawLogic')
 export default class DrawLogic extends Component {
@@ -24,8 +25,8 @@ export default class DrawLogic extends Component {
     
 
     protected onEnable():void{
-        EventMgr.on("upate_my_roleRes", this.updateRoleRes, this);
-        EventMgr.on("update_my_generals", this.updateRoleRes, this);
+        EventMgr.on(LogicEvent.upateMyRoleRes, this.updateRoleRes, this);
+        EventMgr.on(LogicEvent.updateMyGenerals, this.updateRoleRes, this);
         this.updateRoleRes();
     }
 
@@ -56,13 +57,15 @@ export default class DrawLogic extends Component {
     protected drawGeneralOnce():void{
         AudioManager.instance.playClick();
         GeneralCommand.getInstance().drawGenerals();
+
+        EventMgr.emit(LogicEvent.showWaiting);
     }
 
     protected drawGeneralTen():void{
         AudioManager.instance.playClick();
         GeneralCommand.getInstance().drawGenerals(10);
+        EventMgr.emit(LogicEvent.showWaiting);
     }
 
-
-
+ 
 }

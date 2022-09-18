@@ -14,6 +14,8 @@ import MapFacilityBuildLogic from "../map/MapFacilityBuildLogic";
 import MapBuildTagLogic from "../map/MapBuildTagLogic";
 import MapSysCityLogic from "../map/MapSysCityLogic";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
+import { CoreEvent } from '../core/coreEvent';
 
 @ccclass('MapScene')
 export default class MapScene extends Component {
@@ -35,8 +37,8 @@ export default class MapScene extends Component {
         
         MapUtil.initMapConfig(tiledMap);
         this._cmd.initData();
-        EventMgr.on("map_show_area_change", this.onMapShowAreaChange, this);
-        EventMgr.on("scroll_to_map", this.onScrollToMap, this);
+        EventMgr.on(LogicEvent.mapShowAreaChange, this.onMapShowAreaChange, this);
+        EventMgr.on(LogicEvent.scrollToMap, this.onScrollToMap, this);
         
         this.scheduleOnce(() => {
             let myCity: MapCityData = this._cmd.cityProxy.getMyMainCity();
@@ -48,7 +50,7 @@ export default class MapScene extends Component {
         this.schedule(this.onTimer, 0.2);
 
         this.scheduleOnce(()=>{
-            EventMgr.emit("load_complete");
+            EventMgr.emit(CoreEvent.loadComplete);
         }, 0.6);
     }
 
@@ -82,7 +84,7 @@ export default class MapScene extends Component {
 
     protected onMapShowAreaChange(centerPoint: Vec2, centerAreaId: number, addIds: number[], removeIds: number[]): void {
         
-        console.log("map_show_area_change", arguments);
+    
         let resLogic: MapResLogic = this.node.getComponent(MapResLogic);
         let buildResLogic: MapResBuildLogic = this.node.getComponent(MapResBuildLogic);
         let buildFacilityLogic: MapFacilityBuildLogic = this.node.getComponent(MapFacilityBuildLogic);
@@ -158,7 +160,7 @@ export default class MapScene extends Component {
         let old = this.node.getComponent(MapLogic).curCameraPoint();
         let cur = this.node.getComponent(MapLogic).toCameraPoint(new Vec2(x, y));
         
-        EventMgr.emit("before_scroll_to_map", cur.x, cur.y, old.x, old.y);
+        EventMgr.emit(LogicEvent.beforeScrollToMap, cur.x, cur.y, old.x, old.y);
         this.node.getComponent(MapLogic).scrollToMapPoint(new Vec2(x, y));
     }
 }

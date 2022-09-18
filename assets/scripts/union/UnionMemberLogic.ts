@@ -8,6 +8,7 @@ import MapCommand from "../map/MapCommand";
 import UnionMemberItemOpLogic from "./UnionMemberItemOpLogic";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionMemberLogic')
 export default class UnionMemberLogic extends Component {
@@ -28,11 +29,11 @@ export default class UnionMemberLogic extends Component {
 
     protected onLoad():void{
 
-        EventMgr.on("update_union_member",this.updateMember,this);
-        EventMgr.on("kick_union_success",this.getMember,this);
-        EventMgr.on("union_appoint",this.getMember,this);
-        EventMgr.on("union_abdicate",this.getMember,this);
-        EventMgr.on("clickUnionMemberItem",this.onClickItem,this);
+        EventMgr.on(LogicEvent.updateUnionMember,this.updateMember,this);
+        EventMgr.on(LogicEvent.kickUnionSuccess,this.getMember,this);
+        EventMgr.on(LogicEvent.unionAppoint,this.getMember,this);
+        EventMgr.on(LogicEvent.unionAbdicate,this.getMember,this);
+        EventMgr.on(LogicEvent.clickUnionMemberItem,this.onClickItem,this);
         
 
     }

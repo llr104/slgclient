@@ -7,6 +7,7 @@ import ArmyLogic from "./entries/ArmyLogic";
 import MapCommand from "./MapCommand";
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapArmyLogic')
 export default class MapArmyLogic extends Component {
@@ -22,8 +23,8 @@ export default class MapArmyLogic extends Component {
     protected _arrowPool: NodePool = new NodePool();
 
     protected onLoad(): void {
-        EventMgr.on("update_army_list", this.onUpdateArmyList, this);
-        EventMgr.on("update_army", this.onUpdateArmy, this);
+        EventMgr.on(LogicEvent.updateArmyList, this.onUpdateArmyList, this);
+        EventMgr.on(LogicEvent.updateArmy, this.onUpdateArmy, this);
         this.initArmys();
 
         this.schedule(this.checkVisible, 0.5);
@@ -60,7 +61,7 @@ export default class MapArmyLogic extends Component {
     }
 
     protected onUpdateArmy(data: ArmyData): void {
-        console.log("update_army", data);
+        console.log("onUpdateArmy", data);
         let aniNode: Node = null;
         let arrowNode: Node = null;
         if (data.cmd == ArmyCmd.Idle || data.cmd == ArmyCmd.Conscript) {

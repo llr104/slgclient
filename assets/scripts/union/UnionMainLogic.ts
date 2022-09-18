@@ -7,6 +7,7 @@ import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionMainLogic')
 export default class UnionMainLogic extends Component {
@@ -28,9 +29,9 @@ export default class UnionMainLogic extends Component {
     applyRedDot: Node | null = null;
     
     onLoad () {
-        EventMgr.on("union_notice",this.onUnionNotice,this);
-        EventMgr.on("union_info",this.onInfo, this);
-        EventMgr.on("update_union_apply", this.onUnionApply, this);
+        EventMgr.on(LogicEvent.unionNotice,this.onUnionNotice,this);
+        EventMgr.on(LogicEvent.unionInfo,this.onInfo, this);
+        EventMgr.on(LogicEvent.updateUnionApply, this.onUnionApply, this);
     }
     
     protected onDestroy():void{
@@ -47,13 +48,15 @@ export default class UnionMainLogic extends Component {
         this.applyRedDot.active = cnt > 0;
     }
     onInfo(){
+        
         let city:MapCityData = MapCommand.getInstance().cityProxy.getMyMainCity();
         let unionData:Union = UnionCommand.getInstance().proxy.getUnion(city.unionId);
         this.nameLab.string = "联盟:" + unionData.name;
+        console.log("unionData:", unionData);
         if (unionData.notice == ""){
-        this.noticeLab.string = "暂无公告";
+            this.noticeLab.string = "暂无公告";
         }else{
-        this.noticeLab.string = unionData.notice;
+            this.noticeLab.string = unionData.notice;
         }
         this.mengZhuLab.string = "盟主:" + unionData.getChairman().name
         this.editNode.active = false;
@@ -63,7 +66,11 @@ export default class UnionMainLogic extends Component {
         this.applyBtn.node.active = ok;
     }
     onUnionNotice(data){
-        this.noticeLab.string = data.text;
+        if (data.text == ""){
+            this.noticeLab.string = "暂无公告";
+        }else{
+            this.noticeLab.string = data.text;
+        }
     }
     
     onUnionApply(){

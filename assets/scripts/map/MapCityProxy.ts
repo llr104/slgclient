@@ -1,6 +1,7 @@
 import { _decorator } from 'cc';
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 
 /**地图城池配置*/
@@ -215,7 +216,7 @@ export default class MapCityProxy {
             }
             this._lastCityCellIds.set(areaId, cityCellIds);
             if (addCityCellIds.length > 0 || removeCityCellIds.length > 0 || updateCityCellIds.length > 0) {
-                EventMgr.emit("update_citys", areaId, addCityCellIds, removeCityCellIds, updateCityCellIds);
+                EventMgr.emit(LogicEvent.updateCitys, areaId, addCityCellIds, removeCityCellIds, updateCityCellIds);
             }
         }
     }

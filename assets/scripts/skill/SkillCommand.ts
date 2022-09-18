@@ -3,6 +3,7 @@ import { ServerConfig } from "../config/ServerConfig";
 import { NetManager } from "../network/socket/NetManager";
 import SkillProxy from "./SkillProxy";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 export default class SkillCommand {
 // //单例
@@ -44,12 +45,12 @@ export default class SkillCommand {
         console.log("onSkillList", data);
         if (data.code == 0) {
             this._proxy.updateSkills(data.msg.list);
-            EventMgr.emit("skill_list_info");
+            EventMgr.emit(LogicEvent.skillListInfo);
         }
     }
     protected onSkillPush(data: any): void {
         console.log("onSkillPush", data);
         this._proxy.updateSkills([data.msg]);
-        EventMgr.emit("update_general");
+        EventMgr.emit(LogicEvent.updateGeneral);
     }
 }

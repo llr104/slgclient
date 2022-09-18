@@ -5,6 +5,7 @@ import { LocalCache } from "../utils/LocalCache";
 import LoginCommand from "./LoginCommand";
 import { EventMgr } from '../utils/EventMgr';
 import { AudioManager } from '../common/AudioManager';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('LoginLogic')
 export default class LoginLogic extends Component {
@@ -16,7 +17,7 @@ export default class LoginLogic extends Component {
     editPass:Label = null;
 
     protected onLoad(): void {
-        EventMgr.on("loginComplete", this.onLoginComplete, this);
+        EventMgr.on(LogicEvent.loginComplete, this.onLoginComplete, this);
 
         var data = LocalCache.getLoginValidation();
         console.log("LoginLogic  data:",data)
@@ -38,7 +39,7 @@ export default class LoginLogic extends Component {
         AudioManager.instance.playClick();
 
         if(!this.editName.string || !this.editPass.string){
-            EventMgr.emit("show_toast", "账号密码有误");
+            EventMgr.emit(LogicEvent.showToast, "账号密码有误");
             return;
         }
 
@@ -49,7 +50,7 @@ export default class LoginLogic extends Component {
         AudioManager.instance.playClick();
 
         if(!this.editName.string || !this.editPass.string){
-            EventMgr.emit("show_toast", "账号密码有误");
+            EventMgr.emit(LogicEvent.showToast, "账号密码有误");
             return;
         }
 

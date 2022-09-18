@@ -5,6 +5,7 @@ import DateUtil from "../../utils/DateUtil";
 import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import { EventMgr } from '../../utils/EventMgr';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CityLogic')
 export default class CityLogic extends Component {
@@ -27,7 +28,7 @@ export default class CityLogic extends Component {
 
     }
     protected onEnable(): void {
-        EventMgr.on("unionChange", this.onUnionChange, this);
+        EventMgr.on(LogicEvent.unionChange, this.onUnionChange, this);
     }
     protected onDisable(): void {
         this._data = null;

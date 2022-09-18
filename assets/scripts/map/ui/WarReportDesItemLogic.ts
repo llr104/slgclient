@@ -1,5 +1,6 @@
 import { _decorator, Component, RichText, Label, UITransform, math, Node } from 'cc';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 import { SkillEffectType } from '../../config/skill/Skill';
 const { ccclass, property } = _decorator;
 
@@ -282,8 +283,8 @@ export default class WarReportDesItemLogic extends Component {
     protected clickPos() {
         console.log("clickPos");
         AudioManager.instance.playClick();
-        EventMgr.emit("close_report");
-        EventMgr.emit("scroll_to_map", this.warReport.x, this.warReport.y);
+        EventMgr.emit(LogicEvent.closeReport);
+        EventMgr.emit(LogicEvent.scrollToMap, this.warReport.x, this.warReport.y);
     }
 
 }

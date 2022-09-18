@@ -1,6 +1,7 @@
 
 import { _decorator, Component, Prefab, ToggleContainer, Node, instantiate } from 'cc';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 import { EventMgr } from '../../utils/EventMgr';
 const { ccclass, property } = _decorator;
 
@@ -30,7 +31,7 @@ export default class GeneralInfoLogic  extends Component {
     private _nodeList:Node[] = [];
 
     protected onLoad():void{
-        EventMgr.on("update_one_generals", this.updateOnce, this); 
+        EventMgr.on(LogicEvent.updateOneGenerals, this.updateOnce, this); 
 
         var des = instantiate(this.generalDesPrefab);
         des.parent = this.node;

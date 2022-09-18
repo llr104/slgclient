@@ -3,9 +3,11 @@ const { ccclass, property } = _decorator;
 
 import GeneralCommand from "../../general/GeneralCommand";
 import { GeneralConfig, GeneralData } from "../../general/GeneralProxy";
-import { GeneralItemType } from "./GeneralItemLogic";
+import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
+import ListLogic from '../../utils/ListLogic';
 
 @ccclass('GeneralComposeLogic')
 export default class GeneralComposeLogic  extends Component {
@@ -38,7 +40,7 @@ export default class GeneralComposeLogic  extends Component {
     }
 
     protected onEnable():void{
-        EventMgr.on("open_general_select", this.selectItem, this); 
+        EventMgr.on(LogicEvent.openGeneralSelect, this.selectItem, this); 
         this.updataView();
     }
 
@@ -62,9 +64,9 @@ export default class GeneralComposeLogic  extends Component {
         this._currData = curData;
         this._cfgData = cfgData;
         this._gIdsArr = [];
-        var com = this._generalNode.getComponent("GeneralItemLogic");
+        var com = this._generalNode.getComponent(GeneralItemLogic);
         if(com){
-            com.updateItem(this._currData,GeneralItemType.GeneralNoThing);
+            com.updateItem(this._currData);
         }
 
         this.nameLab.string = this._cfgData.name;
@@ -83,7 +85,7 @@ export default class GeneralComposeLogic  extends Component {
             item.type = GeneralItemType.GeneralSelect;
         })
 
-        var comp = this.scrollView.node.getComponent("ListLogic");
+        var comp = this.scrollView.node.getComponent(ListLogic);
         comp.setData(listTemp);
         
     }

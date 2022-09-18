@@ -27,9 +27,6 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 262
-      },
-      {
         "__id__": 264
       },
       {
@@ -40,10 +37,13 @@
       },
       {
         "__id__": 270
+      },
+      {
+        "__id__": 272
       }
     ],
     "_prefab": {
-      "__id__": 272
+      "__id__": 274
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -307,10 +307,13 @@
       },
       {
         "__id__": 259
+      },
+      {
+        "__id__": 261
       }
     ],
     "_prefab": {
-      "__id__": 261
+      "__id__": 263
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -5167,6 +5170,23 @@
     "fileId": "c8sbX/NTVPFZEzM58ITa7+"
   },
   {
+    "__type__": "3ccd1gkd7pMvrVSNZjjYInt",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 12
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 262
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "90OzVUOZ9ADKsAihTeY6JL"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -5185,7 +5205,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 263
+      "__id__": 265
     },
     "mask": {
       "__id__": 2
@@ -5205,7 +5225,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 265
+      "__id__": 267
     },
     "_alignFlags": 45,
     "_target": null,
@@ -5240,7 +5260,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 267
+      "__id__": 269
     },
     "nameLab": {
       "__id__": 48
@@ -5293,7 +5313,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 269
+      "__id__": 271
     },
     "_opacity": 255,
     "_id": ""
@@ -5311,7 +5331,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 271
+      "__id__": 273
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -5340,14 +5360,14 @@
     "fileId": "907hMKUJtGWrv9rlsWjB/+",
     "targetOverrides": [
       {
-        "__id__": 273
+        "__id__": 275
       }
     ]
   },
   {
     "__type__": "cc.TargetOverrideInfo",
     "source": {
-      "__id__": 266
+      "__id__": 268
     },
     "sourceInfo": null,
     "propertyPath": [
@@ -5357,7 +5377,7 @@
       "__id__": 55
     },
     "targetInfo": {
-      "__id__": 274
+      "__id__": 276
     }
   },
   {

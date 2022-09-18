@@ -4,6 +4,7 @@ const { ccclass, property } = _decorator;
 import MapCommand from "./MapCommand";
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapLogic')
 export default class MapLogic extends Component {
@@ -30,11 +31,11 @@ export default class MapLogic extends Component {
         console.log("MapLogic onLoad");
         this._cmd = MapCommand.getInstance();
         this._mapCamera = this.node.parent.getChildByName("Map Camera").getComponent(Camera);
-        console.log("_mapCamera:", this._mapCamera);
+   
         this._orthoHeight = this._mapCamera.orthoHeight;
 
-        EventMgr.on("open_city_about", this.openCityAbout, this);
-        EventMgr.on("close_city_about", this.closeCityAbout, this);
+        EventMgr.on(LogicEvent.openCityAbout, this.openCityAbout, this);
+        EventMgr.on(LogicEvent.closeCityAbout, this.closeCityAbout, this);
 
     }
 
@@ -111,9 +112,9 @@ export default class MapLogic extends Component {
             //派发事件
             // console.log("onTouchEnd:", touchLocation1, clickCenterPoint);
 
-            EventMgr.emit("touch_map", mapPoint, clickCenterPoint);
+            EventMgr.emit(LogicEvent.touchMap, mapPoint, clickCenterPoint);
         } else {
-            EventMgr.emit("move_map");
+            EventMgr.emit(LogicEvent.moveMap);
         }
         this._isMove = false;
     }

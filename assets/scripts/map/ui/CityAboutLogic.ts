@@ -9,6 +9,7 @@ import MapUICommand from "./MapUICommand";
 import { CityAddition } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CityAboutLogic')
 export default class CityAboutLogic extends Component {
@@ -23,7 +24,7 @@ export default class CityAboutLogic extends Component {
 
     protected onEnable(): void {
         this.initView();
-        EventMgr.on("update_city_addition", this.onUpdateCityAdditon, this);
+        EventMgr.on(LogicEvent.updateCityAddition, this.onUpdateCityAdditon, this);
     }
 
     protected onDisable(): void {
@@ -74,7 +75,7 @@ export default class CityAboutLogic extends Component {
     protected onClickFacility(): void {
         AudioManager.instance.playClick();
         //设施
-        EventMgr.emit("open_facility", this._cityData);
+        EventMgr.emit(LogicEvent.openFacility, this._cityData);
     }
 
 
@@ -82,7 +83,7 @@ export default class CityAboutLogic extends Component {
         AudioManager.instance.playClick();
         this.node.active = false;
 
-        EventMgr.emit("close_city_about", this._cityData);
+        EventMgr.emit(LogicEvent.closeCityAbout, this._cityData);
         
     }
 }

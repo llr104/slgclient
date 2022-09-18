@@ -10,6 +10,7 @@ import MapProxy, { MapAreaData } from "./MapProxy";
 import MapUtil from "./MapUtil";
 import MapUICommand from "./ui/MapUICommand";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 export default class MapCommand {
     //单例
@@ -146,12 +147,10 @@ export default class MapCommand {
         if(data.code == 0){
             if(data.msg.type == 0){
                 this._proxy.removeMapPosTag(data.msg.x, data.msg.y);
-                // EventMgr.emit("show_toast", "移除成功");
-                EventMgr.emit("update_tag");
+                EventMgr.emit(LogicEvent.updateTag);
             }else if(data.msg.type == 1){
                 this._proxy.addMapPosTag(data.msg.x, data.msg.y, data.msg.name);
-                // EventMgr.emit("show_toast", "添加成功");
-                EventMgr.emit("update_tag");
+                EventMgr.emit(LogicEvent.updateTag);
             }
         }
     }
@@ -161,7 +160,7 @@ export default class MapCommand {
         console.log("onRoleCityPush:", data)
         this._buildProxy.updateSub(data.msg.rid, data.msg.union_id, data.msg.parent_id);
         this._cityProxy.updateCity(data.msg);
-        EventMgr.emit("unionChange", data.msg.rid, data.msg.union_id, data.msg.parent_id);
+        EventMgr.emit(LogicEvent.unionChange, data.msg.rid, data.msg.union_id, data.msg.parent_id);
        
     }
 
@@ -301,7 +300,7 @@ export default class MapCommand {
             this.qryRoleMyProperty();
             return;
         }
-        EventMgr.emit("enter_map");
+        EventMgr.emit(LogicEvent.enterMap);
     }
 
     /**请求角色全量信息*/

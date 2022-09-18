@@ -14,6 +14,7 @@ import LoginCommand from "../../login/LoginCommand";
 import { Conscript } from "../../config/Basci";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('CityArmySettingLogic')
 export default class CityArmySettingLogic extends Component {
@@ -82,9 +83,9 @@ export default class CityArmySettingLogic extends Component {
         this._conTimes = [0, 0, 0];
         this._conCnts = [0, 0, 0];
 
-        EventMgr.on("update_army", this.onUpdateArmy, this);
-        EventMgr.on("chosed_general", this.onChooseGeneral, this);
-        EventMgr.on("update_city_addition", this.onUpdateAddition, this);
+        EventMgr.on(LogicEvent.updateArmy, this.onUpdateArmy, this);
+        EventMgr.on(LogicEvent.chosedGeneral, this.onChooseGeneral, this);
+        EventMgr.on(LogicEvent.updateCityAddition, this.onUpdateAddition, this);
     }
 
     protected onDisable(): void {

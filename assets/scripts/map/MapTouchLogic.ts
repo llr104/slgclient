@@ -8,6 +8,7 @@ import MapCommand from "./MapCommand";
 import { MapResData } from "./MapProxy";
 import MapUtil from "./MapUtil";
 import { EventMgr } from '../utils/EventMgr';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('MapTouchLogic')
 export default class MapTouchLogic extends Component {
@@ -22,8 +23,8 @@ export default class MapTouchLogic extends Component {
 
     protected onLoad(): void {
         this._cmd = MapCommand.getInstance();
-        EventMgr.on("touch_map", this.onTouchMap, this);
-        EventMgr.on("move_map", this.onMoveMap, this);
+        EventMgr.on(LogicEvent.touchMap, this.onTouchMap, this);
+        EventMgr.on(LogicEvent.moveMap, this.onMoveMap, this);
     }
 
     protected onDestroy(): void {

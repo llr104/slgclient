@@ -8,6 +8,7 @@ import GeneralItemLogic, { GeneralItemType } from "./GeneralItemLogic";
 import SkillIconLogic from "./SkillIconLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('GeneralDesLogic')
 export default class GeneralDesLogic extends Component {
@@ -67,7 +68,7 @@ export default class GeneralDesLogic extends Component {
     private _generalNode:Node = null;
 
     protected onEnable(){
-        EventMgr.on("update_general", this.updateGeneral, this)
+        EventMgr.on(LogicEvent.updateGeneral, this.updateGeneral, this)
     }
 
     protected onDisable(){
@@ -124,7 +125,7 @@ export default class GeneralDesLogic extends Component {
      
         var com = this._generalNode.getComponent(GeneralItemLogic);
         if(com){
-            com.updateItem(this._currData, GeneralItemType.GeneralNoThing);
+            com.updateItem(this._currData);
         }
 
         this.powerLabel.string = "体力:" + curData.physical_power + "/" + cfgData.physical_power_limit;
@@ -164,10 +165,10 @@ export default class GeneralDesLogic extends Component {
         var node: Node = event.target;
         var isEmpty = node.getComponent(SkillIconLogic).isEmpty();
         if(isEmpty){
-            EventMgr.emit("open_skill", 1, this._currData, pos);
+            EventMgr.emit(LogicEvent.openSkill, 1, this._currData, pos);
         }else{
             let skill = node.getComponent(SkillIconLogic).getSkill();
-            EventMgr.emit("open_skillInfo", skill, 2, this._currData, pos);
+            EventMgr.emit(LogicEvent.openSkillInfo, skill, 2, this._currData, pos);
         }
     }
 

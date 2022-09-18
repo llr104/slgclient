@@ -17,6 +17,7 @@ import Toast from "./utils/Toast";
 import { Tools } from "./utils/Tools";
 import { EventMgr } from './utils/EventMgr';
 import { AudioManager } from './common/AudioManager';
+import { LogicEvent } from './common/LogicEvent';
 
 @ccclass('Main')
 export default class Main extends Component {
@@ -60,9 +61,12 @@ export default class Main extends Component {
 
         AudioManager.instance.init(this._audioSource);
   
-        EventMgr.on("enter_map", this.onEnterMap, this);
-        EventMgr.on("enter_login", this.enterLogin, this);
-        EventMgr.on("show_toast", this.onShowToast, this);
+        EventMgr.on(LogicEvent.enterMap, this.onEnterMap, this);
+        EventMgr.on(LogicEvent.enterLogin, this.enterLogin, this);
+        EventMgr.on(LogicEvent.showToast, this.onShowToast, this);
+        EventMgr.on(LogicEvent.showWaiting, this.showWaitNode, this);
+        EventMgr.on(LogicEvent.hideWaiting, this.hideWaitNode, this);
+
         EventMgr.on(NetEvent.ServerRequesting, this.showWaitNode,this);
         EventMgr.on(NetEvent.ServerRequestSucess,this.onServerRequest,this);
 
@@ -226,14 +230,22 @@ export default class Main extends Component {
     }
 
 
-    protected showWaitNode(isShow:boolean):void{
+    protected showWaitNode():void{
         if (this._waitNode == null) {
             this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
             this._waitNode.setSiblingIndex(this.topLayer()+2);
         }
-        this._waitNode.active = isShow;
+        this._waitNode.active = true;
+    }
 
+    protected hideWaitNode():void{
+        if (this._waitNode == null) {
+            this._waitNode = instantiate(this.waitPrefab);
+            this._waitNode.parent = this.node;
+            this._waitNode.setSiblingIndex(this.topLayer()+2);
+        }
+        this._waitNode.active = false;
     }
 
 

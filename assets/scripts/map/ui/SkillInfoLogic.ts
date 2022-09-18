@@ -9,6 +9,7 @@ import { Skill } from "../../skill/SkillProxy";
 import SkillIconLogic from "./SkillIconLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('SkillInfoLogic')
 export default class SkillInfoLogic extends Component {
@@ -152,7 +153,7 @@ export default class SkillInfoLogic extends Component {
         if(this._general){
             GeneralCommand.getInstance().upSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;
-            EventMgr.emit("close_skill");
+            EventMgr.emit(LogicEvent.closeSkill);
         }
     }
 
@@ -161,7 +162,7 @@ export default class SkillInfoLogic extends Component {
         if(this._general){
             GeneralCommand.getInstance().lvSkill(this._general.id, this._skillPos);
             this.node.active = false;
-            EventMgr.emit("close_skill");
+            EventMgr.emit(LogicEvent.closeSkill);
         }
     }
 
@@ -170,7 +171,7 @@ export default class SkillInfoLogic extends Component {
         if(this._general){
             GeneralCommand.getInstance().downSkill(this._general.id, this._cfg.cfgId, this._skillPos);
             this.node.active = false;
-            EventMgr.emit("close_skill");
+            EventMgr.emit(LogicEvent.closeSkill);
         }
     }
 }

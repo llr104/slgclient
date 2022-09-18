@@ -6,6 +6,7 @@ import MapCommand from "../MapCommand";
 import MapUICommand from "./MapUICommand";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
+import { LogicEvent } from '../../common/LogicEvent';
 
 @ccclass('TransformLogic')
 export default class TransformLogic extends Component {
@@ -51,7 +52,7 @@ export default class TransformLogic extends Component {
 
         this._keyArr = ["wood","iron","stone","grain"]
 
-        EventMgr.on("upate_my_roleRes", this.initView, this);
+        EventMgr.on(LogicEvent.upateMyRoleRes, this.initView, this);
     }
 
     private getRate() :number {

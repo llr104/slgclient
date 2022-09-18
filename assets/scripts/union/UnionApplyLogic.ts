@@ -14,14 +14,15 @@ import { MapCityData } from "../map/MapCityProxy";
 import MapCommand from "../map/MapCommand";
 import { EventMgr } from '../utils/EventMgr';
 import ListLogic from '../utils/ListLogic';
+import { LogicEvent } from '../common/LogicEvent';
 
 @ccclass('UnionApplyLogic')
 export default class UnionApplyLogic extends Component {
     @property(ScrollView)
     applyView:ScrollView | null = null;
     protected onLoad():void{
-        EventMgr.on("update_union_apply",this.updateApply,this);
-        EventMgr.on("verify_union_success",this.getApply,this);
+        EventMgr.on(LogicEvent.updateUnionApply,this.updateApply,this);
+        EventMgr.on(LogicEvent.verifyUnionSuccess,this.getApply,this);
     }
     
     protected onDestroy():void{

@@ -6,7 +6,7 @@ import ArmySelectNodeLogic from "./ArmySelectNodeLogic";
 import CityArmySettingLogic from "./CityArmySettingLogic";
 import FacilityListLogic from "./FacilityListLogic";
 import MapUICommand from "./MapUICommand";
-import Dialog from "./Dialog";
+import Dialog, { DialogType } from "./Dialog";
 import UnionCommand from "../../union/UnionCommand";
 import MapCommand from "../MapCommand";
 import FortressAbout from "./FortressAbout";
@@ -24,6 +24,7 @@ import SkillInfoLogic from "./SkillInfoLogic";
 import { EventMgr } from '../../utils/EventMgr';
 import { AudioManager } from '../../common/AudioManager';
 import { Skill } from '../../skill/SkillProxy';
+import { LogicEvent } from '../../common/LogicEvent';
 
 
 
@@ -148,28 +149,26 @@ export default class MapUILogic extends Component {
         this._yieldArray.push({key:"grain_yield", name:"谷+"});
 
 
-        EventMgr.on("open_city_about", this.openCityAbout, this);
-        EventMgr.on("close_city_about", this.closeCityAbout, this);
-
-        EventMgr.on("open_fortress_about", this.openFortressAbout, this);
-        EventMgr.on("open_facility", this.openFacility, this);
-
-
-        EventMgr.on("open_army_setting", this.openArmySetting, this);
-        EventMgr.on("upate_my_roleRes", this.updateRoleRes, this);
-        EventMgr.on("open_general_des", this.openGeneralDes, this);
-        EventMgr.on("open_general_choose", this.openGeneralChoose, this);
-        EventMgr.on("open_army_select_ui", this.onOpenArmySelectUI, this);
-        EventMgr.on("open_draw_result", this.openDrawR, this);
-        EventMgr.on("robLoginUI", this.robLoginUI, this);
-        EventMgr.on("interior_collect", this.onCollection, this);
-        EventMgr.on("open_general_convert", this.onOpenGeneralConvert, this);
-        EventMgr.on("open_general_roster", this.onOpenGeneralRoster, this);
-        EventMgr.on("open_general", this.openGeneral, this);
-        EventMgr.on("open_skill", this.onOpenSkill, this);
-        EventMgr.on("close_skill", this.onCloseSkill, this);
-        EventMgr.on("open_skillInfo", this.onOpenSkillInfo, this);
-        EventMgr.on("before_scroll_to_map", this.beforeScrollToMap, this);
+        EventMgr.on(LogicEvent.openCityAbout, this.openCityAbout, this);
+        EventMgr.on(LogicEvent.closeCityAbout, this.closeCityAbout, this);
+        EventMgr.on(LogicEvent.openFortressAbout, this.openFortressAbout, this);
+        EventMgr.on(LogicEvent.openFacility, this.openFacility, this);
+        EventMgr.on(LogicEvent.openArmySetting, this.openArmySetting, this);
+        EventMgr.on(LogicEvent.upateMyRoleRes, this.updateRoleRes, this);
+        EventMgr.on(LogicEvent.openGeneralDes, this.openGeneralDes, this);
+        EventMgr.on(LogicEvent.openGeneralChoose, this.openGeneralChoose, this);
+        EventMgr.on(LogicEvent.openArmySelectUi, this.onOpenArmySelectUI, this);
+        EventMgr.on(LogicEvent.openDrawResult, this.openDrawR, this);
+        EventMgr.on(LogicEvent.robLoginUI, this.robLoginUI, this);
+        EventMgr.on(LogicEvent.interiorCollect, this.onCollection, this);
+        EventMgr.on(LogicEvent.openGeneralConvert, this.onOpenGeneralConvert, this);
+        EventMgr.on(LogicEvent.openGeneralRoster, this.onOpenGeneralRoster, this);
+        EventMgr.on(LogicEvent.openGeneral, this.openGeneral, this);
+        EventMgr.on(LogicEvent.openSkill, this.onOpenSkill, this);
+        EventMgr.on(LogicEvent.closeSkill, this.onCloseSkill, this);
+        EventMgr.on(LogicEvent.openSkillInfo, this.onOpenSkillInfo, this);
+        EventMgr.on(LogicEvent.beforeScrollToMap, this.beforeScrollToMap, this);
+        EventMgr.on(LogicEvent.showTip, this.showTip, this);
         
         
 
@@ -183,7 +182,7 @@ export default class MapUILogic extends Component {
 
     protected robLoginUI(): void {
         this.showTip("账号在其他地方登录",function () {
-            EventMgr.emit("enter_login");
+            EventMgr.emit(LogicEvent.enterLogin);
         });
     }
 
@@ -195,7 +194,7 @@ export default class MapUILogic extends Component {
             this._dialogNode.active = true;
         }
         this._dialogNode.setSiblingIndex(this.topLayer());
-        this._dialogNode.getComponent(Dialog).text(text);
+        this._dialogNode.getComponent(Dialog).show(text, DialogType.OnlyConfirm);
         this._dialogNode.getComponent(Dialog).setClose(close)
     }
 
@@ -328,7 +327,7 @@ export default class MapUILogic extends Component {
 
         this._cityAboutNode.setSiblingIndex(this.topLayer());
         this.widgetNode.active = false;
-        EventMgr.emit("scroll_to_map", data.x, data.y);
+        EventMgr.emit(LogicEvent.scrollToMap, data.x, data.y);
         this._cityAboutNode.getComponent(CityAboutLogic).setData(data);
     }
 
@@ -430,8 +429,6 @@ export default class MapUILogic extends Component {
         }
         this._drawResultNode.setSiblingIndex(this.topLayer());
         this._drawResultNode.getComponent(DrawRLogic).setData(data);
-
-        console.log("openDrawR:", this.contentNode);
     }
 
 
@@ -552,6 +549,7 @@ export default class MapUILogic extends Component {
 
     protected onClickCollection():void {
         AudioManager.instance.playClick();
+      
         if(this._collectNode == null){
             this._collectNode = instantiate(this.collectPrefab);
             this._collectNode.parent = this.contentNode;

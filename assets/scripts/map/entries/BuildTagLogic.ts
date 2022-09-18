@@ -2,6 +2,7 @@ import { _decorator, Component, Node } from 'cc';
 import MapCommand from "../MapCommand";
 import { MapResData } from "../MapProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { LogicEvent } from '../../common/LogicEvent';
 const { ccclass, property } = _decorator;
 
 
@@ -18,7 +19,7 @@ export default class BuildTagLogic extends Component {
     }
 
     protected onEnable(): void {
-        EventMgr.on("update_tag", this.onUpdateTag, this);
+        EventMgr.on(LogicEvent.updateTag, this.onUpdateTag, this);
 
     }
 

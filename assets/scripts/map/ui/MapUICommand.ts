@@ -6,6 +6,7 @@ import { MapCityData } from "../MapCityProxy";
 import MapCommand from "../MapCommand";
 import MapUIProxy, { CityAddition, Facility } from "./MapUIProxy";
 import { EventMgr } from '../../utils/EventMgr';
+import { LogicEvent } from '../../common/LogicEvent';
 
 export default class MapUICommand {
     //单例
@@ -61,13 +62,13 @@ export default class MapUICommand {
         console.log("onCityFacilities :", data);
         if (data.code == 0) {
             this._proxy.updateMyFacilityList(data.msg.cityId, data.msg.facilities);
-            EventMgr.emit("update_my_facilities");
+            EventMgr.emit(LogicEvent.updateMyFacilities);
 
             //刷新城池附加加成
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(cityData.cityId);
             cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
-            EventMgr.emit("update_city_addition", data.msg.cityId, addition);
+            EventMgr.emit(LogicEvent.updateCityAddition, data.msg.cityId, addition);
         }
     }
 
@@ -76,15 +77,15 @@ export default class MapUICommand {
         console.log("onCityUpFacility :", data);
         if (data.code == 0) {
             let facilityData: Facility = this._proxy.updateMyFacility(data.msg.cityId, data.msg.facility);
-            EventMgr.emit("update_my_facility", data.msg.cityId, facilityData);
+            EventMgr.emit(LogicEvent.updateMyFacility, data.msg.cityId, facilityData);
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            EventMgr.emit("upate_my_roleRes");
+            EventMgr.emit(LogicEvent.upateMyRoleRes);
 
             //刷新城池附加加成
             let cityData: MapCityData = MapCommand.getInstance().cityProxy.getMyCityById(data.msg.cityId);
             let addition: CityAddition = this._proxy.updateMyCityAdditions(data.msg.cityId);
             cityData.maxDurable = this._proxy.getMyCityMaxDurable(data.msg.cityId);
-            EventMgr.emit("update_city_addition", data.msg.cityId, addition);
+            EventMgr.emit(LogicEvent.updateCityAddition, data.msg.cityId, addition);
         }
     }
 
@@ -93,7 +94,7 @@ export default class MapUICommand {
         console.log("onRoleMyProperty :", data);
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-            EventMgr.emit("upate_my_roleRes");
+            EventMgr.emit(LogicEvent.upateMyRoleRes);
         }
     }
 
@@ -101,7 +102,7 @@ export default class MapUICommand {
     protected updataRoleRes(data: any): void {
         if (data.code == 0) {
             LoginCommand.getInstance().proxy.setRoleResData(data.msg);
-            EventMgr.emit("upate_my_roleRes");
+            EventMgr.emit(LogicEvent.upateMyRoleRes);
         }
     }
 
@@ -110,7 +111,7 @@ export default class MapUICommand {
         console.log("onUpdataWarReport :", data);
         if (data.code == 0) {
             this._proxy.updateWarReports(data.msg);
-            EventMgr.emit("upate_war_report");
+            EventMgr.emit(LogicEvent.upateWarReport);
         }
     }
 
@@ -120,7 +121,7 @@ export default class MapUICommand {
         console.log("onUpdataWarReport :", data);
         if (data.code == 0) {
             this._proxy.updateWarReport(data.msg);
-            EventMgr.emit("upate_war_report");
+            EventMgr.emit(LogicEvent.upateWarReport);
         }
     }
 
@@ -134,21 +135,21 @@ export default class MapUICommand {
                 this._proxy.updateWarRead(id, true);
             }
            
-            EventMgr.emit("upate_war_report");
+            EventMgr.emit(LogicEvent.upateWarReport);
         }
     }
 
     protected onCollect(data:any):void {
         console.log("onCollect :", data);
         if (data.code == 0) {
-            EventMgr.emit("interior_collect", data.msg);
+            EventMgr.emit(LogicEvent.interiorCollect, data.msg);
         }
     }
 
     protected onOpenCollect(data:any):void{
         console.log("onOpenCollect :", data);
         if (data.code == 0) {
-            EventMgr.emit("interior_openCollect", data.msg);
+            EventMgr.emit(LogicEvent.interiorOpenCollect, data.msg);
         }
     }
 
@@ -212,7 +213,7 @@ export default class MapUICommand {
      */
     public updateMyProperty(data: any): void {
         LoginCommand.getInstance().proxy.saveEnterData(data.msg);
-        EventMgr.emit("upate_my_roleRes");
+        EventMgr.emit(LogicEvent.upateMyRoleRes);
     }
 
 
