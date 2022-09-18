@@ -5,7 +5,20 @@
 
 **代码交流群：1054084192**
 
-# 客户端截图
+## 连接服务端
+
+服务端部署成功后，修改客户端 GameConfig.ts 文件中的连接地址
+
+```typescript
+import { _decorator } from 'cc';
+const GameConfig = {
+    serverUrl: "ws://127.0.0.1:8004", //httpserver 地址
+    webUrl: "http://127.0.0.1:8088",  //gateserver 地址
+}
+export { GameConfig };
+```
+
+## 客户端截图
 ### 队伍征兵
 ![队伍征兵](https://s1.imagehub.cc/images/2021/04/23/d56cd91ba46b9ffd7b097dc4cb07bf5a.png)
 
