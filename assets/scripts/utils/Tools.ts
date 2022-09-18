@@ -111,6 +111,8 @@ export class Tools{
         }else{
             str = codeObj[code]
         }
+
+        console.log("getCodeStr:", str)
         return str;
     }
 

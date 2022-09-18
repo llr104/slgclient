@@ -87,6 +87,8 @@ export default class Main extends Component {
     }
 
     protected onDestroy(): void {
+        console.log("main onDestroy");
+
         EventMgr.targetOff(this);
     }
 
@@ -234,8 +236,8 @@ export default class Main extends Component {
         if (this._waitNode == null) {
             this._waitNode = instantiate(this.waitPrefab);
             this._waitNode.parent = this.node;
-            this._waitNode.setSiblingIndex(this.topLayer()+2);
         }
+        this._waitNode.setSiblingIndex(this.topLayer()+2);
         this._waitNode.active = true;
     }
 
@@ -253,10 +255,10 @@ export default class Main extends Component {
         if(this.toastNode == null){
             let toast = instantiate(this.toastPrefab);
             toast.parent = this.node;
-            toast.setSiblingIndex(this.topLayer()+10);
             this.toastNode = toast;
         }
         this.toastNode.active = true;
+        this.toastNode.setSiblingIndex(this.topLayer()+10);
         this.toastNode.getComponent(Toast).setText(text);
     }
 
